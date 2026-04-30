@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tablero de Control · Mercadeo Digital UAO · Educación Continua 2025–2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ════════════════════════════════════════════════
+   DESIGN SYSTEM
+════════════════════════════════════════════════ */
+:root {
+  --ink:       #04090f;
+  --ink-2:     #0b1525;
+  --ink-3:     #12243a;
+  --ink-4:     #1a3352;
+  --blue:      #1565d8;
+  --blue-lit:  #4d8ff5;
+  --gold:      #e8a022;
+  --gold-dim:  #c9881a;
+  --teal:      #12b8a4;
+  --rose:      #e84545;
+  --violet:    #8b5cf6;
+  --text-hi:   #eef2f8;
+  --text-md:   #8fa8c8;
+  --text-lo:   #4d6a88;
+  --border:    rgba(255,255,255,0.06);
+  --border-md: rgba(255,255,255,0.11);
+  --card-bg:   rgba(255,255,255,0.028);
+  --card-glow: rgba(21,101,216,0.10);
+  --r-sm: 8px; --r-md: 12px; --r-lg: 18px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'Instrument Sans',sans-serif;
+  background:var(--ink);
+  color:var(--text-hi);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* mesh background */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 5%, rgba(21,101,216,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 90% 90%, rgba(18,184,164,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 80% 10%, rgba(232,160,34,0.05) 0%, transparent 50%);
+  pointer-events:none;z-index:0;
+}
+
+/* noise grain */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.5;
+}
+
+.page{
+  position:relative;z-index:1;
+  max-width:1440px;margin:0 auto;
+  padding:32px 36px 80px;
+}
+
+/* ═══════════ HEADER ═══════════ */
+header{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:start;gap:20px;
+  border-bottom:1px solid var(--border-md);
+  padding-bottom:28px;margin-bottom:40px;
+  animation:fadeUp .6s ease both;
+}
+.header-logo-row{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:10px;
+}
+.logo-badge{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,var(--blue),var(--teal));
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:16px;
+  color:#fff;flex-shrink:0;
+  box-shadow:0 0 20px rgba(21,101,216,.4);
+}
+.eyebrow{
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--blue-lit);margin-bottom:5px;
+}
+h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(20px,2.6vw,32px);
+  font-weight:800;line-height:1.15;
+  background:linear-gradient(120deg,#eef2f8 40%,var(--blue-lit));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.header-sub{
+  color:var(--text-md);font-size:13px;margin-top:5px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.header-sub span{display:flex;align-items:center;gap:5px}
+.dot{width:4px;height:4px;border-radius:50%;background:var(--text-lo)}
+.header-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:20px;
+  font-size:11px;font-weight:600;letter-spacing:.4px;
+}
+.badge-blue{background:rgba(21,101,216,.15);border:1px solid rgba(21,101,216,.35);color:var(--blue-lit)}
+.badge-gold{background:rgba(232,160,34,.12);border:1px solid rgba(232,160,34,.3);color:var(--gold)}
+.badge-teal{background:rgba(18,184,164,.12);border:1px solid rgba(18,184,164,.3);color:var(--teal)}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+/* ═══════════ SECTION ═══════════ */
+.section-label{
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--blue-lit);margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ═══════════ KPI GRID ═══════════ */
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  gap:12px;margin-bottom:36px;
+}
+.kpi{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  padding:18px 16px 14px;
+  position:relative;overflow:hidden;
+  transition:all .25s;
+  animation:fadeUp .6s ease both;
+}
+.kpi:hover{background:rgba(21,101,216,.06);border-color:rgba(21,101,216,.25);transform:translateY(-2px)}
+.kpi-accent{position:absolute;top:0;left:0;right:0;height:2px}
+.kpi-icon{
+  width:28px;height:28px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;margin-bottom:10px;
+}
+.kpi-label{font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-lo);margin-bottom:6px}
+.kpi-value{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(17px,2vw,24px);font-weight:700;line-height:1;
+}
+.kpi-value sup{font-size:11px;font-weight:500;color:var(--text-md);margin-right:2px;-webkit-text-fill-color:var(--text-md)}
+.kpi-sub{font-size:10px;color:var(--text-lo);margin-top:5px}
+.kpi-tag{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:9.5px;padding:2px 7px;border-radius:10px;margin-top:5px;
+}
+
+/* ═══════════ GRID LAYOUTS ═══════════ */
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+.col3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:24px}
+.col-7-5{display:grid;grid-template-columns:7fr 5fr;gap:18px;margin-bottom:24px}
+.col-5-7{display:grid;grid-template-columns:5fr 7fr;gap:18px;margin-bottom:24px}
+@media(max-width:900px){.col2,.col3,.col-7-5,.col-5-7{grid-template-columns:1fr}}
+
+/* ═══════════ PANEL ═══════════ */
+.panel{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:22px 20px 18px;
+  animation:fadeUp .7s ease both;
+}
+.panel-title{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--text-hi);margin-bottom:2px;
+}
+.panel-sub{font-size:11px;color:var(--text-lo);margin-bottom:18px}
+.chart-wrap{position:relative;width:100%}
+
+/* ═══════════ TYPE BARS ═══════════ */
+.type-row{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.type-name{width:90px;font-size:11.5px;color:var(--text-md);flex-shrink:0}
+.bar-track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.type-leads{width:60px;text-align:right;font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text-hi)}
+.type-cpl{width:74px;text-align:right;font-size:10.5px;color:var(--text-lo)}
+.type-pct{width:38px;text-align:right;font-size:10.5px;color:var(--text-md)}
+
+/* ═══════════ TABLE ═══════════ */
+.table-wrap{overflow-x:auto;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+thead th{
+  font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-lo);border-bottom:1px solid var(--border);
+  padding:7px 10px;text-align:right;white-space:nowrap;cursor:pointer;
+  user-select:none;
+}
+thead th:first-child{text-align:left;min-width:220px}
+thead th:hover{color:var(--blue-lit)}
+thead th.sorted{color:var(--gold)}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.025);transition:background .18s}
+tbody tr:hover{background:rgba(21,101,216,.06)}
+td{padding:8px 10px;text-align:right;color:var(--text-md);vertical-align:middle}
+td:first-child{text-align:left;color:var(--text-hi)}
+.prog-name{font-size:11px;line-height:1.35;max-width:260px}
+.tipo-pill{
+  display:inline-block;font-size:8px;letter-spacing:.5px;text-transform:uppercase;
+  padding:1px 6px;border-radius:10px;margin-top:2px;
+}
+.t-dip{background:rgba(21,101,216,.15);color:var(--blue-lit)}
+.t-cur{background:rgba(232,160,34,.12);color:var(--gold)}
+.t-sem{background:rgba(139,92,246,.12);color:#a78bfa}
+.t-tal{background:rgba(18,184,164,.12);color:var(--teal)}
+.t-otr{background:rgba(255,255,255,.06);color:var(--text-lo)}
+
+.v-good{color:#34d399!important;font-weight:600}
+.v-ok  {color:#6ee7b7!important}
+.v-warn{color:var(--gold)!important;font-weight:600}
+.v-bad {color:#f87171!important;font-weight:600}
+.v-hi  {color:var(--text-hi)!important;font-weight:600}
+
+.mini-bar-wrap{width:50px;display:inline-block;vertical-align:middle;margin-left:4px}
+.mini-bar{height:3px;border-radius:2px;background:var(--blue);display:inline-block}
+
+/* ═══════════ INSIGHT CARDS ═══════════ */
+.insights-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:8px}
+.insight{
+  border-radius:var(--r-md);padding:16px 16px 14px;
+  border:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.insight::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.ins-positive::before{background:var(--teal)}
+.ins-warning::before{background:var(--gold)}
+.ins-critical::before{background:var(--rose)}
+.ins-info::before{background:var(--blue-lit)}
+.ins-label{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.ins-positive .ins-label{color:var(--teal)}
+.ins-warning  .ins-label{color:var(--gold)}
+.ins-critical .ins-label{color:var(--rose)}
+.ins-info     .ins-label{color:var(--blue-lit)}
+.ins-title{font-family:'Syne',sans-serif;font-size:12.5px;font-weight:700;color:var(--text-hi);margin-bottom:5px;line-height:1.3}
+.ins-body{font-size:11.5px;color:var(--text-md);line-height:1.55}
+.ins-metric{
+  margin-top:8px;font-family:'Syne',sans-serif;font-size:17px;font-weight:700;
+}
+.ins-positive .ins-metric{color:var(--teal)}
+.ins-warning  .ins-metric{color:var(--gold)}
+.ins-critical .ins-metric{color:var(--rose)}
+.ins-info     .ins-metric{color:var(--blue-lit)}
+
+/* ═══════════ RECO CARDS ═══════════ */
+.reco-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.reco{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:16px;
+}
+.reco-num{
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  color:var(--blue-lit);letter-spacing:1px;margin-bottom:6px;
+}
+.reco-title{font-family:'Syne',sans-serif;font-size:12.5px;font-weight:700;color:var(--text-hi);margin-bottom:5px}
+.reco-body{font-size:11.5px;color:var(--text-md);line-height:1.55}
+.reco-tag{
+  margin-top:8px;display:inline-flex;align-items:center;gap:4px;
+  font-size:9px;letter-spacing:.5px;text-transform:uppercase;
+  padding:3px 8px;border-radius:10px;
+  background:rgba(21,101,216,.12);color:var(--blue-lit);
+}
+
+/* ═══════════ EFFICIENCY MATRIX ═══════════ */
+.quad-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;height:100%}
+.quad{
+  border-radius:var(--r-sm);padding:12px 12px;
+  border:1px solid var(--border);
+  display:flex;flex-direction:column;gap:4px;
+}
+.quad-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.quad-star   {background:rgba(18,184,164,.06)}
+.quad-star   .quad-label{color:var(--teal)}
+.quad-invest {background:rgba(21,101,216,.06)}
+.quad-invest .quad-label{color:var(--blue-lit)}
+.quad-scale  {background:rgba(232,160,34,.05)}
+.quad-scale  .quad-label{color:var(--gold)}
+.quad-review {background:rgba(232,69,69,.05)}
+.quad-review .quad-label{color:var(--rose)}
+.quad-prog{
+  font-size:10px;color:var(--text-md);
+  padding:2px 0;border-bottom:1px solid rgba(255,255,255,.04);
+  line-height:1.3;
+}
+.quad-prog:last-child{border-bottom:none}
+
+/* ═══════════ FOOTER ═══════════ */
+footer{
+  margin-top:48px;padding-top:18px;
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:8px;
+  font-size:10px;color:var(--text-lo);
+}
+
+/* ═══════════ ANIMATIONS ═══════════ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+.d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}
+.d4{animation-delay:.2s} .d5{animation-delay:.25s}.d6{animation-delay:.3s}
+.d7{animation-delay:.35s}.d8{animation-delay:.4s} .d9{animation-delay:.45s}
+
+/* progress bars animate */
+.bar-fill{width:0}
+.tab-btn{
+  padding:5px 12px;border-radius:20px;border:1px solid var(--border);
+  background:none;color:var(--text-lo);font-size:11px;cursor:pointer;transition:all .2s;
+  font-family:'Instrument Sans',sans-serif;
+}
+.tab-btn.active,.tab-btn:hover{background:rgba(21,101,216,.15);color:var(--blue-lit);border-color:rgba(21,101,216,.3)}
+
+.scroll-table{max-height:420px;overflow-y:auto}
+.scroll-table::-webkit-scrollbar{width:4px}
+.scroll-table::-webkit-scrollbar-track{background:transparent}
+.scroll-table::-webkit-scrollbar-thumb{background:var(--ink-4);border-radius:2px}
+
+.divider{height:1px;background:var(--border);margin:30px 0}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══════════════════════ HEADER ═══════════════════════ -->
+<header>
+  <div>
+    <div class="header-logo-row">
+      <div class="logo-badge">UAO</div>
+      <div>
+        <div class="eyebrow">Universidad Autónoma de Occidente</div>
+        <h1>Tablero de Control · Mercadeo Digital</h1>
+      </div>
+    </div>
+    <div class="header-sub">
+      <span>📚 Educación Continua</span>
+      <span class="dot"></span>
+      <span>🗓 23 dic 2025 – 29 abr 2026</span>
+      <span class="dot"></span>
+      <span>📊 81 programas activos</span>
+      <span class="dot"></span>
+      <span>🎯 Objetivo: Generación de leads</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="badge badge-blue"><span class="pulse"></span> Meta Ads · Nivel de anuncio</span>
+    <span class="badge badge-gold">⚡ Análisis por skill meta-ads-analyzer</span>
+    <span class="badge badge-teal">Corte: 29 abr 2026</span>
+  </div>
+</header>
+
+<!-- ═══════════════════════ KPIs ═══════════════════════ -->
+<div class="section-label d1">01 · Indicadores clave de desempeño</div>
+<div class="kpi-grid">
+
+  <div class="kpi d1">
+    <div class="kpi-accent" style="background:linear-gradient(90deg,#1565d8,transparent)"></div>
+    <div class="kpi-icon" style="background:rgba(21,101,216,.12)">📥</div>
+    <div class="kpi-label">Total Leads</div>
+    <div class="kpi-value" style="color:#4d8ff5">13,468</div>
+    <div class="kpi-sub">Leads generados · acciones:leadgen</div>
+  </div>
+
+  <div class="kpi d2">
+    <div class="kpi-accent" style="background:linear-gradient(90deg,#e8a022,transparent)"></div>
+    <div class="kpi-icon" style="background:rgba(232,160,34,.10)">💰</div>
+    <div class="kpi-label">Inversión Total (Amount Spent)</div>
+    <div class="kpi-value" style="color:#e8a022"><sup>COP</sup>27.7M</div>
+    <div class="kpi-sub">$27,662,423 COP</div>
+  </div>
+
+  <div class="kpi d3">
+    <div class="kpi-accent" style="background:linear-gradient(90deg,#12b8a4,transparent)"></div>
+    <div class="kpi-icon" style="background:rgba(18,184,164,.10)">🎯</div>
+    <div class="kpi-label">CPL · Costo por Lead</div>
+    <div class="kpi-value" style="color:#12b8a4"><sup>COP</sup>2,054</div>
+    <div class="kpi-sub">Promedio general de la cuenta</div>
+  </div>
+
+  <div class="kpi d4">
+    <div class="kpi-accent" style="background:linear-gradient(90deg,#8b5cf6,transparent)"></div>
+    <div class="kpi-icon" style="background:rgba(139,92,246,.10)">👁</div>
+    <div class="kpi-label">Impresiones</div>
+    <div class="kpi-value" style="color:#a78bfa">6.31M</div>
+    <div class="kpi-sub">6,309,204 impresiones totales</div>
+  </div>
+
+  <div class="kpi d5">
+    <div class="kpi-accent" style="background:linear-gradient(90deg,#34d399,transparent)"></div>
+    <div class="kpi-icon" style="background:rgba(52,211,153,.10)">📡</div>
+    <div class="kpi-label">Alcance (Accounts Center)</div>
+    <div class="kpi-value" style="color:#34d399">2.60M</div>
+    <div class="kpi-sub">2,600,219 cuentas alcanzadas</div>
+  </div>
+
+  <div class="kpi d6">
+    <div class="kpi-accent" style="background:linear-gradient(90deg,#f59e0b,transparent)"></div>
+    <div class="kpi-icon" style="background:rgba(245,158,11,.10)">🔁</div>
+    <div class="kpi-label">Frecuencia</div>
+    <div class="kpi-value" style="color:#f59e0b">2.43</div>
+    <div class="kpi-sub">Impresiones / Alcance · rango sano</div>
+  </div>
+
+  <div class="kpi d7">
+    <div class="kpi-accent" style="background:linear-gradient(90deg,#e84545,transparent)"></div>
+    <div class="kpi-icon" style="background:rgba(232,69,69,.10)">📢</div>
+    <div class="kpi-label">CPM</div>
+    <div class="kpi-value" style="color:#f87171"><sup>COP</sup>4,384</div>
+    <div class="kpi-sub">Costo por mil impresiones</div>
+  </div>
+
+  <div class="kpi d8">
+    <div class="kpi-accent" style="background:linear-gradient(90deg,#06b6d4,transparent)"></div>
+    <div class="kpi-icon" style="background:rgba(6,182,212,.10)">🖱</div>
+    <div class="kpi-label">Link Clicks</div>
+    <div class="kpi-value" style="color:#22d3ee">46,792</div>
+    <div class="kpi-sub">Clics en enlace (salida)</div>
+  </div>
+
+  <div class="kpi d9">
+    <div class="kpi-accent" style="background:linear-gradient(90deg,#a3e635,transparent)"></div>
+    <div class="kpi-icon" style="background:rgba(163,230,53,.10)">📈</div>
+    <div class="kpi-label">CVR · Conversión</div>
+    <div class="kpi-value" style="color:#a3e635">0.213%</div>
+    <div class="kpi-sub">Leads / Impresiones totales</div>
+  </div>
+
+</div><!-- /kpi-grid -->
+
+
+<!-- ═══════════════════════ TIPO + CHARTS ═══════════════════════ -->
+<div class="section-label">02 · Distribución por tipo de programa</div>
+<div class="col-7-5">
+
+  <!-- TYPE BREAKDOWN BARS -->
+  <div class="panel">
+    <div class="panel-title">Leads, inversión y CPL por categoría</div>
+    <div class="panel-sub">Comparativo de rendimiento entre tipologías de programa</div>
+    <div id="typeBars"></div>
+    <div style="margin-top:18px">
+      <div class="chart-wrap" style="height:200px">
+        <canvas id="typeChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- DONUT -->
+  <div class="panel">
+    <div class="panel-title">Participación de leads por tipo</div>
+    <div class="panel-sub">Distribución porcentual del total de 13,468 leads</div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="donutChart"></canvas>
+    </div>
+    <div id="donutLegend" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px"></div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════ CPL CHART + INVESTMENT ═══════════════════════ -->
+<div class="section-label">03 · Eficiencia de campañas (CPL) e inversión</div>
+<div class="col2">
+
+  <div class="panel">
+    <div class="panel-title">Top 15 programas con menor CPL (≥30 leads)</div>
+    <div class="panel-sub">Los programas con menor costo por lead representan mayor eficiencia de pauta</div>
+    <div class="chart-wrap" style="height:320px">
+      <canvas id="cplChart"></canvas>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Top 10 programas por inversión vs leads</div>
+    <div class="panel-sub">Relación entre Amount Spent y resultados obtenidos</div>
+    <div class="chart-wrap" style="height:320px">
+      <canvas id="invChart"></canvas>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════ MATRIX ═══════════════════════ -->
+<div class="section-label">04 · Matriz de eficiencia de campañas</div>
+<div class="col-5-7">
+
+  <div class="panel">
+    <div class="panel-title">Cuadrante: Leads vs CPL</div>
+    <div class="panel-sub">Clasificación de programas por volumen y eficiencia de costos</div>
+    <div class="quad-grid" style="margin-top:12px;min-height:280px">
+
+      <div class="quad quad-star">
+        <div class="quad-label">⭐ Estrella (Alto leads · Bajo CPL)</div>
+        <div class="quad-prog">Dip. Master Training UAO-RCN <span style="color:var(--teal);font-size:9px">CPL 515</span></div>
+        <div class="quad-prog">Curso Excel Online <span style="color:var(--teal);font-size:9px">CPL 1,429</span></div>
+        <div class="quad-prog">Curso Excel Presencial <span style="color:var(--teal);font-size:9px">CPL 1,466</span></div>
+        <div class="quad-prog">Sem. Capcut y Creación de Contenido <span style="color:var(--teal);font-size:9px">CPL 1,017</span></div>
+        <div class="quad-prog">Sem. Liquidación de Nómina <span style="color:var(--teal);font-size:9px">CPL 794</span></div>
+      </div>
+
+      <div class="quad quad-invest">
+        <div class="quad-label">📈 Escalar (Bajo leads · Bajo CPL)</div>
+        <div class="quad-prog">Curso Italiano <span style="color:var(--blue-lit);font-size:9px">CPL 972</span></div>
+        <div class="quad-prog">Sem. Reforma Laboral y Pensional <span style="color:var(--blue-lit);font-size:9px">CPL 1,147</span></div>
+        <div class="quad-prog">Sem. Persuasión y Pres. Orales <span style="color:var(--blue-lit);font-size:9px">CPL 1,147</span></div>
+        <div class="quad-prog">Sem. Edición de Video <span style="color:var(--blue-lit);font-size:9px">CPL 1,416</span></div>
+        <div class="quad-prog">Sem. TikTok Ads <span style="color:var(--blue-lit);font-size:9px">CPL 1,401</span></div>
+      </div>
+
+      <div class="quad quad-scale">
+        <div class="quad-label">⚠ Optimizar (Alto leads · Alto CPL)</div>
+        <div class="quad-prog">Dip. RETIE, RETILAP y NTC 2050 <span style="color:var(--gold);font-size:9px">CPL 1,896</span></div>
+        <div class="quad-prog">Dip. Marketing Digital + IA <span style="color:var(--gold);font-size:9px">CPL 2,728</span></div>
+        <div class="quad-prog">Dip. Finanzas y Analítica de Datos <span style="color:var(--gold);font-size:9px">CPL 3,500</span></div>
+        <div class="quad-prog">Colombia Big Data + IA + Power BI <span style="color:var(--gold);font-size:9px">CPL 3,021</span></div>
+        <div class="quad-prog">Dip. Ecommerce Mkt Digital <span style="color:var(--gold);font-size:9px">CPL 6,997</span></div>
+      </div>
+
+      <div class="quad quad-review">
+        <div class="quad-label">🔴 Revisar (Bajo leads · Alto CPL)</div>
+        <div class="quad-prog">Escuela de Liderazgo Empresarial <span style="color:var(--rose);font-size:9px">CPL 7,041</span></div>
+        <div class="quad-prog">Anuncio #1 / Anuncio #2 <span style="color:var(--rose);font-size:9px">CPL >6,000</span></div>
+        <div class="quad-prog">Dip. Project Management PMBOK <span style="color:var(--rose);font-size:9px">CPL 5,109</span></div>
+        <div class="quad-prog">CURSO PSICOLOGÍA ORGANIZACIONAL <span style="color:var(--rose);font-size:9px">CPL 5,396</span></div>
+        <div class="quad-prog">Dip. Alta Gerencia SST <span style="color:var(--rose);font-size:9px">CPL 5,588</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">CVR por programa — Top 15 (Leads / Impresiones)</div>
+    <div class="panel-sub">Tasa de conversión: mide cuántas impresiones se requieren para generar un lead</div>
+    <div class="chart-wrap" style="height:310px">
+      <canvas id="cvrChart"></canvas>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════ TOP PROGRAMS TABLE ═══════════════════════ -->
+<div class="section-label">05 · Tabla de rendimiento por programa (Top 25)</div>
+<div class="panel" style="margin-bottom:24px">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+    <div>
+      <div class="panel-title">Detalle completo de indicadores por programa</div>
+      <div class="panel-sub" style="margin-bottom:0">Haz clic en columna para ordenar · Scroll vertical activo</div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="tab-btn active" onclick="filterTable('all',this)">Todos</button>
+      <button class="tab-btn" onclick="filterTable('Diplomado',this)">Diplomados</button>
+      <button class="tab-btn" onclick="filterTable('Curso',this)">Cursos</button>
+      <button class="tab-btn" onclick="filterTable('Seminario',this)">Seminarios</button>
+    </div>
+  </div>
+  <div class="scroll-table">
+    <table id="mainTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)" style="text-align:left"># Programa ↕</th>
+          <th onclick="sortTable(1)">Leads ↕</th>
+          <th onclick="sortTable(2)">Inversión COP ↕</th>
+          <th onclick="sortTable(3)">CPL COP ↕</th>
+          <th onclick="sortTable(4)">Impresiones ↕</th>
+          <th onclick="sortTable(5)">Alcance ↕</th>
+          <th onclick="sortTable(6)">Frec. ↕</th>
+          <th onclick="sortTable(7)">CPM ↕</th>
+          <th onclick="sortTable(8)">Link Clicks ↕</th>
+          <th onclick="sortTable(9)">CVR % ↕</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════ HALLAZGOS ═══════════════════════ -->
+<div class="section-label">06 · Hallazgos clave e insights estratégicos</div>
+<div class="insights-grid" style="margin-bottom:28px">
+
+  <div class="insight ins-positive">
+    <div class="ins-label">✅ Hallazgo positivo</div>
+    <div class="ins-title">Seminarios dominan en eficiencia de pauta</div>
+    <div class="ins-body">Con CPL promedio de <strong>COP 1,569</strong>, los Seminarios generan leads un 31% más baratos que Diplomados y 24% más baratos que Cursos, con solo el 23% de la inversión total. Programas cortos de alto interés temático (Capcut, Nómina, Reforma Laboral) lideran la eficiencia operativa.</div>
+    <div class="ins-metric">CPL Sem: COP 1,569</div>
+  </div>
+
+  <div class="insight ins-positive">
+    <div class="ins-label">✅ Hallazgo positivo</div>
+    <div class="ins-title">Diplomado Master Training UAO-RCN: caso de éxito</div>
+    <div class="ins-body">El anuncio con formato de video testimonial (Ana Karina) entregó <strong>1,748 leads</strong> a un CPL de <strong>COP 515</strong> — 75% por debajo del promedio general (COP 2,054). CVR del 0.62% (3x el promedio). Evidencia que el formato video con vocero real es un multiplicador de conversión para Diplomados.</div>
+    <div class="ins-metric">CPL: COP 515 · CVR: 0.62%</div>
+  </div>
+
+  <div class="insight ins-warning">
+    <div class="ins-label">⚠ Oportunidad de mejora</div>
+    <div class="ins-title">Diplomado Ecommerce: alta inversión, bajo retorno</div>
+    <div class="ins-body">Con <strong>COP 1.53M</strong> invertidos (mayor presupuesto de la cuenta) y solo <strong>218 leads</strong>, el CPL de <strong>COP 6,997</strong> es 3.4x el promedio. CVR del 0.084%, el más bajo del portafolio. Se recomienda revisar la segmentación, creativos y propuesta de valor del programa antes de continuar la pauta.</div>
+    <div class="ins-metric">CPL: COP 6,997 ↑ 3.4x</div>
+  </div>
+
+  <div class="insight ins-warning">
+    <div class="ins-label">⚠ Oportunidad de mejora</div>
+    <div class="ins-title">Frecuencia y saturación de audiencia</div>
+    <div class="ins-body">Varios programas superan frecuencia de 3.5x (Automatización n8n: 3.76, Dip. Automatización Contable: 3.92, Sistemas Energéticos: 4.26), indicando posible fatiga de audiencia. Se recomienda rotar creativos o expandir la segmentación para reducir el Breakdown Effect de reiteración en las mismas cuentas.</div>
+    <div class="ins-metric">Frec. máx. observada: 4.26x</div>
+  </div>
+
+  <div class="insight ins-critical">
+    <div class="ins-label">🔴 Alerta crítica</div>
+    <div class="ins-title">Anuncios sin nombre estratégico: "Anuncio #1 / #2"</div>
+    <div class="ins-body">Dos conjuntos con CPL de <strong>COP 7,146</strong> y <strong>COP 6,181</strong> (peores de la cuenta) no tienen identificación de programa. Esto dificulta el seguimiento, la toma de decisiones y la optimización de campañas. CPL acumulado: COP 1.04M para solo 36 leads totales — inversión con retorno crítico.</div>
+    <div class="ins-metric">COP 240K desperdiciados</div>
+  </div>
+
+  <div class="insight ins-info">
+    <div class="ins-label">💡 Insight estratégico</div>
+    <div class="ins-title">CPM de Seminarios vs Diplomados revela diferencia estructural</div>
+    <div class="ins-body">Los Diplomados tienen CPM promedio de <strong>COP 4,385</strong> vs <strong>COP 4,798</strong> de Seminarios, pero generan menos leads por impresión (0.19% vs 0.30% CVR). Esto sugiere que la audiencia de Diplomados tiene mayor fricción en la etapa de captación y puede requerir mayor calidez en el funnel (remarketing, testimonios, contenido de valor).</div>
+    <div class="ins-metric">CVR Dip: 0.19% vs Sem: 0.31%</div>
+  </div>
+
+  <div class="insight ins-info">
+    <div class="ins-label">💡 Insight estratégico</div>
+    <div class="ins-title">La categoría IA domina el portafolio de Diplomados</div>
+    <div class="ins-body">Más del 45% de los Diplomados activos incorporan Inteligencia Artificial en su nombre y propuesta formativa. Si bien generan alto volumen, el CPL promedio es elevado (COP 2,500–4,500), lo que puede indicar competencia de subasta entre programas similares (<em>Auction Overlap</em>) al segmentar audiencias análogas simultáneamente.</div>
+    <div class="ins-metric">9+ diplomados IA activos</div>
+  </div>
+
+  <div class="insight ins-positive">
+    <div class="ins-label">✅ Hallazgo positivo</div>
+    <div class="ins-title">Curso Excel: volumen + eficiencia = programa ancla</div>
+    <div class="ins-body">Las dos variantes del Curso Excel (Online + Presencial) acumulan <strong>1,737 leads</strong> con CPL promedio de <strong>COP 1,447</strong> — 30% más eficiente que la media. Son los programas con mayor alcance acumulado (290K+ cuentas). Programa con probada demanda sostenida durante todo el período.</div>
+    <div class="ins-metric">1,737 leads · CPL COP 1,447</div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════ RECOMENDACIONES ═══════════════════════ -->
+<div class="section-label">07 · Recomendaciones y acciones priorizadas</div>
+<div class="reco-grid" style="margin-bottom:32px">
+
+  <div class="reco">
+    <div class="reco-num">REC 01 · ALTA PRIORIDAD</div>
+    <div class="reco-title">Replicar formato video testimonial en Diplomados clave</div>
+    <div class="reco-body">El formato con vocero real (Ana Karina / Master Training) generó CVR 3x superior y CPL 75% inferior. <em>Hipótesis testeable:</em> aplicar el mismo enfoque creativo a Diplomados IA, Ecommerce y Finanzas podría reducir su CPL a rango COP 1,500–2,000. Producir 3–4 videos testimoniales para los programas de CPL alto como prueba controlada.</div>
+    <div class="reco-tag">📹 Creativos · CPL esperado: -40%</div>
+  </div>
+
+  <div class="reco">
+    <div class="reco-num">REC 02 · ALTA PRIORIDAD</div>
+    <div class="reco-title">Revisar y pausar hipótesis en Diplomado Ecommerce</div>
+    <div class="reco-body">Con COP 1.53M invertidos y CPL de COP 6,997, se recomienda suspender la pauta actual y realizar un diagnóstico completo: revisar landing page, segmentación, oferta del programa y creativos. <em>Hipótesis:</em> la propuesta de valor del programa no se diferencia suficientemente en el entorno de subasta frente a competidores externos.</div>
+    <div class="reco-tag">🔍 Diagnóstico · Antes de reinversión</div>
+  </div>
+
+  <div class="reco">
+    <div class="reco-num">REC 03 · MEDIA PRIORIDAD</div>
+    <div class="reco-title">Escalar inversión en Seminarios de alta eficiencia</div>
+    <div class="reco-body">Seminarios como Liquidación de Nómina (CPL 794), Capcut (CPL 1,017), Reforma Laboral (CPL 1,147) tienen amplio margen de escala. <em>Hipótesis:</em> aumentar presupuesto diario un 30–50% en estos programas podría generar leads adicionales a CPL marginal inferior a COP 1,500, mejorando el promedio general de la cuenta.</div>
+    <div class="reco-tag">📈 Presupuesto · Bajo riesgo</div>
+  </div>
+
+  <div class="reco">
+    <div class="reco-num">REC 04 · MEDIA PRIORIDAD</div>
+    <div class="reco-title">Consolidar Diplomados IA para reducir Auction Overlap</div>
+    <div class="reco-body">9+ Diplomados de Inteligencia Artificial activos simultáneamente con segmentaciones similares probablemente compiten en subasta entre sí, elevando artificialmente el CPM. <em>Hipótesis:</em> agrupar en 2–3 conjuntos de anuncios con segmentos diferenciados y permitir que el algoritmo optimice la distribución puede reducir CPM hasta un 20%.</div>
+    <div class="reco-tag">⚖ Estructura · Auction Overlap</div>
+  </div>
+
+  <div class="reco">
+    <div class="reco-num">REC 05 · MEDIA PRIORIDAD</div>
+    <div class="reco-title">Rotar creativos en programas con frecuencia >3x</div>
+    <div class="reco-body">Programas con frecuencia superior a 3.5 (n8n Automatización: 3.76, Automatización Contable: 3.92, Sistemas Energéticos: 4.26) pueden estar en fase de fatiga creativa. Implementar rotación de creativos y variaciones de copy puede recuperar CTR y CVR sin necesidad de expandir audiencias.</div>
+    <div class="reco-tag">🎨 Creativos · Frecuencia alta</div>
+  </div>
+
+  <div class="reco">
+    <div class="reco-num">REC 06 · BAJA PRIORIDAD</div>
+    <div class="reco-title">Implementar naming convention estandarizado</div>
+    <div class="reco-body">Los anuncios denominados "Anuncio #1" y "Anuncio #2" gastaron COP 241K con CPL promedio de COP 6,650, sin trazabilidad. Establecer una convención de nombres (Tipo_Programa_Mes_Variante) permitirá análisis de cohortes, A/B testing estructurado y reducción de errores operativos.</div>
+    <div class="reco-tag">🏷 Gobernanza · Operativo</div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════ NOTA META ADS ANALYZER ═══════════════════════ -->
+<div class="section-label">08 · Notas metodológicas · meta-ads-analyzer</div>
+<div class="panel" style="margin-bottom:24px">
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+    <div>
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue-lit);margin-bottom:6px">Nivel de evaluación</div>
+      <div style="font-size:12px;color:var(--text-md);line-height:1.6">Los datos se analizan al nivel de <strong style="color:var(--text-hi)">anuncio individual</strong> (272 registros). La evaluación de eficiencia sigue el principio <em>Holístico primero</em>: se agregan por programa antes de comparar. CPLs por anuncio pueden reflejar el <strong style="color:var(--gold)">Breakdown Effect</strong> — anuncios con CPL alto no deben pausarse sin evaluar su contribución marginal al conjunto de anuncios.</div>
+    </div>
+    <div>
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue-lit);margin-bottom:6px">Fase de aprendizaje</div>
+      <div style="font-size:12px;color:var(--text-md);line-height:1.6">Varios conjuntos de anuncios lanzados en <strong style="color:var(--text-hi)">marzo–abril 2026</strong> (últimas 4 semanas) pueden aún estar en fase de aprendizaje (~50 eventos de optimización requeridos). Los hallazgos sobre CPL en estos programas son <strong style="color:var(--gold)">preliminares</strong> y deben revisarse tras completar la fase de aprendizaje antes de tomar decisiones de pausa o presupuesto.</div>
+    </div>
+    <div>
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue-lit);margin-bottom:6px">Terminología estandarizada</div>
+      <div style="font-size:12px;color:var(--text-md);line-height:1.6">
+        · <strong style="color:var(--text-hi)">Link Clicks</strong> = clics en enlace (salida offsite)<br>
+        · <strong style="color:var(--text-hi)">Alcance</strong> = Accounts Center accounts (no "personas")<br>
+        · <strong style="color:var(--text-hi)">CPL</strong> = Costo por resultado leadgen<br>
+        · <strong style="color:var(--text-hi)">CVR</strong> = Leads / Impresiones<br>
+        · <strong style="color:var(--text-hi)">Amount Spent</strong> = Importe gastado COP<br>
+        · <strong style="color:var(--text-hi)">CPM</strong> = Costo por mil impresiones
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>📊 Tablero de Control · Educación Continua UAO · Mercadeo Digital</span>
+  <span>Período: 23 dic 2025 – 29 abr 2026 · 81 programas · 272 registros procesados</span>
+  <span>Generado con meta-ads-analyzer skill · Corte: 29 abr 2026</span>
+</footer>
+
+</div><!-- /page -->
+
+<!-- ════════════════════════════════════════
+     DATA & CHARTS
+════════════════════════════════════════ -->
+<script>
+/* ── RAW DATA ── */
+const DATA = {
+  totals: {"spend":27662423,"leads":13468,"cpl":2054,"imp":6309204,"reach":2600219,"freq":2.43,"cpm":4384,"clicks":46792,"cvr":0.213,"programs":81},
+  by_type: [
+    {"tipo":"Diplomado","leads":4576,"spend":10368673,"cpl":2266,"imp":2364560,"reach":993623,"clicks":16425},
+    {"tipo":"Curso",    "leads":4143,"spend":8548008, "cpl":2063,"imp":2191088,"reach":896671, "clicks":15630},
+    {"tipo":"Seminario","leads":4123,"spend":6470242, "cpl":1569,"imp":1348389,"reach":530400, "clicks":12345},
+    {"tipo":"Taller",   "leads":204, "spend":569894,  "cpl":2794,"imp":71991,  "reach":31377,  "clicks":652},
+    {"tipo":"Otro",     "leads":422, "spend":1705606, "cpl":4042,"imp":333176, "reach":148148, "clicks":1740}
+  ],
+  top25: [
+    {name:"ANA KARINA - Diplomado Master Trainning UAO-RCN",tipo:"Diplomado",leads:1748,spend:900083,cpl:515,imp:280914,reach:128511,freq:2.19,cpm:3204,clicks:4015,cvr:0.622},
+    {name:"Curso Excel - Online",tipo:"Curso",leads:1046,spend:1494676,cpl:1429,imp:410773,reach:183385,freq:2.24,cpm:3639,clicks:3460,cvr:0.255},
+    {name:"Curso Excel - Sábados Presencial",tipo:"Curso",leads:691,spend:1013111,cpl:1466,imp:253321,reach:107154,freq:2.36,cpm:3999,clicks:2177,cvr:0.273},
+    {name:"Seminario Capcut y Creación de Contenido",tipo:"Seminario",leads:539,spend:548194,cpl:1017,imp:160250,reach:52307,freq:3.06,cpm:3421,clicks:1471,cvr:0.336},
+    {name:"Diplomado RETIE, RETILAP y NTC 2050",tipo:"Diplomado",leads:432,spend:819273,cpl:1896,imp:313546,reach:136283,freq:2.30,cpm:2613,clicks:2503,cvr:0.138},
+    {name:"Seminario Desarrollo Habilidades Hablar en Público",tipo:"Seminario",leads:420,spend:617176,cpl:1469,imp:119475,reach:58986,freq:2.03,cpm:5166,clicks:1129,cvr:0.352},
+    {name:"Seminario Liquidación y Gestión Integral de Nómina",tipo:"Seminario",leads:416,spend:330370,cpl:794,imp:93119,reach:42358,freq:2.20,cpm:3548,clicks:1275,cvr:0.447},
+    {name:"Curso Power BI + IA",tipo:"Curso",leads:385,spend:695478,cpl:1806,imp:139249,reach:58811,freq:2.37,cpm:4994,clicks:1070,cvr:0.276},
+    {name:"Seminario Pauta Publicitaria FB/IG/WhatsApp",tipo:"Seminario",leads:341,spend:548104,cpl:1607,imp:140702,reach:48461,freq:2.90,cpm:3895,clicks:1012,cvr:0.242},
+    {name:"Diplomado Marketing Digital con IA",tipo:"Diplomado",leads:314,spend:856601,cpl:2728,imp:261770,reach:119510,freq:2.19,cpm:3272,clicks:1299,cvr:0.120},
+    {name:"Diplomado IA para Automatizar Procesos",tipo:"Diplomado",leads:310,spend:571185,cpl:1843,imp:115724,reach:36652,freq:3.16,cpm:4936,clicks:999,cvr:0.268},
+    {name:"Diplomado Automatización Contable + IA",tipo:"Diplomado",leads:305,spend:656787,cpl:2153,imp:123278,reach:31449,freq:3.92,cpm:5328,clicks:1017,cvr:0.247},
+    {name:"Seminario Pauta Digital TikTok Ads",tipo:"Seminario",leads:275,spend:385258,cpl:1401,imp:84512,reach:38012,freq:2.22,cpm:4559,clicks:774,cvr:0.325},
+    {name:"Colombia - Big Data + IA + Power BI",tipo:"Otro",leads:264,spend:797546,cpl:3021,imp:190586,reach:79635,freq:2.39,cpm:4185,clicks:1045,cvr:0.139},
+    {name:"Diplomado Finanzas y Analítica de Datos",tipo:"Diplomado",leads:264,spend:923934,cpl:3500,imp:182175,reach:82881,freq:2.20,cpm:5072,clicks:1058,cvr:0.145},
+    {name:"Curso Italiano",tipo:"Curso",leads:256,spend:248885,cpl:972,imp:82956,reach:50651,freq:1.64,cpm:3000,clicks:833,cvr:0.309},
+    {name:"Curso Diseño de Espacios Comerciales",tipo:"Curso",leads:236,spend:452818,cpl:1919,imp:118475,reach:35798,freq:3.31,cpm:3822,clicks:801,cvr:0.199},
+    {name:"Seminario Edición de Video",tipo:"Seminario",leads:236,spend:334169,cpl:1416,imp:91628,reach:34613,freq:2.65,cpm:3647,clicks:997,cvr:0.258},
+    {name:"Diplomado Marketing Digital Ecommerce",tipo:"Diplomado",leads:218,spend:1525247,cpl:6997,imp:259539,reach:115619,freq:2.24,cpm:5877,clicks:1369,cvr:0.084},
+    {name:"Curso Inglés para Niños",tipo:"Curso",leads:201,spend:590764,cpl:2939,imp:124524,reach:47227,freq:2.64,cpm:4744,clicks:1014,cvr:0.161},
+    {name:"Seminario Persuasión y Pres. Orales",tipo:"Seminario",leads:188,spend:215707,cpl:1147,imp:53650,reach:19224,freq:2.79,cpm:4021,clicks:476,cvr:0.350},
+    {name:"Seminario Diseño de Interiores",tipo:"Seminario",leads:176,spend:272727,cpl:1550,imp:40248,reach:20278,freq:1.98,cpm:6776,clicks:524,cvr:0.437},
+    {name:"Seminario Automatización con n8n",tipo:"Seminario",leads:172,spend:292250,cpl:1699,imp:62615,reach:16658,freq:3.76,cpm:4667,clicks:569,cvr:0.275},
+    {name:"Seminario Reforma Laboral y Pensional",tipo:"Seminario",leads:169,spend:193811,cpl:1147,imp:66158,reach:24097,freq:2.75,cpm:2930,clicks:593,cvr:0.255},
+    {name:"Diplomado Inteligencia de Negocios + IA",tipo:"Diplomado",leads:157,spend:698531,cpl:4449,imp:120686,reach:48477,freq:2.49,cpm:5788,clicks:659,cvr:0.130}
+  ],
+  cpl_chart: [
+    {name:"Dip. Master Training UAO-RCN",cpl:515,leads:1748,tipo:"Diplomado"},
+    {name:"Sem. Liquidación y Gestión de Nómina",cpl:794,leads:416,tipo:"Seminario"},
+    {name:"Curso Italiano",cpl:972,leads:256,tipo:"Curso"},
+    {name:"Sem. Capcut y Creación de Contenido",cpl:1017,leads:539,tipo:"Seminario"},
+    {name:"Sem. Persuasión y Pres. Orales",cpl:1147,leads:188,tipo:"Seminario"},
+    {name:"Sem. Reforma Laboral y Pensional",cpl:1147,leads:169,tipo:"Seminario"},
+    {name:"Sem. TikTok Ads",cpl:1401,leads:275,tipo:"Seminario"},
+    {name:"Sem. Edición de Video",cpl:1416,leads:236,tipo:"Seminario"},
+    {name:"Curso Excel Online",cpl:1429,leads:1046,tipo:"Curso"},
+    {name:"Curso Excel Presencial",cpl:1466,leads:691,tipo:"Curso"},
+    {name:"Sem. Habilidades Hablar en Público",cpl:1469,leads:420,tipo:"Seminario"},
+    {name:"Sem. Diseño de Interiores",cpl:1550,leads:176,tipo:"Seminario"},
+    {name:"Sem. Pauta Publicitaria FB/IG",cpl:1607,leads:341,tipo:"Seminario"},
+    {name:"Sem. Automatización con n8n",cpl:1699,leads:172,tipo:"Seminario"},
+    {name:"Dip. RETIE, RETILAP y NTC 2050",cpl:1896,leads:432,tipo:"Diplomado"}
+  ],
+  inv_top: [
+    {name:"Dip. Ecommerce Mkt Digital",spend:1525247,leads:218},
+    {name:"Curso Excel Online",spend:1494676,leads:1046},
+    {name:"Curso Excel Presencial",spend:1013111,leads:691},
+    {name:"Dip. Finanzas y Analítica",spend:923934,leads:264},
+    {name:"Dip. Master Training RCN",spend:900083,leads:1748},
+    {name:"Dip. Marketing Digital IA",spend:856601,leads:314},
+    {name:"Dip. RETIE RETILAP",spend:819273,leads:432},
+    {name:"Big Data IA Power BI",spend:797546,leads:264},
+    {name:"Dip. Intel. de Negocios+IA",spend:698531,leads:157},
+    {name:"Curso Power BI + IA",spend:695478,leads:385}
+  ]
+};
+
+/* ── COLORS ── */
+const COLORS = {
+  Diplomado:'rgba(77,143,245,0.85)',
+  Curso:'rgba(232,160,34,0.85)',
+  Seminario:'rgba(167,139,250,0.85)',
+  Taller:'rgba(18,184,164,0.85)',
+  Otro:'rgba(100,116,139,0.85)'
+};
+const SOFT = {
+  Diplomado:'rgba(77,143,245,0.20)',
+  Curso:'rgba(232,160,34,0.20)',
+  Seminario:'rgba(167,139,250,0.20)',
+  Taller:'rgba(18,184,164,0.20)',
+  Otro:'rgba(100,116,139,0.20)'
+};
+
+Chart.defaults.color = '#4d6a88';
+Chart.defaults.font.family = "'Instrument Sans', sans-serif";
+
+/* ── TYPE BARS ── */
+function buildTypeBars(){
+  const el = document.getElementById('typeBars');
+  const maxL = Math.max(...DATA.by_type.map(d=>d.leads));
+  DATA.by_type.forEach(d=>{
+    const pct = Math.round(d.leads/DATA.totals.leads*100);
+    const barW = Math.round(d.leads/maxL*100);
+    el.innerHTML += `
+    <div class="type-row">
+      <span class="type-dot" style="background:${COLORS[d.tipo]}"></span>
+      <span class="type-name">${d.tipo}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="background:${COLORS[d.tipo]};width:${barW}%" data-w="${barW}"></div>
+      </div>
+      <span class="type-leads">${d.leads.toLocaleString('es-CO')}</span>
+      <span class="type-cpl">COP ${d.cpl.toLocaleString('es-CO')}</span>
+      <span class="type-pct">${pct}%</span>
+    </div>`;
+  });
+  setTimeout(()=>{
+    document.querySelectorAll('.bar-fill').forEach(b=>{
+      b.style.width = b.dataset.w+'%';
+    });
+  },300);
+}
+
+/* ── STACKED BAR TYPE CHART ── */
+function buildTypeChart(){
+  const ctx = document.getElementById('typeChart').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels: DATA.by_type.map(d=>d.tipo),
+      datasets:[
+        {label:'Leads',data:DATA.by_type.map(d=>d.leads),backgroundColor:DATA.by_type.map(d=>COLORS[d.tipo]),borderRadius:4,yAxisID:'y'},
+        {label:'Inversión (COP miles)',data:DATA.by_type.map(d=>Math.round(d.spend/1000)),backgroundColor:DATA.by_type.map(d=>SOFT[d.tipo]),borderWidth:1,borderColor:DATA.by_type.map(d=>COLORS[d.tipo]),borderRadius:4,yAxisID:'y1'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{font:{size:10},color:'#4d6a88',boxWidth:10}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.parsed.y.toLocaleString('es-CO')}}},
+      scales:{
+        y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{font:{size:9},color:'#4d6a88'},title:{display:true,text:'Leads',color:'#4d6a88',font:{size:9}}},
+        y1:{position:'right',grid:{display:false},ticks:{font:{size:9},color:'#4d6a88'},title:{display:true,text:'Inversión (COP miles)',color:'#4d6a88',font:{size:9}}},
+        x:{grid:{display:false},ticks:{font:{size:9},color:'#8fa8c8'}}
+      }
+    }
+  });
+}
+
+/* ── DONUT ── */
+function buildDonut(){
+  const ctx = document.getElementById('donutChart').getContext('2d');
+  new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      labels:DATA.by_type.map(d=>d.tipo),
+      datasets:[{
+        data:DATA.by_type.map(d=>d.leads),
+        backgroundColor:DATA.by_type.map(d=>COLORS[d.tipo]),
+        borderColor:'#04090f',borderWidth:3,hoverOffset:6
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      cutout:'68%',
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed.toLocaleString('es-CO')} leads (${Math.round(ctx.parsed/DATA.totals.leads*100)}%)`}}
+      }
+    }
+  });
+  const leg = document.getElementById('donutLegend');
+  DATA.by_type.forEach(d=>{
+    leg.innerHTML+=`<span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-md)"><span style="width:8px;height:8px;border-radius:2px;background:${COLORS[d.tipo]};display:inline-block"></span>${d.tipo}: ${Math.round(d.leads/DATA.totals.leads*100)}%</span>`;
+  });
+}
+
+/* ── CPL HORIZONTAL BAR ── */
+function buildCPLChart(){
+  const ctx = document.getElementById('cplChart').getContext('2d');
+  const labels = DATA.cpl_chart.map(d=>d.name);
+  const cpls   = DATA.cpl_chart.map(d=>d.cpl);
+  const bgs    = DATA.cpl_chart.map(d=>COLORS[d.tipo]||'rgba(100,116,139,0.8)');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        label:'CPL (COP)',data:cpls,backgroundColor:bgs,
+        borderRadius:3,borderSkipped:false
+      }]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`CPL: COP ${ctx.parsed.x.toLocaleString('es-CO')} · Leads: ${DATA.cpl_chart[ctx.dataIndex].leads}`}},
+        annotation:{annotations:{line1:{type:'line',xMin:2054,xMax:2054,borderColor:'rgba(232,69,69,0.6)',borderWidth:1.5,borderDash:[4,3],label:{display:true,content:'Promedio COP 2,054',color:'#f87171',font:{size:9},position:'start'}}}}
+      },
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{font:{size:9},callback:v=>'COP '+v.toLocaleString('es-CO')}},
+        y:{grid:{display:false},ticks:{font:{size:9},color:'#8fa8c8'}}
+      }
+    }
+  });
+}
+
+/* ── INVESTMENT vs LEADS ── */
+function buildInvChart(){
+  const ctx = document.getElementById('invChart').getContext('2d');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:DATA.inv_top.map(d=>d.name),
+      datasets:[
+        {label:'Inversión COP',data:DATA.inv_top.map(d=>d.spend),backgroundColor:'rgba(21,101,216,0.6)',borderRadius:4,yAxisID:'y'},
+        {label:'Leads',data:DATA.inv_top.map(d=>d.leads),backgroundColor:'rgba(18,184,164,0.7)',borderRadius:4,yAxisID:'y1'}
+      ]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{font:{size:9},color:'#4d6a88',boxWidth:8}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label==='-'?'':ctx.dataset.label+': '+ctx.parsed.x.toLocaleString('es-CO')}}},
+      scales:{
+        y:{grid:{display:false},ticks:{font:{size:8.5},color:'#8fa8c8'}},
+        x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{font:{size:8.5},callback:v=>v>=1e6?'$'+(v/1e6).toFixed(1)+'M':'$'+(v/1e3).toFixed(0)+'K'}},
+        y1:{display:false},
+        x1:{display:false}
+      }
+    }
+  });
+}
+
+/* ── CVR CHART ── */
+function buildCVRChart(){
+  const ctx = document.getElementById('cvrChart').getContext('2d');
+  const sorted = [...DATA.top25].sort((a,b)=>b.cvr-a.cvr).slice(0,15);
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:sorted.map(d=>d.name.length>35?d.name.substring(0,35)+'…':d.name),
+      datasets:[{
+        label:'CVR %',data:sorted.map(d=>d.cvr),
+        backgroundColor:sorted.map(d=>COLORS[d.tipo]||'rgba(100,116,139,0.8)'),
+        borderRadius:3,borderSkipped:false
+      }]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`CVR: ${ctx.parsed.x}% · Leads: ${sorted[ctx.dataIndex].leads} · CPL: COP ${sorted[ctx.dataIndex].cpl.toLocaleString('es-CO')}`}}
+      },
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{font:{size:9},callback:v=>v+'%'},title:{display:true,text:'CVR (Leads/Impresiones)',color:'#4d6a88',font:{size:9}}},
+        y:{grid:{display:false},ticks:{font:{size:9},color:'#8fa8c8'}}
+      }
+    }
+  });
+}
+
+/* ── TABLE ── */
+let sortDir = 1, sortCol = 1, activeFilter = 'all';
+const TIPO_CLASS = {Diplomado:'t-dip',Curso:'t-cur',Seminario:'t-sem',Taller:'t-tal',Otro:'t-otr'};
+
+function cplClass(v){
+  if(v<=1200) return 'v-good';
+  if(v<=2054) return 'v-ok';
+  if(v<=3500) return 'v-warn';
+  return 'v-bad';
+}
+function freqClass(v){
+  if(v<=2.5)  return 'v-ok';
+  if(v<=3.5)  return 'v-warn';
+  return 'v-bad';
+}
+function fmt(n){return Math.round(n).toLocaleString('es-CO')}
+
+function renderTable(){
+  let data = [...DATA.top25];
+  if(activeFilter!=='all') data=data.filter(d=>d.tipo===activeFilter);
+  const vals = [
+    d=>d.name, d=>d.leads, d=>d.spend, d=>d.cpl,
+    d=>d.imp, d=>d.reach, d=>d.freq, d=>d.cpm, d=>d.clicks, d=>d.cvr
+  ];
+  data.sort((a,b)=>(vals[sortCol](a)-vals[sortCol](b))*sortDir);
+  const maxLeads = Math.max(...data.map(d=>d.leads));
+  const tb = document.getElementById('tableBody');
+  tb.innerHTML = data.map((d,i)=>`
+    <tr>
+      <td><div class="prog-name">${d.name}</div><span class="tipo-pill ${TIPO_CLASS[d.tipo]||'t-otr'}">${d.tipo}</span></td>
+      <td class="v-hi">${fmt(d.leads)}<div class="mini-bar-wrap"><div class="mini-bar" style="width:${Math.round(d.leads/maxLeads*100)}%"></div></div></td>
+      <td>${fmt(d.spend)}</td>
+      <td class="${cplClass(d.cpl)}">${fmt(d.cpl)}</td>
+      <td>${fmt(d.imp)}</td>
+      <td>${fmt(d.reach)}</td>
+      <td class="${freqClass(d.freq)}">${d.freq.toFixed(2)}</td>
+      <td>${fmt(d.cpm)}</td>
+      <td>${fmt(d.clicks)}</td>
+      <td>${d.cvr.toFixed(3)}%</td>
+    </tr>`).join('');
+}
+function sortTable(col){
+  if(sortCol===col) sortDir*=-1; else {sortCol=col;sortDir=-1;}
+  document.querySelectorAll('thead th').forEach((th,i)=>th.classList.toggle('sorted',i===col));
+  renderTable();
+}
+function filterTable(tipo,btn){
+  activeFilter=tipo;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+/* ── INIT ── */
+window.addEventListener('DOMContentLoaded',()=>{
+  buildTypeBars();
+  buildTypeChart();
+  buildDonut();
+  buildCPLChart();
+  buildInvChart();
+  buildCVRChart();
+  renderTable();
+});
+</script>
+</body>
+</html>
