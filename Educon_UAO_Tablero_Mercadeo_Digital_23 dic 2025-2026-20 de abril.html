@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tablero de Control Digital | UAO | Educación para la Vida | Ene–Abr 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --r:#DC142D; --rd:#961423; --rl:#F03C46;
+  --cr:#ECE5DC; --crd:#D4C9BC;
+  --bk:#121212; --wh:#FFFFFF;
+  --bg:#F4EDE4; --card:#FFFFFF;
+  --t1:#1C1C1C; --t2:#4A3F3A; --tm:#8A7570;
+  --bdr:#DDD3C8; --bdrl:#EAE3DB;
+  --sh:0 4px 20px rgba(150,20,35,.10);
+  --shh:0 8px 36px rgba(150,20,35,.18);
+  --shs:0 2px 10px rgba(150,20,35,.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);line-height:1.6;min-width:1200px}
+
+/* ── HEADER ── */
+.hd{background:var(--wh);border-bottom:3px solid var(--r)}
+.hd-in{display:flex;align-items:stretch;min-height:108px}
+
+.hd-logo{
+  background:var(--wh);
+  padding:18px 28px;
+  display:flex;align-items:center;justify-content:center;
+  border-right:2px solid var(--bdrl);
+  flex-shrink:0;min-width:140px;
+}
+.hd-logo img{width:80px;height:80px;object-fit:contain;display:block}
+
+.hd-accent{width:4px;background:linear-gradient(180deg,var(--rl) 0%,var(--r) 50%,var(--rd) 100%);flex-shrink:0}
+
+.hd-body{
+  flex:1;padding:20px 32px;
+  display:flex;flex-direction:column;justify-content:center;gap:7px;
+  background:var(--wh);
+}
+.hd-meta{
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--rd);display:flex;align-items:center;gap:8px
+}
+.hd-meta .sep{color:var(--crd)}
+.hd-title{font-size:26px;font-weight:800;color:var(--bk);line-height:1.15;letter-spacing:-.3px}
+.hd-title span{color:var(--r)}
+.hd-sub{font-size:12px;color:var(--tm);display:flex;align-items:center;gap:10px}
+.hd-sub .dot{width:3px;height:3px;background:var(--r);border-radius:50%;flex-shrink:0;display:inline-block}
+
+
+/* ── TABS ── */
+.tabs{
+  background:var(--bk);
+  border-bottom:2px solid var(--rd);
+  padding:0 40px;display:flex;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 4px 18px rgba(0,0,0,.28)
+}
+.tb{
+  padding:13px 18px;border:none;background:none;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
+  color:rgba(255,255,255,.38);cursor:pointer;
+  border-bottom:3px solid transparent;margin-bottom:-2px;
+  transition:all .2s;white-space:nowrap
+}
+.tb:hover{color:rgba(255,255,255,.72)}
+.tb.on{color:var(--rl);border-bottom-color:var(--r);font-weight:700}
+
+/* ── SECTIONS ── */
+.sec{display:none;padding:32px 44px 54px}
+.sec.on{display:block}
+.sec-h{margin-bottom:24px}
+.sec-t{font-size:20px;font-weight:800;color:var(--t1);letter-spacing:-.3px;margin-bottom:2px}
+.sec-t span{color:var(--r)}
+.sec-s{font-size:12px;color:var(--tm)}
+
+/* ── METRIC BAND ── */
+.mb{
+  background:var(--bk);border-radius:16px;
+  padding:24px 32px;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  margin-bottom:22px;
+  box-shadow:var(--sh);
+  position:relative;overflow:hidden;
+}
+.mb::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--rd),var(--r),var(--rl),var(--r),var(--rd))
+}
+.mbi{text-align:center;padding:4px 16px;border-right:1px solid rgba(255,255,255,.07)}
+.mbi:last-child{border-right:none}
+.mbi-l{font-size:9px;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;font-weight:500}
+.mbi-v{font-size:23px;font-weight:800;color:#fff;line-height:1;letter-spacing:-.5px}
+.mbi-v.ac{color:var(--rl)}
+.mbi-s{font-size:9px;color:rgba(255,255,255,.3);margin-top:3px}
+
+/* ── KPI CARDS ── */
+.kg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kc{
+  background:var(--card);border-radius:16px;padding:18px;
+  box-shadow:var(--shs);border:1px solid var(--bdrl);
+  transition:all .22s;position:relative;overflow:hidden;
+}
+.kc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kc:hover{box-shadow:var(--shh);transform:translateY(-2px)}
+.kc.a::before{background:var(--rd)}
+.kc.b::before{background:var(--r)}
+.kc.c::before{background:var(--rl)}
+.kc.d::before{background:#7A0D1A}
+.km{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--tm);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.kdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.kc.a .kdot{background:var(--rd)}.kc.b .kdot{background:var(--r)}
+.kc.c .kdot{background:var(--rl)}.kc.d .kdot{background:#7A0D1A}
+.kv{font-size:24px;font-weight:800;color:var(--bk);letter-spacing:-.5px;line-height:1;margin-bottom:2px}
+.kml{font-size:10px;color:var(--tm);margin-bottom:10px}
+.khr{height:1px;background:var(--bdrl);margin-bottom:8px}
+.kr{display:flex;flex-direction:column;gap:5px}
+.ki{display:flex;justify-content:space-between;align-items:center}
+.kil{font-size:10px;color:var(--t2)}
+.kiv{font-size:10px;font-weight:700;color:var(--t1);font-feature-settings:'tnum'}
+
+/* ── BADGES ── */
+.bg{display:inline-flex;align-items:center;padding:2px 6px;border-radius:20px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;vertical-align:middle;margin-left:4px}
+.bg-ok{background:#FEF3C7;color:#92400E}
+.bg-alt{background:#FEE2E2;color:#991B1B}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+
+/* ── CHART CARDS ── */
+.cc{background:var(--card);border-radius:14px;padding:20px;box-shadow:var(--shs);border:1px solid var(--bdrl)}
+.ct{font-size:11px;font-weight:700;color:var(--t1);text-transform:uppercase;letter-spacing:.9px;margin-bottom:2px}
+.cs{font-size:10px;color:var(--tm);margin-bottom:14px}
+.cw-sm{position:relative;height:200px}
+.cw-md{position:relative;height:250px}
+.cw-lg{position:relative;height:308px}
+.cw-xl{position:relative;height:390px}
+
+/* ── CHIPS ── */
+.ch{display:inline-block;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600}
+.ch-r{background:#FEE2E2;color:var(--rd)}
+.ch-cr{background:var(--cr);color:#6B4226}
+.ch-bl{background:#DBEAFE;color:#1E40AF}
+.ch-wm{background:#FEF3C7;color:#92400E}
+.ch-gn{background:#D1FAE5;color:#065F46}
+.ch-gy{background:#F3F4F6;color:#374151}
+
+/* ── MINI STRIP ── */
+.mks{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
+.mk{background:var(--card);border-radius:10px;padding:12px;box-shadow:var(--shs);border:1px solid var(--bdrl);text-align:center}
+.mkl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tm);margin-bottom:5px}
+.mkv{font-size:19px;font-weight:800;color:var(--bk);letter-spacing:-.5px;line-height:1}
+.mk.ac .mkv{color:var(--r)}
+
+/* ── TABLES ── */
+.tc{background:var(--card);border-radius:14px;box-shadow:var(--shs);border:1px solid var(--bdrl);overflow:hidden;margin-bottom:16px}
+.th{padding:16px 22px 10px;border-bottom:1px solid var(--bdr);background:#FDFAF7}
+.tt{font-size:11px;font-weight:700;color:var(--t1);text-transform:uppercase;letter-spacing:.9px}
+.td2{font-size:10px;color:var(--tm);margin-top:1px}
+table{width:100%;border-collapse:collapse}
+thead th{padding:9px 12px;background:#FAF5EF;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm);text-align:left;border-bottom:1px solid var(--bdr);white-space:nowrap}
+thead th.r{text-align:right}
+tbody td{padding:8px 12px;font-size:11px;border-bottom:1px solid var(--bdrl);color:var(--t1)}
+tbody td.r{text-align:right;font-feature-settings:'tnum';font-size:11px;font-weight:500}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#FAF5EF}
+.tr-t td{background:#F4E8DF!important;font-weight:700;border-top:2px solid var(--bdr)}
+.tn{padding:8px 22px;font-size:9px;color:var(--tm);border-top:1px solid var(--bdrl);background:#FDFAF7;font-style:italic}
+
+/* ── INSIGHTS ── */
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.ic{background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shs);border:1px solid var(--bdrl);border-left:4px solid var(--r);transition:all .2s}
+.ic:hover{box-shadow:var(--shh)}
+.ic.w{border-left-color:#E67E22}.ic.a{border-left-color:var(--rd)}.ic.i{border-left-color:#2980B9}
+.ic-i{font-size:18px;margin-bottom:6px}
+.ic-t{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:5px}
+.ic-x{font-size:11px;color:var(--t2);line-height:1.7}
+.ic-h{font-weight:700;color:var(--t1)}
+
+/* ── HISTORY CARDS ── */
+.hg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.hcard{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shs);border:1px solid var(--bdrl)}
+.hc-m{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--tm);margin-bottom:8px}
+.hc-v{font-size:18px;font-weight:800;color:var(--t1);letter-spacing:-.4px}
+.hc-vs{font-size:10px;color:var(--tm);margin:4px 0 6px}
+.hc-r{font-size:12px;font-weight:600;color:var(--t2)}
+.hc-s{margin-top:9px}
+
+/* ── CONCLUSIONS ── */
+.cbox{background:var(--card);border-radius:16px;border:2px solid var(--r);overflow:hidden;margin-bottom:16px;box-shadow:var(--sh)}
+.cb-h{background:var(--bk);padding:14px 22px;display:flex;align-items:center;gap:11px}
+.cb-ha{width:4px;height:28px;background:linear-gradient(180deg,var(--rl),var(--rd));border-radius:2px;flex-shrink:0}
+.cb-ht .cbt{font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.5px}
+.cb-ht .cbs{font-size:10px;color:rgba(255,255,255,.38);margin-top:1px}
+.cb-bd{padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.cb-ct{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:9px;padding-bottom:7px;border-bottom:2px solid var(--bdr)}
+.cb-ct.g{color:#065F46;border-color:#065F46}
+.cb-ct.a{color:var(--rd);border-color:var(--rd)}
+.cb-bd ul{padding-left:14px;display:flex;flex-direction:column;gap:6px}
+.cb-bd li{font-size:12px;color:var(--t2);line-height:1.6}
+.cb-bd li strong{color:var(--t1);font-weight:600}
+
+/* ── FOOTER ── */
+.ft{background:var(--bk);padding:16px 44px;display:flex;justify-content:space-between;align-items:center;margin-top:32px;border-top:3px solid var(--r)}
+.ft-l{display:flex;align-items:center;gap:10px}
+.ft-l img{width:32px;height:32px;object-fit:contain;background:white;border-radius:4px;padding:2px}
+.ft-t{font-size:11px;color:rgba(255,255,255,.4)}.ft-t strong{color:rgba(255,255,255,.7)}
+.ft-r{font-size:10px;color:rgba(255,255,255,.25)}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--cr)}
+::-webkit-scrollbar-thumb{background:#C5B0A0;border-radius:3px}
+
+
+.ft-credit{font-size:10px;color:rgba(255,255,255,.35);text-align:center;padding:8px 44px;background:var(--bk);border-top:1px solid rgba(255,255,255,.06);letter-spacing:.5px}
+.ft-credit span{color:rgba(240,60,70,.65);font-weight:600}
+
+/* ── COLUMN SORT & FILTER ── */
+.thead-main th{cursor:default;white-space:nowrap;user-select:none}
+.th-sort{cursor:pointer!important;position:relative}
+.th-sort:hover{background:#F0E8E0!important;color:var(--r)}
+.th-sort.asc .sa::after{content:' ▲';color:var(--r)}
+.th-sort.desc .sa::after{content:' ▼';color:var(--r)}
+.th-sort .sa{color:#C5B0A0;font-size:10px;transition:color .15s}
+.th-sort:hover .sa{color:var(--r)}
+.th-sort.asc,.th-sort.desc{background:#FFF0EE!important;color:var(--rd)!important}
+
+.filter-row td{padding:5px 6px!important;background:#FAF5EF;border-bottom:2px solid var(--r)!important}
+.f-inp,.f-sel{
+  width:100%;padding:4px 7px;font-family:'DM Sans',sans-serif;font-size:10px;
+  border:1px solid var(--bdr);border-radius:6px;background:#fff;color:var(--t1);
+  outline:none;transition:border-color .15s;min-width:0;
+}
+.f-inp:focus,.f-sel:focus{border-color:var(--r);box-shadow:0 0 0 2px rgba(220,20,45,.1)}
+.f-inp::placeholder{color:#C5B0A0}
+.f-num{text-align:right}
+input[type=number].f-num::-webkit-outer-spin-button,
+input[type=number].f-num::-webkit-inner-spin-button{-webkit-appearance:none}
+
+
+.row-count{
+  margin-left:6px;padding:3px 10px;border-radius:20px;
+  background:var(--bk);color:#fff;font-size:10px;font-weight:700;
+  display:none;
+}
+.row-count.active{display:inline-block}
+
+tr.row-hidden{display:none}
+tr.row-hl td{background:#FFF4F4!important;font-weight:600}
+tr.row-top td{background:#FFF0F0!important}
+tr.row-top td:nth-child(3)::before{content:'★ ';color:var(--r);font-weight:700}
+
+/* ── TOP CREDIT BAR ── */
+.top-credit{
+  background:var(--cr);
+  border-bottom:1px solid var(--crd);
+  padding:7px 44px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.tc-left{
+  font-size:10px;color:var(--tm);
+  font-weight:400;letter-spacing:.3px;
+}
+.tc-left strong{
+  color:var(--rd);font-weight:700;
+}
+.tc-right{
+  font-size:10px;color:var(--tm);
+  letter-spacing:.3px;
+}
+</style>
+</head>
+<body>
+<!-- HEADER -->
+<div class="top-credit">
+<div class="tc-left">Elaborado por <strong>José Joaquín González Uribe</strong> · Área de Mercadeo Digital · Universidad Autónoma de Occidente</div>
+<div class="tc-right">Educación para la Vida · Enero – Abril 2026</div>
+</div>
+<header class="hd">
+<div class="hd-in">
+<div class="hd-logo">
+<img alt="Universidad Autónoma de Occidente" src="data:image/png;base64,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"/>
+</div>
+<div class="hd-accent"></div>
+<div class="hd-body">
+<div class="hd-meta">
+        Universidad Autónoma de Occidente
+        <span class="sep">·</span>Mercadeo Digital
+        <span class="sep">·</span>Educación para la Vida
+      </div>
+<div class="hd-title">Tablero de Control <span>Digital Ads</span></div>
+<div class="hd-sub">
+        Meta Ads<span class="dot"></span>
+        Generación de Leads<span class="dot"></span>
+        Enero–Abril 2026<span class="dot"></span>
+        Informe de Comité
+      </div>
+</div>
+</div>
+</header>
+<!-- TABS -->
+<nav class="tabs">
+<button class="tb on" onclick="showTab('resumen',this)">📊 Resumen Ejecutivo</button>
+<button class="tb" onclick="showTab('enero',this)">Ene 2026</button>
+<button class="tb" onclick="showTab('febrero',this)">Feb 2026</button>
+<button class="tb" onclick="showTab('marzo',this)">Mar 2026</button>
+<button class="tb" onclick="showTab('abril',this)">Abr 2026</button>
+<button class="tb" onclick="showTab('roas',this)">💰 ROAS por Programa</button>
+<button class="tb" onclick="showTab('historico',this)">📈 Histórico de Ventas</button>
+<button class="tb" onclick="showTab('insights',this)">💡 Hallazgos &amp; Recomendaciones</button>
+</nav>
+<!-- ══════════ RESUMEN ══════════ -->
+<section class="sec on" id="tab-resumen">
+<div class="sec-h">
+<div class="sec-t">Resumen <span>Ejecutivo</span></div>
+<div class="sec-s">Indicadores consolidados Enero–Abril 2026 · Campañas de Generación de Leads · Meta Ads · Universidad Autónoma de Occidente</div>
+</div>
+<div class="mb">
+<div class="mbi"><div class="mbi-l">Leads Totales</div><div class="mbi-v ac">12.007</div><div class="mbi-s">4 meses</div></div>
+<div class="mbi"><div class="mbi-l">Inversión Real</div><div class="mbi-v">$23,1M</div><div class="mbi-s">COP pautado</div></div>
+<div class="mbi"><div class="mbi-l">Ventas Generadas</div><div class="mbi-v ac">$624,6M</div><div class="mbi-s">COP período</div></div>
+<div class="mbi"><div class="mbi-l">ROAS Global</div><div class="mbi-v">27,1x</div><div class="mbi-s">Ponderado</div></div>
+<div class="mbi"><div class="mbi-l">Impresiones</div><div class="mbi-v">5,56M</div><div class="mbi-s">Total período</div></div>
+</div>
+<div class="kg">
+<div class="kc a">
+<div class="km"><span class="kdot"></span>Enero 2026</div>
+<div class="kv">$78,3M</div>
+<div class="kml">Ventas generadas<span class="bg bg-ok">🏆 Récord</span></div>
+<div class="khr"></div>
+<div class="kr">
+<div class="ki"><span class="kil">Leads</span><span class="kiv">1.712</span></div>
+<div class="ki"><span class="kil">Matrículas</span><span class="kiv">143</span></div>
+<div class="ki"><span class="kil">Inversión real</span><span class="kiv">$3.281.600</span></div>
+<div class="ki"><span class="kil">CPL ponderado</span><span class="kiv">$1.916</span></div>
+<div class="ki"><span class="kil">ROAS</span><span class="kiv">23,9x</span></div>
+<div class="ki"><span class="kil">% Ppto ejecutado</span><span class="kiv">88,5%</span></div>
+</div>
+</div>
+<div class="kc b">
+<div class="km"><span class="kdot"></span>Febrero 2026</div>
+<div class="kv">$228,5M</div>
+<div class="kml">Ventas generadas<span class="bg bg-ok">🏆 Récord</span></div>
+<div class="khr"></div>
+<div class="kr">
+<div class="ki"><span class="kil">Leads</span><span class="kiv">3.155</span></div>
+<div class="ki"><span class="kil">Matrículas</span><span class="kiv">212</span></div>
+<div class="ki"><span class="kil">Inversión real</span><span class="kiv">$6.835.691</span></div>
+<div class="ki"><span class="kil">CPL ponderado</span><span class="kiv">$2.167</span></div>
+<div class="ki"><span class="kil">ROAS</span><span class="kiv">33,4x</span></div>
+<div class="ki"><span class="kil">% Ppto ejecutado</span><span class="kiv">93,3%</span></div>
+</div>
+</div>
+<div class="kc c">
+<div class="km"><span class="kdot"></span>Marzo 2026</div>
+<div class="kv">$256,0M</div>
+<div class="kml">Ventas generadas<span class="bg bg-ok">🏆 Récord</span></div>
+<div class="khr"></div>
+<div class="kr">
+<div class="ki"><span class="kil">Leads</span><span class="kiv">4.905</span></div>
+<div class="ki"><span class="kil">Matrículas</span><span class="kiv">159</span></div>
+<div class="ki"><span class="kil">Inversión real</span><span class="kiv">$8.319.742</span></div>
+<div class="ki"><span class="kil">CPL ponderado</span><span class="kiv">$1.696</span></div>
+<div class="ki"><span class="kil">ROAS</span><span class="kiv">30,8x</span></div>
+<div class="ki"><span class="kil">% Ppto ejecutado</span><span class="kiv">80,8%</span></div>
+</div>
+</div>
+<div class="kc d">
+<div class="km"><span class="kdot"></span>Abril 2026</div>
+<div class="kv">$61,7M</div>
+<div class="kml">Ventas generadas<span class="bg bg-alt">⚠ Bajo histórico</span></div>
+<div class="khr"></div>
+<div class="kr">
+<div class="ki"><span class="kil">Leads</span><span class="kiv">2.235</span></div>
+<div class="ki"><span class="kil">Matrículas</span><span class="kiv">40</span></div>
+<div class="ki"><span class="kil">Inversión real</span><span class="kiv">$4.623.583</span></div>
+<div class="ki"><span class="kil">CPL ponderado</span><span class="kiv">$2.069</span></div>
+<div class="ki"><span class="kil">ROAS</span><span class="kiv">13,4x</span></div>
+<div class="ki"><span class="kil">% Ppto ejecutado</span><span class="kiv" style="color:var(--r)">56,3%</span></div>
+</div>
+</div>
+</div>
+<div class="g2">
+<div class="cc"><div class="ct">Leads por Mes</div><div class="cs">Total leads generados mes a mes</div><div class="cw-md"><canvas id="cLM"></canvas></div></div>
+<div class="cc"><div class="ct">Inversión Real vs. Ventas</div><div class="cs">Gasto pautado vs. ventas generadas (COP millones)</div><div class="cw-md"><canvas id="cIV"></canvas></div></div>
+</div>
+<div class="g3">
+<div class="cc"><div class="ct">CPL Real Ponderado</div><div class="cs">Inversión total / Total leads por mes</div><div class="cw-md"><canvas id="cCPL"></canvas></div></div>
+<div class="cc"><div class="ct">ROAS Global Mensual</div><div class="cs">Ventas / Gasto real de pauta</div><div class="cw-md"><canvas id="cROAS"></canvas></div></div>
+<div class="cc"><div class="ct">Tasa de Conversión</div><div class="cs">Matrículas / Leads (%)</div><div class="cw-md"><canvas id="cConv"></canvas></div></div>
+</div>
+<div class="g2">
+<div class="cc"><div class="ct">Impresiones · Alcance · Clics (all)</div><div class="cs">Visibilidad y engagement — Alcance = Accounts Center accounts</div><div class="cw-md"><canvas id="cVis"></canvas></div></div>
+<div class="cc"><div class="ct">CPM Ponderado · Frecuencia Ponderada</div><div class="cs">Eficiencia de entrega por mes</div><div class="cw-md"><canvas id="cEfi"></canvas></div></div>
+</div>
+<div class="tc">
+<div class="th"><div class="tt">Comparativo Mensual Consolidado</div><div class="td2">Todos los indicadores con metodología ponderada correcta</div></div>
+<table>
+<thead><tr><th>Indicador</th><th class="r">Enero</th><th class="r">Febrero</th><th class="r">Marzo</th><th class="r">Abril</th><th class="r">Total / Prom.</th></tr></thead>
+<tbody>
+<tr><td>Programas activos</td><td class="r">13</td><td class="r">18</td><td class="r">23</td><td class="r">17</td><td class="r">71 acum.</td></tr>
+<tr><td>Leads generados</td><td class="r">1.712</td><td class="r">3.155</td><td class="r">4.905</td><td class="r">2.235</td><td class="r"><strong>12.007</strong></td></tr>
+<tr><td>Inscritos</td><td class="r">281</td><td class="r">462</td><td class="r">374</td><td class="r">310</td><td class="r">1.427</td></tr>
+<tr><td>Matrículas</td><td class="r">143</td><td class="r">212</td><td class="r">159</td><td class="r">40</td><td class="r"><strong>554</strong></td></tr>
+<tr><td>Inversión real pauta</td><td class="r">$3.281.600</td><td class="r">$6.835.691</td><td class="r">$8.319.742</td><td class="r">$4.623.583</td><td class="r"><strong>$23.060.616</strong></td></tr>
+<tr><td>Presupuesto del mes</td><td class="r">$3.707.000</td><td class="r">$7.330.350</td><td class="r">$10.291.977</td><td class="r">$8.210.000</td><td class="r">$29.539.327</td></tr>
+<tr><td>% Presupuesto ejecutado</td><td class="r">88,5%</td><td class="r">93,3%</td><td class="r">80,8%</td><td class="r" style="color:var(--r);font-weight:700">56,3%</td><td class="r">78,1%</td></tr>
+<tr><td>Ventas generadas</td><td class="r">$78.312.000</td><td class="r">$228.509.000</td><td class="r">$255.992.500</td><td class="r">$61.748.000</td><td class="r"><strong>$624.561.500</strong></td></tr>
+<tr><td>CPL real ponderado ★</td><td class="r">$1.916</td><td class="r">$2.167</td><td class="r">$1.696</td><td class="r">$2.069</td><td class="r"><strong>$1.921</strong></td></tr>
+<tr><td>ROAS global</td><td class="r">23,9x</td><td class="r">33,4x</td><td class="r">30,8x</td><td class="r">13,4x</td><td class="r"><strong>27,1x</strong></td></tr>
+<tr><td>Conv. Matrículas/Leads ★</td><td class="r">8,35%</td><td class="r">6,72%</td><td class="r">3,24%</td><td class="r" style="color:var(--r);font-weight:700">1,79%</td><td class="r">4,62%</td></tr>
+<tr><td>Impresiones</td><td class="r">990.116</td><td class="r">1.407.539</td><td class="r">1.935.533</td><td class="r">1.223.671</td><td class="r">5.556.859</td></tr>
+<tr><td>Alcance (Acc. Center accounts)</td><td class="r">360.842</td><td class="r">467.293</td><td class="r">670.457</td><td class="r">436.079</td><td class="r">1.934.671</td></tr>
+<tr><td>Frecuencia ponderada ★</td><td class="r">2,74</td><td class="r">3,01</td><td class="r">2,89</td><td class="r">2,81</td><td class="r">2,87</td></tr>
+<tr><td>CPM ponderado ★</td><td class="r">$3.314</td><td class="r">$4.857</td><td class="r">$4.299</td><td class="r">$3.779</td><td class="r">$4.152</td></tr>
+<tr><td>Clics (all)</td><td class="r">6.753</td><td class="r">11.916</td><td class="r">15.524</td><td class="r">7.981</td><td class="r">42.174</td></tr>
+<tr class="tr-t"><td>CTR (all) ponderado ★</td><td class="r">0,68%</td><td class="r">0,85%</td><td class="r">0,80%</td><td class="r">0,65%</td><td class="r"><strong>0,76%</strong></td></tr>
+</tbody>
+</table>
+<div class="tn">★ Promedios reales ponderados — CPL = Inversión/Leads · Frecuencia = Impresiones/Alcance · CPM = (Inversión/Impresiones)×1000 · CTR = Clics(all)/Impresiones</div>
+</div>
+</section>
+<!-- ══════════ ENERO ══════════ -->
+<section class="sec" id="tab-enero">
+<div class="sec-h"><div class="sec-t">Enero <span>2026</span></div><div class="sec-s">13 programas activos · Inversión real $3.281.600 · Presupuesto $3.707.000</div></div>
+<div class="mks">
+<div class="mk"><div class="mkl">Leads</div><div class="mkv">1.712</div></div>
+<div class="mk"><div class="mkl">Matrículas</div><div class="mkv">143</div></div>
+<div class="mk ac"><div class="mkl">CPL Ponderado</div><div class="mkv">$1.916</div></div>
+<div class="mk"><div class="mkl">Frecuencia</div><div class="mkv">2,74</div></div>
+<div class="mk"><div class="mkl">CPM Ponderado</div><div class="mkv">$3.314</div></div>
+<div class="mk"><div class="mkl">Conv. Mat/Leads</div><div class="mkv">8,35%</div></div>
+</div>
+<div class="g2">
+<div class="cc"><div class="ct">Leads por Programa — Enero</div><div class="cs">Distribución total de leads generados</div><div class="cw-lg"><canvas id="cEL"></canvas></div></div>
+<div class="cc"><div class="ct">CPL por Programa — Enero</div><div class="cs">Verde ≤$1.500 · Naranja ≤$2.500 · Rojo &gt;$2.500</div><div class="cw-lg"><canvas id="cEC"></canvas></div></div>
+</div>
+<div class="tc">
+<div class="th"><div class="tt">Detalle Completo por Programa — Enero 2026</div></div>
+<table id="tbl-filt-ene">
+<thead><tr class="thead-main"><th>#</th><th>Tipo</th><th class="th-sort" data-col="2" data-dir="none" onclick="colSort('tbl-filt-ene', 2, this)">Programa<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="3" data-dir="none" onclick="colSort('tbl-filt-ene', 3, this)">Leads<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="4" data-dir="none" onclick="colSort('tbl-filt-ene', 4, this)">CPL<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="5" data-dir="none" onclick="colSort('tbl-filt-ene', 5, this)">Inscr.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="6" data-dir="none" onclick="colSort('tbl-filt-ene', 6, this)">Matr.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="7" data-dir="none" onclick="colSort('tbl-filt-ene', 7, this)">Conv%<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="8" data-dir="none" onclick="colSort('tbl-filt-ene', 8, this)">Ventas<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="9" data-dir="none" onclick="colSort('tbl-filt-ene', 9, this)">Gasto Real<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="10" data-dir="none" onclick="colSort('tbl-filt-ene', 10, this)">%Ppto<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="11" data-dir="none" onclick="colSort('tbl-filt-ene', 11, this)">Impres.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="12" data-dir="none" onclick="colSort('tbl-filt-ene', 12, this)">Alcance<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="13" data-dir="none" onclick="colSort('tbl-filt-ene', 13, this)">Frec.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="14" data-dir="none" onclick="colSort('tbl-filt-ene', 14, this)">CPM<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="15" data-dir="none" onclick="colSort('tbl-filt-ene', 15, this)">Clics<span class="sa"> ⇅</span></th></tr><tr class="filter-row"><td></td><td><select class="f-sel" data-col="1" onchange="applyColFilters('tbl-filt-ene')"><option value="">Todos</option><option>Curso</option><option>Seminario</option><option>Diplomado</option><option>Taller</option></select></td><td><input class="f-inp" data-col="2" oninput="applyColFilters('tbl-filt-ene')" placeholder="Buscar…" type="text"/></td><td class="r"><input class="f-inp f-num" data-col="3" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="4" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="5" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="6" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="7" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥ %" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="8" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="9" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="10" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥ %" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="11" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="12" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="13" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="14" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="15" min="0" oninput="applyColFilters('tbl-filt-ene')" placeholder="≥" type="number"/></td></tr></thead>
+<tbody>
+<tr data-cpl="972" data-gasto="248885" data-inscr="17" data-leads="256" data-matr="9" data-ventas="7128000"><td>10</td><td><span class="ch ch-bl">Curso</span></td><td>Italiano Basic A1</td><td class="r">256</td><td class="r">$972</td><td class="r">17</td><td class="r">9</td><td class="r">3,5%</td><td class="r">$7.128.000</td><td class="r">$248.885</td><td class="r">98,8%</td><td class="r">82.956</td><td class="r">45.925</td><td class="r">1,81</td><td class="r">$3.000</td><td class="r">833</td></tr>
+<tr data-cpl="1602" data-gasto="313943" data-inscr="32" data-leads="196" data-matr="17" data-ventas="9826000"><td>3</td><td><span class="ch ch-bl">Curso</span></td><td>Excel B-A Semana</td><td class="r">196</td><td class="r">$1.602</td><td class="r">32</td><td class="r">17</td><td class="r">8,7%</td><td class="r">$9.826.000</td><td class="r">$313.943</td><td class="r">83,1%</td><td class="r">105.257</td><td class="r">44.430</td><td class="r">2,37</td><td class="r">$2.983</td><td class="r">739</td></tr>
+<tr data-cpl="1255" data-gasto="224575" data-inscr="68" data-leads="179" data-matr="28" data-ventas="16184000"><td>4</td><td><span class="ch ch-bl">Curso</span></td><td>Excel B-A Sábados</td><td class="r">179</td><td class="r">$1.255</td><td class="r">68</td><td class="r">28</td><td class="r">15,6%</td><td class="r">$16.184.000</td><td class="r">$224.575</td><td class="r">59,4%</td><td class="r">61.313</td><td class="r">27.241</td><td class="r">2,25</td><td class="r">$3.663</td><td class="r">517</td></tr>
+<tr data-cpl="2211" data-gasto="386901" data-inscr="42" data-leads="175" data-matr="26" data-ventas="15028000"><td>1</td><td><span class="ch ch-bl">Curso</span></td><td>Analista Datos Excel/PQ + IA</td><td class="r">175</td><td class="r">$2.211</td><td class="r">42</td><td class="r">26</td><td class="r">14,9%</td><td class="r">$15.028.000</td><td class="r">$386.901</td><td class="r">102,4%</td><td class="r">168.965</td><td class="r">48.725</td><td class="r">3,47</td><td class="r">$2.290</td><td class="r">817</td></tr>
+<tr data-cpl="1852" data-gasto="298188" data-inscr="37" data-leads="161" data-matr="27" data-ventas="10530000"><td>12</td><td><span class="ch ch-cr">Seminario</span></td><td>Pauta FB/IG/WA Ads</td><td class="r">161</td><td class="r">$1.852</td><td class="r">37</td><td class="r">27</td><td class="r">16,8%</td><td class="r">$10.530.000</td><td class="r">$298.188</td><td class="r">149,1%</td><td class="r">84.972</td><td class="r">22.796</td><td class="r">3,73</td><td class="r">$3.509</td><td class="r">569</td></tr>
+<tr data-cpl="2185" data-gasto="332106" data-inscr="22" data-leads="152" data-matr="12" data-ventas="8160000"><td>2</td><td><span class="ch ch-bl">Curso</span></td><td>Power BI Informes + IA</td><td class="r">152</td><td class="r">$2.185</td><td class="r">22</td><td class="r">12</td><td class="r">7,9%</td><td class="r">$8.160.000</td><td class="r">$332.106</td><td class="r">87,9%</td><td class="r">61.396</td><td class="r">21.115</td><td class="r">2,91</td><td class="r">$5.409</td><td class="r">449</td></tr>
+<tr data-cpl="2300" data-gasto="324344" data-inscr="9" data-leads="141" data-matr="0" data-ventas="0"><td>5</td><td><span class="ch ch-bl">Curso</span></td><td>Inglés Jóvenes Pre A1</td><td class="r">141</td><td class="r">$2.300</td><td class="r">9</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$324.344</td><td class="r">77,2%</td><td class="r">109.179</td><td class="r">35.145</td><td class="r">3,11</td><td class="r">$2.971</td><td class="r">713</td></tr>
+<tr data-cpl="2300" data-gasto="193811" data-inscr="17" data-leads="141" data-matr="16" data-ventas="5120000"><td>13</td><td><span class="ch ch-cr">Seminario</span></td><td>Reforma Laboral y Pensional</td><td class="r">141</td><td class="r">$2.300</td><td class="r">17</td><td class="r">16</td><td class="r">11,3%</td><td class="r">$5.120.000</td><td class="r">$193.811</td><td class="r">102,6%</td><td class="r">66.158</td><td class="r">20.819</td><td class="r">3,18</td><td class="r">$2.930</td><td class="r">593</td></tr>
+<tr data-cpl="2530" data-gasto="212541" data-inscr="3" data-leads="84" data-matr="1" data-ventas="792000"><td>8</td><td><span class="ch ch-bl">Curso</span></td><td>Alemán Basic A1</td><td class="r">84</td><td class="r">$2.530</td><td class="r">3</td><td class="r">1</td><td class="r">1,2%</td><td class="r">$792.000</td><td class="r">$212.541</td><td class="r">84,3%</td><td class="r">65.110</td><td class="r">24.679</td><td class="r">2,64</td><td class="r">$3.264</td><td class="r">413</td></tr>
+<tr data-cpl="3065" data-gasto="257453" data-inscr="8" data-leads="84" data-matr="6" data-ventas="4752000"><td>9</td><td><span class="ch ch-bl">Curso</span></td><td>Francés Basic A1</td><td class="r">84</td><td class="r">$3.065</td><td class="r">8</td><td class="r">6</td><td class="r">7,1%</td><td class="r">$4.752.000</td><td class="r">$257.453</td><td class="r">102,2%</td><td class="r">71.129</td><td class="r">26.137</td><td class="r">2,72</td><td class="r">$3.620</td><td class="r">432</td></tr>
+<tr data-cpl="3723" data-gasto="268072" data-inscr="25" data-leads="72" data-matr="0" data-ventas="0"><td>7</td><td><span class="ch ch-bl">Curso</span></td><td>Inglés Niños Pre A1 Sáb.</td><td class="r">72</td><td class="r">$3.723</td><td class="r">25</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$268.072</td><td class="r">70,9%</td><td class="r">51.620</td><td class="r">17.432</td><td class="r">2,96</td><td class="r">$5.193</td><td class="r">341</td></tr>
+<tr data-cpl="3110" data-gasto="220781" data-inscr="1" data-leads="71" data-matr="1" data-ventas="792000"><td>11</td><td><span class="ch ch-bl">Curso</span></td><td>Portugués Basic A1</td><td class="r">71</td><td class="r">$3.110</td><td class="r">1</td><td class="r">1</td><td class="r">1,4%</td><td class="r">$792.000</td><td class="r">$220.781</td><td class="r">87,6%</td><td class="r">62.061</td><td class="r">26.398</td><td class="r">2,35</td><td class="r">$3.557</td><td class="r">337</td></tr>
+<tr class="tr-t"><td colspan="3"><strong>TOTALES / PROMEDIOS PONDERADOS</strong></td><td class="r"><strong>1.712</strong></td><td class="r"><strong>$1.916</strong></td><td class="r"><strong>281</strong></td><td class="r"><strong>143</strong></td><td class="r"><strong>8,35%</strong></td><td class="r"><strong>$78.312.000</strong></td><td class="r"><strong>$3.281.600</strong></td><td class="r"><strong>88,5%</strong></td><td class="r"><strong>990.116</strong></td><td class="r"><strong>360.842</strong></td><td class="r"><strong>2,74</strong></td><td class="r"><strong>$3.314</strong></td><td class="r"><strong>6.753</strong></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ══════════ FEBRERO ══════════ -->
+<section class="sec" id="tab-febrero">
+<div class="sec-h"><div class="sec-t">Febrero <span>2026</span></div><div class="sec-s">18 programas activos · Inversión real $6.835.691 · Presupuesto $7.330.350</div></div>
+<div class="mks">
+<div class="mk"><div class="mkl">Leads</div><div class="mkv">3.155</div></div>
+<div class="mk"><div class="mkl">Matrículas</div><div class="mkv">212</div></div>
+<div class="mk ac"><div class="mkl">CPL Ponderado</div><div class="mkv">$2.167</div></div>
+<div class="mk"><div class="mkl">Frecuencia</div><div class="mkv">3,01</div></div>
+<div class="mk"><div class="mkl">CPM Ponderado</div><div class="mkv">$4.857</div></div>
+<div class="mk"><div class="mkl">Conv. Mat/Leads</div><div class="mkv">6,72%</div></div>
+</div>
+<div class="g2">
+<div class="cc"><div class="ct">Leads por Programa — Febrero</div><div class="cs">18 programas activos</div><div class="cw-xl"><canvas id="cFL"></canvas></div></div>
+<div class="cc"><div class="ct">CPL por Programa — Febrero</div><div class="cs">Verde ≤$1.500 · Naranja ≤$2.500 · Rojo &gt;$2.500</div><div class="cw-xl"><canvas id="cFC"></canvas></div></div>
+</div>
+<div class="tc">
+<div class="th"><div class="tt">Detalle Completo por Programa — Febrero 2026</div></div>
+<table id="tbl-filt-feb">
+<thead><tr class="thead-main"><th>#</th><th>Tipo</th><th class="th-sort" data-col="2" data-dir="none" onclick="colSort('tbl-filt-feb', 2, this)">Programa<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="3" data-dir="none" onclick="colSort('tbl-filt-feb', 3, this)">Leads<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="4" data-dir="none" onclick="colSort('tbl-filt-feb', 4, this)">CPL<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="5" data-dir="none" onclick="colSort('tbl-filt-feb', 5, this)">Matr.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="6" data-dir="none" onclick="colSort('tbl-filt-feb', 6, this)">Conv%<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="7" data-dir="none" onclick="colSort('tbl-filt-feb', 7, this)">Ventas<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="8" data-dir="none" onclick="colSort('tbl-filt-feb', 8, this)">Gasto Real<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="9" data-dir="none" onclick="colSort('tbl-filt-feb', 9, this)">%Ppto<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="10" data-dir="none" onclick="colSort('tbl-filt-feb', 10, this)">Impres.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="11" data-dir="none" onclick="colSort('tbl-filt-feb', 11, this)">Alcance<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="12" data-dir="none" onclick="colSort('tbl-filt-feb', 12, this)">Frec.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="13" data-dir="none" onclick="colSort('tbl-filt-feb', 13, this)">Clics<span class="sa"> ⇅</span></th></tr><tr class="filter-row"><td></td><td><select class="f-sel" data-col="1" onchange="applyColFilters('tbl-filt-feb')"><option value="">Todos</option><option>Curso</option><option>Seminario</option><option>Diplomado</option><option>Taller</option></select></td><td><input class="f-inp" data-col="2" oninput="applyColFilters('tbl-filt-feb')" placeholder="Buscar…" type="text"/></td><td class="r"><input class="f-inp f-num" data-col="3" min="0" oninput="applyColFilters('tbl-filt-feb')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="4" min="0" oninput="applyColFilters('tbl-filt-feb')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="5" min="0" oninput="applyColFilters('tbl-filt-feb')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="6" min="0" oninput="applyColFilters('tbl-filt-feb')" placeholder="≥ %" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="7" min="0" oninput="applyColFilters('tbl-filt-feb')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="8" min="0" oninput="applyColFilters('tbl-filt-feb')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="9" min="0" oninput="applyColFilters('tbl-filt-feb')" placeholder="≥ %" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="10" min="0" oninput="applyColFilters('tbl-filt-feb')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="11" min="0" oninput="applyColFilters('tbl-filt-feb')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="12" min="0" oninput="applyColFilters('tbl-filt-feb')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="13" min="0" oninput="applyColFilters('tbl-filt-feb')" placeholder="≥" type="number"/></td></tr></thead>
+<tbody>
+<tr data-cpl="337" data-gasto="78" data-inscr="26" data-leads="233" data-matr="11" data-ventas="78572"><td>—</td><td><span class="ch ch-r">Diplomado</span></td><td>UAO-RCN Prod. y Realización</td><td class="r">233</td><td class="r">$337</td><td class="r">26</td><td class="r">11,2%</td><td class="r">$78.000.000</td><td class="r">$78.572</td><td class="r">78,6%</td><td class="r">21.912</td><td class="r">14.074</td><td class="r">1,56</td><td class="r">524</td></tr>
+<tr data-cpl="1896" data-gasto="100" data-inscr="10" data-leads="432" data-matr="2" data-ventas="819273"><td>4</td><td><span class="ch ch-r">Diplomado</span></td><td>RETIE, RETILAP y NTC 2050</td><td class="r">432</td><td class="r">$1.896</td><td class="r">10</td><td class="r">2,3%</td><td class="r">$23.500.000</td><td class="r">$819.273</td><td class="r">100,8%</td><td class="r">313.546</td><td class="r">90.179</td><td class="r">3,46</td><td class="r">2.503</td></tr>
+<tr data-cpl="1065" data-gasto="114" data-inscr="30" data-leads="280" data-matr="10" data-ventas="298318"><td>8</td><td><span class="ch ch-cr">Seminario</span></td><td>Capcut y Creación de Contenido</td><td class="r">280</td><td class="r">$1.065</td><td class="r">30</td><td class="r">10,7%</td><td class="r">$4.800.000</td><td class="r">$298.318</td><td class="r">114,9%</td><td class="r">70.405</td><td class="r">18.548</td><td class="r">3,80</td><td class="r">759</td></tr>
+<tr data-cpl="3500" data-gasto="113" data-inscr="11" data-leads="264" data-matr="4" data-ventas="923934"><td>1</td><td><span class="ch ch-r">Diplomado</span></td><td>Finanzas y Analítica de Datos</td><td class="r">264</td><td class="r">$3.500</td><td class="r">11</td><td class="r">4,2%</td><td class="r">$22.500.000</td><td class="r">$923.934</td><td class="r">113,7%</td><td class="r">182.175</td><td class="r">67.669</td><td class="r">2,69</td><td class="r">1.058</td></tr>
+<tr data-cpl="1416" data-gasto="128" data-inscr="19" data-leads="236" data-matr="8" data-ventas="334169"><td>11</td><td><span class="ch ch-cr">Seminario</span></td><td>Edición de Video</td><td class="r">236</td><td class="r">$1.416</td><td class="r">19</td><td class="r">8,1%</td><td class="r">$6.650.000</td><td class="r">$334.169</td><td class="r">128,8%</td><td class="r">91.628</td><td class="r">26.790</td><td class="r">3,42</td><td class="r">997</td></tr>
+<tr data-cpl="1268" data-gasto="71" data-inscr="20" data-leads="212" data-matr="9" data-ventas="268828"><td>5</td><td><span class="ch ch-bl">Curso</span></td><td>Excel Sábados Presencial</td><td class="r">212</td><td class="r">$1.268</td><td class="r">20</td><td class="r">9,4%</td><td class="r">$11.560.000</td><td class="r">$268.828</td><td class="r">71,7%</td><td class="r">66.905</td><td class="r">25.237</td><td class="r">2,65</td><td class="r">703</td></tr>
+<tr data-cpl="1827" data-gasto="124" data-inscr="11" data-leads="177" data-matr="6" data-ventas="323419"><td>9</td><td><span class="ch ch-cr">Seminario</span></td><td>Hablar en Público</td><td class="r">177</td><td class="r">$1.827</td><td class="r">11</td><td class="r">6,2%</td><td class="r">$2.387.000</td><td class="r">$323.419</td><td class="r">124,6%</td><td class="r">62.099</td><td class="r">24.663</td><td class="r">2,52</td><td class="r">545</td></tr>
+<tr data-cpl="1699" data-gasto="112" data-inscr="12" data-leads="172" data-matr="7" data-ventas="292250"><td>16</td><td><span class="ch ch-cr">Seminario</span></td><td>Automatización n8n</td><td class="r">172</td><td class="r">$1.699</td><td class="r">12</td><td class="r">7,0%</td><td class="r">$4.320.000</td><td class="r">$292.250</td><td class="r">112,6%</td><td class="r">62.615</td><td class="r">16.068</td><td class="r">3,90</td><td class="r">569</td></tr>
+<tr data-cpl="1550" data-gasto="105" data-inscr="11" data-leads="176" data-matr="6" data-ventas="272727"><td>10</td><td><span class="ch ch-cr">Seminario</span></td><td>Diseño de Interiores</td><td class="r">176</td><td class="r">$1.550</td><td class="r">11</td><td class="r">6,3%</td><td class="r">$2.178.000</td><td class="r">$272.727</td><td class="r">105,1%</td><td class="r">40.248</td><td class="r">18.622</td><td class="r">2,16</td><td class="r">524</td></tr>
+<tr data-cpl="2244" data-gasto="88" data-inscr="23" data-leads="147" data-matr="15" data-ventas="329926"><td>6</td><td><span class="ch ch-bl">Curso</span></td><td>Excel Online</td><td class="r">147</td><td class="r">$2.244</td><td class="r">23</td><td class="r">15,6%</td><td class="r">$13.294.000</td><td class="r">$329.926</td><td class="r">88,0%</td><td class="r">64.126</td><td class="r">26.054</td><td class="r">2,46</td><td class="r">597</td></tr>
+<tr data-cpl="2413" data-gasto="121" data-inscr="0" data-leads="131" data-matr="0" data-ventas="316056"><td>17</td><td><span class="ch ch-cr">Seminario</span></td><td>IA para Productividad Laboral</td><td class="r">131</td><td class="r">$2.413</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$316.056</td><td class="r">121,8%</td><td class="r">34.499</td><td class="r">10.228</td><td class="r">3,37</td><td class="r">392</td></tr>
+<tr data-cpl="2818" data-gasto="142" data-inscr="8" data-leads="131" data-matr="6" data-ventas="369165"><td>12</td><td><span class="ch ch-cr">Seminario</span></td><td>RETAIL 2030</td><td class="r">131</td><td class="r">$2.818</td><td class="r">8</td><td class="r">6,1%</td><td class="r">$1.440.000</td><td class="r">$369.165</td><td class="r">142,3%</td><td class="r">61.935</td><td class="r">20.528</td><td class="r">3,02</td><td class="r">488</td></tr>
+<tr data-cpl="2785" data-gasto="105" data-inscr="0" data-leads="98" data-matr="0" data-ventas="272898"><td>15</td><td><span class="ch ch-cr">Seminario</span></td><td>Finanzas Personales</td><td class="r">98</td><td class="r">$2.785</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$272.898</td><td class="r">105,2%</td><td class="r">37.384</td><td class="r">11.154</td><td class="r">3,35</td><td class="r">341</td></tr>
+<tr data-cpl="3101" data-gasto="113" data-inscr="0" data-leads="95" data-matr="0" data-ventas="294611"><td>18</td><td><span class="ch ch-wm">Taller</span></td><td>Liderazgo 2026</td><td class="r">95</td><td class="r">$3.101</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$294.611</td><td class="r">113,9%</td><td class="r">34.049</td><td class="r">12.540</td><td class="r">2,72</td><td class="r">298</td></tr>
+<tr data-cpl="3017" data-gasto="109" data-inscr="9" data-leads="94" data-matr="9" data-ventas="283578"><td>14</td><td><span class="ch ch-cr">Seminario</span></td><td>Escuela Comercial</td><td class="r">94</td><td class="r">$3.017</td><td class="r">9</td><td class="r">9,6%</td><td class="r">$2.880.000</td><td class="r">$283.578</td><td class="r">109,3%</td><td class="r">43.839</td><td class="r">14.784</td><td class="r">2,97</td><td class="r">274</td></tr>
+<tr data-cpl="3656" data-gasto="84" data-inscr="0" data-leads="60" data-matr="0" data-ventas="219335"><td>13</td><td><span class="ch ch-cr">Seminario</span></td><td>WhatsApp Marketing</td><td class="r">60</td><td class="r">$3.656</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$219.335</td><td class="r">84,5%</td><td class="r">28.582</td><td class="r">9.599</td><td class="r">2,98</td><td class="r">218</td></tr>
+<tr data-cpl="3957" data-gasto="29" data-inscr="0" data-leads="60" data-matr="0" data-ventas="237406"><td>2</td><td><span class="ch ch-r">Diplomado</span></td><td>BI + IA Herramientas Microsoft</td><td class="r">60</td><td class="r">$3.957</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$237.406</td><td class="r">29,2%</td><td class="r">30.561</td><td class="r">10.505</td><td class="r">2,91</td><td class="r">215</td></tr>
+<tr data-cpl="5487" data-gasto="65" data-inscr="0" data-leads="45" data-matr="0" data-ventas="246902"><td>7</td><td><span class="ch ch-bl">Curso</span></td><td>TOEFL Preparación</td><td class="r">45</td><td class="r">$5.487</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$246.902</td><td class="r">65,8%</td><td class="r">39.806</td><td class="r">15.243</td><td class="r">2,61</td><td class="r">237</td></tr>
+<tr class="tr-t"><td colspan="3"><strong>TOTALES / PROMEDIOS PONDERADOS</strong></td><td class="r"><strong>3.155</strong></td><td class="r"><strong>$2.167</strong></td><td class="r"><strong>212</strong></td><td class="r"><strong>6,72%</strong></td><td class="r"><strong>$228.509.000</strong></td><td class="r"><strong>$6.835.691</strong></td><td class="r"><strong>93,3%</strong></td><td class="r"><strong>1.407.539</strong></td><td class="r"><strong>467.293</strong></td><td class="r"><strong>3,01</strong></td><td class="r"><strong>11.916</strong></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ══════════ MARZO ══════════ -->
+<section class="sec" id="tab-marzo">
+<div class="sec-h"><div class="sec-t">Marzo <span>2026</span></div><div class="sec-s">23 programas activos · Inversión real $8.319.742 · Presupuesto $10.291.977</div></div>
+<div class="mks">
+<div class="mk"><div class="mkl">Leads</div><div class="mkv">4.905</div></div>
+<div class="mk"><div class="mkl">Matrículas</div><div class="mkv">159</div></div>
+<div class="mk ac"><div class="mkl">CPL Ponderado</div><div class="mkv">$1.696</div></div>
+<div class="mk"><div class="mkl">Frecuencia</div><div class="mkv">2,89</div></div>
+<div class="mk"><div class="mkl">CPM Ponderado</div><div class="mkv">$4.299</div></div>
+<div class="mk"><div class="mkl">Conv. Mat/Leads</div><div class="mkv">3,24%</div></div>
+</div>
+<div class="g2">
+<div class="cc"><div class="ct">Leads por Programa — Marzo</div><div class="cs">23 programas activos</div><div class="cw-xl"><canvas id="cMaL"></canvas></div></div>
+<div class="cc"><div class="ct">CPL por Programa — Marzo</div><div class="cs">Verde ≤$1.500 · Naranja ≤$2.500 · Rojo &gt;$2.500</div><div class="cw-xl"><canvas id="cMaC"></canvas></div></div>
+</div>
+<div class="tc">
+<div class="th"><div class="tt">Detalle Completo por Programa — Marzo 2026</div></div>
+<table id="tbl-filt-mar">
+<thead><tr class="thead-main"><th>#</th><th>Tipo</th><th class="th-sort" data-col="2" data-dir="none" onclick="colSort('tbl-filt-mar', 2, this)">Programa<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="3" data-dir="none" onclick="colSort('tbl-filt-mar', 3, this)">Leads<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="4" data-dir="none" onclick="colSort('tbl-filt-mar', 4, this)">CPL<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="5" data-dir="none" onclick="colSort('tbl-filt-mar', 5, this)">Matr.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="6" data-dir="none" onclick="colSort('tbl-filt-mar', 6, this)">Conv%<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="7" data-dir="none" onclick="colSort('tbl-filt-mar', 7, this)">Ventas<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="8" data-dir="none" onclick="colSort('tbl-filt-mar', 8, this)">Gasto Real<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="9" data-dir="none" onclick="colSort('tbl-filt-mar', 9, this)">%Ppto<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="10" data-dir="none" onclick="colSort('tbl-filt-mar', 10, this)">Impres.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="11" data-dir="none" onclick="colSort('tbl-filt-mar', 11, this)">Alcance<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="12" data-dir="none" onclick="colSort('tbl-filt-mar', 12, this)">Frec.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="13" data-dir="none" onclick="colSort('tbl-filt-mar', 13, this)">Clics<span class="sa"> ⇅</span></th></tr><tr class="filter-row"><td></td><td><select class="f-sel" data-col="1" onchange="applyColFilters('tbl-filt-mar')"><option value="">Todos</option><option>Curso</option><option>Seminario</option><option>Diplomado</option><option>Taller</option></select></td><td><input class="f-inp" data-col="2" oninput="applyColFilters('tbl-filt-mar')" placeholder="Buscar…" type="text"/></td><td class="r"><input class="f-inp f-num" data-col="3" min="0" oninput="applyColFilters('tbl-filt-mar')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="4" min="0" oninput="applyColFilters('tbl-filt-mar')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="5" min="0" oninput="applyColFilters('tbl-filt-mar')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="6" min="0" oninput="applyColFilters('tbl-filt-mar')" placeholder="≥ %" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="7" min="0" oninput="applyColFilters('tbl-filt-mar')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="8" min="0" oninput="applyColFilters('tbl-filt-mar')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="9" min="0" oninput="applyColFilters('tbl-filt-mar')" placeholder="≥ %" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="10" min="0" oninput="applyColFilters('tbl-filt-mar')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="11" min="0" oninput="applyColFilters('tbl-filt-mar')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="12" min="0" oninput="applyColFilters('tbl-filt-mar')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="13" min="0" oninput="applyColFilters('tbl-filt-mar')" placeholder="≥" type="number"/></td></tr></thead>
+<tbody>
+<tr data-cpl="511" data-gasto="80" data-inscr="44" data-leads="1261" data-matr="3" data-ventas="644997"><td>4</td><td><span class="ch ch-r">Diplomado</span></td><td>UAO-RCN Prod. y Realización</td><td class="r">1.261</td><td class="r">$511</td><td class="r">44</td><td class="r">3,5%</td><td class="r">$132.000.000</td><td class="r">$644.997</td><td class="r">80,6%</td><td class="r">193.678</td><td class="r">100.861</td><td class="r">1,92</td><td class="r">2.918</td></tr>
+<tr data-cpl="794" data-gasto="116" data-inscr="0" data-leads="416" data-matr="0" data-ventas="330370"><td>21</td><td><span class="ch ch-cr">Seminario</span></td><td>Liquidación y Gestión Nómina</td><td class="r">416</td><td class="r">$794</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$330.370</td><td class="r">116,7%</td><td class="r">93.119</td><td class="r">27.676</td><td class="r">3,36</td><td class="r">1.275</td></tr>
+<tr data-cpl="2908" data-gasto="95" data-inscr="15" data-leads="314" data-matr="4" data-ventas="856599"><td>5</td><td><span class="ch ch-r">Diplomado</span></td><td>Marketing Digital + IA</td><td class="r">314</td><td class="r">$2.908</td><td class="r">15</td><td class="r">4,8%</td><td class="r">$30.700.000</td><td class="r">$856.599</td><td class="r">95,1%</td><td class="r">261.767</td><td class="r">104.081</td><td class="r">2,53</td><td class="r">1.299</td></tr>
+<tr data-cpl="1843" data-gasto="63" data-inscr="17" data-leads="310" data-matr="5" data-ventas="571185"><td>2</td><td><span class="ch ch-r">Diplomado</span></td><td>IA para Automatizar Procesos</td><td class="r">310</td><td class="r">$1.843</td><td class="r">17</td><td class="r">5,5%</td><td class="r">$46.462.500</td><td class="r">$571.185</td><td class="r">63,4%</td><td class="r">115.724</td><td class="r">36.047</td><td class="r">3,21</td><td class="r">999</td></tr>
+<tr data-cpl="1401" data-gasto="136" data-inscr="0" data-leads="275" data-matr="0" data-ventas="385258"><td>22</td><td><span class="ch ch-cr">Seminario</span></td><td>Pauta Digital en TikTok Ads</td><td class="r">275</td><td class="r">$1.401</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$385.258</td><td class="r">136,0%</td><td class="r">84.512</td><td class="r">28.206</td><td class="r">3,00</td><td class="r">774</td></tr>
+<tr data-cpl="3021" data-gasto="88" data-inscr="0" data-leads="264" data-matr="0" data-ventas="797546"><td>1</td><td><span class="ch ch-r">Diplomado</span></td><td>Big Data con IA y Power BI</td><td class="r">264</td><td class="r">$3.021</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$797.546</td><td class="r">88,6%</td><td class="r">190.586</td><td class="r">57.143</td><td class="r">3,34</td><td class="r">1.045</td></tr>
+<tr data-cpl="1919" data-gasto="118" data-inscr="0" data-leads="236" data-matr="0" data-ventas="452818"><td>15</td><td><span class="ch ch-bl">Curso</span></td><td>Diseño Espacios Comerciales</td><td class="r">236</td><td class="r">$1.919</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$452.818</td><td class="r">118,9%</td><td class="r">118.475</td><td class="r">27.279</td><td class="r">4,34</td><td class="r">801</td></tr>
+<tr data-cpl="1194" data-gasto="76" data-inscr="9" data-leads="245" data-matr="3" data-ventas="292557"><td>8</td><td><span class="ch ch-bl">Curso</span></td><td>Excel Online</td><td class="r">245</td><td class="r">$1.194</td><td class="r">9</td><td class="r">3,7%</td><td class="r">$5.463.000</td><td class="r">$292.557</td><td class="r">76,8%</td><td class="r">78.073</td><td class="r">30.351</td><td class="r">2,57</td><td class="r">761</td></tr>
+<tr data-cpl="2871" data-gasto="144" data-inscr="0" data-leads="192" data-matr="0" data-ventas="551294"><td>11</td><td><span class="ch ch-bl">Curso</span></td><td>Inglés Niños Pre A1</td><td class="r">192</td><td class="r">$2.871</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$551.294</td><td class="r">144,8%</td><td class="r">116.914</td><td class="r">31.288</td><td class="r">3,74</td><td class="r">948</td></tr>
+<tr data-cpl="1201" data-gasto="76" data-inscr="11" data-leads="181" data-matr="6" data-ventas="217423"><td>23</td><td><span class="ch ch-cr">Seminario</span></td><td>Habilidades Hablar en Público</td><td class="r">181</td><td class="r">$1.201</td><td class="r">11</td><td class="r">6,1%</td><td class="r">$3.300.000</td><td class="r">$217.423</td><td class="r">76,8%</td><td class="r">45.493</td><td class="r">16.411</td><td class="r">2,77</td><td class="r">474</td></tr>
+<tr data-cpl="1337" data-gasto="60" data-inscr="28" data-leads="173" data-matr="16" data-ventas="231337"><td>13</td><td><span class="ch ch-bl">Curso</span></td><td>Power BI + IA</td><td class="r">173</td><td class="r">$1.337</td><td class="r">28</td><td class="r">16,2%</td><td class="r">$19.992.000</td><td class="r">$231.337</td><td class="r">60,7%</td><td class="r">57.548</td><td class="r">24.011</td><td class="r">2,40</td><td class="r">483</td></tr>
+<tr data-cpl="1638" data-gasto="88" data-inscr="0" data-leads="153" data-matr="0" data-ventas="250567"><td>17</td><td><span class="ch ch-cr">Seminario</span></td><td>Chatbots y WhatsApp Mktg + IA</td><td class="r">153</td><td class="r">$1.638</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$250.567</td><td class="r">88,5%</td><td class="r">41.885</td><td class="r">16.531</td><td class="r">2,53</td><td class="r">352</td></tr>
+<tr data-cpl="1555" data-gasto="82" data-inscr="10" data-leads="151" data-matr="6" data-ventas="234793"><td>18</td><td><span class="ch ch-cr">Seminario</span></td><td>Liderazgo y Coaching</td><td class="r">151</td><td class="r">$1.555</td><td class="r">10</td><td class="r">6,6%</td><td class="r">$2.900.000</td><td class="r">$234.793</td><td class="r">82,9%</td><td class="r">41.792</td><td class="r">13.784</td><td class="r">3,03</td><td class="r">382</td></tr>
+<tr data-cpl="2526" data-gasto="97" data-inscr="0" data-leads="109" data-matr="0" data-ventas="275283"><td>19</td><td><span class="ch ch-wm">Taller</span></td><td>Bienestar Integral</td><td class="r">109</td><td class="r">$2.526</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$275.283</td><td class="r">97,2%</td><td class="r">37.942</td><td class="r">13.382</td><td class="r">2,84</td><td class="r">354</td></tr>
+<tr data-cpl="3042" data-gasto="99" data-inscr="0" data-leads="93" data-matr="0" data-ventas="282900"><td>20</td><td><span class="ch ch-cr">Seminario</span></td><td>Tesorería y Presupuesto</td><td class="r">93</td><td class="r">$3.042</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$282.900</td><td class="r">99,9%</td><td class="r">40.874</td><td class="r">11.137</td><td class="r">3,67</td><td class="r">309</td></tr>
+<tr data-cpl="3369" data-gasto="66" data-inscr="0" data-leads="75" data-matr="0" data-ventas="252667"><td>9</td><td><span class="ch ch-bl">Curso</span></td><td>Inglés Jóvenes Sábados</td><td class="r">75</td><td class="r">$3.369</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$252.667</td><td class="r">66,3%</td><td class="r">54.704</td><td class="r">25.260</td><td class="r">2,17</td><td class="r">401</td></tr>
+<tr data-cpl="3001" data-gasto="57" data-inscr="0" data-leads="73" data-matr="0" data-ventas="219057"><td>6</td><td><span class="ch ch-bl">Curso</span></td><td>Gestión Comercial Basada en Datos</td><td class="r">73</td><td class="r">$3.001</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$219.057</td><td class="r">57,5%</td><td class="r">34.791</td><td class="r">10.719</td><td class="r">3,25</td><td class="r">210</td></tr>
+<tr data-cpl="3580" data-gasto="63" data-inscr="0" data-leads="67" data-matr="0" data-ventas="239836"><td>10</td><td><span class="ch ch-bl">Curso</span></td><td>Inglés Jóvenes Semana</td><td class="r">67</td><td class="r">$3.580</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$239.836</td><td class="r">63,0%</td><td class="r">53.058</td><td class="r">18.245</td><td class="r">2,91</td><td class="r">385</td></tr>
+<tr data-cpl="2160" data-gasto="33" data-inscr="25" data-leads="59" data-matr="42" data-ventas="127439"><td>7</td><td><span class="ch ch-bl">Curso</span></td><td>Excel Sábados</td><td class="r">59</td><td class="r">$2.160</td><td class="r">25</td><td class="r">42,4%</td><td class="r">$15.175.000</td><td class="r">$127.439</td><td class="r">33,5%</td><td class="r">21.138</td><td class="r">7.625</td><td class="r">1,81</td><td class="r">205</td></tr>
+<tr data-cpl="3650" data-gasto="54" data-inscr="0" data-leads="57" data-matr="0" data-ventas="208077"><td>12</td><td><span class="ch ch-bl">Curso</span></td><td>Gerencia Proyectos PMI</td><td class="r">57</td><td class="r">$3.650</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$208.077</td><td class="r">54,6%</td><td class="r">31.237</td><td class="r">9.480</td><td class="r">3,30</td><td class="r">172</td></tr>
+<tr data-cpl="3638" data-gasto="46" data-inscr="0" data-leads="49" data-matr="0" data-ventas="178268"><td>14</td><td><span class="ch ch-bl">Curso</span></td><td>Construcción y Gestión Marcas + IA</td><td class="r">49</td><td class="r">$3.638</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$178.268</td><td class="r">46,8%</td><td class="r">31.778</td><td class="r">11.511</td><td class="r">2,76</td><td class="r">169</td></tr>
+<tr data-cpl="5632" data-gasto="73" data-inscr="0" data-leads="117" data-matr="0" data-ventas="658961"><td>3</td><td><span class="ch ch-r">Diplomado</span></td><td>Logística Integral</td><td class="r">117</td><td class="r">$5.632</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$658.961</td><td class="r">73,2%</td><td class="r">181.059</td><td class="r">46.184</td><td class="r">3,92</td><td class="r">701</td></tr>
+<tr data-cpl="1729" data-gasto="60" data-inscr="0" data-leads="35" data-matr="0" data-ventas="60510"><td>16</td><td><span class="ch ch-bl">Curso</span></td><td>Power BI + Power Automate</td><td class="r">35</td><td class="r">$1.729</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$60.510</td><td class="r">60,5%</td><td class="r">9.386</td><td class="r">3.245</td><td class="r">2,89</td><td class="r">107</td></tr>
+<tr class="tr-t"><td colspan="3"><strong>TOTALES / PROMEDIOS PONDERADOS</strong></td><td class="r"><strong>4.905</strong></td><td class="r"><strong>$1.696</strong></td><td class="r"><strong>159</strong></td><td class="r"><strong>3,24%</strong></td><td class="r"><strong>$255.992.500</strong></td><td class="r"><strong>$8.319.742</strong></td><td class="r"><strong>80,8%</strong></td><td class="r"><strong>1.935.533</strong></td><td class="r"><strong>670.457</strong></td><td class="r"><strong>2,89</strong></td><td class="r"><strong>15.524</strong></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ══════════ ABRIL ══════════ -->
+<section class="sec" id="tab-abril">
+<div class="sec-h"><div class="sec-t">Abril <span>2026</span></div><div class="sec-s">17 programas activos · Inversión real $4.623.583 · Presupuesto $8.210.000 · Ejecución: 56,3%</div></div>
+<div class="mks">
+<div class="mk"><div class="mkl">Leads</div><div class="mkv">2.235</div></div>
+<div class="mk"><div class="mkl">Matrículas</div><div class="mkv">40</div></div>
+<div class="mk ac"><div class="mkl">CPL Ponderado</div><div class="mkv">$2.069</div></div>
+<div class="mk"><div class="mkl">Frecuencia</div><div class="mkv">2,81</div></div>
+<div class="mk"><div class="mkl">CPM Ponderado</div><div class="mkv">$3.779</div></div>
+<div class="mk ac"><div class="mkl">Conv. ⚠ Caída</div><div class="mkv">1,79%</div></div>
+</div>
+<div class="g2">
+<div class="cc"><div class="ct">Leads por Programa — Abril</div><div class="cs">17 programas activos</div><div class="cw-xl"><canvas id="cAbL"></canvas></div></div>
+<div class="cc"><div class="ct">CPL por Programa — Abril</div><div class="cs">Verde ≤$1.500 · Naranja ≤$3.000 · Rojo &gt;$3.000</div><div class="cw-xl"><canvas id="cAbC"></canvas></div></div>
+</div>
+<div class="tc">
+<div class="th"><div class="tt">Detalle Completo por Programa — Abril 2026</div></div>
+<table id="tbl-filt-abr">
+<thead><tr class="thead-main"><th>#</th><th>Tipo</th><th class="th-sort" data-col="2" data-dir="none" onclick="colSort('tbl-filt-abr', 2, this)">Programa<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="3" data-dir="none" onclick="colSort('tbl-filt-abr', 3, this)">Leads<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="4" data-dir="none" onclick="colSort('tbl-filt-abr', 4, this)">CPL<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="5" data-dir="none" onclick="colSort('tbl-filt-abr', 5, this)">Matr.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="6" data-dir="none" onclick="colSort('tbl-filt-abr', 6, this)">Conv%<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="7" data-dir="none" onclick="colSort('tbl-filt-abr', 7, this)">Ventas<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="8" data-dir="none" onclick="colSort('tbl-filt-abr', 8, this)">Gasto Real<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="9" data-dir="none" onclick="colSort('tbl-filt-abr', 9, this)">%Ppto<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="10" data-dir="none" onclick="colSort('tbl-filt-abr', 10, this)">Impres.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="11" data-dir="none" onclick="colSort('tbl-filt-abr', 11, this)">Alcance<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="12" data-dir="none" onclick="colSort('tbl-filt-abr', 12, this)">Frec.<span class="sa"> ⇅</span></th><th class="r th-sort" data-col="13" data-dir="none" onclick="colSort('tbl-filt-abr', 13, this)">Clics<span class="sa"> ⇅</span></th></tr><tr class="filter-row"><td></td><td><select class="f-sel" data-col="1" onchange="applyColFilters('tbl-filt-abr')"><option value="">Todos</option><option>Curso</option><option>Seminario</option><option>Diplomado</option><option>Taller</option></select></td><td><input class="f-inp" data-col="2" oninput="applyColFilters('tbl-filt-abr')" placeholder="Buscar…" type="text"/></td><td class="r"><input class="f-inp f-num" data-col="3" min="0" oninput="applyColFilters('tbl-filt-abr')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="4" min="0" oninput="applyColFilters('tbl-filt-abr')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="5" min="0" oninput="applyColFilters('tbl-filt-abr')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="6" min="0" oninput="applyColFilters('tbl-filt-abr')" placeholder="≥ %" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="7" min="0" oninput="applyColFilters('tbl-filt-abr')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="8" min="0" oninput="applyColFilters('tbl-filt-abr')" placeholder="≥ $" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="9" min="0" oninput="applyColFilters('tbl-filt-abr')" placeholder="≥ %" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="10" min="0" oninput="applyColFilters('tbl-filt-abr')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="11" min="0" oninput="applyColFilters('tbl-filt-abr')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="12" min="0" oninput="applyColFilters('tbl-filt-abr')" placeholder="≥" type="number"/></td><td class="r"><input class="f-inp f-num" data-col="13" min="0" oninput="applyColFilters('tbl-filt-abr')" placeholder="≥" type="number"/></td></tr></thead>
+<tbody>
+<tr data-cpl="719" data-gasto="95" data-inscr="11" data-leads="265" data-matr="4" data-ventas="190517"><td>2</td><td><span class="ch ch-r">Diplomado</span></td><td>UAO-RCN Prod. y Realización</td><td class="r">265</td><td class="r">$719</td><td class="r">11</td><td class="r">4,2%</td><td class="r">$33.000.000</td><td class="r">$190.517</td><td class="r">95,3%</td><td class="r">67.800</td><td class="r">53.530</td><td class="r">1,27</td><td class="r">609</td></tr>
+<tr data-cpl="1021" data-gasto="66" data-inscr="0" data-leads="236" data-matr="0" data-ventas="240896"><td>12</td><td><span class="ch ch-bl">Curso</span></td><td>Excel Semana</td><td class="r">236</td><td class="r">$1.021</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$240.896</td><td class="r">66,9%</td><td class="r">81.041</td><td class="r">37.090</td><td class="r">2,18</td><td class="r">762</td></tr>
+<tr data-cpl="1833" data-gasto="53" data-inscr="0" data-leads="235" data-matr="0" data-ventas="430833"><td>11</td><td><span class="ch ch-r">Diplomado</span></td><td>Automatización Contable + IA</td><td class="r">235</td><td class="r">$1.833</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$430.833</td><td class="r">53,2%</td><td class="r">90.113</td><td class="r">24.938</td><td class="r">3,61</td><td class="r">748</td></tr>
+<tr data-cpl="829" data-gasto="62" data-inscr="0" data-leads="202" data-matr="0" data-ventas="167491"><td>17</td><td><span class="ch ch-cr">Seminario</span></td><td>Capcut y Creación de Contenido</td><td class="r">202</td><td class="r">$829</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$167.491</td><td class="r">62,0%</td><td class="r">68.725</td><td class="r">23.487</td><td class="r">2,93</td><td class="r">550</td></tr>
+<tr data-cpl="1322" data-gasto="68" data-inscr="11" data-leads="187" data-matr="5" data-ventas="247171"><td>8</td><td><span class="ch ch-bl">Curso</span></td><td>Excel Sábados</td><td class="r">187</td><td class="r">$1.322</td><td class="r">11</td><td class="r">5,9%</td><td class="r">$6.677.000</td><td class="r">$247.171</td><td class="r">68,7%</td><td class="r">73.902</td><td class="r">29.930</td><td class="r">2,47</td><td class="r">536</td></tr>
+<tr data-cpl="1105" data-gasto="73" data-inscr="11" data-leads="181" data-matr="6" data-ventas="198827"><td>9</td><td><span class="ch ch-cr">Seminario</span></td><td>Persuasión y Presentaciones</td><td class="r">181</td><td class="r">$1.105</td><td class="r">11</td><td class="r">6,1%</td><td class="r">$3.696.000</td><td class="r">$198.827</td><td class="r">73,6%</td><td class="r">49.962</td><td class="r">16.928</td><td class="r">2,95</td><td class="r">461</td></tr>
+<tr data-cpl="3129" data-gasto="47" data-inscr="0" data-leads="124" data-matr="0" data-ventas="388030"><td>5</td><td><span class="ch ch-r">Diplomado</span></td><td>RETILAP e Iluminación</td><td class="r">124</td><td class="r">$3.129</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$388.030</td><td class="r">47,9%</td><td class="r">100.246</td><td class="r">34.017</td><td class="r">2,95</td><td class="r">662</td></tr>
+<tr data-cpl="4428" data-gasto="56" data-inscr="7" data-leads="103" data-matr="6" data-ventas="456115"><td>6</td><td><span class="ch ch-r">Diplomado</span></td><td>Lean Six Sigma</td><td class="r">103</td><td class="r">$4.428</td><td class="r">7</td><td class="r">6,8%</td><td class="r">$18.375.000</td><td class="r">$456.115</td><td class="r">56,3%</td><td class="r">141.977</td><td class="r">37.451</td><td class="r">3,79</td><td class="r">539</td></tr>
+<tr data-cpl="1295" data-gasto="48" data-inscr="0" data-leads="102" data-matr="0" data-ventas="132138"><td>19</td><td><span class="ch ch-cr">Seminario</span></td><td>Pauta FB/IG/WA Ads</td><td class="r">102</td><td class="r">$1.295</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$132.138</td><td class="r">48,9%</td><td class="r">27.284</td><td class="r">10.791</td><td class="r">2,53</td><td class="r">240</td></tr>
+<tr data-cpl="2256" data-gasto="55" data-inscr="0" data-leads="89" data-matr="0" data-ventas="200808"><td>16</td><td><span class="ch ch-bl">Curso</span></td><td>Analista Datos Excel/PQ + IA</td><td class="r">89</td><td class="r">$2.256</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$200.808</td><td class="r">55,8%</td><td class="r">64.724</td><td class="r">23.330</td><td class="r">2,77</td><td class="r">391</td></tr>
+<tr data-cpl="7067" data-gasto="68" data-inscr="0" data-leads="78" data-matr="0" data-ventas="551201"><td>3</td><td><span class="ch ch-r">Diplomado</span></td><td>Marketing Digital c/Ecommerce</td><td class="r">78</td><td class="r">$7.067</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$551.201</td><td class="r">68,0%</td><td class="r">98.666</td><td class="r">35.213</td><td class="r">2,80</td><td class="r">504</td></tr>
+<tr data-cpl="2905" data-gasto="62" data-inscr="0" data-leads="77" data-matr="0" data-ventas="223719"><td>14</td><td><span class="ch ch-bl">Curso</span></td><td>Sistemas Energéticos Eficientes</td><td class="r">77</td><td class="r">$2.905</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$223.719</td><td class="r">62,1%</td><td class="r">76.907</td><td class="r">18.090</td><td class="r">4,25</td><td class="r">409</td></tr>
+<tr data-cpl="2763" data-gasto="57" data-inscr="0" data-leads="75" data-matr="0" data-ventas="207252"><td>5</td><td><span class="ch ch-bl">Curso</span></td><td>Animación 3D Blender</td><td class="r">75</td><td class="r">$2.763</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$207.252</td><td class="r">57,6%</td><td class="r">74.029</td><td class="r">17.759</td><td class="r">4,17</td><td class="r">467</td></tr>
+<tr data-cpl="4240" data-gasto="41" data-inscr="0" data-leads="80" data-matr="0" data-ventas="334942"><td>18</td><td><span class="ch ch-r">Diplomado</span></td><td>BI + IA Herramientas Microsoft</td><td class="r">80</td><td class="r">$4.240</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$334.942</td><td class="r">41,4%</td><td class="r">68.201</td><td class="r">25.789</td><td class="r">2,64</td><td class="r">342</td></tr>
+<tr data-cpl="2324" data-gasto="62" data-inscr="0" data-leads="72" data-matr="0" data-ventas="167292"><td>13</td><td><span class="ch ch-cr">Seminario</span></td><td>Podcast en Organizaciones</td><td class="r">72</td><td class="r">$2.324</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$167.292</td><td class="r">62,0%</td><td class="r">51.565</td><td class="r">19.275</td><td class="r">2,68</td><td class="r">299</td></tr>
+<tr data-cpl="5453" data-gasto="45" data-inscr="0" data-leads="68" data-matr="0" data-ventas="370798"><td>15</td><td><span class="ch ch-r">Diplomado</span></td><td>Escuela de Liderazgo Empresarial</td><td class="r">68</td><td class="r">$5.453</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$370.798</td><td class="r">45,8%</td><td class="r">65.842</td><td class="r">19.127</td><td class="r">3,44</td><td class="r">295</td></tr>
+<tr data-cpl="1894" data-gasto="42" data-inscr="0" data-leads="61" data-matr="0" data-ventas="115553"><td>10</td><td><span class="ch ch-cr">Seminario</span></td><td>Redes Sociales para Marcas</td><td class="r">61</td><td class="r">$1.894</td><td class="r">0</td><td class="r">0,0%</td><td class="r">$0</td><td class="r">$115.553</td><td class="r">42,8%</td><td class="r">22.687</td><td class="r">9.334</td><td class="r">2,43</td><td class="r">167</td></tr>
+<tr class="tr-t"><td colspan="3"><strong>TOTALES / PROMEDIOS PONDERADOS</strong></td><td class="r"><strong>2.235</strong></td><td class="r"><strong>$2.069</strong></td><td class="r"><strong>40</strong></td><td class="r" style="color:var(--r)"><strong>1,79%</strong></td><td class="r"><strong>$61.748.000</strong></td><td class="r"><strong>$4.623.583</strong></td><td class="r" style="color:var(--r)"><strong>56,3%</strong></td><td class="r"><strong>1.223.671</strong></td><td class="r"><strong>436.079</strong></td><td class="r"><strong>2,81</strong></td><td class="r"><strong>7.981</strong></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ══════════ ROAS ══════════ -->
+<section class="sec" id="tab-roas">
+<div class="sec-h"><div class="sec-t">ROAS <span>por Programa</span></div><div class="sec-s">Return on Ad Spend = Ventas / Gasto Real de Pauta · Solo programas con ventas &gt; $0 · ROAS global período: 27,1x</div></div>
+<div class="g2">
+<div class="cc"><div class="ct">ROAS — Enero &amp; Febrero</div><div class="cs">Programas con ventas registradas</div><div class="cw-xl"><canvas id="cREF"></canvas></div></div>
+<div class="cc"><div class="ct">ROAS — Marzo &amp; Abril</div><div class="cs">Programas con ventas registradas</div><div class="cw-xl"><canvas id="cRMA"></canvas></div></div>
+</div>
+<div class="tc">
+<div class="th"><div class="tt">ROAS Detallado por Programa y Mes</div><div class="td2">Fórmula: ROAS = Ventas / Gasto Real de Pauta · Solo programas con ventas &gt; $0</div></div>
+<table>
+<thead><tr><th>Mes</th><th>Tipo</th><th>Programa</th><th class="r">Ventas</th><th class="r">Gasto Real</th><th class="r">ROAS</th><th>Nivel</th></tr></thead>
+<tbody>
+<tr style="background:#FFF8F8"><td><strong>Feb</strong></td><td><span class="ch ch-r">Diplomado</span></td><td>UAO-RCN Prod. y Realización</td><td class="r">$78.000.000</td><td class="r">$78.572</td><td class="r"><strong>992,7x</strong></td><td><span class="ch ch-gn">⭐⭐ TOP</span></td></tr>
+<tr><td><strong>Mar</strong></td><td><span class="ch ch-r">Diplomado</span></td><td>UAO-RCN Prod. y Realización</td><td class="r">$132.000.000</td><td class="r">$644.997</td><td class="r"><strong>204,7x</strong></td><td><span class="ch ch-gn">⭐⭐ TOP</span></td></tr>
+<tr><td><strong>Abr</strong></td><td><span class="ch ch-r">Diplomado</span></td><td>UAO-RCN Prod. y Realización</td><td class="r">$33.000.000</td><td class="r">$190.517</td><td class="r"><strong>173,2x</strong></td><td><span class="ch ch-gn">⭐⭐ TOP</span></td></tr>
+<tr><td><strong>Mar</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Excel Sábados</td><td class="r">$15.175.000</td><td class="r">$127.439</td><td class="r"><strong>119,1x</strong></td><td><span class="ch ch-gn">⭐ Excepcional</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-r">Diplomado</span></td><td>Marketing Digital c/Ecommerce</td><td class="r">$55.000.000</td><td class="r">$654.324</td><td class="r"><strong>84,1x</strong></td><td><span class="ch ch-gn">⭐ Excepcional</span></td></tr>
+<tr><td><strong>Mar</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Power BI + IA</td><td class="r">$19.992.000</td><td class="r">$231.337</td><td class="r"><strong>86,4x</strong></td><td><span class="ch ch-gn">⭐ Excepcional</span></td></tr>
+<tr><td><strong>Mar</strong></td><td><span class="ch ch-r">Diplomado</span></td><td>IA para Automatizar Procesos</td><td class="r">$46.462.500</td><td class="r">$571.185</td><td class="r"><strong>81,3x</strong></td><td><span class="ch ch-gn">⭐ Excepcional</span></td></tr>
+<tr><td><strong>Ene</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Excel Sábados</td><td class="r">$16.184.000</td><td class="r">$224.575</td><td class="r"><strong>72,1x</strong></td><td><span class="ch ch-gn">⭐ Excepcional</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Excel Sábados</td><td class="r">$11.560.000</td><td class="r">$268.828</td><td class="r"><strong>43,0x</strong></td><td><span class="ch ch-gn">Muy alto</span></td></tr>
+<tr><td><strong>Abr</strong></td><td><span class="ch ch-r">Diplomado</span></td><td>Lean Six Sigma</td><td class="r">$18.375.000</td><td class="r">$456.115</td><td class="r"><strong>40,3x</strong></td><td><span class="ch ch-gn">Muy alto</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Excel Online</td><td class="r">$13.294.000</td><td class="r">$329.926</td><td class="r"><strong>40,3x</strong></td><td><span class="ch ch-gn">Muy alto</span></td></tr>
+<tr><td><strong>Ene</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Analista Datos Excel/PQ + IA</td><td class="r">$15.028.000</td><td class="r">$386.901</td><td class="r"><strong>38,8x</strong></td><td><span class="ch ch-gn">Muy alto</span></td></tr>
+<tr><td><strong>Mar</strong></td><td><span class="ch ch-r">Diplomado</span></td><td>Marketing Digital + IA</td><td class="r">$30.700.000</td><td class="r">$856.599</td><td class="r"><strong>35,8x</strong></td><td><span class="ch ch-gn">Muy alto</span></td></tr>
+<tr><td><strong>Ene</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>Pauta FB/IG/WA Ads</td><td class="r">$10.530.000</td><td class="r">$298.188</td><td class="r"><strong>35,3x</strong></td><td><span class="ch ch-gn">Muy alto</span></td></tr>
+<tr><td><strong>Ene</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Excel Semana</td><td class="r">$9.826.000</td><td class="r">$313.943</td><td class="r"><strong>31,3x</strong></td><td><span class="ch ch-gn">Alto</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-r">Diplomado</span></td><td>RETIE, RETILAP y NTC 2050</td><td class="r">$23.500.000</td><td class="r">$819.273</td><td class="r"><strong>28,7x</strong></td><td><span class="ch ch-gn">Alto</span></td></tr>
+<tr><td><strong>Ene</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Italiano Basic A1</td><td class="r">$7.128.000</td><td class="r">$248.885</td><td class="r"><strong>28,6x</strong></td><td><span class="ch ch-gn">Alto</span></td></tr>
+<tr><td><strong>Abr</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Excel Sábados</td><td class="r">$6.677.000</td><td class="r">$247.171</td><td class="r"><strong>27,0x</strong></td><td><span class="ch ch-gn">Alto</span></td></tr>
+<tr><td><strong>Ene</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>Reforma Laboral y Pensional</td><td class="r">$5.120.000</td><td class="r">$193.811</td><td class="r"><strong>26,4x</strong></td><td><span class="ch ch-gn">Alto</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-r">Diplomado</span></td><td>Finanzas y Analítica de Datos</td><td class="r">$22.500.000</td><td class="r">$923.934</td><td class="r"><strong>24,3x</strong></td><td><span class="ch ch-gn">Alto</span></td></tr>
+<tr><td><strong>Ene</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Power BI + IA</td><td class="r">$8.160.000</td><td class="r">$332.106</td><td class="r"><strong>24,6x</strong></td><td><span class="ch ch-gn">Alto</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>Edición de Video</td><td class="r">$6.650.000</td><td class="r">$334.169</td><td class="r"><strong>19,9x</strong></td><td><span class="ch ch-bl">Medio</span></td></tr>
+<tr><td><strong>Abr</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>Persuasión y Presentaciones</td><td class="r">$3.696.000</td><td class="r">$198.827</td><td class="r"><strong>18,6x</strong></td><td><span class="ch ch-bl">Medio</span></td></tr>
+<tr><td><strong>Mar</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Excel Online</td><td class="r">$5.463.000</td><td class="r">$292.557</td><td class="r"><strong>18,7x</strong></td><td><span class="ch ch-bl">Medio</span></td></tr>
+<tr><td><strong>Ene</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Francés Basic A1</td><td class="r">$4.752.000</td><td class="r">$257.453</td><td class="r"><strong>18,5x</strong></td><td><span class="ch ch-bl">Medio</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>Capcut y Creación de Contenido</td><td class="r">$4.800.000</td><td class="r">$298.318</td><td class="r"><strong>16,1x</strong></td><td><span class="ch ch-bl">Medio</span></td></tr>
+<tr><td><strong>Mar</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>Habilidades Hablar en Público</td><td class="r">$3.300.000</td><td class="r">$217.423</td><td class="r"><strong>15,2x</strong></td><td><span class="ch ch-bl">Medio</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>Automatización n8n</td><td class="r">$4.320.000</td><td class="r">$292.250</td><td class="r"><strong>14,8x</strong></td><td><span class="ch ch-bl">Medio</span></td></tr>
+<tr><td><strong>Mar</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>Liderazgo y Coaching</td><td class="r">$2.900.000</td><td class="r">$234.793</td><td class="r"><strong>12,4x</strong></td><td><span class="ch ch-bl">Medio</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>Escuela Comercial</td><td class="r">$2.880.000</td><td class="r">$283.578</td><td class="r"><strong>10,2x</strong></td><td><span class="ch ch-bl">Medio</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>Diseño de Interiores</td><td class="r">$2.178.000</td><td class="r">$272.727</td><td class="r"><strong>8,0x</strong></td><td><span class="ch ch-wm">Regular</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>Hablar en Público</td><td class="r">$2.387.000</td><td class="r">$323.419</td><td class="r"><strong>7,4x</strong></td><td><span class="ch ch-wm">Regular</span></td></tr>
+<tr><td><strong>Feb</strong></td><td><span class="ch ch-cr">Seminario</span></td><td>RETAIL 2030</td><td class="r">$1.440.000</td><td class="r">$369.165</td><td class="r"><strong>3,9x</strong></td><td><span class="ch ch-gy">Bajo</span></td></tr>
+<tr><td><strong>Ene</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Alemán Basic A1</td><td class="r">$792.000</td><td class="r">$212.541</td><td class="r"><strong>3,7x</strong></td><td><span class="ch ch-gy">Bajo</span></td></tr>
+<tr><td><strong>Ene</strong></td><td><span class="ch ch-bl">Curso</span></td><td>Portugués Basic A1</td><td class="r">$792.000</td><td class="r">$220.781</td><td class="r"><strong>3,6x</strong></td><td><span class="ch ch-gy">Bajo</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ══════════ HISTÓRICO ══════════ -->
+<section class="sec" id="tab-historico">
+<div class="sec-h"><div class="sec-t">Comparativo con <span>Histórico de Ventas</span></div><div class="sec-s">Análisis de superación de récords históricos · 3 de 4 meses batieron el máximo histórico anterior</div></div>
+<div class="hg">
+<div class="hcard">
+<div class="hc-m">Enero 2026</div>
+<div class="hc-v">$78.312.000</div>
+<div class="hc-vs">vs. récord anterior (ene-23)</div>
+<div class="hc-r">$21.748.650</div>
+<div class="hc-s"><span class="ch ch-gn">🏆 +260,1% sobre récord</span></div>
+</div>
+<div class="hcard">
+<div class="hc-m">Febrero 2026</div>
+<div class="hc-v">$228.509.000</div>
+<div class="hc-vs">vs. récord anterior (feb-24)</div>
+<div class="hc-r">$98.859.800</div>
+<div class="hc-s"><span class="ch ch-gn">🏆 +131,2% sobre récord</span></div>
+</div>
+<div class="hcard">
+<div class="hc-m">Marzo 2026</div>
+<div class="hc-v">$255.992.500</div>
+<div class="hc-vs">vs. récord anterior (mar-25)</div>
+<div class="hc-r">$134.646.200</div>
+<div class="hc-s"><span class="ch ch-gn">🏆 +90,1% sobre récord</span></div>
+</div>
+<div class="hcard" style="border-left:3px solid var(--r)">
+<div class="hc-m">Abril 2026</div>
+<div class="hc-v" style="color:var(--r)">$61.748.000</div>
+<div class="hc-vs">vs. récord anterior (abr-23)</div>
+<div class="hc-r">$87.486.800</div>
+<div class="hc-s"><span class="ch ch-r" style="background:#FEE2E2">⚠ −29,4% bajo récord</span></div>
+</div>
+</div>
+<div class="cc" style="margin-bottom:16px">
+<div class="ct">Ventas 2026 vs. Récord Histórico Anterior</div>
+<div class="cs">Barras: ventas 2026 · Línea: máximo histórico previo · Valores en COP millones</div>
+<div class="cw-lg"><canvas id="cHist"></canvas></div>
+</div>
+<div class="g2">
+<div class="cc"><div class="ct">Ventas Acumuladas Ene–Abr 2026</div><div class="cs">Crecimiento mensual acumulado (COP millones)</div><div class="cw-md"><canvas id="cAcum"></canvas></div></div>
+<div class="cc"><div class="ct">% Variación vs. Récord Anterior</div><div class="cs">Comparativo porcentual por mes</div><div class="cw-md"><canvas id="cVar"></canvas></div></div>
+</div>
+<div class="tc">
+<div class="th"><div class="tt">Análisis de Superación de Récord Histórico</div></div>
+<table>
+<thead><tr><th>Mes 2026</th><th class="r">Ventas 2026</th><th>Año Récord Ant.</th><th class="r">Récord Anterior</th><th class="r">Diferencia</th><th class="r">Var. %</th><th>Estado</th></tr></thead>
+<tbody>
+<tr><td><strong>Enero</strong></td><td class="r">$78.312.000</td><td>ene-23</td><td class="r">$21.748.650</td><td class="r">+$56.563.350</td><td class="r">+260,1%</td><td><span class="ch ch-gn">🏆 Nuevo récord</span></td></tr>
+<tr><td><strong>Febrero</strong></td><td class="r">$228.509.000</td><td>feb-24</td><td class="r">$98.859.800</td><td class="r">+$129.649.200</td><td class="r">+131,2%</td><td><span class="ch ch-gn">🏆 Nuevo récord</span></td></tr>
+<tr><td><strong>Marzo</strong></td><td class="r">$255.992.500</td><td>mar-25</td><td class="r">$134.646.200</td><td class="r">+$121.346.300</td><td class="r">+90,1%</td><td><span class="ch ch-gn">🏆 Nuevo récord</span></td></tr>
+<tr><td><strong>Abril</strong></td><td class="r" style="color:var(--r)">$61.748.000</td><td>abr-23</td><td class="r">$87.486.800</td><td class="r" style="color:var(--r)">−$25.738.800</td><td class="r" style="color:var(--r)">−29,4%</td><td><span class="ch ch-r" style="background:#FEE2E2">⚠ Por debajo</span></td></tr>
+<tr class="tr-t"><td><strong>TOTAL</strong></td><td class="r"><strong>$624.561.500</strong></td><td>—</td><td class="r"><strong>$342.741.450</strong></td><td class="r"><strong>+$281.820.050</strong></td><td class="r"><strong>+82,2%</strong></td><td><span class="ch ch-gn">+82% vs. suma de récords</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- ══════════ HALLAZGOS ══════════ -->
+<section class="sec" id="tab-insights">
+<div class="sec-h"><div class="sec-t">Hallazgos Clave, <span>Insights</span> y Recomendaciones</div><div class="sec-s">Análisis estratégico · Metodología: Meta Ads Analysis Framework · Orientado a toma de decisiones de comité</div></div>
+<div class="ig">
+<div class="ic">
+<div class="ic-i">🏆</div>
+<div class="ic-t">3 de 4 meses superaron el récord histórico de ventas</div>
+<div class="ic-x">Enero (+260%), Febrero (+131%) y Marzo (+90%) batieron los máximos anteriores de cada mes. El acumulado del período ($624,6M) representa un <span class="ic-h">+82% sobre la suma de los 4 récords históricos anteriores</span>, con un ROAS acumulado global de <span class="ic-h">27,1x</span>.</div>
+</div>
+<div class="ic a">
+<div class="ic-i">⚠️</div>
+<div class="ic-t">Caída crítica en conversión — Abril 2026</div>
+<div class="ic-x">La tasa cayó de <span class="ic-h">8,35% (Enero) a 1,79% (Abril)</span>. No es falla de generación de leads (2.235 obtenidos), sino de <span class="ic-h">cierre comercial</span>. Solo 4 de 17 programas registraron ventas. La ejecución presupuestal fue del 56,3%. Recomendación: auditar pipeline de ventas y ajustar asignación presupuestal.</div>
+</div>
+<div class="ic">
+<div class="ic-i">⭐</div>
+<div class="ic-t">Diplomado UAO-RCN: locomotora de ventas con ROAS extraordinario</div>
+<div class="ic-x">ROAS de <span class="ic-h">993x (Feb), 205x (Mar), 173x (Abr)</span>. CPL entre $337 y $719, el más bajo de los diplomados. Recomendación: <span class="ic-h">escalar presupuesto para próximas cohortes</span> y analizar la estructura de campaña para replicarla en otros diplomados de alto valor.</div>
+</div>
+<div class="ic">
+<div class="ic-i">📊</div>
+<div class="ic-t">Excel Sábados: el programa más consistente del período</div>
+<div class="ic-x">Presente los <span class="ic-h">4 meses con ventas ininterrumpidas</span>: ROAS 72x (Ene), 43x (Feb), 119x (Mar), 27x (Abr). Único con conversiones continuas y CPL estable. Recomendación: <span class="ic-h">asignarle presupuesto base prioritario</span> en todos los meses.</div>
+</div>
+<div class="ic w">
+<div class="ic-i">🔴</div>
+<div class="ic-t">Diplomados con CPL alto y cero ventas — Revisión necesaria</div>
+<div class="ic-x">Ecommerce (Abr: $7.067, $0), Escuela Liderazgo ($5.453, $0), BI+IA ($4.240, $0) y Logística Integral ($5.632, $0) consumen presupuesto sin retorno demostrado. Nota: <span class="ic-h">no se deben pausar sin analizar el pipeline</span>. Revisar etapa de nurturing de los leads.</div>
+</div>
+<div class="ic i">
+<div class="ic-i">📈</div>
+<div class="ic-t">Marzo: más leads (4.905) pero conversión mínima</div>
+<div class="ic-x">Mayor inversión, mayor volumen de leads y 23 programas activos. Pero <span class="ic-h">solo 8 de 23 generaron ventas</span>. El CPL más bajo del período ($1.696) no se tradujo en mejor conversión (3,24%). Causa probable: <span class="ic-h">sobreextensión del portafolio superó la capacidad comercial</span>.</div>
+</div>
+<div class="ic i">
+<div class="ic-i">💡</div>
+<div class="ic-t">Cursos de idiomas: sin conversión sostenida</div>
+<div class="ic-x">Inglés Jóvenes e Inglés Niños registraron <span class="ic-h">0 matrículas en todos los meses</span>. Alemán y Portugués con ROAS de 3,7x y 3,6x. Recomendación: evaluar si Meta Ads es el canal correcto para estos programas o si la propuesta de valor en el anuncio requiere rediseño.</div>
+</div>
+<div class="ic w">
+<div class="ic-i">📉</div>
+<div class="ic-t">Frecuencia alta en Febrero: señal de saturación</div>
+<div class="ic-x">Frecuencia ponderada de <span class="ic-h">3,01</span> con CPM más alto ($4.857). La frecuencia óptima para captación es 2,0–3,0x. Recomendación: rotar creatividades en programas con frecuencia &gt;3x y ampliar audiencias <span class="ic-h">lookalike basadas en convertidores reales</span>.</div>
+</div>
+</div>
+<div class="tc">
+<div class="th"><div class="tt">Matriz de Eficiencia — Mayor y Menor Desempeño · Período Completo</div><div class="td2">Clasificación por CPL, ROAS y tasa de conversión</div></div>
+<table>
+<thead><tr><th>Categoría</th><th>Programa</th><th>Mes(es)</th><th class="r">CPL Rango</th><th class="r">ROAS</th><th class="r">Conv%</th><th>Acción recomendada</th></tr></thead>
+<tbody>
+<tr><td><span class="ch ch-gn">🏆 Top performer</span></td><td>UAO-RCN Producción</td><td>Feb/Mar/Abr</td><td class="r">$337–$719</td><td class="r">173–993x</td><td class="r">4–11%</td><td>↑ Escalar presupuesto</td></tr>
+<tr><td><span class="ch ch-gn">🏆 Top performer</span></td><td>Excel Sábados</td><td>Ene–Abr</td><td class="r">$1.255–$2.160</td><td class="r">27–119x</td><td class="r">5–16%</td><td>↑ Presupuesto base</td></tr>
+<tr><td><span class="ch ch-gn">🏆 Top performer</span></td><td>Power BI + IA</td><td>Ene/Mar</td><td class="r">$1.337–$2.185</td><td class="r">24–86x</td><td class="r">16%</td><td>↑ Mantener/escalar</td></tr>
+<tr><td><span class="ch ch-gn">🏆 Top performer</span></td><td>Marketing Digital Ecommerce</td><td>Feb/Mar</td><td class="r">$2.908–$5.842</td><td class="r">36–84x</td><td class="r">5–20%</td><td>↑ Optimizar CPL</td></tr>
+<tr><td><span class="ch ch-bl">✅ Desempeño sólido</span></td><td>Analista Datos Excel/PQ</td><td>Ene</td><td class="r">$2.211</td><td class="r">38,8x</td><td class="r">14,9%</td><td>→ Mantener</td></tr>
+<tr><td><span class="ch ch-bl">✅ Desempeño sólido</span></td><td>Capcut y Creación Contenido</td><td>Feb</td><td class="r">$1.065</td><td class="r">16,1x</td><td class="r">10,7%</td><td>→ Mantener</td></tr>
+<tr><td><span class="ch ch-wm">⚠ Bajo desempeño</span></td><td>Idiomas (Alemán/Portugués)</td><td>Ene</td><td class="r">$2.530–$3.110</td><td class="r">3,6–3,7x</td><td class="r">1–1,4%</td><td>↓ Revisar audiencia</td></tr>
+<tr><td><span class="ch ch-wm">⚠ Bajo desempeño</span></td><td>Logística Integral</td><td>Mar</td><td class="r">$5.632</td><td class="r">—</td><td class="r">0%</td><td>↓ Revisar propuesta</td></tr>
+<tr><td><span class="ch ch-r" style="background:#FEE2E2">🔴 Crítico</span></td><td>Inglés Jóvenes/Niños</td><td>Ene/Mar</td><td class="r">$2.300–$3.723</td><td class="r">—</td><td class="r">0%</td><td>↓↓ Revisar canal</td></tr>
+<tr><td><span class="ch ch-r" style="background:#FEE2E2">🔴 Crítico</span></td><td>Ecommerce (Abril)</td><td>Abr</td><td class="r">$7.067</td><td class="r">—</td><td class="r">0%</td><td>↓↓ Pause/revisar</td></tr>
+<tr><td><span class="ch ch-r" style="background:#FEE2E2">🔴 Crítico</span></td><td>Escuela Liderazgo Empresarial</td><td>Abr</td><td class="r">$5.453</td><td class="r">—</td><td class="r">0%</td><td>↓↓ Revisar ciclo</td></tr>
+</tbody>
+</table>
+</div>
+<div class="cbox">
+<div class="cb-h">
+<div class="cb-ha"></div>
+<div class="cb-ht">
+<div class="cbt">Conclusiones Estratégicas para Comité · UAO Mercadeo Digital</div>
+<div class="cbs">Período Enero–Abril 2026 · Educación para la Vida · Meta Ads</div>
+</div>
+</div>
+<div class="cb-bd">
+<div>
+<div class="cb-ct g">✅ Lo que funcionó muy bien</div>
+<ul>
+<li>ROAS acumulado de <strong>27,1x</strong> sobre $23,1M invertidos en pauta</li>
+<li><strong>3 récords históricos de ventas</strong> consecutivos: Ene (+260%), Feb (+131%), Mar (+90%)</li>
+<li>Diplomado UAO-RCN: locomotora con ROAS de hasta <strong>993x en Febrero</strong></li>
+<li>Excel Sábados: ventas <strong>ininterrumpidas los 4 meses</strong>, ROAS 27x–119x</li>
+<li>Crecimiento de <strong>+185% en leads</strong> entre Enero (1.712) y Marzo (4.905)</li>
+<li>Frecuencia controlada (2,74–3,01): <strong>audiencias sin saturación masiva</strong></li>
+<li>Ventas acumuladas representan <strong>+82% vs. suma de los 4 récords anteriores</strong></li>
+</ul>
+</div>
+<div>
+<div class="cb-ct a">⚠️ Requiere atención inmediata</div>
+<ul>
+<li>Conversión Abril: <strong>1,79%</strong> — caída severa vs. 8,35% en Enero</li>
+<li>Ejecución presupuestal Abril: <strong>56,3%</strong> — señal de desaceleración</li>
+<li><strong>13 de 17 programas en Abril con $0 en ventas</strong></li>
+<li>Cursos de idiomas: <strong>0 matrículas</strong> en múltiples meses</li>
+<li>CPM más alto en Febrero ($4.857): <strong>revisar audiencias y creatividades</strong></li>
+<li>Programas con CPL &gt;$5.000 y sin ventas: <strong>posible desperdicio de pauta</strong></li>
+<li>Marzo: <strong>23 programas activos vs. capacidad real del equipo comercial</strong></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<footer class="ft">
+<div class="ft-l">
+<img alt="UAO" src="data:image/png;base64,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"/>
+<div class="ft-t"><strong>Universidad Autónoma de Occidente</strong>  ·  Área de Mercadeo Digital  ·  Educación para la Vida</div>
+</div>
+<div class="ft-r">Tablero de Control Ene–Abr 2026  ·  Datos: Meta Ads Manager  ·  Elaborado: Mayo 2026</div>
+</footer>
+<div class="ft-credit">Tablero elaborado por <span>José Joaquín González Uribe</span> · Área de Mercadeo Digital · Universidad Autónoma de Occidente · 2026</div>
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+Chart.defaults.font.family="'DM Sans',sans-serif";
+Chart.defaults.color='#8A7570';
+Chart.defaults.plugins.legend.labels.boxWidth=10;
+Chart.defaults.plugins.legend.labels.padding=12;
+Chart.defaults.plugins.legend.labels.font={size:11};
+
+const R='#DC142D',RD='#961423',RL='#F03C46',BK='#121212';
+const MC=[RD,R,RL,'#7A0D1A'];
+const ML=['Enero','Febrero','Marzo','Abril'];
+
+function cplC(v){return v<=1500?'#16A34A':v<=2500?'#D97706':R}
+
+/* ─ RESUMEN CHARTS ─ */
+new Chart(document.getElementById('cLM'),{type:'bar',data:{labels:ML,datasets:[{label:'Leads',data:[1712,3155,4905,2235],backgroundColor:MC,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.parsed.y.toLocaleString('es-CO')+' leads'}}},scales:{y:{beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>v.toLocaleString('es-CO')}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('cIV'),{type:'bar',data:{labels:ML,datasets:[{label:'Inversión (M)',data:[3.28,6.84,8.32,4.62],backgroundColor:BK,borderRadius:5,yAxisID:'y1'},{label:'Ventas (M)',data:[78.3,228.5,256.0,61.7],backgroundColor:MC,borderRadius:5,yAxisID:'y2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true}},scales:{y1:{type:'linear',position:'left',beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>'$'+v.toFixed(1)+'M'}},y2:{type:'linear',position:'right',beginAtZero:true,grid:{display:false},ticks:{callback:v=>'$'+v+'M'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('cCPL'),{type:'line',data:{labels:ML,datasets:[{label:'CPL Ponderado',data:[1916,2167,1696,2069],borderColor:R,backgroundColor:'rgba(220,20,45,0.06)',fill:true,tension:0.4,pointBackgroundColor:MC,pointRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' $'+c.parsed.y.toLocaleString('es-CO')}}},scales:{y:{beginAtZero:false,min:1400,grid:{color:'#EAE3DB'},ticks:{callback:v=>'$'+v.toLocaleString('es-CO')}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('cROAS'),{type:'bar',data:{labels:ML,datasets:[{label:'ROAS (x)',data:[23.9,33.4,30.8,13.4],backgroundColor:MC,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.parsed.y.toFixed(1)+'x'}}},scales:{y:{beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>v+'x'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('cConv'),{type:'line',data:{labels:ML,datasets:[{label:'Conv. %',data:[8.35,6.72,3.24,1.79],borderColor:RD,backgroundColor:'rgba(150,20,35,0.06)',fill:true,tension:0.4,pointBackgroundColor:MC,pointRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.parsed.y.toFixed(2)+'%'}}},scales:{y:{beginAtZero:true,max:12,grid:{color:'#EAE3DB'},ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('cVis'),{type:'bar',data:{labels:ML,datasets:[{label:'Impresiones',data:[990116,1407539,1935533,1223671],backgroundColor:'rgba(150,20,35,0.5)',borderRadius:4,yAxisID:'y1'},{label:'Alcance (Acc.Center)',data:[360842,467293,670457,436079],backgroundColor:'rgba(220,20,45,0.75)',borderRadius:4,yAxisID:'y1'},{label:'Clics (all)',data:[6753,11916,15524,7981],type:'line',borderColor:BK,backgroundColor:'rgba(18,18,18,0.05)',fill:true,tension:0.4,yAxisID:'y2',pointRadius:5,pointBackgroundColor:BK}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true}},scales:{y1:{beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>(v/1000).toFixed(0)+'K'}},y2:{position:'right',beginAtZero:true,grid:{display:false},ticks:{callback:v=>v.toLocaleString()}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('cEfi'),{type:'bar',data:{labels:ML,datasets:[{label:'CPM (COP)',data:[3314,4857,4299,3779],backgroundColor:MC,borderRadius:6,yAxisID:'y1'},{label:'Frecuencia',data:[2.74,3.01,2.89,2.81],type:'line',borderColor:BK,backgroundColor:'rgba(18,18,18,0.06)',fill:true,tension:0.4,yAxisID:'y2',pointRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true}},scales:{y1:{beginAtZero:false,min:2500,grid:{color:'#EAE3DB'},ticks:{callback:v=>'$'+v.toLocaleString('es-CO')}},y2:{position:'right',beginAtZero:false,min:2.0,max:3.5,grid:{display:false},ticks:{callback:v=>v.toFixed(2)+'x'}},x:{grid:{display:false}}}}});
+
+/* ─ ENERO ─ */
+const eL=['Italiano A1','Excel Semana','Excel Sáb.','Analista+IA','Pauta FB/IG','Power BI','Inglés Jóv.','Ref. Laboral','Alemán A1','Francés A1','Inglés Niños','Portugués A1'];
+const eLeads=[256,196,179,175,161,152,141,141,84,84,72,71];
+const eCPL=[972,1602,1255,2211,1852,2185,2300,2300,2530,3065,3723,3110];
+new Chart(document.getElementById('cEL'),{type:'bar',data:{labels:eL,datasets:[{label:'Leads',data:eLeads,backgroundColor:RD,borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#EAE3DB'}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+new Chart(document.getElementById('cEC'),{type:'bar',data:{labels:eL,datasets:[{label:'CPL (COP)',data:eCPL,backgroundColor:eCPL.map(cplC),borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' $'+c.parsed.x.toLocaleString('es-CO')}}},scales:{x:{beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>'$'+v.toLocaleString('es-CO')}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+
+/* ─ FEBRERO ─ */
+const fL=['RETIE/RETILAP','UAO-RCN','Capcut','Fin.+Datos','Edición Video','Excel Sáb.','Hablar Púb.','Autom. n8n','Diseño Int.','Excel Online','IA Productiv.','RETAIL 2030','Liderazgo','Fin.Personal','Esc.Comercial','WA Marketing','BI+IA Msft','TOEFL'];
+const fLeads=[432,233,280,264,236,212,177,172,176,147,131,131,95,98,94,60,60,45];
+const fCPL=[1896,337,1065,3500,1416,1268,1827,1699,1550,2244,2413,2818,3101,2785,3017,3656,3957,5487];
+new Chart(document.getElementById('cFL'),{type:'bar',data:{labels:fL,datasets:[{label:'Leads',data:fLeads,backgroundColor:R,borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#EAE3DB'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+new Chart(document.getElementById('cFC'),{type:'bar',data:{labels:fL,datasets:[{label:'CPL (COP)',data:fCPL,backgroundColor:fCPL.map(cplC),borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' $'+c.parsed.x.toLocaleString('es-CO')}}},scales:{x:{beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>'$'+v.toLocaleString('es-CO')}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+
+/* ─ MARZO ─ */
+const maL=['UAO-RCN','Liq.Nómina','Mar.Dig.+IA','IA Automatiz.','TikTok Ads','Big Data+IA','Diseño Espacios','Excel Online','Inglés Niños','Hablar Púb.','Power BI','Chatbots+WA','Liderazgo','Bienestar','Tesorería','Inglés Jóv Sáb','Gest.Comercial','Inglés Jóv Sem','Excel Sáb.','PMI','Marcas+IA','Logística','PBI+Automate'];
+const maCPL=[511, 794, 2908, 1843, 1401, 3021, 1919, 1194, 2871, 1201, 1337, 1638, 1555, 2526, 3042, 3369, 3001, 3580, 2160, 3650, 3638, 5632, 1729];
+const maLeads=[1261,416,314,310,275,264,236,245,192,181,173,153,151,109,93,75,73,67,59,57,49,117,35];
+new Chart(document.getElementById('cMaL'),{type:'bar',data:{labels:maL,datasets:[{label:'Leads',data:maLeads,backgroundColor:RL,borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#EAE3DB'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+new Chart(document.getElementById('cMaC'),{type:'bar',data:{labels:maL,datasets:[{label:'CPL (COP)',data:maCPL,backgroundColor:maCPL.map(cplC),borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' $'+c.parsed.x.toLocaleString('es-CO')}}},scales:{x:{beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>'$'+v.toLocaleString('es-CO')}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+
+
+
+/* ─ ABRIL ─ */
+const abL=['UAO-RCN','Excel Sem.','Autom.Cont.','Capcut','Excel Sáb.','Persuasión','RETILAP','Lean 6 Sigma','Pauta FB/IG','Analista+IA','Ecommerce','Sist.Energét.','Animación 3D','BI+IA Msft','Podcast','Esc.Liderazgo','Redes Sociales'];
+const abLeads=[265,236,235,202,187,181,124,103,102,89,78,77,75,80,72,68,61];
+const abCPL=[719,1021,1833,829,1322,1105,3129,4428,1295,2256,7067,2905,2763,4240,2324,5453,1894];
+new Chart(document.getElementById('cAbL'),{type:'bar',data:{labels:abL,datasets:[{label:'Leads',data:abLeads,backgroundColor:'#7A0D1A',borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,grid:{color:'#EAE3DB'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+new Chart(document.getElementById('cAbC'),{type:'bar',data:{labels:abL,datasets:[{label:'CPL (COP)',data:abCPL,backgroundColor:abCPL.map(v=>v<=1500?'#16A34A':v<=3000?'#D97706':R),borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' $'+c.parsed.x.toLocaleString('es-CO')}}},scales:{x:{beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>'$'+v.toLocaleString('es-CO')}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+
+/* ─ ROAS ─ */
+const refL=['UAO-RCN(Feb)','UAO-RCN(Mar)','UAO-RCN(Abr)','ExcelSáb(Mar)','Ecommerce(Feb)','PowerBI(Mar)','IAAutomat(Mar)','ExcelSáb(Ene)','ExcelSáb(Feb)','LeanSigma(Abr)','ExcelOnl(Feb)','AnalistaDatos(Ene)','MarDig+IA(Mar)','PautaFBIG(Ene)','ExcelSem(Ene)','RETIE(Feb)','ItalianA1(Ene)','ExcelSáb(Abr)','RefLaboral(Ene)','Finanzas(Feb)','PowerBI(Ene)','EdVideo(Feb)','Persuasion(Abr)','ExcelOnl(Mar)','Frances(Ene)','Capcut(Feb)','HablarPub(Mar)','n8n(Feb)','EscComercial(Feb)','DiseñoInt(Feb)','HablarPub(Feb)','RETAIL2030(Feb)','Aleman(Ene)','Portugues(Ene)'];
+const refV=[992.7,204.7,173.2,119.1,84.1,86.4,81.3,72.1,43.0,40.3,40.3,38.8,35.8,35.3,31.3,28.7,28.6,27.0,26.4,24.3,24.6,19.9,18.6,18.7,18.5,16.1,15.2,14.8,10.2,8.0,7.4,3.9,3.7,3.6];
+const refC=refV.map(v=>v>=50?RD:v>=20?R:v>=10?RL:'#C5B0A0');
+const half=Math.ceil(refL.length/2);
+new Chart(document.getElementById('cREF'),{type:'bar',data:{labels:refL.slice(0,half),datasets:[{label:'ROAS (x)',data:refV.slice(0,half),backgroundColor:refC.slice(0,half),borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' ROAS: '+c.parsed.x.toFixed(1)+'x'}}},scales:{x:{beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>v+'x'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+new Chart(document.getElementById('cRMA'),{type:'bar',data:{labels:refL.slice(half),datasets:[{label:'ROAS (x)',data:refV.slice(half),backgroundColor:refC.slice(half),borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' ROAS: '+c.parsed.x.toFixed(1)+'x'}}},scales:{x:{beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>v+'x'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+
+/* ─ HISTÓRICO ─ */
+new Chart(document.getElementById('cHist'),{type:'bar',data:{labels:ML,datasets:[{label:'Ventas 2026 (M)',data:[78.3,228.5,256.0,61.7],backgroundColor:MC,borderRadius:8,yAxisID:'y'},{label:'Récord anterior (M)',data:[21.7,98.9,134.6,87.5],type:'line',borderColor:BK,backgroundColor:'rgba(18,18,18,0.04)',borderDash:[8,4],fill:true,tension:0.3,pointRadius:8,pointBackgroundColor:BK,yAxisID:'y'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true},tooltip:{callbacks:{label:c=>' $'+c.parsed.y.toFixed(1)+'M'}}},scales:{y:{beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>'$'+v+'M'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('cAcum'),{type:'line',data:{labels:ML,datasets:[{label:'Ventas acumuladas (M)',data:[78.3,306.8,562.8,624.6],borderColor:R,backgroundColor:'rgba(220,20,45,0.07)',fill:true,tension:0.4,pointBackgroundColor:MC,pointRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' $'+c.parsed.y.toFixed(1)+'M'}}},scales:{y:{beginAtZero:true,grid:{color:'#EAE3DB'},ticks:{callback:v=>'$'+v+'M'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('cVar'),{type:'bar',data:{labels:ML,datasets:[{label:'% vs. récord',data:[260.1,131.2,90.1,-29.4],backgroundColor:MC,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+(c.parsed.y>0?'+':'')+c.parsed.y.toFixed(1)+'%'}}},scales:{y:{grid:{color:'#EAE3DB'},ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}}});
+
+/* ── COLUMN SORT & FILTER ENGINE ── */
+const _colState = {};   // { tableId: { sortCol: -1, sortDir: 'none' } }
+
+function _getState(tid) {
+  if (!_colState[tid]) _colState[tid] = {sortCol:-1, sortDir:'none'};
+  return _colState[tid];
+}
+
+function parseCell(text) {
+  text = text.trim().replace(/[$%\s]/g,'');
+  if (!text || text === '—') return -1;
+  // Colombian format: periods=thousands, comma=decimal
+  if (text.includes(',')) {
+    text = text.replace(/\./g,'').replace(',','.');
+  } else {
+    text = text.replace(/\./g,'');
+  }
+  return parseFloat(text) || 0;
+}
+
+function getRowCells(row) {
+  return Array.from(row.querySelectorAll('td'));
+}
+
+function applyColFilters(tid) {
+  const tbl = document.getElementById(tid);
+  if (!tbl) return;
+  const thead = tbl.querySelector('thead');
+  const tbody = tbl.querySelector('tbody');
+  const filterInputs = thead.querySelectorAll('.f-inp,.f-sel');
+  const filters = {};
+  filterInputs.forEach(inp => {
+    const col = parseInt(inp.dataset.col);
+    const val = inp.value.trim();
+    if (val) filters[col] = {val, type: inp.classList.contains('f-num') ? 'number' : inp.tagName === 'SELECT' ? 'select' : 'text'};
+  });
+
+  const rows = tbody.querySelectorAll('tr:not(.tr-t)');
+  let visible = 0;
+  rows.forEach(row => {
+    const cells = getRowCells(row);
+    let show = true;
+    for (const [col, f] of Object.entries(filters)) {
+      const cell = cells[parseInt(col)];
+      if (!cell) continue;
+      const cellText = cell.textContent;
+      if (f.type === 'number') {
+        const minVal = parseFloat(f.val);
+        if (!isNaN(minVal) && parseCell(cellText) < minVal) { show = false; break; }
+      } else if (f.type === 'select') {
+        const chipText = cell.querySelector('span') ? cell.querySelector('span').textContent : cellText;
+        if (f.val && !chipText.toLowerCase().includes(f.val.toLowerCase()) && f.val !== 'Todos') { show = false; break; }
+      } else {
+        if (!cellText.toLowerCase().includes(f.val.toLowerCase())) { show = false; break; }
+      }
+    }
+    row.classList.toggle('row-hidden', !show);
+    if (show) visible++;
+  });
+
+  // Update row count badge
+  const fid = tid.replace('tbl-','');
+  const cnt = document.getElementById('cnt-'+fid);
+  if (cnt) {
+    const total = rows.length;
+    cnt.textContent = visible === total ? `${total} programas` : `${visible} de ${total}`;
+    cnt.classList.toggle('active', Object.keys(filters).length > 0);
+  }
+
+  // Re-apply sort if active
+  const st = _getState(tid);
+  if (st.sortCol >= 0 && st.sortDir !== 'none') _sortVisible(tid, st.sortCol, st.sortDir);
+}
+
+function _sortVisible(tid, colIdx, dir) {
+  const tbl = document.getElementById(tid);
+  const tbody = tbl.querySelector('tbody');
+  const totRow = tbody.querySelector('.tr-t');
+  const rows = Array.from(tbody.querySelectorAll('tr:not(.tr-t):not(.row-hidden)'));
+  const hidden = Array.from(tbody.querySelectorAll('tr.row-hidden'));
+
+  rows.sort((a,b) => {
+    const ta = getRowCells(a)[colIdx]?.textContent || '';
+    const tb = getRowCells(b)[colIdx]?.textContent || '';
+    const na = parseCell(ta), nb = parseCell(tb);
+    if (na !== -1 && nb !== -1) return dir === 'asc' ? na - nb : nb - na;
+    return dir === 'asc' ? ta.localeCompare(tb) : tb.localeCompare(ta);
+  });
+
+  // Remove all data rows then re-insert sorted
+  tbody.querySelectorAll('tr:not(.tr-t)').forEach(r => r.remove());
+  rows.forEach(r => { r.classList.remove('row-top','row-hl'); tbody.insertBefore(r, totRow); });
+  hidden.forEach(r => tbody.insertBefore(r, totRow));
+
+  // Highlight top 3 visible
+  const vis = rows.filter(r => !r.classList.contains('row-hidden'));
+  if (vis.length > 0) vis[0].classList.add('row-top');
+  vis.slice(1,3).forEach(r => r.classList.add('row-hl'));
+}
+
+function colSort(tid, colIdx, thEl) {
+  const st = _getState(tid);
+  const tbl = document.getElementById(tid);
+
+  // Reset all th states in this table
+  tbl.querySelectorAll('.th-sort').forEach(th => {
+    th.classList.remove('asc','desc');
+    th.dataset.dir = 'none';
+  });
+
+  // Toggle direction
+  let dir;
+  if (st.sortCol === colIdx && st.sortDir === 'desc') dir = 'asc';
+  else dir = 'desc';
+
+  st.sortCol = colIdx;
+  st.sortDir = dir;
+  thEl.classList.add(dir);
+  thEl.dataset.dir = dir;
+
+  _sortVisible(tid, colIdx, dir);
+}
+
+function resetFilters(tid, fid) {
+  const tbl = document.getElementById(tid);
+  if (!tbl) return;
+  // Clear all filter inputs
+  tbl.querySelectorAll('.f-inp,.f-sel').forEach(inp => {
+    inp.value = '';
+    if (inp.tagName === 'SELECT') inp.selectedIndex = 0;
+  });
+  // Show all rows
+  tbl.querySelectorAll('tr.row-hidden').forEach(r => r.classList.remove('row-hidden'));
+  tbl.querySelectorAll('tr.row-top,.row-hl').forEach(r => r.classList.remove('row-top','row-hl'));
+  // Reset sort
+  tbl.querySelectorAll('.th-sort').forEach(th => { th.classList.remove('asc','desc'); th.dataset.dir='none'; });
+  const st = _getState(tid);
+  st.sortCol = -1; st.sortDir = 'none';
+  // Hide row count
+  const cnt = document.getElementById('cnt-'+fid);
+  if (cnt) { cnt.textContent=''; cnt.classList.remove('active'); }
+  // Reset sort-preset buttons
+  const fb = document.getElementById(fid);
+  if (fb) {
+    fb.querySelectorAll('.fb').forEach(b => b.classList.remove('on'));
+    const first = fb.querySelector('.fb');
+    if (first) first.classList.add('on');
+  }
+}
+
+</script>
+</body>
+</html>
