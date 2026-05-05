@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tablero de Trazabilidad de Leads — Posgrados UAO 2026-2S</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #181c27;
+    --bg3: #1e2333;
+    --bg4: #252a3d;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8eaf0;
+    --text2: #8b90a6;
+    --text3: #5a5f75;
+    --blue: #4a8fe8;
+    --blue-dim: rgba(74,143,232,0.15);
+    --teal: #27c99a;
+    --teal-dim: rgba(39,201,154,0.15);
+    --coral: #e06245;
+    --coral-dim: rgba(224,98,69,0.15);
+    --amber: #f0a832;
+    --amber-dim: rgba(240,168,50,0.15);
+    --red: #e24b4a;
+    --red-dim: rgba(226,75,74,0.15);
+    --green: #52c46a;
+    --green-dim: rgba(82,196,106,0.15);
+    --purple: #9b7ff4;
+    --purple-dim: rgba(155,127,244,0.15);
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .logo-mark {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #fff;
+  }
+  .topbar-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .topbar-sub { font-size: 12px; color: var(--text2); margin-top: 1px; }
+  .topbar-badge {
+    font-size: 11px; padding: 3px 10px; border-radius: 20px;
+    background: var(--teal-dim); color: var(--teal);
+    border: 1px solid rgba(39,201,154,0.3);
+    font-weight: 500;
+  }
+  .updated { font-size: 11px; color: var(--text3); }
+
+  /* LAYOUT */
+  .main { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 11px; font-weight: 600; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 14px; margin-top: 32px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  /* KPI GRID */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .kpi.blue::before { background: var(--blue); }
+  .kpi.teal::before { background: var(--teal); }
+  .kpi.coral::before { background: var(--coral); }
+  .kpi.red::before { background: var(--red); }
+  .kpi.amber::before { background: var(--amber); }
+  .kpi.green::before { background: var(--green); }
+  .kpi.purple::before { background: var(--purple); }
+  .kpi-label { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; font-weight: 500; }
+  .kpi-value { font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+  .kpi.blue .kpi-value { color: var(--blue); }
+  .kpi.teal .kpi-value { color: var(--teal); }
+  .kpi.coral .kpi-value { color: var(--coral); }
+  .kpi.red .kpi-value { color: var(--red); }
+  .kpi.amber .kpi-value { color: var(--amber); }
+  .kpi.green .kpi-value { color: var(--green); }
+  .kpi.purple .kpi-value { color: var(--purple); }
+  .kpi-sub { font-size: 11px; color: var(--text3); }
+
+  /* ISSUES GRID */
+  .issues-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .issue-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .issue-card.red { border-left: 3px solid var(--red); border-top-left-radius: var(--radius); border-bottom-left-radius: var(--radius); }
+  .issue-card.amber { border-left: 3px solid var(--amber); }
+  .issue-card.blue { border-left: 3px solid var(--blue); }
+  .issue-card.gray { border-left: 3px solid var(--text3); }
+  .issue-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; margin-bottom: 12px;
+  }
+  .issue-card.red .issue-icon { background: var(--red-dim); }
+  .issue-card.amber .issue-icon { background: var(--amber-dim); }
+  .issue-card.blue .issue-icon { background: var(--blue-dim); }
+  .issue-card.gray .issue-icon { background: rgba(255,255,255,0.05); }
+  .issue-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .issue-count-big { font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
+  .issue-card.red .issue-count-big { color: var(--red); }
+  .issue-card.amber .issue-count-big { color: var(--amber); }
+  .issue-card.blue .issue-count-big { color: var(--blue); }
+  .issue-card.gray .issue-count-big { color: var(--text2); }
+  .issue-list { font-size: 11px; color: var(--text2); line-height: 1.8; }
+  .issue-list strong { color: var(--text); font-weight: 500; }
+
+  /* TWO-COL LAYOUT */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+
+  /* CHART CARD */
+  .chart-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+  .chart-card.full { grid-column: 1 / -1; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .card-sub { font-size: 11px; color: var(--text2); margin-bottom: 16px; }
+
+  /* LEGEND */
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* TABLE */
+  .table-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .table-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .table-header-left { }
+  .table-header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .filter-group { display: flex; gap: 4px; flex-wrap: wrap; }
+  .filter-btn {
+    font-size: 11px; padding: 4px 10px; border-radius: 20px;
+    border: 1px solid var(--border2); background: none;
+    color: var(--text2); cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover { background: var(--bg4); color: var(--text); }
+  .filter-btn.active { background: var(--bg4); color: var(--text); border-color: var(--text3); }
+  .filter-btn.active.critical { background: var(--red-dim); color: var(--red); border-color: rgba(226,75,74,0.4); }
+  .filter-btn.active.warning { background: var(--amber-dim); color: var(--amber); border-color: rgba(240,168,50,0.4); }
+  .filter-btn.active.ok { background: var(--green-dim); color: var(--green); border-color: rgba(82,196,106,0.4); }
+  .filter-btn.active.nodata { background: var(--blue-dim); color: var(--blue); border-color: rgba(74,143,232,0.4); }
+
+  .search-box {
+    font-size: 12px; padding: 5px 12px; border-radius: 6px;
+    border: 1px solid var(--border2); background: var(--bg3);
+    color: var(--text); font-family: inherit; width: 180px;
+    outline: none;
+  }
+  .search-box::placeholder { color: var(--text3); }
+  .search-box:focus { border-color: var(--blue); }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    font-size: 11px; font-weight: 600; color: var(--text3);
+    text-align: left; padding: 10px 16px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    background: var(--bg3); border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  th.num, td.num { text-align: right; }
+  tbody tr { transition: background 0.1s; }
+  tbody tr:hover { background: var(--bg3); }
+  tbody tr:not(:last-child) td { border-bottom: 1px solid var(--border); }
+  td {
+    padding: 10px 16px;
+    font-size: 12px;
+    color: var(--text);
+    vertical-align: middle;
+  }
+  td.prog-name { font-size: 12px; color: var(--text); max-width: 260px; }
+  td.num { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  td.num.normal { color: var(--text); }
+  td.num.red { color: var(--red); }
+  td.num.amber { color: var(--amber); }
+  td.num.zero { color: var(--red); }
+
+  .badge {
+    font-size: 10px; padding: 3px 8px; border-radius: 4px;
+    font-weight: 600; white-space: nowrap; letter-spacing: 0.03em;
+  }
+  .badge.critical { background: var(--red-dim); color: var(--red); border: 1px solid rgba(226,75,74,0.3); }
+  .badge.warning { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(240,168,50,0.3); }
+  .badge.ok { background: var(--green-dim); color: var(--green); border: 1px solid rgba(82,196,106,0.3); }
+  .badge.nodata { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(74,143,232,0.3); }
+
+  .bar-container { display: flex; align-items: center; gap: 8px; }
+  .bar-track { height: 6px; background: var(--bg4); border-radius: 3px; flex: 1; min-width: 60px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+  .bar-label { font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; min-width: 34px; text-align: right; }
+
+  td .note { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 12px;
+  }
+
+  /* TOTALS ROW */
+  .totals-row td { font-weight: 700; background: rgba(74,143,232,0.06); font-size: 13px; }
+  .totals-row:hover td { background: rgba(74,143,232,0.10) !important; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-mark">U</div>
+    <div>
+      <div class="topbar-title">Trazabilidad de Leads — Posgrados UAO</div>
+      <div class="topbar-sub">Salesforce · Meta Ads · Marketing Cloud Journey · 2026-2S</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span class="topbar-badge">Activo</span>
+    <span class="updated">Actualizado: 2026</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- KPIs -->
+  <div class="section-label">Resumen general del funnel</div>
+  <div class="kpi-grid">
+    <div class="kpi blue">
+      <div class="kpi-label">Total Salesforce</div>
+      <div class="kpi-value">2,444</div>
+      <div class="kpi-sub">todos los orígenes</div>
+    </div>
+    <div class="kpi teal">
+      <div class="kpi-label">Total Meta Ads</div>
+      <div class="kpi-value">2,352</div>
+      <div class="kpi-sub">leads capturados</div>
+    </div>
+    <div class="kpi coral">
+      <div class="kpi-label">Total MC Journey</div>
+      <div class="kpi-value">2,395</div>
+      <div class="kpi-sub">leads en journey</div>
+    </div>
+    <div class="kpi red">
+      <div class="kpi-label">Programas críticos</div>
+      <div class="kpi-value">9</div>
+      <div class="kpi-sub">brecha &gt;30%</div>
+    </div>
+    <div class="kpi amber">
+      <div class="kpi-label">En advertencia</div>
+      <div class="kpi-value">4</div>
+      <div class="kpi-sub">brecha 10–30%</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">Sin anomalías</div>
+      <div class="kpi-value">14</div>
+      <div class="kpi-sub">alineados</div>
+    </div>
+    <div class="kpi purple">
+      <div class="kpi-label">Leads sin programa</div>
+      <div class="kpi-value">105</div>
+      <div class="kpi-sub">sin clasificar en SF</div>
+    </div>
+  </div>
+
+  <!-- ISSUE CARDS -->
+  <div class="section-label">Clasificación de problemas detectados</div>
+  <div class="issues-grid">
+    <div class="issue-card red">
+      <div class="issue-icon">⚠</div>
+      <div class="issue-title">Subregistro crítico en Salesforce</div>
+      <div class="issue-count-big">4</div>
+      <div class="issue-list">
+        <strong>Eficiencia Energética:</strong> SF=1 vs Meta=69 (−98%)<br>
+        <strong>Gerencia del Talento Humano:</strong> SF=14 vs Meta=71 (−80%)<br>
+        <strong>Maestría Seg. y Salud:</strong> SF=0 vs Meta=51 (−100%)<br>
+        <strong>Maestría Sistemas Energéticos:</strong> SF=1 vs MC=27 (−96%)
+      </div>
+    </div>
+    <div class="issue-card amber">
+      <div class="issue-icon">↕</div>
+      <div class="issue-title">Discrepancia entre fuentes</div>
+      <div class="issue-count-big">3</div>
+      <div class="issue-list">
+        <strong>Esp. Mercadeo:</strong> SF=98 vs Meta=34 (SF sobreregistra +188%)<br>
+        <strong>Esp. Finanzas:</strong> SF=25 vs Meta=6 vs MC=57 (inconsistente)<br>
+        <strong>Estrategia Publicitaria:</strong> SF=138 vs Meta=87 (−37%)
+      </div>
+    </div>
+    <div class="issue-card blue">
+      <div class="issue-icon">✕</div>
+      <div class="issue-title">Journey no configurado</div>
+      <div class="issue-count-big">4</div>
+      <div class="issue-list">
+        <strong>Esp. Gerencia de Proyectos:</strong> Journey no encontrado en carpeta (MC=0)<br>
+        <strong>Doctorado Bioingeniería:</strong> sin formulario numérico<br>
+        <strong>Doctorado Ingeniería:</strong> sin formulario numérico<br>
+        <strong>Doctorado Sostenibilidad:</strong> sin formulario numérico
+      </div>
+    </div>
+    <div class="issue-card gray">
+      <div class="issue-icon">?</div>
+      <div class="issue-title">Leads sin programa en SF</div>
+      <div class="issue-count-big">105</div>
+      <div class="issue-list">
+        <strong>"SIN NOMBRE":</strong> 97 leads sin clasificar<br>
+        <strong>"PROGRAMAS DE POSGRADO":</strong> 7 leads genéricos<br>
+        <strong>"Otra":</strong> 1 lead no identificado<br>
+        Total: 4.3% del pipeline sin trazabilidad
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="section-label">Comparativo visual por programa</div>
+  <div class="two-col">
+
+    <!-- Horizontal bar chart: anomalous programs -->
+    <div class="chart-card">
+      <div class="card-title">Brecha máxima entre sistemas — programas con anomalías</div>
+      <div class="card-sub">Diferencia porcentual entre el valor más alto y más bajo de los tres sistemas</div>
+      <div style="position:relative;height:320px;">
+        <canvas id="gapChart" role="img" aria-label="Gráfico de barras horizontales con la brecha máxima entre sistemas por programa crítico"></canvas>
+      </div>
+    </div>
+
+    <!-- Donut: status distribution -->
+    <div class="chart-card">
+      <div class="card-title">Distribución de estado por programa</div>
+      <div class="card-sub">Clasificación de los 30 programas según nivel de discrepancia detectado</div>
+      <div style="display:flex;align-items:center;gap:24px;height:320px;">
+        <div style="position:relative;width:200px;height:200px;flex-shrink:0;">
+          <canvas id="donutChart" role="img" aria-label="Gráfico de dona con distribución de estados: crítico, advertencia, normal, sin datos"></canvas>
+        </div>
+        <div style="flex:1;">
+          <div id="donutLegend"></div>
+          <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--border);">
+            <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">BRECHA NETA EN EL FUNNEL</div>
+            <div style="font-size:12px;color:var(--text2);line-height:2.0;">
+              SF vs Meta Ads: <strong style="color:var(--red);">−92 leads (−3.8%)</strong><br>
+              SF vs MC Journey: <strong style="color:var(--amber);">−49 leads (−2.0%)</strong><br>
+              Meta vs MC Journey: <strong style="color:var(--text);">+43 leads (+1.8%)</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full comparison chart -->
+  <div class="chart-card full" style="margin-bottom:28px;">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:6px;">
+      <div>
+        <div class="card-title">Comparativo completo: Salesforce vs Meta Ads vs MC Journey</div>
+        <div class="card-sub">Volumen de leads por programa en cada sistema — programas con datos numéricos</div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button class="filter-btn active" id="chartAll" onclick="setChartFilter('all',this)">Todos</button>
+        <button class="filter-btn" id="chartCrit" onclick="setChartFilter('critical',this)">Solo críticos</button>
+        <button class="filter-btn" id="chartHigh" onclick="setChartFilter('high',this)">Top 10 volumen</button>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#4a8fe8;"></div>Salesforce</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#27c99a;"></div>Meta Ads</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e06245;"></div>MC Journey</div>
+    </div>
+    <div style="position:relative;" id="mainChartWrap">
+      <canvas id="mainChart" role="img" aria-label="Gráfico de barras agrupadas comparando leads de los tres sistemas por programa de posgrado"></canvas>
+    </div>
+  </div>
+
+  <!-- DATA TABLE -->
+  <div class="section-label">Detalle por programa</div>
+  <div class="table-wrap">
+    <div class="table-header">
+      <div class="table-header-left">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Estado de integración por programa</div>
+        <div style="font-size:11px;color:var(--text2);">30 programas de posgrado · datos al corte 2026-2S</div>
+      </div>
+      <div class="table-header-right">
+        <div class="filter-group" id="filterGroup">
+          <button class="filter-btn active" data-filter="all" onclick="filterTable('all',this)">Todos</button>
+          <button class="filter-btn" data-filter="critical" onclick="filterTable('critical',this)">Crítico</button>
+          <button class="filter-btn" data-filter="warning" onclick="filterTable('warning',this)">Advertencia</button>
+          <button class="filter-btn" data-filter="ok" onclick="filterTable('ok',this)">Normal</button>
+          <button class="filter-btn" data-filter="nodata" onclick="filterTable('nodata',this)">Sin datos</button>
+        </div>
+        <input class="search-box" id="searchBox" placeholder="Buscar programa..." oninput="filterTable(currentFilter,null)">
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30%">Programa</th>
+          <th class="num">Salesforce</th>
+          <th class="num">Meta Ads</th>
+          <th class="num">MC Journey</th>
+          <th style="min-width:160px">Brecha máxima</th>
+          <th>Estado</th>
+          <th>Diagnóstico</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+      <tfoot id="tableFoot"></tfoot>
+    </table>
+    </div>
+  </div>
+
+  <!-- ACTION TABLE -->
+  <div class="section-label">Plan de acción correctiva</div>
+  <div class="table-wrap" style="margin-bottom:0;">
+    <table>
+      <thead>
+        <tr>
+          <th>Prioridad</th>
+          <th>Acción</th>
+          <th>Programas afectados</th>
+          <th>Sistema</th>
+          <th>Responsable sugerido</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge critical">P1 — Crítico</span></td>
+          <td style="font-size:12px;">Verificar integración landing → SF para programas con subregistro extremo</td>
+          <td style="font-size:11px;color:var(--text2);">Eficiencia Energética, Talento Humano, Maestría SST, Sistemas Energéticos</td>
+          <td><span style="font-size:11px;color:var(--blue);">Salesforce + Landing</span></td>
+          <td style="font-size:11px;color:var(--text2);">CRM Admin / Desarrollador</td>
+        </tr>
+        <tr>
+          <td><span class="badge critical">P1 — Crítico</span></td>
+          <td style="font-size:12px;">Crear y activar Journey en Marketing Cloud para Esp. Gerencia de Proyectos</td>
+          <td style="font-size:11px;color:var(--text2);">Esp. Gerencia de Proyectos (MC=0)</td>
+          <td><span style="font-size:11px;color:var(--coral);">Marketing Cloud</span></td>
+          <td style="font-size:11px;color:var(--text2);">Analista de Marketing</td>
+        </tr>
+        <tr>
+          <td><span class="badge warning">P2 — Alto</span></td>
+          <td style="font-size:12px;">Auditar duplicados y leads de entrada manual en SF para Mercadeo y Estrategia Publicitaria</td>
+          <td style="font-size:11px;color:var(--text2);">Esp. Mercadeo (SF=98 vs Meta=34), Estrategia Publicitaria</td>
+          <td><span style="font-size:11px;color:var(--blue);">Salesforce</span></td>
+          <td style="font-size:11px;color:var(--text2);">CRM Admin</td>
+        </tr>
+        <tr>
+          <td><span class="badge warning">P2 — Alto</span></td>
+          <td style="font-size:12px;">Configurar formularios numéricos para los tres Doctorados en Meta y MC</td>
+          <td style="font-size:11px;color:var(--text2);">Doctorado Bioingeniería, Ingeniería, Sostenibilidad</td>
+          <td><span style="font-size:11px;color:var(--teal);">Meta Ads + MC</span></td>
+          <td style="font-size:11px;color:var(--text2);">Analista de Marketing</td>
+        </tr>
+        <tr>
+          <td><span class="badge warning">P3 — Medio</span></td>
+          <td style="font-size:12px;">Limpiar y reclasificar los 105 leads sin programa en Salesforce</td>
+          <td style="font-size:11px;color:var(--text2);">SIN NOMBRE (97), Programas de Posgrado (7), Otra (1)</td>
+          <td><span style="font-size:11px;color:var(--blue);">Salesforce</span></td>
+          <td style="font-size:11px;color:var(--text2);">Ejecutivo comercial / CRM</td>
+        </tr>
+        <tr>
+          <td><span class="badge ok">P4 — Bajo</span></td>
+          <td style="font-size:12px;">Revisar brecha leve en Big Data, Comunicación Estratégica, Logística y SST</td>
+          <td style="font-size:11px;color:var(--text2);">4 programas en estado de advertencia (10–30%)</td>
+          <td><span style="font-size:11px;color:var(--text2);">Todos los sistemas</span></td>
+          <td style="font-size:11px;color:var(--text2);">Analista de datos</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div>Tablero de Trazabilidad de Leads · Posgrados UAO 2026-2S · Fuentes: Salesforce, Meta Ads Manager, Marketing Cloud Journey Builder</div>
+  <div>Generado con datos al corte 2026 · Uso interno</div>
+</div>
+
+<script>
+const DATA = [
+  {p:'Esp. Analítica de Big Data',sf:83,meta:94,mc:87,status:'warning',note:'SF bajo respecto a Meta'},
+  {p:'Esp. Comercio Exterior',sf:78,meta:84,mc:84,status:'ok',note:'Brecha menor al 8%'},
+  {p:'Esp. Comunicación Estratégica',sf:27,meta:30,mc:31,status:'warning',note:'Leve subregistro SF'},
+  {p:'Esp. Comunicación y Periodismo Digital - Virtual',sf:85,meta:83,mc:86,status:'ok',note:'Correctamente alineado'},
+  {p:'Esp. Derechos Humanos y Territorios',sf:268,meta:275,mc:275,status:'ok',note:'Brecha menor al 3%'},
+  {p:'Esp. Diseño Publicitario en Contenidos Digitales',sf:96,meta:95,mc:95,status:'ok',note:'Correctamente alineado'},
+  {p:'Esp. Eficiencia Energética',sf:1,meta:69,mc:69,status:'critical',note:'Integración landing → SF posiblemente rota'},
+  {p:'Esp. Finanzas',sf:25,meta:6,mc:57,status:'critical',note:'Incoherencia entre las tres fuentes'},
+  {p:'Esp. Finanzas - Virtual',sf:55,meta:80,mc:56,status:'critical',note:'SF bajo respecto a Meta (+45%)'},
+  {p:'Esp. Gerencia de Mantenimiento y Confiabilidad',sf:88,meta:88,mc:89,status:'ok',note:'Perfectamente alineado'},
+  {p:'Esp. Gerencia de Proyectos',sf:80,meta:78,mc:0,status:'critical',note:'Journey no encontrado en carpeta MC'},
+  {p:'Esp. Gerencia del Talento Humano',sf:14,meta:71,mc:71,status:'critical',note:'SF captura solo 20% de los leads'},
+  {p:'Esp. Ingeniería Clínica',sf:86,meta:88,mc:89,status:'ok',note:'Brecha menor al 4%'},
+  {p:'Esp. Inteligencia Artificial',sf:128,meta:135,mc:136,status:'ok',note:'Brecha menor al 6%'},
+  {p:'Esp. Interculturalidad y Estudios de Género',sf:90,meta:87,mc:89,status:'ok',note:'Correctamente alineado'},
+  {p:'Esp. Logística',sf:31,meta:22,mc:42,status:'warning',note:'Variación entre las tres fuentes'},
+  {p:'Esp. Logística - Virtual',sf:265,meta:293,mc:279,status:'ok',note:'Brecha menor al 10%'},
+  {p:'Esp. Mercadeo',sf:98,meta:34,mc:34,status:'critical',note:'SF sobreregistra vs Meta/MC (+188%)'},
+  {p:'Esp. Seg. y Salud en el Trabajo',sf:38,meta:40,mc:46,status:'warning',note:'Brecha SF vs MC del 17%'},
+  {p:'Esp. SST - Virtual',sf:140,meta:146,mc:148,status:'ok',note:'Brecha menor al 6%'},
+  {p:'Estrategia Publicitaria de Marca Digital',sf:138,meta:87,mc:158,status:'critical',note:'Gran diferencia SF vs Meta (−37%)'},
+  {p:'Maestría en Administración de Empresas',sf:31,meta:33,mc:33,status:'ok',note:'Brecha menor al 6%'},
+  {p:'Maestría en Comunicación Digital',sf:90,meta:99,mc:99,status:'ok',note:'Leve subregistro SF'},
+  {p:'Maestría en Gerencia de Ingeniería',sf:45,meta:44,mc:44,status:'ok',note:'Correctamente alineado'},
+  {p:'Maestría en IA y Ciencia de Datos',sf:129,meta:136,mc:120,status:'ok',note:'Brecha aceptable entre fuentes'},
+  {p:'Maestría en Seguridad y Salud',sf:0,meta:51,mc:51,status:'critical',note:'0 leads en SF — integración completamente rota'},
+  {p:'Maestría en Sistemas Energéticos',sf:1,meta:4,mc:27,status:'critical',note:'SF captura solo 1 de 27 leads MC'},
+  {p:'Doctorado en Bioingeniería',sf:13,meta:null,mc:null,status:'nodata',note:'Sin datos numéricos en Meta ni MC'},
+  {p:'Doctorado en Ingeniería',sf:36,meta:null,mc:null,status:'nodata',note:'Sin datos numéricos en Meta ni MC'},
+  {p:'Doctorado en Sostenibilidad',sf:78,meta:null,mc:null,status:'nodata',note:'Sin datos numéricos en Meta ni MC'},
+];
+
+function maxGap(d) {
+  if (d.meta === null) return null;
+  const vals = [d.sf, d.meta, d.mc].filter(v => v !== null);
+  const mx = Math.max(...vals), mn = Math.min(...vals);
+  if (mx === 0) return 0;
+  return Math.round(((mx - mn) / mx) * 100);
+}
+
+function gapColor(g, status) {
+  if (status === 'critical') return '#e24b4a';
+  if (status === 'warning') return '#f0a832';
+  if (status === 'ok') return '#52c46a';
+  return '#4a8fe8';
+}
+
+let currentFilter = 'all';
+
+function renderTable(filter, search) {
+  const tbody = document.getElementById('tableBody');
+  const tfoot = document.getElementById('tableFoot');
+  const sq = (search||'').toLowerCase();
+  let rows = DATA.filter(d => {
+    if (filter !== 'all' && d.status !== filter) return false;
+    if (sq && !d.p.toLowerCase().includes(sq)) return false;
+    return true;
+  });
+
+  tbody.innerHTML = rows.map(d => {
+    const gap = maxGap(d);
+    const gStr = gap === null ? '—' : gap + '%';
+    const gc = gapColor(gap, d.status);
+    const bw = gap === null ? 0 : Math.min(gap, 100);
+    const statusLabel = {critical:'Crítico',warning:'Advertencia',ok:'Normal',nodata:'Sin datos num.'}[d.status];
+    const sfC = (d.status==='critical'&&d.sf<=1&&d.meta!==null) ? 'red' : 'normal';
+    const metaStr = d.meta === null ? '<span style="color:var(--text3)">—</span>' : `<span class="num ${d.meta < d.sf * 0.5 && d.meta !== null ? 'amber' : 'normal'}">${d.meta}</span>`;
+    const mcStr = d.mc === null ? '<span style="color:var(--text3)">—</span>' : (d.mc === 0 ? '<span class="num zero">0</span>' : `<span class="num normal">${d.mc}</span>`);
+    return `<tr>
+      <td class="prog-name">${d.p}</td>
+      <td class="num ${sfC}">${d.sf}</td>
+      <td>${metaStr}</td>
+      <td>${mcStr}</td>
+      <td>
+        <div class="bar-container">
+          <div class="bar-track"><div class="bar-fill" style="width:${bw}%;background:${gc};"></div></div>
+          <span class="bar-label" style="color:${gc}">${gStr}</span>
+        </div>
+      </td>
+      <td><span class="badge ${d.status}">${statusLabel}</span></td>
+      <td style="font-size:11px;color:var(--text2);">${d.note}</td>
+    </tr>`;
+  }).join('');
+
+  // totals
+  const sfT = rows.filter(d=>d.meta!==null).reduce((a,d)=>a+d.sf,0);
+  const metaT = rows.filter(d=>d.meta!==null).reduce((a,d)=>a+d.meta,0);
+  const mcT = rows.filter(d=>d.mc!==null&&d.mc!==undefined).filter(d=>d.meta!==null).reduce((a,d)=>a+d.mc,0);
+  tfoot.innerHTML = `<tr class="totals-row">
+    <td>Subtotal (${rows.length} programas)</td>
+    <td class="num">${sfT.toLocaleString()}</td>
+    <td class="num">${metaT.toLocaleString()}</td>
+    <td class="num">${mcT.toLocaleString()}</td>
+    <td colspan="3" style="font-size:11px;color:var(--text3);">Programas con datos numéricos únicamente</td>
+  </tr>`;
+}
+
+function filterTable(f, btn) {
+  currentFilter = f;
+  const search = document.getElementById('searchBox').value;
+  document.querySelectorAll('#filterGroup .filter-btn').forEach(b => {
+    b.classList.remove('active','critical','warning','ok','nodata');
+  });
+  if (btn) {
+    btn.classList.add('active');
+    if (f !== 'all') btn.classList.add(f);
+  }
+  renderTable(f, search);
+}
+
+document.getElementById('searchBox').addEventListener('input', function() {
+  renderTable(currentFilter, this.value);
+});
+
+renderTable('all', '');
+
+// DONUT CHART
+const donutCtx = document.getElementById('donutChart').getContext('2d');
+const donutCounts = [9, 4, 14, 3];
+const donutLabels = ['Crítico', 'Advertencia', 'Normal', 'Sin datos num.'];
+const donutColors = ['#e24b4a', '#f0a832', '#52c46a', '#4a8fe8'];
+
+new Chart(donutCtx, {
+  type: 'doughnut',
+  data: {
+    labels: donutLabels,
+    datasets: [{
+      data: donutCounts,
+      backgroundColor: donutColors,
+      borderColor: '#181c27',
+      borderWidth: 2,
+      hoverBorderWidth: 3,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '68%',
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} programas` } } }
+  }
+});
+
+const donutLegEl = document.getElementById('donutLegend');
+donutLegEl.innerHTML = donutLabels.map((l,i) => `
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+    <div style="width:10px;height:10px;border-radius:2px;background:${donutColors[i]};flex-shrink:0;"></div>
+    <div style="flex:1;font-size:12px;color:var(--text2);">${l}</div>
+    <div style="font-size:13px;font-weight:700;color:${donutColors[i]};">${donutCounts[i]}</div>
+  </div>`).join('');
+
+// GAP CHART (horizontal bars)
+const gapData = DATA
+  .filter(d => d.meta !== null && d.status !== 'ok')
+  .map(d => ({ label: d.p.length > 35 ? d.p.substring(0,35)+'…' : d.p, gap: maxGap(d), status: d.status }))
+  .sort((a,b) => b.gap - a.gap);
+
+const gapCtx = document.getElementById('gapChart').getContext('2d');
+new Chart(gapCtx, {
+  type: 'bar',
+  data: {
+    labels: gapData.map(d=>d.label),
+    datasets: [{
+      data: gapData.map(d=>d.gap),
+      backgroundColor: gapData.map(d => d.status==='critical' ? 'rgba(226,75,74,0.75)' : 'rgba(240,168,50,0.75)'),
+      borderColor: gapData.map(d => d.status==='critical' ? '#e24b4a' : '#f0a832'),
+      borderWidth: 1,
+      borderRadius: 3,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: {display:false}, tooltip: { callbacks: { label: ctx => ` Brecha: ${ctx.parsed.x}%` } } },
+    scales: {
+      x: {
+        max: 110,
+        ticks: { color: '#5a5f75', font:{size:10}, callback: v => v+'%' },
+        grid: { color: 'rgba(255,255,255,0.04)' }
+      },
+      y: { ticks: { color: '#8b90a6', font:{size:10} }, grid: { display: false } }
+    }
+  }
+});
+
+// MAIN COMPARISON CHART
+let mainChart = null;
+const ALL_PROGRAMS = DATA.filter(d => d.meta !== null);
+
+function buildMainChart(filter) {
+  let programs;
+  if (filter === 'critical') {
+    programs = ALL_PROGRAMS.filter(d => d.status === 'critical');
+  } else if (filter === 'high') {
+    programs = [...ALL_PROGRAMS].sort((a,b) => b.sf - a.sf).slice(0,10);
+  } else {
+    programs = ALL_PROGRAMS;
+  }
+  const h = Math.max(280, programs.length * 36 + 80);
+  document.getElementById('mainChartWrap').style.height = h + 'px';
+  if (mainChart) mainChart.destroy();
+  const ctx = document.getElementById('mainChart').getContext('2d');
+  mainChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: programs.map(d => d.p.length > 38 ? d.p.substring(0,38)+'…' : d.p),
+      datasets: [
+        { label:'Salesforce', data: programs.map(d=>d.sf), backgroundColor:'rgba(74,143,232,0.8)', borderColor:'#4a8fe8', borderWidth:1, borderRadius:2 },
+        { label:'Meta Ads', data: programs.map(d=>d.meta), backgroundColor:'rgba(39,201,154,0.8)', borderColor:'#27c99a', borderWidth:1, borderRadius:2 },
+        { label:'MC Journey', data: programs.map(d=>d.mc), backgroundColor:'rgba(224,98,69,0.8)', borderColor:'#e06245', borderWidth:1, borderRadius:2 },
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.parsed.x}`}} },
+      scales: {
+        x: { ticks:{color:'#5a5f75',font:{size:10}}, grid:{color:'rgba(255,255,255,0.04)'} },
+        y: { ticks:{color:'#8b90a6',font:{size:10}}, grid:{display:false} }
+      }
+    }
+  });
+}
+
+function setChartFilter(f, btn) {
+  document.querySelectorAll('.filter-btn[onclick^="setChartFilter"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildMainChart(f);
+}
+
+setTimeout(() => buildMainChart('all'), 100);
+</script>
+</body>
+</html>
