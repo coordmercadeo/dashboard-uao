@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VSM · Gestión de Eventos Virtuales · UAO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C0392B;
+    --red-light: #FEECEB;
+    --red-mid: #F7C1C1;
+    --amber: #F5A623;
+    --amber-light: #FEF3DA;
+    --amber-mid: #FAC775;
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-mid: #B5D4F4;
+    --teal: #0F6E56;
+    --teal-light: #E1F5EE;
+    --teal-mid: #9FE1CB;
+    --purple: #3C3489;
+    --purple-light: #EEEDFE;
+    --purple-mid: #CECBF6;
+    --green: #1a7a4a;
+    --gray: #f5f5f3;
+    --gray2: #e8e7e3;
+    --gray3: #9e9c96;
+    --text: #1a1a18;
+    --text2: #5a5955;
+    --text3: #9e9c96;
+    --border: rgba(0,0,0,0.1);
+    --white: #ffffff;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --shadow-hover: 0 6px 20px rgba(0,0,0,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f0efeb;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .logo-area { display: flex; align-items: center; gap: 12px; }
+  .logo-uao {
+    height: 38px;
+    width: auto;
+    display: block;
+  }
+  .header-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .header-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+    cursor: pointer;
+    color: var(--text);
+    transition: all .15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+  }
+  .btn:hover { background: var(--gray); box-shadow: var(--shadow); }
+  .btn-primary { background: var(--red); color: white; border-color: var(--red); }
+  .btn-primary:hover { background: #a63020; }
+
+  /* ── MAIN LAYOUT ── */
+  .main { padding: 28px 32px 48px; max-width: 1400px; margin: 0 auto; }
+
+  /* ── METRICS ROW ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 900px) { .metrics-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+  .metric-card {
+    background: white;
+    border-radius: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .metric-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+  .metric-value { font-size: 26px; font-weight: 700; line-height: 1; }
+  .metric-value.blue { color: var(--blue); }
+  .metric-value.green { color: var(--green); }
+  .metric-value.red { color: var(--red); }
+  .metric-unit { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+  /* ── BOARD CARD ── */
+  .board-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .board-card-header {
+    padding: 14px 20px 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .phase-title { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+  .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .phase-meta { font-size: 11px; color: var(--text3); }
+  .board-card-body { padding: 16px 20px; overflow-x: auto; }
+
+  /* ── STEPS ROW ── */
+  .steps-flow { display: flex; align-items: flex-start; gap: 6px; min-width: max-content; }
+  .arrow { font-size: 18px; color: var(--gray3); align-self: center; flex-shrink: 0; padding: 0 2px; line-height: 1; }
+
+  /* ── STEP CARD ── */
+  .step { position: relative; cursor: pointer; flex-shrink: 0; }
+  .step-inner {
+    width: 100px;
+    min-height: 80px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: white;
+    padding: 8px 8px 7px;
+    display: flex;
+    flex-direction: column;
+    transition: all .18s;
+    box-shadow: var(--shadow);
+  }
+  .step:hover .step-inner {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(0,0,0,0.2);
+  }
+  .step-inner.crit-red { border-color: var(--red); border-width: 1.5px; }
+  .step-inner.crit-purple { border-color: var(--purple); border-width: 1.5px; }
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+  .step-name {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+    flex: 1;
+  }
+  .step-badges { display: flex; gap: 4px; margin-top: 7px; flex-wrap: wrap; }
+  .badge {
+    font-size: 8.5px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    padding: 2px 5px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .badge-pt { background: var(--blue-light); color: var(--blue); }
+  .badge-wt { background: var(--amber-light); color: #7a5000; }
+
+  /* ── PARALLEL GROUP ── */
+  .parallel-group { display: flex; flex-direction: column; gap: 5px; position: relative; flex-shrink: 0; }
+  .par-label {
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--teal);
+    background: var(--teal-light);
+    padding: 1px 7px;
+    border-radius: 20px;
+    white-space: nowrap;
+    z-index: 2;
+    border: 1px solid var(--teal-mid);
+  }
+
+  /* ── TOOLTIP ── */
+  .tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 13px;
+    width: 180px;
+    z-index: 200;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.14);
+    pointer-events: none;
+  }
+  .step:hover .tooltip { display: block; }
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: white;
+  }
+  .tooltip-title { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .tooltip-row { font-size: 11px; color: var(--text2); margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .tooltip-row span { font-weight: 600; color: var(--text); }
+  .tooltip-warn { font-size: 10px; color: var(--red); font-weight: 600; margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--border); }
+  .tooltip-hito { font-size: 10px; color: var(--purple); font-weight: 600; margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--border); }
+
+  /* ── TIMELINE CARD ── */
+  .timeline-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .tl-title { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; }
+  .tl-outer { position: relative; padding-bottom: 20px; }
+  .tl-bar { height: 28px; border-radius: 6px; overflow: hidden; display: flex; margin-bottom: 6px; }
+  .tl-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .tl-ticks { position: relative; height: 16px; }
+  .tl-tick {
+    position: absolute;
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text3);
+    transform: translateX(-50%);
+  }
+  .tl-tick.ev { color: var(--red); font-weight: 700; }
+  .va-bar-wrap { margin-top: 14px; }
+  .va-label { font-size: 10px; color: var(--text3); font-weight: 600; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .04em; }
+  .va-bar { height: 10px; border-radius: 5px; overflow: hidden; display: flex; }
+  .va-fill { background: #1D9E75; }
+  .nva-fill { background: var(--red); opacity: .7; }
+  .va-legend { display: flex; justify-content: space-between; font-size: 10px; margin-top: 4px; }
+  .va-legend .green { color: var(--green); font-weight: 600; }
+  .va-legend .red { color: var(--red); font-weight: 600; }
+
+  /* ── KAIZEN ── */
+  .kaizen-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--red-mid);
+    box-shadow: var(--shadow);
+    padding: 18px 24px;
+    margin-bottom: 16px;
+  }
+  .kaizen-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .kaizen-icon { font-size: 18px; }
+  .kaizen-title { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--red); }
+  .kaizen-subtitle { font-size: 11px; color: var(--text3); margin-top: 1px; }
+  .kaizen-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  @media (max-width: 900px) { .kaizen-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .kaizen-grid { grid-template-columns: 1fr; } }
+  .k-item {
+    border: 1px solid var(--red-mid);
+    border-radius: 10px;
+    padding: 12px 13px;
+    background: var(--red-light);
+  }
+  .k-step { font-size: 11px; font-weight: 700; color: var(--red); margin-bottom: 4px; }
+  .k-desc { font-size: 11px; color: var(--text2); line-height: 1.45; }
+  .k-gain { font-size: 10px; font-weight: 600; color: var(--green); margin-top: 6px; }
+
+  /* ── LEGEND ── */
+  .legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text3); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ── DIVIDER ── */
+  .phase-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0 6px 20px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--gray2); }
+  .divider-label { font-size: 9px; letter-spacing: .07em; text-transform: uppercase; color: var(--text3); white-space: nowrap; }
+  .divider-label.ev { color: var(--red); font-weight: 700; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 11px;
+    color: var(--text3);
+    border-top: 1px solid var(--border);
+    background: white;
+    margin-top: 12px;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: white; }
+    .site-header { position: static; }
+    .header-actions { display: none; }
+    .step:hover .step-inner { transform: none; box-shadow: var(--shadow); }
+    .tooltip { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo-area">
+    <img class="logo-uao" src="data:image/png;base64,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" alt="UAO Logo">
+    <div>
+      <div class="header-title">Value Stream Mapping — Eventos Virtuales</div>
+      <div class="header-sub">21 pasos · 30 días de lead time · Equipo UAO</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="btn" onclick="window.print()">🖨 Imprimir</button>
+    <button class="btn btn-primary" onclick="copyLink()">🔗 Copiar enlace</button>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- METRICS -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-label">Lead Time Total</div>
+      <div class="metric-value blue">30</div>
+      <div class="metric-unit">días · D-30 → D+2</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Valor Agregado (VA)</div>
+      <div class="metric-value green">19</div>
+      <div class="metric-unit">días de proceso real</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Espera / NVA</div>
+      <div class="metric-value red">11</div>
+      <div class="metric-unit">días sin valor</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Eficiencia del Flujo</div>
+      <div class="metric-value" style="color:#1a7a4a">63%</div>
+      <div class="metric-unit">meta estado futuro: &gt;85%</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Pasos en Paralelo</div>
+      <div class="metric-value" style="color:#3C3489">3</div>
+      <div class="metric-unit">grupos simultáneos</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Cuellos de Botella</div>
+      <div class="metric-value red">2</div>
+      <div class="metric-unit">pasos 05 y 12</div>
+    </div>
+  </div>
+
+  <!-- ═══════════ FASE 1 ═══════════ -->
+  <div class="board-card">
+    <div class="board-card-header">
+      <div class="phase-title">
+        <div class="phase-dot" style="background:var(--amber)"></div>
+        <span style="color:#7a5000">Fase 1 · Pre-producción</span>
+      </div>
+      <div class="phase-meta">D-30 → D-21 · 9 días · Pasos 01–06</div>
+    </div>
+    <div class="board-card-body">
+      <div class="steps-flow">
+
+        <div class="step">
+          <div class="step-inner crit-red">
+            <div class="step-num">01</div>
+            <div class="step-name">Solicitud de propuestas a docentes</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 1d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Solicitud de propuestas</div>
+            <div class="tooltip-row">Responsable <span>Coordinación</span></div>
+            <div class="tooltip-row">Proceso <span>1 día</span></div>
+            <div class="tooltip-row">Espera <span>0 días</span></div>
+            <div class="tooltip-row">Día inicio <span>D-30</span></div>
+          </div>
+        </div>
+
+        <div class="arrow">›</div>
+
+        <div class="step">
+          <div class="step-inner">
+            <div class="step-num">02</div>
+            <div class="step-name">Info y fecha de actividad (D-30)</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 1d</span><span class="badge badge-wt">WT: 1d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Info y fecha</div>
+            <div class="tooltip-row">Responsable <span>Docente</span></div>
+            <div class="tooltip-row">Proceso <span>1 día</span></div>
+            <div class="tooltip-row">Espera <span>1 día</span></div>
+            <div class="tooltip-row">Día inicio <span>D-29</span></div>
+          </div>
+        </div>
+
+        <div class="arrow">›</div>
+
+        <div class="step">
+          <div class="step-inner">
+            <div class="step-num">03</div>
+            <div class="step-name">Recepción UAO Equipo</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 1d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Recepción</div>
+            <div class="tooltip-row">Responsable <span>UAO Equipo</span></div>
+            <div class="tooltip-row">Proceso <span>1 día</span></div>
+            <div class="tooltip-row">Espera <span>0 días</span></div>
+            <div class="tooltip-row">Día inicio <span>D-27</span></div>
+          </div>
+        </div>
+
+        <div class="arrow">›</div>
+
+        <div class="step">
+          <div class="step-inner crit-red">
+            <div class="step-num">04</div>
+            <div class="step-name">Diseño de pieza de muestra</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 3d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Diseño de pieza</div>
+            <div class="tooltip-row">Responsable <span>Diseño</span></div>
+            <div class="tooltip-row">Proceso <span>3 días</span></div>
+            <div class="tooltip-row">Espera <span>0 días</span></div>
+            <div class="tooltip-row">Día inicio <span>D-26</span></div>
+          </div>
+        </div>
+
+        <div class="arrow">›</div>
+
+        <div class="step">
+          <div class="step-inner">
+            <div class="step-num">05</div>
+            <div class="step-name">Aprobación</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 1d</span><span class="badge badge-wt">WT: 2d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Aprobación</div>
+            <div class="tooltip-row">Responsable <span>Dir. Académica</span></div>
+            <div class="tooltip-row">Proceso <span>1 día</span></div>
+            <div class="tooltip-row">Espera <span>2 días</span></div>
+            <div class="tooltip-row">Día inicio <span>D-23</span></div>
+            <div class="tooltip-warn">⚠ Cuello de botella principal</div>
+          </div>
+        </div>
+
+        <div class="arrow">›</div>
+
+        <div class="step">
+          <div class="step-inner">
+            <div class="step-num">06</div>
+            <div class="step-name">Despliegue de piezas</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 1d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Despliegue de piezas</div>
+            <div class="tooltip-row">Responsable <span>Marketing</span></div>
+            <div class="tooltip-row">Proceso <span>1 día</span></div>
+            <div class="tooltip-row">Día inicio <span>D-21</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ FASE 2 ═══════════ -->
+  <div class="board-card">
+    <div class="board-card-header">
+      <div class="phase-title">
+        <div class="phase-dot" style="background:var(--blue)"></div>
+        <span style="color:var(--blue)">Fase 2 · Activación Digital</span>
+      </div>
+      <div class="phase-meta">D-21 → D-1 · 20 días · Pasos 07–13</div>
+    </div>
+    <div class="board-card-body">
+      <div class="steps-flow">
+
+        <div class="step">
+          <div class="step-inner">
+            <div class="step-num">07</div>
+            <div class="step-name">Landing de registro y sala Webex</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 1d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Landing + Webex</div>
+            <div class="tooltip-row">Responsable <span>Marketing</span></div>
+            <div class="tooltip-row">Proceso <span>1 día</span></div>
+            <div class="tooltip-row">Día inicio <span>D-21</span></div>
+          </div>
+        </div>
+
+        <div class="arrow">›</div>
+
+        <div class="step">
+          <div class="step-inner crit-red">
+            <div class="step-num">08</div>
+            <div class="step-name">Journey y campaña</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 2d</span><span class="badge badge-wt">WT: 1d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Journey y campaña</div>
+            <div class="tooltip-row">Responsable <span>CRM / Marketing</span></div>
+            <div class="tooltip-row">Proceso <span>2 días</span></div>
+            <div class="tooltip-row">Espera <span>1 día</span></div>
+            <div class="tooltip-row">Día inicio <span>D-20</span></div>
+          </div>
+        </div>
+
+        <div class="arrow">›</div>
+
+        <!-- PARALELO 9, 10, 11 -->
+        <div class="parallel-group" style="margin-top:14px">
+          <div class="par-label">paralelo</div>
+
+          <div class="step">
+            <div class="step-inner">
+              <div class="step-num">09</div>
+              <div class="step-name">Notas web y RRSS</div>
+              <div class="step-badges"><span class="badge badge-pt">PT: 2d</span></div>
+            </div>
+            <div class="tooltip">
+              <div class="tooltip-title">Notas web y RRSS</div>
+              <div class="tooltip-row">Responsable <span>Comunicaciones</span></div>
+              <div class="tooltip-row">Proceso <span>2 días</span></div>
+              <div class="tooltip-row">Día inicio <span>D-17</span></div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-inner">
+              <div class="step-num">10</div>
+              <div class="step-name">Difusión interna y externa</div>
+              <div class="step-badges"><span class="badge badge-pt">PT: 2d</span></div>
+            </div>
+            <div class="tooltip">
+              <div class="tooltip-title">Difusión interna/ext.</div>
+              <div class="tooltip-row">Responsable <span>Comunicaciones</span></div>
+              <div class="tooltip-row">Proceso <span>2 días</span></div>
+              <div class="tooltip-row">Día inicio <span>D-17</span></div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-inner">
+              <div class="step-num">11</div>
+              <div class="step-name">ADS (pauta digital)</div>
+              <div class="step-badges"><span class="badge badge-pt">PT: 7d</span></div>
+            </div>
+            <div class="tooltip">
+              <div class="tooltip-title">ADS / Pauta digital</div>
+              <div class="tooltip-row">Responsable <span>Marketing digital</span></div>
+              <div class="tooltip-row">Activo <span>7 días</span></div>
+              <div class="tooltip-row">Día inicio <span>D-17</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow" style="align-self:center; margin-top:14px">›</div>
+
+        <div class="step" style="margin-top:14px">
+          <div class="step-inner">
+            <div class="step-num">12</div>
+            <div class="step-name">Impactos refuerzo BBDD (SMS)</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 2d</span><span class="badge badge-wt">WT: 4d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Impactos refuerzo</div>
+            <div class="tooltip-row">Responsable <span>CRM</span></div>
+            <div class="tooltip-row">Proceso <span>2 días</span></div>
+            <div class="tooltip-row">Espera <span>4 días</span></div>
+            <div class="tooltip-row">Día inicio <span>D-8</span></div>
+            <div class="tooltip-warn">⚠ Espera comprimible a D-12</div>
+          </div>
+        </div>
+
+        <div class="arrow" style="align-self:center; margin-top:14px">›</div>
+
+        <div class="step" style="margin-top:14px">
+          <div class="step-inner">
+            <div class="step-num">13</div>
+            <div class="step-name">Impactos con link de conexión</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 1d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Impactos con link</div>
+            <div class="tooltip-row">Responsable <span>CRM</span></div>
+            <div class="tooltip-row">Proceso <span>1 día</span></div>
+            <div class="tooltip-row">Día inicio <span>D-1</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ FASE 3 ═══════════ -->
+  <div class="board-card" style="border-color: var(--red-mid);">
+    <div class="board-card-header" style="background: var(--red-light);">
+      <div class="phase-title">
+        <div class="phase-dot" style="background:var(--red)"></div>
+        <span style="color:var(--red)">Fase 3 · Evento + Captación</span>
+      </div>
+      <div class="phase-meta" style="font-weight:600; color:var(--red)">D0 · DÍA DEL EVENTO · Pasos 14–17</div>
+    </div>
+    <div class="board-card-body">
+      <div class="steps-flow">
+
+        <div class="parallel-group" style="margin-top:14px">
+          <div class="par-label">simultáneo</div>
+
+          <div class="step">
+            <div class="step-inner crit-red">
+              <div class="step-num">14</div>
+              <div class="step-name">Evento virtual (sesión)</div>
+              <div class="step-badges"><span class="badge badge-pt">PT: 1d</span></div>
+            </div>
+            <div class="tooltip">
+              <div class="tooltip-title">Evento virtual</div>
+              <div class="tooltip-row">Responsable <span>Docente + Coord.</span></div>
+              <div class="tooltip-row">Proceso <span>1 día</span></div>
+              <div class="tooltip-row">Día <span>D0</span></div>
+              <div class="tooltip-hito">★ Hito principal del flujo</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-inner">
+              <div class="step-num">15</div>
+              <div class="step-name">Comercial</div>
+              <div class="step-badges"><span class="badge badge-pt">PT: 1d</span></div>
+            </div>
+            <div class="tooltip">
+              <div class="tooltip-title">Comercial</div>
+              <div class="tooltip-row">Responsable <span>Equipo comercial</span></div>
+              <div class="tooltip-row">Proceso <span>1 día</span></div>
+              <div class="tooltip-row">Día <span>D0</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow" style="align-self:center; margin-top:14px">›</div>
+
+        <div class="parallel-group" style="margin-top:14px">
+          <div class="par-label">paralelo</div>
+
+          <div class="step">
+            <div class="step-inner">
+              <div class="step-num">16</div>
+              <div class="step-name">Formulario confirmación de intención</div>
+              <div class="step-badges"><span class="badge badge-pt">PT: 1d</span></div>
+            </div>
+            <div class="tooltip">
+              <div class="tooltip-title">Formulario intención</div>
+              <div class="tooltip-row">Responsable <span>CRM</span></div>
+              <div class="tooltip-row">Proceso <span>1 día</span></div>
+              <div class="tooltip-row">Día <span>D0</span></div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-inner">
+              <div class="step-num">17</div>
+              <div class="step-name">Captación</div>
+              <div class="step-badges"><span class="badge badge-pt">PT: 1d</span></div>
+            </div>
+            <div class="tooltip">
+              <div class="tooltip-title">Captación</div>
+              <div class="tooltip-row">Responsable <span>Comercial</span></div>
+              <div class="tooltip-row">Proceso <span>1 día</span></div>
+              <div class="tooltip-row">Día <span>D0</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ FASE 4 ═══════════ -->
+  <div class="board-card">
+    <div class="board-card-header">
+      <div class="phase-title">
+        <div class="phase-dot" style="background:var(--purple)"></div>
+        <span style="color:var(--purple)">Fase 4 · Post-evento y Cierre</span>
+      </div>
+      <div class="phase-meta">D+1 → D+2 · 2 días · Pasos 18–21</div>
+    </div>
+    <div class="board-card-body">
+      <div class="steps-flow">
+
+        <div class="parallel-group" style="margin-top:14px">
+          <div class="par-label">paralelo</div>
+
+          <div class="step">
+            <div class="step-inner">
+              <div class="step-num">18</div>
+              <div class="step-name">Edición y subida a YouTube</div>
+              <div class="step-badges"><span class="badge badge-pt">PT: 2d</span></div>
+            </div>
+            <div class="tooltip">
+              <div class="tooltip-title">Edición YouTube</div>
+              <div class="tooltip-row">Responsable <span>Producción AV</span></div>
+              <div class="tooltip-row">Proceso <span>2 días</span></div>
+              <div class="tooltip-row">Día inicio <span>D+1</span></div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-inner">
+              <div class="step-num">19</div>
+              <div class="step-name">Difusión correo "Si te lo perdiste"</div>
+              <div class="step-badges"><span class="badge badge-pt">PT: 1d</span><span class="badge badge-wt">WT: 1d</span></div>
+            </div>
+            <div class="tooltip">
+              <div class="tooltip-title">Difusión post-evento</div>
+              <div class="tooltip-row">Responsable <span>Marketing</span></div>
+              <div class="tooltip-row">Proceso <span>1 día</span></div>
+              <div class="tooltip-row">Espera <span>1 día (grabación)</span></div>
+              <div class="tooltip-row">Día <span>D+2</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow" style="align-self:center; margin-top:14px">›</div>
+
+        <div class="step" style="margin-top:14px">
+          <div class="step-inner">
+            <div class="step-num">20</div>
+            <div class="step-name">Subida prospecto + intención a SF</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 1d</span><span class="badge badge-wt">WT: 1d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Subida a Salesforce</div>
+            <div class="tooltip-row">Responsable <span>CRM / Comercial</span></div>
+            <div class="tooltip-row">Proceso <span>1 día</span></div>
+            <div class="tooltip-row">Espera <span>1 día</span></div>
+            <div class="tooltip-row">Día inicio <span>D+1</span></div>
+          </div>
+        </div>
+
+        <div class="arrow" style="align-self:center; margin-top:14px">›</div>
+
+        <div class="step" style="margin-top:14px">
+          <div class="step-inner crit-purple">
+            <div class="step-num">21</div>
+            <div class="step-name">Cierre de operación</div>
+            <div class="step-badges"><span class="badge badge-pt">PT: 1d</span></div>
+          </div>
+          <div class="tooltip">
+            <div class="tooltip-title">Cierre de operación</div>
+            <div class="tooltip-row">Responsable <span>Coordinación</span></div>
+            <div class="tooltip-row">Proceso <span>1 día</span></div>
+            <div class="tooltip-row">Día <span>D+2</span></div>
+            <div class="tooltip-hito">★ Fin del flujo operativo</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ TIMELINE ═══════════ -->
+  <div class="timeline-card">
+    <div class="tl-title">Línea de tiempo consolidada — Lead Time: 30 días</div>
+    <div class="tl-outer">
+      <div class="tl-bar">
+        <div class="tl-seg" style="width:30%; background:#FAC775; color:#7a5000;">Pre (9d)</div>
+        <div class="tl-seg" style="width:53.3%; background:#B5D4F4; color:var(--blue);">Activación Digital (16d)</div>
+        <div class="tl-seg" style="width:6.7%; background:#F7C1C1; color:var(--red); font-size:8px">D0</div>
+        <div class="tl-seg" style="width:10%; background:#CECBF6; color:var(--purple);">Post (2d)</div>
+      </div>
+      <div class="tl-ticks">
+        <span class="tl-tick" style="left:0%">D-30</span>
+        <span class="tl-tick" style="left:30%">D-21</span>
+        <span class="tl-tick" style="left:53%">D-13</span>
+        <span class="tl-tick" style="left:73%">D-8</span>
+        <span class="tl-tick ev" style="left:83.3%">D0 ★</span>
+        <span class="tl-tick" style="left:100%; transform:translateX(-100%)">D+2</span>
+      </div>
+    </div>
+    <div class="va-bar-wrap">
+      <div class="va-label">VA vs NVA · Eficiencia actual: 63%</div>
+      <div class="va-bar">
+        <div class="va-fill" style="width:63.3%"></div>
+        <div class="nva-fill" style="width:36.7%"></div>
+      </div>
+      <div class="va-legend">
+        <span class="green">▌ Valor Agregado: 19 días (63%)</span>
+        <span class="red">Espera / NVA: 11 días (37%) ▐</span>
+      </div>
+    </div>
+    <div class="legend-row" style="margin-top:14px">
+      <div class="legend-item"><div class="legend-dot" style="background:#B5D4F4"></div>PT — Tiempo de proceso</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FAC775"></div>WT — Tiempo de espera (NVA)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#9FE1CB"></div>Actividades en paralelo</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red); opacity:.6"></div>Pasos críticos</div>
+    </div>
+  </div>
+
+  <!-- ═══════════ KAIZEN ═══════════ -->
+  <div class="kaizen-card">
+    <div class="kaizen-header">
+      <div class="kaizen-icon">⚡</div>
+      <div>
+        <div class="kaizen-title">Kaizen · Oportunidades de mejora</div>
+        <div class="kaizen-subtitle">Meta estado futuro: reducir NVA de 11 días → 3 días · Eficiencia objetivo: &gt;85%</div>
+      </div>
+    </div>
+    <div class="kaizen-grid">
+      <div class="k-item">
+        <div class="k-step">Paso 05 · Aprobación · WT: 2d</div>
+        <div class="k-desc">Implementar flujo de aprobación digital con notificación automática. Objetivo: aprobación el mismo día.</div>
+        <div class="k-gain">✓ Ahorro potencial: 2 días</div>
+      </div>
+      <div class="k-item">
+        <div class="k-step">Paso 12 · Impactos BBDD · WT: 4d</div>
+        <div class="k-desc">Activar primer impacto de refuerzo en D-12 en lugar de D-8. Comprimir ventana de espera post-pauta.</div>
+        <div class="k-gain">✓ Ahorro potencial: 4 días</div>
+      </div>
+      <div class="k-item">
+        <div class="k-step">Paso 19 · Difusión post · WT: 1d</div>
+        <div class="k-desc">Edición express en 24 horas para enviar correo "Si te lo perdiste" con mayor rapidez.</div>
+        <div class="k-gain">✓ Ahorro potencial: 1 día</div>
+      </div>
+      <div class="k-item">
+        <div class="k-step">Paso 20 · Salesforce · WT: 1d</div>
+        <div class="k-desc">Automatizar carga de prospectos en CRM vía integración con formulario en tiempo real.</div>
+        <div class="k-gain">✓ Ahorro potencial: 1 día</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  VSM · Gestión de Eventos Virtuales · UAO Equipo — <a href="mailto:coordmercadeo@uao.edu.co" style="color:var(--red);text-decoration:none;font-weight:500">coordmercadeo@uao.edu.co</a> · Última actualización: <span id="fecha"></span>
+</footer>
+
+<script>
+  document.getElementById('fecha').textContent = new Date().toLocaleDateString('es-CO', { year:'numeric', month:'long', day:'numeric' });
+
+  function copyLink() {
+    const url = window.location.href;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(() => {
+        const btn = document.querySelector('.btn-primary');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✓ Enlace copiado';
+        btn.style.background = '#1a7a4a';
+        setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; }, 2000);
+      });
+    } else {
+      alert('Comparte este archivo HTML con tu equipo para visualizar el tablero.');
+    }
+  }
+</script>
+
+</body>
+</html>
