@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tablero de Control – Mercadeo Digital Posgrados UAO 2026-2S</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --navy:#0a1628; --navy2:#112240;
+    --blue:#1a73e8; --blue2:#0d47a1;
+    --teal:#00bcd4; --gold:#f9a825;
+    --coral:#e53935; --green:#1de9b6;
+    --green2:#00897b; --wa:#25d366;
+    --muted:#8892a4; --surface:#f4f6fb;
+    --card:#ffffff; --border:#e2e8f0;
+    --text:#1a202c; --text2:#4a5568;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);min-height:100vh;}
+
+  /* HEADER */
+  .header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#1a3055 100%);color:white;padding:32px 40px 28px;position:relative;overflow:hidden;}
+  .header::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(26,115,232,.25) 0%,transparent 70%);border-radius:50%;}
+  .header::after{content:'';position:absolute;bottom:-40px;left:30%;width:200px;height:200px;background:radial-gradient(circle,rgba(0,188,212,.12) 0%,transparent 70%);border-radius:50%;}
+  .header-inner{position:relative;z-index:1;}
+  .header-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+  .brand{display:flex;align-items:center;gap:14px;}
+  .brand-badge{width:52px;height:52px;background:linear-gradient(135deg,var(--blue),var(--teal));border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:white;letter-spacing:-.5px;box-shadow:0 4px 16px rgba(26,115,232,.4);}
+  .brand-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;letter-spacing:.5px;}
+  .brand-dept{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;}
+  .header-period{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:8px 16px;font-size:12px;color:rgba(255,255,255,.7);backdrop-filter:blur(8px);text-align:right;line-height:1.6;}
+  .header-period strong{color:white;display:block;font-size:13px;}
+  .header-title{margin-top:20px;font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:white;line-height:1.2;letter-spacing:-.5px;}
+  .header-title span{color:var(--teal);}
+  .header-sub{margin-top:6px;font-size:13px;color:rgba(255,255,255,.55);}
+  .status-dots{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap;}
+  .status-dot{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.55);}
+  .status-dot::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);}
+
+  /* LAYOUT */
+  .main{padding:28px 40px 60px;}
+  .section-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+  .section-label.wa-label{color:var(--wa);}
+
+  /* KPI */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+  .kpi-card{background:var(--card);border-radius:14px;padding:18px 20px;border:1px solid var(--border);position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+  .kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08);}
+  .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kpi-color,var(--blue));}
+  .kpi-icon{width:36px;height:36px;border-radius:10px;background:var(--kpi-bg,rgba(26,115,232,.1));display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px;}
+  .kpi-label{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px;}
+  .kpi-value{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--text);line-height:1.1;margin-top:4px;}
+  .kpi-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+  .kpi-badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;margin-top:6px;}
+  .badge-neu{background:rgba(26,115,232,.1);color:var(--blue);}
+  .badge-wa{background:rgba(37,211,102,.12);color:var(--wa);}
+
+  /* WA SECTION */
+  .wa-card{background:linear-gradient(135deg,#0a2a14 0%,#064d1c 100%);border-radius:16px;padding:24px 28px;margin-bottom:18px;border:1px solid rgba(37,211,102,.25);position:relative;overflow:hidden;}
+  .wa-card::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(37,211,102,.15) 0%,transparent 70%);border-radius:50%;}
+  .wa-inner{position:relative;z-index:1;}
+  .wa-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+  .wa-icon-big{width:44px;height:44px;background:var(--wa);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+  .wa-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:white;}
+  .wa-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px;}
+  .wa-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .wa-kpi{background:rgba(255,255,255,.06);border:1px solid rgba(37,211,102,.2);border-radius:12px;padding:16px;}
+  .wa-kpi-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.4);font-weight:600;}
+  .wa-kpi-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--wa);line-height:1.1;margin-top:4px;}
+  .wa-kpi-desc{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;}
+  .wa-detail{margin-top:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .wa-det-item{background:rgba(255,255,255,.04);border-radius:10px;padding:12px 14px;border:1px solid rgba(37,211,102,.1);}
+  .wa-det-name{font-size:10px;color:rgba(255,255,255,.45);line-height:1.4;margin-bottom:6px;}
+  .wa-det-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:#7fffa0;}
+  .wa-det-inv{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;}
+
+  /* CHART CARDS */
+  .chart-card{background:var(--card);border-radius:16px;padding:24px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.04);}
+  .chart-card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;}
+  .chart-card-sub{font-size:12px;color:var(--muted);margin-bottom:20px;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+  .mb-18{margin-bottom:18px;}
+
+  /* EFFICIENCY BARS */
+  .eff-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:11px;}
+  .eff-label{width:180px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;color:var(--text2);flex-shrink:0;}
+  .eff-bar-wrap{flex:1;height:18px;background:var(--surface);border-radius:4px;overflow:hidden;}
+  .eff-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:6px;font-size:10px;font-weight:600;color:white;white-space:nowrap;}
+  .eff-val{width:76px;text-align:right;font-weight:600;font-size:11px;color:var(--text);flex-shrink:0;}
+
+  /* PERF TABLE */
+  .perf-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+  .perf-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .perf-table th{padding:8px 12px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);border-bottom:2px solid var(--border);}
+  .perf-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text2);}
+  .perf-table tr:last-child td{border-bottom:none;}
+  .perf-table tr:hover td{background:var(--surface);}
+  .rank-badge{width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;}
+  .r1{background:#f9a825;} .r2{background:#bdbdbd;} .r3{background:#a1887f;} .ro{background:var(--blue2);} .rb{background:var(--coral);}
+  .pill{display:inline-flex;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;}
+  .pill-r{background:rgba(229,57,53,.1);color:var(--coral);}
+  .pill-g{background:rgba(0,137,123,.1);color:var(--green2);}
+  .pill-b{background:rgba(26,115,232,.1);color:var(--blue);}
+
+  /* INSIGHTS */
+  .insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+  .insight-card{background:var(--card);border-radius:14px;padding:18px 20px;border:1px solid var(--border);border-left:4px solid var(--insight-color,var(--blue));}
+  .insight-icon{font-size:18px;margin-bottom:8px;}
+  .insight-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;}
+  .insight-text{font-size:12px;color:var(--text2);line-height:1.6;}
+  .insight-text strong{color:var(--text);font-weight:600;}
+
+  /* CONCLUSIONS */
+  .conclusions-card{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:16px;padding:28px 32px;color:white;margin-bottom:18px;}
+  .conclusions-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:20px;}
+  .conclusions-title span{color:var(--teal);}
+  .conc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .conc-item{display:flex;gap:12px;align-items:flex-start;}
+  .conc-num{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--teal);line-height:1;flex-shrink:0;width:28px;}
+  .conc-text{font-size:12px;color:rgba(255,255,255,.75);line-height:1.6;}
+  .conc-text strong{color:white;font-weight:600;}
+
+  .footer{text-align:center;padding:20px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);}
+
+  @media(max-width:900px){
+    .kpi-grid{grid-template-columns:repeat(2,1fr);}
+    .grid-2,.perf-grid,.insights-grid,.conc-grid{grid-template-columns:1fr;}
+    .wa-kpi-row,.wa-detail{grid-template-columns:1fr 1fr;}
+    .main{padding:20px;}
+    .header{padding:24px 20px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-badge">UAO</div>
+        <div>
+          <div class="brand-name">Universidad Autónoma de Occidente</div>
+          <div class="brand-dept">Dirección de Mercadeo Digital · Oferta de Posgrados</div>
+        </div>
+      </div>
+      <div class="header-period">
+        <strong>Informe para Comité Directivo</strong>
+        Período: 1 Abr 2026 – 11 May 2026<br>
+        Semestre objetivo: 2026-2S
+      </div>
+    </div>
+    <h1 class="header-title">Tablero de Control · <span>Campañas Meta Ads</span></h1>
+    <p class="header-sub">Desempeño de pauta digital para captación de aspirantes a programas de posgrado · Incluye análisis de conversaciones WhatsApp</p>
+    <div class="status-dots">
+      <span class="status-dot">151 anuncios analizados</span>
+      <span class="status-dot">29 programas activos</span>
+      <span class="status-dot">4 campañas WhatsApp activas</span>
+      <span class="status-dot">Datos: Meta Ads Manager</span>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- KPI GENERAL -->
+  <p class="section-label">Resumen Ejecutivo · Métricas Clave del Período</p>
+  <div class="kpi-grid">
+    <div class="kpi-card" style="--kpi-color:#1a73e8;--kpi-bg:rgba(26,115,232,.1)">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-label">Total Leads Generados</div>
+      <div class="kpi-value">2.508</div>
+      <div class="kpi-sub">Formularios de captación completados</div>
+      <span class="kpi-badge badge-neu">Meta 2026-2S</span>
+    </div>
+    <div class="kpi-card" style="--kpi-color:#e53935;--kpi-bg:rgba(229,57,53,.1)">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-label">Inversión Total</div>
+      <div class="kpi-value">$20.8M</div>
+      <div class="kpi-sub">COP · 41 días de pauta</div>
+      <span class="kpi-badge badge-neu">~$508K / día</span>
+    </div>
+    <div class="kpi-card" style="--kpi-color:#f9a825;--kpi-bg:rgba(249,168,37,.1)">
+      <div class="kpi-icon">📌</div>
+      <div class="kpi-label">CPL Promedio</div>
+      <div class="kpi-value">$8.305</div>
+      <div class="kpi-sub">Costo por Lead · COP</div>
+      <span class="kpi-badge badge-neu">Rango: $1.6K – $31.1K</span>
+    </div>
+    <div class="kpi-card" style="--kpi-color:#00bcd4;--kpi-bg:rgba(0,188,212,.1)">
+      <div class="kpi-icon">👁️</div>
+      <div class="kpi-label">Impresiones Totales</div>
+      <div class="kpi-value">3.16M</div>
+      <div class="kpi-sub">Total de impresiones acumuladas</div>
+      <span class="kpi-badge badge-neu">CPM prom. $6.600</span>
+    </div>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi-card" style="--kpi-color:#00897b;--kpi-bg:rgba(0,137,123,.1)">
+      <div class="kpi-icon">👥</div>
+      <div class="kpi-label">Alcance</div>
+      <div class="kpi-value">1.29M</div>
+      <div class="kpi-sub">Cuentas únicas alcanzadas</div>
+      <span class="kpi-badge badge-neu">Accounts Center</span>
+    </div>
+    <div class="kpi-card" style="--kpi-color:#7c4dff;--kpi-bg:rgba(124,77,255,.1)">
+      <div class="kpi-icon">🔁</div>
+      <div class="kpi-label">Frecuencia Promedio</div>
+      <div class="kpi-value">2.44x</div>
+      <div class="kpi-sub">Veces promedio que se vio el anuncio</div>
+      <span class="kpi-badge badge-neu" style="background:rgba(0,137,123,.1);color:var(--green2)">Óptimo (2–4)</span>
+    </div>
+    <div class="kpi-card" style="--kpi-color:#f4511e;--kpi-bg:rgba(244,81,30,.1)">
+      <div class="kpi-icon">📊</div>
+      <div class="kpi-label">CPM Promedio</div>
+      <div class="kpi-value">$6.600</div>
+      <div class="kpi-sub">Costo por mil impresiones · COP</div>
+      <span class="kpi-badge badge-neu">Variable por segmento</span>
+    </div>
+    <div class="kpi-card" style="--kpi-color:#039be5;--kpi-bg:rgba(3,155,229,.1)">
+      <div class="kpi-icon">🖱️</div>
+      <div class="kpi-label">Link Clicks</div>
+      <div class="kpi-value">16.867</div>
+      <div class="kpi-sub">Clics directos al destino</div>
+      <span class="kpi-badge badge-neu">CTR prom. 0.53%</span>
+    </div>
+  </div>
+
+  <!-- WHATSAPP SECTION -->
+  <p class="section-label wa-label">WhatsApp Business · Conversaciones Iniciadas</p>
+  <div class="wa-card mb-18">
+    <div class="wa-inner">
+      <div class="wa-header">
+        <div class="wa-icon-big">💬</div>
+        <div>
+          <div class="wa-title">Campañas de Conversación WhatsApp</div>
+          <div class="wa-sub">Indicador: actions:onsite_conversion.messaging_conversation_started_7d · Período 1 Abr – 11 May 2026</div>
+        </div>
+      </div>
+      <div class="wa-kpi-row">
+        <div class="wa-kpi">
+          <div class="wa-kpi-label">Chats Iniciados</div>
+          <div class="wa-kpi-val">48</div>
+          <div class="wa-kpi-desc">Conversaciones en WhatsApp</div>
+        </div>
+        <div class="wa-kpi">
+          <div class="wa-kpi-label">Inversión WA</div>
+          <div class="wa-kpi-val">$231K</div>
+          <div class="wa-kpi-desc">COP destinado a campañas WA</div>
+        </div>
+        <div class="wa-kpi">
+          <div class="wa-kpi-label">Costo / Chat</div>
+          <div class="wa-kpi-val">$4.817</div>
+          <div class="wa-kpi-desc">COP por conversación iniciada</div>
+        </div>
+        <div class="wa-kpi">
+          <div class="wa-kpi-label">% del Presupuesto</div>
+          <div class="wa-kpi-val">1.1%</div>
+          <div class="wa-kpi-desc">Del total invertido en el período</div>
+        </div>
+      </div>
+      <div class="wa-detail">
+        <div class="wa-det-item">
+          <div class="wa-det-name">WA Posgrados – Convenios 2026-1S</div>
+          <div class="wa-det-val">21 chats</div>
+          <div class="wa-det-inv">Inv. $103.853 · CPChat $4.945</div>
+        </div>
+        <div class="wa-det-item">
+          <div class="wa-det-name">WA Posgrados – General 2026-2S</div>
+          <div class="wa-det-val">16 chats</div>
+          <div class="wa-det-inv">Inv. $70.709 · CPChat $4.419</div>
+        </div>
+        <div class="wa-det-item">
+          <div class="wa-det-name">WA Posgrados – 2026-2S</div>
+          <div class="wa-det-val">8 chats</div>
+          <div class="wa-det-inv">Inv. $53.906 · CPChat $6.738</div>
+        </div>
+        <div class="wa-det-item">
+          <div class="wa-det-name">WA Facilidades de Pago 2026-1S</div>
+          <div class="wa-det-val">3 chats</div>
+          <div class="wa-det-inv">Inv. $2.751 · CPChat $917</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADS POR PROGRAMA -->
+  <p class="section-label">Producción de Leads por Programa</p>
+  <div class="chart-card mb-18">
+    <div class="chart-card-title">Total de Leads por Programa</div>
+    <div class="chart-card-sub">Suma de leads generados por programa académico · Período 1 Abr – 11 May 2026 · Coloreado por eficiencia CPL</div>
+    <div style="position:relative;height:600px;width:100%"><canvas id="leadsChart"></canvas></div>
+  </div>
+
+  <!-- CPL + SCATTER -->
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="chart-card-title">Costo por Lead (CPL) por Programa</div>
+      <div class="chart-card-sub">COP · Verde = eficiente · Rojo = costoso · Línea = CPL promedio ($8.305)</div>
+      <div style="position:relative;height:560px;width:100%"><canvas id="cplChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title">Relación Inversión vs. Leads Generados</div>
+      <div class="chart-card-sub">Tamaño del punto proporcional al CPL · Punto mayor = más costoso</div>
+      <div style="position:relative;height:560px;width:100%"><canvas id="scatterChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- IMPRESIONES + PIE -->
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="chart-card-title">Impresiones vs. Alcance · Top 10 Programas</div>
+      <div class="chart-card-sub">Comparativo entre impactos totales y cuentas únicas alcanzadas</div>
+      <div style="position:relative;height:300px;width:100%"><canvas id="impAlcChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title">Distribución de Inversión · Top 12 Programas</div>
+      <div class="chart-card-sub">Porcentaje del presupuesto total por programa</div>
+      <div style="position:relative;height:300px;width:100%"><canvas id="pieChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- EFICIENCIA -->
+  <p class="section-label">Análisis de Eficiencia · Alto vs Bajo CPL</p>
+  <div class="grid-2">
+    <div class="chart-card">
+      <div class="chart-card-title">🟢 Programas de ALTO Desempeño (CPL Eficiente)</div>
+      <div class="chart-card-sub">CPL inferior al promedio ($8.305 COP) · Mejor retorno</div>
+      <div style="margin-top:12px">
+        <div class="eff-row"><span class="eff-label">Becas para El Cambio</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:5.3%;background:#00897b">$1.644</div></div><span class="eff-val" style="color:#00897b">$1.644</span></div>
+        <div class="eff-row"><span class="eff-label">Conf. DDHH Brasil</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:7.9%;background:#00897b"></div></div><span class="eff-val" style="color:#00897b">$2.479</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. Derechos Humanos</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:9.0%;background:#43a047"></div></div><span class="eff-val" style="color:#43a047">$2.816</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. Logística Híbrida</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:10.3%;background:#43a047"></div></div><span class="eff-val" style="color:#43a047">$3.214</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. Energías Renovables</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:10.4%;background:#43a047"></div></div><span class="eff-val" style="color:#43a047">$3.234</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. Logística Virtual</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:12.0%;background:#7cb342"></div></div><span class="eff-val" style="color:#7cb342">$3.728</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. Inteligencia Artificial</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:17.2%;background:#c6a000"></div></div><span class="eff-val" style="color:#c6a000">$5.353</span></div>
+        <div class="eff-row"><span class="eff-label">Charla Informativa</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:21.8%;background:#c6a000"></div></div><span class="eff-val" style="color:#c6a000">$6.796</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. SST</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:22.2%;background:#c6a000"></div></div><span class="eff-val" style="color:#c6a000">$6.914</span></div>
+        <div style="margin-top:14px;padding:10px;background:rgba(0,137,123,.07);border-radius:8px;font-size:11px;color:#00897b">
+          <strong>⚡ Referencia:</strong> CPL promedio general = <strong>$8.305 COP</strong>
+        </div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title">🔴 Programas de BAJO Desempeño (CPL Elevado)</div>
+      <div class="chart-card-sub">CPL superior al promedio · Requieren revisión de estrategia</div>
+      <div style="margin-top:12px">
+        <div class="eff-row"><span class="eff-label">Mtra. Adm. de Empresas</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:100%;background:#e53935">$31.121</div></div><span class="eff-val" style="color:#e53935">$31.121</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. Mercadeo</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:75.3%;background:#ef5350"></div></div><span class="eff-val" style="color:#ef5350">$23.431</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. Comunicación Estrat.</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:71.7%;background:#ef5350"></div></div><span class="eff-val" style="color:#ef5350">$22.313</span></div>
+        <div class="eff-row"><span class="eff-label">Mtra. Sistemas Energéticos</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:65.4%;background:#ef5350"></div></div><span class="eff-val" style="color:#ef5350">$20.362</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. Finanzas MIX</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:50.1%;background:#f44336"></div></div><span class="eff-val" style="color:#f44336">$15.581</span></div>
+        <div class="eff-row"><span class="eff-label">Mtra. Comunicación Digital</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:48.0%;background:#f44336"></div></div><span class="eff-val" style="color:#f44336">$14.927</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. Gerencia Talento Humano</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:40.6%;background:#e57373"></div></div><span class="eff-val" style="color:#e57373">$12.632</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. Interculturalidad y Género</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:36.9%;background:#e57373"></div></div><span class="eff-val" style="color:#e57373">$11.500</span></div>
+        <div class="eff-row"><span class="eff-label">Esp. Gerencia Mantenimiento</span><div class="eff-bar-wrap"><div class="eff-bar" style="width:36.3%;background:#e57373"></div></div><span class="eff-val" style="color:#e57373">$11.288</span></div>
+        <div style="margin-top:14px;padding:10px;background:rgba(229,57,53,.07);border-radius:8px;font-size:11px;color:#e53935">
+          <strong>⚠ Alerta:</strong> Mtra. Adm. de Empresas tiene CPL 3.7× el promedio invirtiendo $933K con solo 30 leads.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RANKING -->
+  <p class="section-label">Ranking de Programas</p>
+  <div class="perf-grid">
+    <div class="chart-card">
+      <div class="chart-card-title">🏆 Top 10 · Mayor Producción de Leads</div>
+      <div class="chart-card-sub">Ordenados por volumen de leads generados</div>
+      <table class="perf-table" style="margin-top:12px">
+        <thead><tr><th>#</th><th>Programa</th><th>Leads</th><th>CPL (COP)</th><th>Eficiencia</th></tr></thead>
+        <tbody>
+          <tr><td><span class="rank-badge r1">1</span></td><td>Esp. Derechos Humanos</td><td><strong>262</strong></td><td>$2.816</td><td><span class="pill pill-g">Muy Alta ✓</span></td></tr>
+          <tr><td><span class="rank-badge r2">2</span></td><td>Esp. Logística Virtual</td><td><strong>242</strong></td><td>$3.728</td><td><span class="pill pill-g">Alta ✓</span></td></tr>
+          <tr><td><span class="rank-badge r3">3</span></td><td>Becas para El Cambio</td><td><strong>149</strong></td><td>$1.644</td><td><span class="pill pill-g">Muy Alta ✓</span></td></tr>
+          <tr><td><span class="rank-badge ro">4</span></td><td>Esp. Logística Híbrida</td><td><strong>130</strong></td><td>$3.214</td><td><span class="pill pill-g">Alta ✓</span></td></tr>
+          <tr><td><span class="rank-badge ro">5</span></td><td>Esp. SST</td><td><strong>191</strong></td><td>$6.914</td><td><span class="pill pill-g">Alta ✓</span></td></tr>
+          <tr><td><span class="rank-badge ro">6</span></td><td>Esp. Inteligencia Artificial</td><td><strong>122</strong></td><td>$5.353</td><td><span class="pill pill-g">Alta ✓</span></td></tr>
+          <tr><td><span class="rank-badge ro">7</span></td><td>Mtra. IA y Ciencia de Datos</td><td><strong>100</strong></td><td>$9.222</td><td><span class="pill pill-b">Media</span></td></tr>
+          <tr><td><span class="rank-badge ro">8</span></td><td>Esp. Analítica de Big Data</td><td><strong>91</strong></td><td>$8.153</td><td><span class="pill pill-b">Media</span></td></tr>
+          <tr><td><span class="rank-badge ro">9</span></td><td>Esp. Finanzas MIX</td><td><strong>85</strong></td><td>$15.581</td><td><span class="pill pill-r">Baja ✗</span></td></tr>
+          <tr><td><span class="rank-badge ro">10</span></td><td>Esp. Com. y Periodismo Digital</td><td><strong>81</strong></td><td>$9.110</td><td><span class="pill pill-b">Media</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title">⚠ Programas · Atención Prioritaria (CPL Elevado)</div>
+      <div class="chart-card-sub">CPL superior al promedio ($8.305) con baja producción de leads</div>
+      <table class="perf-table" style="margin-top:12px">
+        <thead><tr><th>#</th><th>Programa</th><th>Leads</th><th>CPL (COP)</th><th>Inversión</th></tr></thead>
+        <tbody>
+          <tr><td><span class="rank-badge rb">!</span></td><td>Mtra. Adm. Empresas</td><td>30</td><td><strong style="color:#e53935">$31.121</strong></td><td>$933K</td></tr>
+          <tr><td><span class="rank-badge rb">!</span></td><td>Esp. Mercadeo</td><td>28</td><td><strong style="color:#ef5350">$23.431</strong></td><td>$656K</td></tr>
+          <tr><td><span class="rank-badge rb">!</span></td><td>Esp. Comunicación Estrat.</td><td>33</td><td><strong style="color:#ef5350">$22.313</strong></td><td>$736K</td></tr>
+          <tr><td><span class="rank-badge rb">!</span></td><td>Mtra. Sistemas Energéticos</td><td>40</td><td><strong style="color:#ef5350">$20.362</strong></td><td>$814K</td></tr>
+          <tr><td><span class="rank-badge rb">!</span></td><td>Esp. Finanzas MIX</td><td>85</td><td><strong style="color:#f44336">$15.581</strong></td><td>$1.32M</td></tr>
+          <tr><td><span class="rank-badge rb">!</span></td><td>Mtra. Comunicación Digital</td><td>62</td><td><strong style="color:#f44336">$14.927</strong></td><td>$925K</td></tr>
+          <tr><td><span class="rank-badge rb">!</span></td><td>Esp. Gerencia T. Humano</td><td>58</td><td><strong style="color:#e57373">$12.632</strong></td><td>$732K</td></tr>
+          <tr><td><span class="rank-badge rb">!</span></td><td>Esp. Interculturalidad y Género</td><td>64</td><td><strong style="color:#e57373">$11.500</strong></td><td>$735K</td></tr>
+          <tr><td><span class="rank-badge rb">!</span></td><td>Esp. Gerencia Mantenimiento</td><td>66</td><td><strong style="color:#e57373">$11.288</strong></td><td>$744K</td></tr>
+          <tr><td><span class="rank-badge rb">!</span></td><td>Esp. Gerencia de Proyectos</td><td>67</td><td><strong style="color:#e57373">$10.995</strong></td><td>$736K</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <p class="section-label">Hallazgos Clave e Insights Estratégicos</p>
+  <div class="insights-grid">
+    <div class="insight-card" style="--insight-color:#00897b">
+      <div class="insight-icon">🚀</div>
+      <div class="insight-title">Líderes del Período: Derechos Humanos y Logística</div>
+      <div class="insight-text">
+        <strong>Esp. Derechos Humanos (262 leads, CPL $2.816)</strong> y <strong>Esp. Logística Virtual (242 leads, CPL $3.728)</strong> encabezan la producción con los CPL más eficientes del portafolio. Juntos generan el <strong>20.1% de todos los leads</strong> utilizando solo el 7.9% de la inversión total. Son el benchmark para replicar estrategia creativa y de segmentación.
+      </div>
+    </div>
+    <div class="insight-card" style="--insight-color:#25d366">
+      <div class="insight-icon">💬</div>
+      <div class="insight-title">WhatsApp: Canal Complementario con Oportunidad de Escala</div>
+      <div class="insight-text">
+        Las 4 campañas de WhatsApp generaron <strong>48 conversaciones iniciadas a un CPChat de $4.817 COP</strong>, muy por debajo del CPL promedio de leads ($8.305). Este canal tiene alta intención de contacto directo. <strong>Se recomienda escalar el presupuesto</strong> de estas campañas (actualmente solo el 1.1% del total) dado su eficiencia, especialmente para programas de maestría con CPL elevado en lead form.
+      </div>
+    </div>
+    <div class="insight-card" style="--insight-color:#1a73e8">
+      <div class="insight-icon">🤖</div>
+      <div class="insight-title">Tecnología e IA: Demanda Sostenida con Saturación de Audiencia</div>
+      <div class="insight-text">
+        <strong>Mtra. IA y Ciencia de Datos</strong> mantiene 100 leads pero con <strong>frecuencia 3.71x</strong> y CPM de $11.816 —el más alto del portafolio—, señales claras de saturación de audiencia. <strong>Esp. Inteligencia Artificial</strong> (122 leads, CPL $5.353) mantiene mejor eficiencia. Se recomienda ampliar el targeting de Mtra. IA con audiencias Lookalike 3–5% e introducir nuevos creativos.
+      </div>
+    </div>
+    <div class="insight-card" style="--insight-color:#e53935">
+      <div class="insight-icon">⚠️</div>
+      <div class="insight-title">Alerta Crítica: 4 Programas con CPL Superior a $20.000</div>
+      <div class="insight-text">
+        <strong>Mtra. Adm. Empresas ($31.121)</strong>, <strong>Esp. Mercadeo ($23.431)</strong>, <strong>Esp. Com. Estratégica ($22.313)</strong> y <strong>Mtra. Sistemas Energéticos ($20.362)</strong> suman una inversión de <strong>$3.14M COP</strong> con apenas 131 leads combinados. Probable solapamiento de audiencias entre ad sets y fase de aprendizaje inestable. Acción urgente: consolidar, resetear y reestructurar.
+      </div>
+    </div>
+    <div class="insight-card" style="--insight-color:#f9a825">
+      <div class="insight-icon">🎯</div>
+      <div class="insight-title">Becas y Eventos: CPL Ultra-Eficiente Confirmado</div>
+      <div class="insight-text">
+        <strong>Becas para El Cambio ($1.644 CPL, 149 leads)</strong> y <strong>Conferencia DDHH Brasil ($2.479, 20 leads)</strong> reconfirman que el <strong>marketing de atracción mediante contenido de valor</strong> genera los mejores CPL del portafolio. Esta táctica debe escalarse como estrategia transversal para maestrías y programas con CPL alto.
+      </div>
+    </div>
+    <div class="insight-card" style="--insight-color:#7c4dff">
+      <div class="insight-icon">📐</div>
+      <div class="insight-title">SST: Programa Consolidado Tras Unificación de Ad Sets</div>
+      <div class="insight-text">
+        Al consolidar los ad sets, <strong>Esp. SST</strong> suma <strong>191 leads en total</strong> (el 3er mayor volumen) con CPL de $6.914, por debajo del promedio. Sin embargo, el CPM de $7.864 y la inversión de $1.32M sugieren que <strong>parte del presupuesto se está pagando con CPM elevado</strong>. Revisar la distribución de presupuesto entre los ad sets internos para priorizar el de menor CPM.
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCLUSIONES -->
+  <div class="conclusions-card">
+    <div class="conclusions-title">Conclusiones y <span>Recomendaciones Estratégicas</span></div>
+    <div class="conc-grid">
+      <div class="conc-item">
+        <div class="conc-num">01</div>
+        <div class="conc-text"><strong>Escalar los programas estrella:</strong> Aumentar presupuesto en Esp. Derechos Humanos, Esp. Logística Virtual y Esp. IA. Estos tres concentran el 24.6% de leads con CPL muy por debajo del promedio. Redirigir inversión desde los programas con CPL &gt;$20K.</div>
+      </div>
+      <div class="conc-item">
+        <div class="conc-num">02</div>
+        <div class="conc-text"><strong>Escalar WhatsApp como canal de captación:</strong> Con un CPChat de $4.817 (vs CPL lead form de $8.305), las campañas de WA son más eficientes por contacto. Proponer escalar el presupuesto WA al 8–10% del total y añadir campañas por programa para maestrías de alto CPL.</div>
+      </div>
+      <div class="conc-item">
+        <div class="conc-num">03</div>
+        <div class="conc-text"><strong>Reestructurar urgente los 4 programas críticos:</strong> Mtra. Adm. Empresas, Esp. Mercadeo, Esp. Com. Estratégica y Mtra. Sistemas Energéticos. Consolidar todos los ad sets en uno solo por programa, usar CBO y audiencias Lookalike basadas en leads existentes.</div>
+      </div>
+      <div class="conc-item">
+        <div class="conc-num">04</div>
+        <div class="conc-text"><strong>Combatir la saturación en Mtra. IA:</strong> Frecuencia 3.71x y CPM $11.816 indican fatiga. Introducir mínimo 3 variantes creativas nuevas (formato Reel, carrusel UGC, video testimonios) y ampliar audiencias a Lookalike 3–5% o intereses adicionales en tecnología.</div>
+      </div>
+      <div class="conc-item">
+        <div class="conc-num">05</div>
+        <div class="conc-text"><strong>Calendario de eventos digitales mensual:</strong> Becas y Conferencias confirman CPL de $1.6K–$3.2K. Crear un plan de webinars, charlas y conferencias temáticas mensuales como embudo de captación de bajo costo para los programas más costosos del portafolio.</div>
+      </div>
+      <div class="conc-item">
+        <div class="conc-num">06</div>
+        <div class="conc-text"><strong>Revisar estructura (Breakdown Effect):</strong> Múltiples ad sets por programa generan solapamiento. Consolidar bajo Advantage+ CBO por programa. Para el portafolio completo, aplicar Broad Targeting con señales de optimización basadas en leads históricos para reducir el CPL promedio sin aumentar inversión.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Universidad Autónoma de Occidente · Dirección de Mercadeo Digital · Posgrados 2026-2S<br>
+  Datos exportados de Meta Ads Manager · Período: 1 Abr – 11 May 2026 · Análisis aplicando marco Meta Ads (Breakdown Effect, Fase de Aprendizaje, Frecuencia, CPM Marginal)
+</footer>
+
+<script>
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.color = '#4a5568';
+
+const PROGRAMS = [
+  "Esp. Derechos Humanos","Esp. Logística Virtual","Esp. SST","Becas para El Cambio",
+  "Esp. Logística Híbrida","Esp. Inteligencia Artificial","Mtra. IA y Ciencia de Datos",
+  "Esp. Analítica Big Data","Esp. Finanzas MIX","Esp. Com. Periodismo Digital",
+  "Mtra. SST","Esp. Diseño Publicitario","Esp. Estrategia Publicitaria","Esp. Comercio Exterior",
+  "Esp. Eficiencia Energética","Esp. Ingeniería Clínica","Esp. Gerencia Proyectos",
+  "Esp. Gerencia Mantenimiento","Mtra. Gerencia Ingeniería","Esp. Interculturalidad y Género",
+  "Mtra. Com. Digital","Esp. Gerencia T. Humano","Beneficio UAO 40%",
+  "Mtra. Sistemas Energéticos","Esp. Comunicación Estrat.","Mtra. Adm. Empresas",
+  "Esp. Mercadeo","Charla Informativa","Conf. DDHH Brasil","Esp. Energías Renovables"
+];
+const LEADS = [262,242,191,149,130,122,100,91,85,81,79,79,74,74,70,68,67,66,64,64,62,58,43,40,33,30,28,25,20,11];
+const INV   = [737675,902157,1320489,245003,417755,653009,922217,741889,1324416,737940,810458,727654,736264,738274,739056,737254,736692,744985,658202,735969,925488,732646,408459,814461,736331,933635,656072,169911,49581,35577];
+const CPL   = [2816,3728,6914,1644,3214,5353,9222,8153,15581,9110,10259,9211,9950,9977,10558,10842,10995,11288,10284,11500,14927,12632,9499,20362,22313,31121,23431,6796,2479,3234];
+const IMP   = [170815,256664,167909,58593,99360,78767,78051,74536,152675,109664,72929,165812,93114,149028,73834,171883,72851,160426,109151,84714,150566,119795,70223,111104,77192,84312,94396,26127,15709,5812];
+const ALC   = [78973,114130,89316,18880,43587,32918,21053,37889,51623,40121,29251,62816,49371,60969,23757,61390,33515,67639,28796,24815,56601,43855,34837,35002,42632,40479,38697,17279,9164,2337];
+const CLICS = [1210,1565,984,1113,770,531,420,489,569,505,345,637,468,548,373,712,456,811,386,406,466,426,760,495,316,401,347,211,102,45];
+
+const AVG_CPL = 8305;
+const CPL_COLORS = CPL.map(v => {
+  if (v <= 3800) return '#00897b';
+  if (v <= AVG_CPL) return '#7cb342';
+  if (v <= 13000) return '#f9a825';
+  return '#e53935';
+});
+
+// ── LEADS CHART ──
+new Chart(document.getElementById('leadsChart'), {
+  type: 'bar',
+  data: {
+    labels: PROGRAMS,
+    datasets: [{
+      label: 'Leads',
+      data: LEADS,
+      backgroundColor: CPL_COLORS.map(c => c + 'dd'),
+      borderColor: CPL_COLORS,
+      borderWidth: 1,
+      borderRadius: 5,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.raw} leads · CPL: $${CPL[ctx.dataIndex].toLocaleString('es-CO')} · Inv: $${Math.round(INV[ctx.dataIndex]/1000)}K`
+        }
+      }
+    },
+    scales: {
+      x: { grid: { color: '#e2e8f030' }, ticks: { font: { size: 11 } } },
+      y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// ── CPL CHART ──
+const cplSorted = [...Array(PROGRAMS.length).keys()].sort((a,b) => CPL[a]-CPL[b]);
+new Chart(document.getElementById('cplChart'), {
+  type: 'bar',
+  data: {
+    labels: cplSorted.map(i => PROGRAMS[i]),
+    datasets: [
+      {
+        label: 'CPL (COP)',
+        data: cplSorted.map(i => CPL[i]),
+        backgroundColor: cplSorted.map(i => CPL_COLORS[i] + 'cc'),
+        borderColor: cplSorted.map(i => CPL_COLORS[i]),
+        borderWidth: 1,
+        borderRadius: 4,
+        borderSkipped: false,
+      },
+      {
+        label: 'CPL Promedio ($8.305)',
+        data: Array(PROGRAMS.length).fill(AVG_CPL),
+        type: 'line',
+        borderColor: '#f9a825',
+        borderWidth: 2,
+        borderDash: [6, 3],
+        tension: 0,
+        pointRadius: 0,
+        fill: false,
+      }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true, labels: { font: { size: 11 }, boxWidth: 14 } },
+      tooltip: {
+        callbacks: {
+          label: ctx => ctx.datasetIndex === 0
+            ? ` $${ctx.raw.toLocaleString('es-CO')} COP`
+            : ` Promedio: $${ctx.raw.toLocaleString('es-CO')}`
+        }
+      }
+    },
+    scales: {
+      x: { grid: { color: '#e2e8f020' }, ticks: { font: { size: 10 }, callback: v => '$'+(v/1000).toFixed(0)+'K' } },
+      y: { grid: { display: false }, ticks: { font: { size: 9 } } }
+    }
+  }
+});
+
+// ── BUBBLE CHART ──
+new Chart(document.getElementById('scatterChart'), {
+  type: 'bubble',
+  data: {
+    datasets: PROGRAMS.map((p, i) => ({
+      label: p,
+      data: [{ x: INV[i] / 1000, y: LEADS[i], r: Math.max(4, Math.min(20, CPL[i] / 1400)) }],
+      backgroundColor: CPL_COLORS[i] + '99',
+      borderColor: CPL_COLORS[i],
+      borderWidth: 1.5,
+    }))
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const i = PROGRAMS.indexOf(ctx.dataset.label);
+            return [`${ctx.dataset.label}`, `Inversión: $${Math.round(INV[i]/1000)}K`, `Leads: ${LEADS[i]}`, `CPL: $${CPL[i].toLocaleString('es-CO')}`];
+          }
+        }
+      }
+    },
+    scales: {
+      x: { title: { display: true, text: 'Inversión (miles COP)', font: { size: 11 } }, grid: { color: '#e2e8f040' } },
+      y: { title: { display: true, text: 'Leads generados', font: { size: 11 } }, grid: { color: '#e2e8f040' } }
+    }
+  }
+});
+
+// ── IMP VS ALC ──
+new Chart(document.getElementById('impAlcChart'), {
+  type: 'bar',
+  data: {
+    labels: PROGRAMS.slice(0, 10),
+    datasets: [
+      { label: 'Impresiones', data: IMP.slice(0,10), backgroundColor: '#1a73e8aa', borderRadius: 3, borderSkipped: false },
+      { label: 'Alcance',     data: ALC.slice(0,10), backgroundColor: '#00bcd4aa', borderRadius: 3, borderSkipped: false }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { labels: { font: { size: 11 } } }, tooltip: { mode: 'index' } },
+    scales: {
+      x: { ticks: { font: { size: 9 }, maxRotation: 35, minRotation: 25 }, grid: { display: false } },
+      y: { grid: { color: '#e2e8f030' }, ticks: { font: { size: 10 }, callback: v => (v/1000).toFixed(0)+'K' } }
+    }
+  }
+});
+
+// ── PIE ──
+const COLORS12 = ['#1a73e8','#0d47a1','#00bcd4','#00897b','#f9a825','#e53935','#7c4dff','#ff5722','#039be5','#43a047','#8d6e63','#546e7a'];
+const top12 = [...Array(INV.length).keys()].sort((a,b) => INV[b]-INV[a]).slice(0,12);
+new Chart(document.getElementById('pieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: top12.map(i => PROGRAMS[i]),
+    datasets: [{
+      data: top12.map(i => INV[i]),
+      backgroundColor: COLORS12,
+      borderWidth: 2,
+      borderColor: '#fff',
+      hoverOffset: 8,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 10 }, boxWidth: 12, padding: 8 } },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` $${Math.round(ctx.raw/1000)}K COP (${((ctx.raw / INV.reduce((a,b)=>a+b,0))*100).toFixed(1)}%)`
+        }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
