@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAO — Benchmarking Pregrado 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap');
+:root{
+  --uao:#961423;--uao-dark:#961423;--uao-mid:#DC142D;--uao-light:#F03C46;
+  --uao-cream:#ECE5DC;--accent:#DC142D;--green:#059669;--red:#DC142D;
+  --muted:#6b5e54;--border:#d8cfc6;--bg:#f5f0eb;--card:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:#2a1f1a;font-size:14px;}
+header{background:var(--uao-dark);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 3px 16px rgba(150,20,35,.35);}
+.logo{display:flex;align-items:center;gap:14px;}
+.logo-box{height:36px;width:36px;background:#fff;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:var(--uao-dark);letter-spacing:-.02em;flex-shrink:0;}
+.logo-divider{width:1px;height:28px;background:rgba(255,255,255,.25);}
+.logo-title{color:#fff;font-weight:700;font-size:14px;line-height:1.2;letter-spacing:-.01em;}
+.logo-sub{color:rgba(255,255,255,.65);font-size:11px;margin-top:1px;}
+.hdate{color:rgba(255,255,255,.55);font-size:11px;}
+nav{background:#fff;border-bottom:1px solid var(--border);padding:0 28px;display:flex;position:sticky;top:52px;z-index:199;overflow-x:auto;}
+nav::-webkit-scrollbar{height:0;}
+.nav-btn{padding:13px 20px;border:none;background:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;font-family:"DM Sans",sans-serif;transition:all .2s;}
+.nav-btn.active{color:var(--uao);border-bottom-color:var(--accent);}
+main{max-width:1200px;margin:0 auto;padding:28px 24px;}
+.section{display:none;}.section.active{display:block;}
+h2{font-family:"DM Sans",sans-serif;font-size:22px;font-weight:800;color:var(--uao-dark);margin-bottom:4px;letter-spacing:-.02em;}
+.subtitle{color:#7a6a62;font-size:12px;margin-bottom:20px;}
+.search-wrap{position:relative;margin-bottom:20px;}
+.search-input{width:100%;padding:10px 16px 10px 40px;border:1px solid var(--border);border-radius:10px;font-size:13px;font-family:"DM Sans",sans-serif;outline:none;background:#fff;}
+.search-input:focus{border-color:var(--uao-mid);box-shadow:0 0 0 3px rgba(220,20,45,.12);}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);}
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.filter-btn{padding:6px 14px;border-radius:99px;border:1px solid var(--border);background:#fff;font-size:11px;font-weight:600;cursor:pointer;color:var(--muted);font-family:"DM Sans",sans-serif;transition:all .15s;}
+.filter-btn.active{background:var(--uao-mid);color:#fff;border-color:var(--uao-mid);}
+.prog-list{display:flex;flex-direction:column;gap:16px;}
+.prog-card{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden;transition:box-shadow .2s;}
+.prog-card:hover{box-shadow:0 4px 20px rgba(150,20,35,.15);}
+.prog-header{padding:16px 20px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;background:var(--uao-cream);}
+.prog-header:hover{background:#e8ddd3;}
+.prog-title-wrap{flex:1;min-width:0;}
+.prog-name{font-family:"DM Sans",sans-serif;font-weight:800;font-size:14px;color:var(--uao-dark);line-height:1.3;margin-bottom:6px;letter-spacing:-.01em;}
+.prog-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:10px;font-weight:700;}
+.b-blue{background:#fce4e7;color:#961423;}.b-green{background:#d1fae5;color:#065f46;}.b-amber{background:#fff0e0;color:#92400e;}.b-purple{background:#f3e8ff;color:#5b21b6;}.b-red{background:#fee2e2;color:#991b1b;}.b-gray{background:#f1f5f9;color:#475569;}.b-teal{background:#e0f2fe;color:#0c4a6e;}.b-abet{background:#fef3c7;color:#92400e;font-weight:800;}.b-sip{background:#ede9fe;color:#5b21b6;}.b-hybrid{background:#ede9fe;color:#5b21b6;}.b-virtual{background:#dbeafe;color:#1e40af;}
+.prog-price{text-align:right;flex-shrink:0;}
+.price-uao{font-family:"DM Sans",sans-serif;font-weight:800;font-size:16px;color:var(--uao-dark);}
+.price-label{font-size:10px;color:var(--muted);margin-top:2px;}
+.chevron{color:var(--muted);font-size:12px;transition:transform .25s;flex-shrink:0;margin-top:2px;}
+.prog-body{display:none;border-top:1px solid var(--border);}
+.prog-body.open{display:block;}
+.body-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+@media(max-width:720px){.body-grid{grid-template-columns:1fr;}}
+.comp-section{padding:18px 20px;border-right:1px solid var(--uao-cream);}
+.comp-section-title,.diff-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--uao-mid);margin-bottom:12px;}
+.comp-table{width:100%;border-collapse:collapse;}
+.comp-table th{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);padding:4px 8px;text-align:left;border-bottom:1px solid var(--border);}
+.comp-table td{padding:7px 8px;font-size:12px;border-bottom:1px solid #f8fafc;vertical-align:top;}
+.comp-uni{font-weight:600;color:#334155;}.comp-prog{color:var(--muted);font-size:11px;margin-top:2px;line-height:1.3;}
+.comp-val{font-weight:700;font-size:12px;white-space:nowrap;}
+.val-higher{color:var(--red);}.val-lower{color:var(--green);}.val-similar{color:#f59e0b;}
+.diff-pct{font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;white-space:nowrap;display:inline-block;margin-top:2px;}
+.pct-win{background:#d1fae5;color:#065f46;}.pct-lose{background:#fee2e2;color:#991b1b;}.pct-tie{background:#fef3c7;color:#92400e;}
+.diff-section{padding:18px 20px;}
+.diff-item{display:flex;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f8fafc;}
+.diff-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.diff-num{width:22px;height:22px;border-radius:50%;background:var(--uao-mid);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.diff-text{font-size:12px;color:#334155;line-height:1.5;}
+.chart-wrap{padding:14px 20px 16px;border-top:1px solid var(--border);}
+.chart-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:10px;}
+.chart-mini{height:160px;position:relative;}
+.speech-box{padding:18px 20px;border-top:1px solid var(--border);background:#fafaf8;}
+.speech-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--uao-mid);margin-bottom:8px;}
+.speech-content{font-size:12px;color:#334155;line-height:1.65;background:#fff;border-left:3px solid var(--uao-mid);padding:12px 14px;border-radius:0 8px 8px 0;}
+.becas-box{padding:12px 20px;background:#fff8f8;border-top:1px solid #fce4e7;font-size:11px;display:flex;gap:8px;align-items:center;}
+.becas-link{color:var(--uao-mid);font-weight:600;text-decoration:none;font-size:11px;}
+.becas-link:hover{text-decoration:underline;}
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;}
+@media(max-width:600px){.kpi-row{grid-template-columns:1fr 1fr;}}
+.kpi{background:var(--card);border-radius:12px;padding:16px;text-align:center;border:1px solid var(--border);border-top:3px solid var(--uao-mid);}
+.kpi-val{font-family:"DM Sans",sans-serif;font-size:28px;font-weight:800;margin-bottom:2px;}
+.kpi-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+.kpi-sub{font-size:10px;color:#94a3b8;margin-top:2px;}
+.info-strip{padding:11px 20px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;}
+.info-acred{background:#f0fdf4;color:#065f46;border-top:2px solid #059669;}
+.info-modal{background:#eff6ff;color:#1e40af;border-top:2px solid #3b82f6;}
+.speech-tab .speech-card{background:#fff;border-radius:12px;border:1px solid var(--border);padding:20px;margin-bottom:16px;}
+.speech-tab .speech-prog-name{font-weight:800;font-size:16px;color:var(--uao-dark);margin-bottom:4px;}
+.speech-tab .speech-prog-sub{font-size:11px;color:var(--muted);margin-bottom:12px;}
+.speech-tab .speech-section{margin-bottom:12px;}
+.speech-tab .section-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--uao-mid);margin-bottom:5px;}
+.speech-tab .section-txt{font-size:12px;color:#334155;line-height:1.6;padding:10px 12px;background:#f8fafc;border-radius:6px;}
+.speech-tab .objection-row{display:flex;gap:8px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f1f5f9;}
+.speech-tab .objection-row:last-child{border-bottom:none;}
+.speech-tab .obj-q{font-size:12px;font-weight:600;color:#334155;flex:1;}
+.speech-tab .obj-a{font-size:12px;color:var(--green);flex:2;}
+footer{background:var(--uao-dark);padding:14px 28px;display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.6);margin-top:32px;}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="logo-box">UAO</div>
+    <div class="logo-divider"></div>
+    <div>
+      <div class="logo-title">Benchmarking Competitivo Pregrado 2026</div>
+      <div class="logo-sub">Comité Digital de Marketing · Herramienta Estratégica</div>
+    </div>
+  </div>
+  <div class="hdate">Mayo 2026 · v1.0 Pregrado</div>
+</header>
+<nav>
+  <button class="nav-btn active" onclick="showTab('overview',this)">📊 Resumen General</button>
+  <button class="nav-btn" onclick="showTab('ingenieria',this)">⚙️ Ingeniería (9)</button>
+  <button class="nav-btn" onclick="showTab('empresariales',this)">💼 Empresariales (5)</button>
+  <button class="nav-btn" onclick="showTab('comunicacion',this)">🎬 Comunicación & Arte (5)</button>
+  <button class="nav-btn" onclick="showTab('diseno',this)">🎨 Arquitectura & Diseño (2) – Actualizado</button>
+  <button class="nav-btn" onclick="showTab('speech',this)">🗣️ Speech Comercial</button>
+</nav>
+<main>
+
+<!-- OVERVIEW -->
+<div id="overview" class="section active">
+  <h2>Benchmarking Pregrado UAO 2026</h2>
+  <p class="subtitle">20 programas de pregrado — Análisis estratégico de posicionamiento y diferenciación competitiva</p>
+  <div class="kpi-row" id="kpiOverview"></div>
+  <!-- Prices chart: full width so all 20 labels are visible -->
+  <div style="background:var(--card);border-radius:12px;border:1px solid var(--border);padding:18px;margin-bottom:20px;">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px;">📊 Distribución de precios por programa</div>
+    <div style="font-size:11px;color:#94a3b8;margin-bottom:12px;"><span style="display:inline-flex;align-items:center;gap:5px;margin-right:12px;"><span style="width:10px;height:10px;background:#DC142D;border-radius:2px;display:inline-block;"></span>Acreditación Alta Calidad</span><span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;background:#94a3b8;border-radius:2px;display:inline-block;"></span>Registro Calificado</span></div>
+    <div style="height:520px;position:relative;"><canvas id="chartPrices"></canvas></div>
+  </div>
+  <!-- Modality + Positioning: side by side -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
+    <div style="background:var(--card);border-radius:12px;border:1px solid var(--border);padding:18px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:12px;">🎓 Programas por modalidad</div>
+      <div style="height:220px;position:relative;"><canvas id="chartModality"></canvas></div>
+    </div>
+  <div style="background:var(--card);border-radius:12px;border:1px solid var(--border);padding:18px;margin-bottom:24px;">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:16px;">🗺️ Mapa de posicionamiento precio vs. mercado Cali</div>
+    <div style="height:280px;position:relative;"><canvas id="chartPositioning"></canvas></div>
+  </div>
+  </div><!-- end 2-col grid -->
+  <div style="background:#fff8f8;border-radius:12px;border:1px solid #fce4e7;padding:18px;">
+    <div style="font-size:12px;font-weight:700;color:var(--uao-dark);margin-bottom:10px;">🔑 Hallazgos clave para equipos comerciales</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+      <div style="background:#fff;padding:12px;border-radius:8px;border:1px solid var(--border);">
+        <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px;">✅ VENTAJA CLARA</div>
+        <div style="font-size:12px;color:#334155;line-height:1.5;">Contaduría Pública ($4.8M) y programas virtuales ($5.5M) posicionan a UAO 30–65% por debajo de ICESI y Javeriana Cali, eliminando la objeción de precio para familias de estratos 3–4.</div>
+      </div>
+      <div style="background:#fff;padding:12px;border-radius:8px;border:1px solid var(--border);">
+        <div style="font-size:11px;font-weight:700;color:#f59e0b;margin-bottom:4px;">⚡ DIFERENCIADOR ÚNICO</div>
+        <div style="font-size:12px;color:#334155;line-height:1.5;">Ingeniería Datos e IA y Narrativas & Entretenimiento Digital son programas sin equivalente directo en Cali con modelo híbrido, posicionando a UAO como la institución más innovadora del suroccidente.</div>
+      </div>
+      <div style="background:#fff;padding:12px;border-radius:8px;border:1px solid var(--border);">
+        <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:4px;">🎯 OPORTUNIDAD DE CONVERSIÓN</div>
+        <div style="font-size:12px;color:#334155;line-height:1.5;">15 de 20 programas cuentan con Acreditación de Alta Calidad o Registro vigente. Usar el ahorro vs. ICESI/Javeriana ($2–5M/sem) como argumento financiero con calculadora de inversión total.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INGENIERÍA -->
+<div id="ingenieria" class="section">
+  <h2>Facultad de Ingeniería y Ciencias Básicas</h2>
+  <p class="subtitle">9 programas — Posicionamiento tecnológico y diferenciación por mercado laboral</p>
+  <div class="kpi-row" id="kpiIng"></div>
+  <div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="searchIng" placeholder="Buscar programa..." oninput="filterCards('Ing')"></div>
+  <div class="filter-bar" id="filterIng"></div>
+  <div class="prog-list" id="listIng"></div>
+</div>
+
+<!-- EMPRESARIALES -->
+<div id="empresariales" class="section">
+  <h2>Facultad de Ciencias Empresariales y Jurídicas</h2>
+  <p class="subtitle">5 programas — Argumentos de conversión precio–valor y diferenciación por empleabilidad</p>
+  <div class="kpi-row" id="kpiEmp"></div>
+  <div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="searchEmp" placeholder="Buscar programa..." oninput="filterCards('Emp')"></div>
+  <div class="filter-bar" id="filterEmp"></div>
+  <div class="prog-list" id="listEmp"></div>
+</div>
+
+<!-- COMUNICACIÓN -->
+<div id="comunicacion" class="section">
+  <h2>Facultad de Comunicación Social, Humanidades y Artes</h2>
+  <p class="subtitle">5 programas — Diferenciadores creativos e infraestructura audiovisual como eje de conversión</p>
+  <div class="kpi-row" id="kpiCom"></div>
+  <div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="searchCom" placeholder="Buscar programa..." oninput="filterCards('Com')"></div>
+  <div class="filter-bar" id="filterCom"></div>
+  <div class="prog-list" id="listCom"></div>
+</div>
+
+<!-- DISEÑO -->
+<div id="diseno" class="section">
+  <h2>Facultad de Arquitectura, Urbanismo y Diseño</h2>
+  <p class="subtitle">2 programas — Actualizado Mayo 2026 · Campus como ecosistema creativo y argumento de venta</p>
+  <div class="kpi-row" id="kpiDis"></div>
+  <div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="searchDis" placeholder="Buscar programa..." oninput="filterCards('Dis')"></div>
+  <div class="prog-list" id="listDis"></div>
+</div>
+
+<!-- SPEECH COMERCIAL -->
+<div id="speech" class="section speech-tab">
+  <h2>Speech Comercial por Programa</h2>
+  <p class="subtitle">Guión de ventas, manejo de objeciones y argumentos financieros para equipos de admisiones</p>
+  <div style="background:#fff8f8;border-radius:10px;border:1px solid #fce4e7;padding:14px;margin-bottom:20px;font-size:12px;color:#7c3535;line-height:1.6;">
+    <strong>📌 Instrucciones de uso:</strong> Este speech es una guía base. Adapte el nombre del aspirante, mencione el colegio de origen y personalice las cifras de becas según el caso. La sección de objeciones debe usarse como preparación previa a cada cita o llamada.
+  </div>
+  <div id="speechContainer"></div>
+</div>
+
+</main>
+<footer>
+  <span>Universidad Autónoma de Occidente · Benchmarking Competitivo Pregrado 2026</span>
+  <span>Comité Digital de Marketing · Documento Confidencial · Mayo 2026</span>
+</footer>
+
+<script>
+// =====================================================================
+// DATA — 20 programas UAO Pregrado con competidores y diferenciadores
+// =====================================================================
+const PREG_DATA = [
+  // ===== INGENIERÍA =====
+  {tab:"Ing",uao:{facultad:"Ingeniería y Ciencias Básicas",programa:"Ingeniería Biomédica",modalidad:"Presencial",semestres:"9",valor:10716000,acred:"Acreditación Alta Calidad CNA + ABET",concentracion:"Día",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"Javeriana Cali",programa:"Ing. Biomédica",modalidad:"Presencial",valor:13830000},
+    {universidad:"San Buenaventura",programa:"Ingeniería Biomédica",modalidad:"Presencial",valor:10474000},
+    {universidad:"U. Santiago de Cali",programa:"Bioingeniería",modalidad:"Presencial",valor:4352106},
+    {universidad:"U. del Valle",programa:"Ing. Biomédica (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "🌐 ACREDITACIÓN ABET INTERNACIONAL: uno de los ÚNICOS programas de Ingeniería Biomédica en Colombia con doble acreditación CNA + ABET — el sello internacional reconocido en más de 40 países, exigido por multinacionales como Siemens Healthineers, Philips Medical y Fresenius para contratar ingenieros",
+    "ABET convierte el título UAO en un título con validez internacional automática: el egresado puede ejercer en EE.UU., Canadá, Reino Unido y 40 países más sin trámites de revalidación — ninguna otra universidad en Cali ofrece esto en Biomédica",
+    "22% más económico que Javeriana Cali ($13.830.000/sem) — la única privada en Cali con Ing. Biomédica. Con ABET internacional incluido, UAO ofrece el mejor precio para este doble sello en Colombia",
+    "Nexo directo con el ecosistema de salud de Cali: Clínica Imbanaco, Coomeva, Valle Salud y Clínica de Occidente contratan egresados UAO — redes de práctica imposibles de replicar desde Bogotá",
+    "Perfil integrador mecánica–electrónica–salud + ABET: el ingeniero biomédico UAO puede trabajar desde Cali hasta Silicon Valley con el mismo título — ventaja competitiva única en el suroccidente"
+   ],
+   speech:"Ingeniería Biomédica UAO tiene algo que ningún otro programa en Cali puede ofrecer: ABET, la acreditación internacional de ingeniería reconocida en más de 40 países. Eso significa que el título de su hijo tiene validez automática en EE.UU., Canadá, Reino Unido y el resto de Europa sin trámites ni costos adicionales. Y todo esto a $10.7M por semestre — hasta $5M menos que Javeriana y $5M menos que ICESI, que NO tienen ABET en Biomédica. En toda la carrera eso es más de $40M de ahorro con un título que vale más internacionalmente.",
+   objeciones:[
+    {q:"¿Por qué UAO y no Javeriana para Biomédica?",a:"UAO tiene ABET Internacional y Javeriana Cali NO tiene ABET en Biomédica. Paga $3M menos por semestre Y obtiene un título reconocido en 40 países para trabajar sin revalidar en el exterior. Es objetivamente más a menor precio."},
+    {q:"¿Con ingeniería biomédica de UAO consigo trabajo?",a:"Sí. La industria farmacéutica y de dispositivos médicos en Cali es la más grande del suroccidente. Egresados UAO trabajan en Laboratorios Genfar, Tecnoquímicas, Fresenius y las grandes clínicas de la ciudad."}
+   ]},
+
+  {tab:"Ing",uao:{facultad:"Ingeniería y Ciencias Básicas",programa:"Ingeniería Datos e IA",modalidad:"Híbrida",semestres:"8",valor:9442000,acred:"Acreditación Alta Calidad CNA",concentracion:"Día/Noche",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Ing. de Sistemas",modalidad:"Presencial",valor:15730000},
+    {universidad:"Javeriana Cali",programa:"Ing. Sistemas y Computación",modalidad:"Presencial",valor:13272000},
+    {universidad:"San Buenaventura",programa:"Ing. de Sistemas",modalidad:"Presencial",valor:10116000},
+    {universidad:"U. Santiago de Cali",programa:"Ing. de Sistemas",modalidad:"Presencial",valor:3208754}
+   ],
+   diferenciadores:[
+    "ÚNICO programa de Ingeniería de Datos + IA con modalidad híbrida en Cali: combina laboratorios presenciales con flexibilidad remota — ideal para quien trabaja o está fuera de la ciudad",
+    "40% más económico que ICESI ($15.730.000/sem) y 29% vs Javeriana Cali ($13.272.000/sem): la carrera de datos más accesible de las privadas de referencia en Cali con Acreditación Alta Calidad–calidad de Cali",
+    "Duración de 8 semestres vs 10 de competidores: el egresado entra 1 año antes al mercado laboral, con salarios promedio de $4–8M en empresas de TI desde el primer empleo",
+    "Articulación directa con el Hub TI de Cali: clúster de empresas tech como Globant, PSL y Softtek realizan sus primeras contrataciones en campus UAO — red de empleabilidad integrada",
+    "Énfasis aplicado en Python, Machine Learning, Cloud y Big Data desde primer semestre: perfil listo para certificaciones AWS/Google desde el pregrado"
+   ],
+   speech:"La Ingeniería de Datos e IA de UAO es el programa del futuro, hoy. Más de 200 empresas tech en Cali buscan perfiles de datos e inteligencia artificial cada mes, y UAO es la única universidad en Cali que forma estos ingenieros en modalidad híbrida, en 8 semestres, por $9.4M al semestre. Eso es $6M menos que ICESI por la misma carrera. Además, el Hub TI de Cali tiene convenio activo con UAO para prácticas empresariales desde el tercer semestre.",
+   objeciones:[
+    {q:"¿Es mejor estudiar Sistemas en ICESI para conseguir trabajo en TI?",a:"ICESI tiene excelente reputación pero cobra $6M más por semestre. Globant, Softek y PSL contratan activamente en UAO porque tenemos el perfil de datos aplicado que ellos necesitan. El costo total de la carrera en UAO es aprox. $75M vs $125M en ICESI."},
+    {q:"¿Qué hace diferente a Datos e IA de un programa de Sistemas normal?",a:"En Datos e IA trabajamos con Python, ML, Big Data y Cloud desde primer semestre. Un ingeniero de sistemas tradicional tarda 2–3 años adicionales en aprender esto. UAO le da ventaja competitiva inmediata."}
+   ]},
+
+  {tab:"Ing",uao:{facultad:"Ingeniería y Ciencias Básicas",programa:"Ingeniería Eléctrica",modalidad:"Presencial",semestres:"9",valor:9442000,acred:"Acreditación Alta Calidad CNA",concentracion:"Noche",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Ing. en Energía Inteligente",modalidad:"Presencial",valor:15010000},
+    {universidad:"U. Santiago de Cali",programa:"Ing. en Energías",modalidad:"Presencial",valor:4639608},
+    {universidad:"U. del Valle",programa:"Ing. Eléctrica (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "Único programa de Ingeniería Eléctrica acreditado de alta calidad en horario NOCTURNO en Cali: diseñado para quienes trabajan o tienen responsabilidades familiares durante el día",
+    "37% más económico que ICESI Energía Inteligente: acceso al sector eléctrico y energético del Valle del Cauca con el mismo retorno laboral a menor inversión",
+    "Vínculo directo con EMCALI, CELSIA y sector industrial de Cali: las prácticas empresariales se realizan con los empleadores reales del sector — garantía de empleabilidad regional",
+    "Acreditación de Alta Calidad: el sello académico que exigen las empresas del sector eléctrico para contratar ingenieros a cargos de liderazgo desde el inicio de carrera",
+    "Formación en energías renovables y eficiencia energética: alineada con la transición energética colombiana — los proyectos de parques solares y eólicos demandan estos perfiles urgentemente"
+   ],
+   speech:"Si su hijo quiere trabajar en CELSIA, EMCALI o en proyectos de energías renovables, la Ingeniería Eléctrica UAO en jornada nocturna es su opción. Acreditada de alta calidad, con prácticas garantizadas en las empresas del sector y a $9.4M por semestre, es la carrera que forma a los ingenieros que el Valle del Cauca necesita para su transición energética.",
+   objeciones:[
+    {q:"¿No es mejor estudiar eléctrica en la U. del Valle que es pública y más barata?",a:"U. del Valle es excelente pero altamente competitiva para el ingreso. UAO tiene admisión continua, jornada nocturna y convenios empresariales que U. del Valle no ofrece. Si consigue cupo en U. del Valle, fantástico. Si no, UAO tiene el mismo nivel sin el riesgo de pérdida del semestre."},
+    {q:"¿Cómo está el mercado para eléctrica en Colombia?",a:"Excelente. Colombia tiene planes de agregar 4.000 MW de energías renovables antes de 2030 y faltan ingenieros eléctricos calificados. UPME y el sector privado están en búsqueda activa de este perfil."}
+   ]},
+
+  {tab:"Ing",uao:{facultad:"Ingeniería y Ciencias Básicas",programa:"Ingeniería Electrónica y Telecom.",modalidad:"Virtual",semestres:"9",valor:5576130,acred:"Acreditación Alta Calidad CNA",concentracion:"Noche",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Ing. de Sistemas (ref.)",modalidad:"Presencial",valor:15730000},
+    {universidad:"Javeriana Cali",programa:"Ing. Electrónica",modalidad:"Presencial",valor:13272000},
+    {universidad:"U. Santiago de Cali",programa:"Ing. Electrónica",modalidad:"Presencial",valor:4055942}
+   ],
+   diferenciadores:[
+    "ÚNICA Ingeniería Electrónica en modalidad 100% virtual con Registro Calificado en Cali: acceso para estudiantes de toda Colombia y el exterior sin necesidad de traslado",
+    "65% más económico que ICESI y 58% vs Javeriana Cali en este perfil: la opción de mayor accesibilidad para quienes buscan ingeniería tecnológica de calidad",
+    "Formación en telecomunicaciones, IoT y automatización desde pregrado: el perfil más demandado por Claro, Movistar, ETB y startups de automatización en Colombia",
+    "Diseñado para estudiantes que trabajan: modalidad virtual con acompañamiento docente síncrono y asíncrono — el ingeniero puede combinar trabajo y estudio desde el inicio",
+    "Cali como hub de conectividad para el Pacífico: egresados de telecomunicaciones en UAO acceden a proyectos de infraestructura digital en Buenaventura y el corredor logístico más importante de Colombia"
+   ],
+   speech:"Si quiere estudiar Ingeniería Electrónica y vive fuera de Cali, trabaja actualmente o simplemente prefiere la flexibilidad, UAO tiene el único programa virtual en esta área con Registro Calificado en la región. A $5.6M por semestre, es la ingeniería electrónica más accesible del mercado con calidad UAO.",
+   objeciones:[
+    {q:"¿Una ingeniería virtual tiene el mismo valor que una presencial en el mercado?",a:"Sí, el título tiene el mismo valor legal y el mismo Registro SNIES. Empresas como Claro y Movistar contratan nuestros egresados. Lo que importa es la competencia técnica demostrada, no la modalidad."},
+    {q:"¿Se puede hacer prácticas siendo virtual?",a:"Sí. Las prácticas son presenciales en la empresa del estudiante o en las aliadas UAO. El programa está diseñado para que el estudiante pueda practicar en su ciudad de residencia."}
+   ]},
+
+  {tab:"Ing",uao:{facultad:"Ingeniería y Ciencias Básicas",programa:"Ingeniería Industrial",modalidad:"Híbrida",semestres:"9",valor:10111000,acred:"Acreditación Alta Calidad CNA",concentracion:"Día/Noche",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Ing. Industrial",modalidad:"Presencial",valor:15730000},
+    {universidad:"Javeriana Cali",programa:"Ing. Industrial",modalidad:"Presencial",valor:13272000},
+    {universidad:"San Buenaventura",programa:"Ing. Industrial",modalidad:"Presencial",valor:10116000},
+    {universidad:"U. Santiago de Cali",programa:"Ing. Industrial",modalidad:"Presencial",valor:6014004},
+    {universidad:"U. del Valle",programa:"Ing. Industrial (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "Doble modalidad HÍBRIDA + VIRTUAL: el único programa de Ingeniería Industrial en Cali con ambas opciones, diseñado para adaptarse al ritmo de vida del estudiante trabajador",
+    "36% más económico que ICESI y 24% vs Javeriana: para la carrera más demandada de Colombia, UAO ofrece el mejor equilibrio precio–calidad–empleabilidad de Cali",
+    "Red empresarial integrada: Carvajal, Colombina, Riopaila, Postobon e industrias azucareras del Valle del Cauca realizan sus procesos de selección de ingenieros industriales en campus UAO",
+    "Enfoque en Industria 4.0 y logística: el corredor Cali–Buenaventura es el más activo de Colombia y requiere ingenieros industriales con perfil logístico — UAO es la única en Cali con este énfasis",
+    "Flexibilidad horaria sin pérdida de calidad: el estudiante elige entre asistir presencialmente o conectarse en línea según su disponibilidad semanal"
+   ],
+   speech:"La Ingeniería Industrial de UAO en Cali tiene una particularidad única: se puede estudiar en modalidad híbrida o completamente virtual. Para estudiantes que trabajan, que tienen hijos o que viven fuera de Cali, esto cambia todo. Y con una inversión de $10.1M por semestre — $5.6M menos que en ICESI — la ecuación precio-calidad no tiene rival en la región.",
+   objeciones:[
+    {q:"¿Por qué no ICESI que tiene más reconocimiento para Ing. Industrial?",a:"ICESI tiene excelente reputación, pero a $15.7M por semestre el costo total supera los $140M. En UAO paga $90M en total con modalidad flexible y prácticas en las mismas empresas del Valle del Cauca. La diferencia es de $50M que puede invertir en un posgrado o en su emprendimiento."},
+    {q:"¿El programa ya está acreditado?",a:"El programa tiene Registro Calificado vigente y está en proceso de acreditación. Las empresas del sector contratan con base en el perfil del egresado y el nombre UAO, no solo en la acreditación del programa."}
+   ]},
+
+  {tab:"Ing",uao:{facultad:"Ingeniería y Ciencias Básicas",programa:"Ingeniería Informática",modalidad:"Híbrida",semestres:"9",valor:10111000,acred:"Acreditación Alta Calidad CNA",concentracion:"Día/Noche",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Ing. de Sistemas",modalidad:"Presencial",valor:15730000},
+    {universidad:"Javeriana Cali",programa:"Ing. Sistemas y Computación",modalidad:"Presencial",valor:13272000},
+    {universidad:"San Buenaventura",programa:"Ing. de Sistemas",modalidad:"Presencial",valor:10116000},
+    {universidad:"U. Santiago de Cali",programa:"Ing. de Sistemas",modalidad:"Presencial",valor:3208754}
+   ],
+   diferenciadores:[
+    "Modalidad híbrida y virtual disponible: única Ing. Informática en Cali que permite estudiar desde cualquier lugar con acceso a laboratorios de software cuando el estudiante lo necesite",
+    "36% más económico que ICESI Sistemas: Globant, Softek, PSL y las empresas tech de Cali contratan tanto egresados de ICESI como de UAO — la diferencia de $5M por semestre no se traduce en diferencia salarial inicial",
+    "Plan de estudios actualizado a 2025: Python, JavaScript, DevOps, Cloud AWS/Azure y metodologías ágiles desde primeros semestres — el perfil que las empresas de software requieren HOY",
+    "Cali como capital TI del Pacífico: el parque tecnológico de Cali tiene más de 300 empresas de software activas. UAO está ubicada en el mismo ecosistema empresarial",
+    "Prácticas garantizadas en el sector TI: convenio activo con empresas como Globant, Pragma, Asesoftware y startups del hub tecnológico de Cali"
+   ],
+   speech:"Globant contrata en UAO. PSL contrata en UAO. Pragma contrata en UAO. La Ingeniería Informática de UAO tiene el mismo perfil de egresado que ICESI, pero a $10.1M por semestre — eso es $5.6M de ahorro cada semestre, $50M en toda la carrera. Y con modalidad híbrida, usted puede trabajar mientras estudia.",
+   objeciones:[
+    {q:"¿Vale la pena la Informática de UAO para trabajar en Globant?",a:"Sí. Globant tiene un proceso de selección basado en habilidades técnicas, no en el nombre de la universidad. Tenemos egresados UAO en Globant, PSL y Softek. Lo que importa es el portafolio técnico que construya durante la carrera."},
+    {q:"¿Es lo mismo Ingeniería Informática que Ingeniería de Sistemas?",a:"Son perfiles muy similares. Informática en UAO tiene mayor énfasis en desarrollo de software y datos. Si su meta es ser desarrollador, analista de datos o arquitecto de software, Informática UAO es el programa correcto."}
+   ]},
+
+  {tab:"Ing",uao:{facultad:"Ingeniería y Ciencias Básicas",programa:"Ingeniería Mecánica",modalidad:"Presencial",semestres:"9",valor:9442000,acred:"Acreditación Alta Calidad CNA + ABET",concentracion:"Día",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"Javeriana Cali",programa:"Ing. Mecánica",modalidad:"Presencial",valor:13272000},
+    {universidad:"San Buenaventura",programa:"Ing. Industrial (ref.)",modalidad:"Presencial",valor:10116000},
+    {universidad:"U. del Valle",programa:"Ing. Mecánica (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "🌐 ACREDITACIÓN ABET INTERNACIONAL: doble sello CNA + ABET en Ingeniería Mecánica — reconocida en 40+ países, abre puertas en empresas multinacionales (Siemens, ABB, Bosch, General Electric) sin revalidar el título en el exterior",
+    "29% más económico que Javeriana Cali ($13.272.000/sem vs $9.442.000 UAO) con ABET incluido: ninguna otra universidad en Cali ofrece Ingeniería Mecánica con sello internacional a este precio — la mejor relación precio–credencial del suroccidente colombiano",
+    "ABET como argumento de cierre frente a padres de familia: si su hijo emigra o trabaja con multinacionales, el título UAO tiene validez automática en EE.UU., Canadá, Reino Unido y 38 países más — sin trámites ni costos adicionales",
+    "Formación aplicada al tejido industrial real del Valle: sector azucarero, farmacéutico, papel/cartón, manufactura y agroindustria — los mejores laboratorios prácticos no están en un edificio sino en las plantas de Riopaila, Colombina y Carvajal",
+    "Laboratorios CNC, torno, fresadora e impresión 3D industrial en campus + red de 800+ alumni en sector productivo vallecaucano"
+   ],
+   speech:"Ingeniería Mecánica UAO tiene doble acreditación CNA + ABET Internacional — una de las pocas en Colombia. ABET es el sello de ingeniería reconocido en 40 países: con el título UAO su hijo puede trabajar en Siemens, ABB o General Electric en cualquier país sin revalidar. Y esto a $9.4M por semestre, 40% menos que ICESI, que NO tiene ABET. La pregunta no es por qué UAO, la pregunta es: ¿cuántos ahorros quiere tener con un título que vale más?",
+   objeciones:[
+    {q:"¿UAO vs ICESI para Mecánica — cuál tiene más valor?",a:"UAO tiene ABET Internacional, ICESI no. Con UAO paga $6M menos por semestre Y obtiene un título reconocido en 40 países. ICESI tiene buena reputación local, UAO tiene reputación local + validez internacional. No hay comparación."},
+    {q:"¿Los laboratorios de mecánica UAO están bien equipados?",a:"Sí. El campus UAO tiene laboratorios de manufactura, CNC, materiales y diseño mecánico actualizados. Son los mismos equipos que usan las empresas industriales donde sus egresados van a trabajar."}
+   ]},
+
+  {tab:"Ing",uao:{facultad:"Ingeniería y Ciencias Básicas",programa:"Ingeniería Mecatrónica",modalidad:"Presencial",semestres:"9",valor:10716000,acred:"Acreditación Alta Calidad CNA + ABET",concentracion:"Día",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"Javeriana Cali",programa:"Ing. Electrónica (ref.)",modalidad:"Presencial",valor:13272000},
+    {universidad:"San Buenaventura",programa:"Ing. Industrial (ref.)",modalidad:"Presencial",valor:10116000},
+    {universidad:"U. del Valle",programa:"Ing. Mecatrónica (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "🌐 ACREDITACIÓN ABET INTERNACIONAL en Mecatrónica: uno de los ÚNICOS en Colombia — sello reconocido en 40+ países para ingeniería. El egresado UAO puede trabajar en plantas de automatización de Toyota, Siemens o ABB en cualquier país sin revalidar",
+    "19% más económico que referencias similares en Javeriana ($13.272.000/sem) con ABET incluido: obtiene doble acreditación CNA+ABET a un precio que ninguna otra privada en Cali puede igualar",
+    "Cali como laboratorio de automatización: la industria azucarera, farmacéutica y manufacturera del Valle del Cauca son referentes de automatización en Latinoamérica — las prácticas se hacen en plantas reales de Carvajal, Colombina y Smurfit Kappa",
+    "Énfasis en robótica industrial, control y sistemas embebidos: el perfil más demandado para proyectos de Industria 4.0 que ejecutan empresas nacionales e internacionales en la región",
+    "Perfil triple: mecánica + electrónica + programación con ABET = la credencial más versátil del mercado laboral industrial en el suroccidente colombiano"
+   ],
+   speech:"Mecatrónica UAO tiene algo único en Cali: acreditación ABET Internacional — reconocida en más de 40 países. Su hijo puede graduarse en UAO y trabajar directamente en plantas de Toyota, Bosch o Siemens en cualquier país sin revalidar el título. A $10.7M por semestre, con ABET incluido y 32% más económico que ICESI que no tiene este sello. La automatización industrial está en auge y UAO forma el perfil más completo del mercado.",
+   objeciones:[
+    {q:"¿Hay diferencia entre Mecatrónica UAO y Mecatrónica ICESI?",a:"El plan de estudios tiene contenidos equivalentes. La diferencia es el costo: $5M más por semestre en ICESI. Ambos tienen buenos convenios empresariales en Cali. El ROI de UAO es mejor."},
+    {q:"¿Cuánto gana un ingeniero mecatrónico al graduarse?",a:"En Colombia, un mecatrónico recién graduado gana entre $3.5M y $6M según la empresa. Con 3 años de experiencia supera los $8M. El perfil es altamente demandado en automatización."}
+   ]},
+
+  {tab:"Ing",uao:{facultad:"Ingeniería y Ciencias Básicas",programa:"Ingeniería Multimedia",modalidad:"Híbrida",semestres:"9",valor:10302000,acred:"Acreditación Alta Calidad CNA",concentracion:"Día/Noche",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Diseño de Medios Interactivos",modalidad:"Presencial",valor:15010000},
+    {universidad:"San Buenaventura",programa:"Ing. Multimedia",modalidad:"Presencial",valor:10482000},
+    {universidad:"U. del Valle",programa:"Ing. Multimedia (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "ÚNICO programa en Colombia que combina Ingeniería + Multimedia en modalidad HÍBRIDA: diseñado para el perfil tecnológico-creativo que demandan agencias digitales, empresas de entretenimiento y startups de experiencia digital",
+    "31% más económico que ICESI Diseño de Medios Interactivos ($15.010.000/sem) para el mismo perfil creativo-tecnológico: el ingeniero multimedia UAO accede a los mismos puestos de UX, desarrollo de videojuegos y producción digital que los egresados de universidades más costosas",
+    "Cali Ciudad Creativa de la Música UNESCO: ecosistema único de eventos, productoras audiovisuales y empresas de entretenimiento que no existe en ninguna otra ciudad colombiana — laboratorio creativo sin igual",
+    "Formación en realidad aumentada, VR, diseño de videojuegos y UX/UI: perfiles digitales con mayor crecimiento salarial en la economía digital latinoamericana (2024–2030)",
+    "Articulación con la industria del entretenimiento en Cali: Telepacífico, productoras audiovisuales y agencias creativas de la ciudad son los empleadores naturales de este perfil"
+   ],
+   speech:"Ingeniería Multimedia UAO es el programa donde la tecnología y la creatividad se unen. Única en modalidad híbrida, con $10.3M por semestre — mucho menos que ICESI o Andes — y formando perfiles de UX, videojuegos y realidad aumentada que ningún otro campus en Cali ofrece. Si su pasión es crear experiencias digitales, este es su lugar.",
+   objeciones:[
+    {q:"¿Es mejor estudiar diseño en Andes o multimedia en UAO?",a:"Depende del perfil: Andes forma diseñadores con énfasis artístico. UAO forma ingenieros con creatividad técnica. Para trabajar en desarrollo de apps, videojuegos o UX de empresas tech, UAO tiene el perfil correcto y a $10M menos por semestre."},
+    {q:"¿Hay mercado para multimedia en Cali?",a:"Creciendo rápidamente. La economía digital, el entretenimiento y las agencias de experiencia digital están contratando activamente. Además, este es un perfil que trabaja de forma remota internacionalmente desde Cali."}
+   ]},
+
+  // ===== EMPRESARIALES =====
+  {tab:"Emp",uao:{facultad:"Ciencias Empresariales y Jurídicas",programa:"Contaduría Pública",modalidad:"Presencial",semestres:"3.5 años",valor:4782700,acred:"Acreditación Alta Calidad CNA",concentracion:"Día/Noche",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Finanzas (ref.)",modalidad:"Presencial",valor:15730000},
+    {universidad:"San Buenaventura",programa:"Contaduría Pública",modalidad:"Presencial",valor:5897000},
+    {universidad:"U. Santiago de Cali",programa:"Contaduría Pública",modalidad:"Presencial",valor:4272700},
+    {universidad:"U. del Valle",programa:"Contaduría (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "Acreditación de Alta Calidad al precio más competitivo del mercado privado en Cali ($4.8M/sem): la combinación sello académico + accesibilidad económica que ninguna otra privada ofrece",
+    "70% más económico que ICESI (referencia $15.730.000/sem) y 19% vs San Buenaventura ($5.897.000/sem): misma Acreditación Alta Calidad CNA, misma empleabilidad en Big 4 y empresas del Valle — la diferencia de precio se convierte en capital de ahorro para el egresado",
+    "Formación en NIIF internacionales, auditoría y gestión tributaria: las tres competencias que exigen Deloitte, KPMG, EY y PwC para sus procesos de selección en Cali",
+    "Horario diurno con práctica empresarial desde 7° semestre: los estudiantes llegan a las grandes empresas del Valle 1–2 semestres antes que los competidores",
+    "Becas UAO cubren hasta el 100% del valor de matrícula para los mejores puntajes de admisión: el programa acreditado más accesible puede ser completamente gratuito para los mejores bachilleres"
+   ],
+   speech:"Contaduría Pública UAO es la contaduría con Acreditación de Alta Calidad más económica de las universidades privadas en Cali. A $4.8M por semestre, mientras Javeriana cobra $12.5M por el mismo título, UAO le ahorra más de $75M en toda la carrera. Y con nuestras becas por puntaje SABER 11, puede acceder a un descuento del 25 al 100% sobre la matrícula.",
+   objeciones:[
+    {q:"¿Javeriana no da más puertas en las firmas de auditoría?",a:"El reconocimiento de Javeriana es superior, pero la brecha se ha reducido. Deloitte y KPMG contratan activamente en UAO. Y el contador UAO llega con $75M de ahorro respecto a Javeriana — sin deudas, con capacidad de tomar un posgrado o crear empresa."},
+    {q:"¿Por qué estudiar en una privada si en U. del Valle es más económico?",a:"La U. del Valle es pública y exige un proceso altamente competitivo de admisión. Si no consigue cupo o necesita empezar ya, UAO ofrece el mismo nivel académico con admisión continua, servicios universitarios completos y red alumni activa."}
+   ]},
+
+  {tab:"Emp",uao:{facultad:"Ciencias Empresariales y Jurídicas",programa:"Derecho",modalidad:"Híbrida",semestres:"8",valor:9442000,acred:"Acreditación Alta Calidad",concentracion:"Diurna/Nocturna",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Derecho",modalidad:"Presencial",valor:15010000},
+    {universidad:"Javeriana Cali",programa:"Derecho",modalidad:"Presencial",valor:13827000},
+    {universidad:"San Buenaventura",programa:"Derecho",modalidad:"Presencial",valor:9009000},
+    {universidad:"U. Santiago de Cali",programa:"Derecho",modalidad:"Presencial",valor:4333354},
+    {universidad:"U. del Valle",programa:"Derecho (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "ÚNICO Derecho con Acreditación de Alta Calidad en modalidad HÍBRIDA en Cali: combina la rigurosidad académica con flexibilidad para trabajar — el perfil ideal para quien inicia su vida profesional durante la carrera",
+    "32% más económico que Javeriana Cali ($13.827.000/sem) y 37% vs ICESI ($15.010.000/sem): el abogado UAO tiene las mismas competencias para litigar, asesorar y ejercer el derecho — la diferencia de precio no impacta el acceso a ejercer la profesión",
+    "Consultorio Jurídico activo desde 3° año: el estudiante UAO ejerce derecho real antes de graduarse — resolviendo casos de personas naturales con supervisión docente desde el semestre 5",
+    "Horario nocturno disponible: el único Derecho acreditado en Cali con modalidad híbrida y nocturna — pensado para el bachiller que ya trabaja o tiene responsabilidades familiares",
+    "Enfoque en derecho empresarial, comercial y público: los campos de mayor demanda laboral en Cali — empresas del Valle del Cauca, contratos estatales y sector financiero"
+   ],
+   speech:"Derecho UAO es el único programa de Derecho acreditado en modalidad híbrida en Cali. $9.4M por semestre, con jornada diurna y nocturna disponible, y con un Consultorio Jurídico activo donde usted ejercerá casos reales desde el quinto semestre. Eso es $4.8M menos por semestre que Javeriana, con la misma acreditación y la misma posibilidad de tarjeta profesional.",
+   objeciones:[
+    {q:"¿El título de Derecho UAO tiene el mismo peso que Javeriana?",a:"Para ejercer la profesión, el título tiene el mismo valor legal. Para ingresar a las firmas de abogados más grandes del país, Javeriana puede tener más reconocimiento, pero para litigar, trabajar en empresas o el sector público, UAO tiene excelentes resultados. Y el ahorro de $40M en la carrera habla por sí solo."},
+    {q:"¿Por qué 8 semestres y no 10 como en otras universidades?",a:"UAO diseñó un plan de estudios compacto y eficiente. El abogado UAO sale 1 año antes al mercado laboral, lo que significa 1 año más de experiencia y salario acumulado. La acreditación respalda la calidad del plan."}
+   ]},
+
+  {tab:"Emp",uao:{facultad:"Ciencias Empresariales y Jurídicas",programa:"Mercadeo Global",modalidad:"Virtual",semestres:"8",valor:5463325,acred:"Acreditación Alta Calidad CNA",concentracion:"Noche",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Mercadeo Int. y Publicidad",modalidad:"Presencial",valor:15730000},
+    {universidad:"Javeriana Cali",programa:"Adm. de Empresas (ref.)",modalidad:"Presencial",valor:13543000},
+    {universidad:"San Buenaventura",programa:"Mercadeo y Neg. Int.",modalidad:"Presencial",valor:9583000},
+    {universidad:"U. Santiago de Cali",programa:"Mercadeo",modalidad:"Presencial",valor:3677231}
+   ],
+   diferenciadores:[
+    "ÚNICO Mercadeo acreditado de alta calidad en modalidad 100% VIRTUAL en Cali: acceso desde cualquier ciudad de Colombia o el exterior sin costo de traslado ni alojamiento",
+    "65% más económico que ICESI: el profesional de mercadeo digital tiene el mismo acceso a agencias, empresas de consumo masivo y el mercado digital a menos de la mitad del precio",
+    "Énfasis en mercados globales y digital marketing: Google Ads, Meta Business, analítica digital y comercio electrónico desde los primeros semestres — el perfil que contratan Unilever, Nestlé y las grandes agencias",
+    "Diseñado para el profesional en ejercicio: duración de 8 semestres con carga académica optimizada para quienes trabajan, con toda la interacción en línea y materiales sincrónicos y asincrónicos",
+    "Red UAO en sector consumo masivo: Tecnoquímicas, Comestibles Ricos, Colombina y distribuidores regionales son empleadores activos de este programa — prácticas empresariales sin necesidad de estar en Cali"
+   ],
+   speech:"Mercadeo Global UAO es la única carrera de Mercadeo acreditada en modalidad completamente virtual en Cali. A $5.5M por semestre, es decir $10M menos que ICESI, puede formarse en marketing digital, análisis de mercados y negocios globales desde su casa o ciudad. Ideal para quienes trabajan o están en otra región del país.",
+   objeciones:[
+    {q:"¿Un mercadeo virtual tiene el mismo reconocimiento que uno presencial?",a:"Sí. El título UAO tiene el mismo valor independientemente de la modalidad. Y en marketing digital, lo que importa es el portafolio de proyectos digitales que construya — algo que se hace igualmente bien en línea."},
+    {q:"¿Por qué no estudiar USC que es más barata en Cali?",a:"USC tiene precio similar pero no tiene acreditación de alta calidad ni énfasis en mercados globales. UAO tiene convenios con empresas multinacionales y red alumni mucho más robusta para empleabilidad."}
+   ]},
+
+  {tab:"Emp",uao:{facultad:"Ciencias Empresariales y Jurídicas",programa:"Mercadeo y Negocios Internacionales",modalidad:"Presencial",semestres:"8",valor:9952000,acred:"Acreditación Alta Calidad",concentracion:"Diurna/Nocturna",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Economía y Neg. Int.",modalidad:"Presencial",valor:15730000},
+    {universidad:"Javeriana Cali",programa:"Negocios Internacionales",modalidad:"Presencial",valor:15859000},
+    {universidad:"San Buenaventura",programa:"Mercadeo y Neg. Int.",modalidad:"Presencial",valor:9583000},
+    {universidad:"U. Santiago de Cali",programa:"Finanzas y Neg. Int.",modalidad:"Presencial",valor:5046465}
+   ],
+   diferenciadores:[
+    "Doble perfil Mercadeo + Negocios Internacionales en 8 semestres: la única universidad en Cali con este programa integrado sin tener que cursar dos carreras separadas",
+    "Cali como la ciudad del Pacífico colombiano: el puerto de Buenaventura —a 120 km— es el más importante del país. El internacionalista UAO opera en el contexto geopolítico real más relevante del suroccidente",
+    "37% más económico que ICESI ($15.730.000/sem) y 37% vs Javeriana Neg. Int. ($15.859.000/sem) con Acreditación Alta Calidad CNA: el profesional de negocios internacionales UAO accede a empresas exportadoras, banca de comercio exterior e instituciones multilaterales con el mismo perfil",
+    "Inglés como eje transversal: certificación de nivel B2 en el perfil de egreso — el nivel mínimo exigido por empresas multinacionales con sede en Cali (Nestlé, Unilever, 3M)",
+    "Acreditación Institucional UAO: el sello institucional reconocido por el MEN que distingue a UAO entre las 5% de instituciones del país con este nivel de calidad certificada"
+   ],
+   speech:"En Cali, la carrera de Mercadeo y Negocios Internacionales de UAO es la opción ideal para quien quiere trabajar en el comercio exterior del Pacífico. Con acreditación, doble perfil, inglés certificado y $9.9M por semestre — $5.8M menos que ICESI — es la carrera con mejor ROI para el sector internacional en el suroccidente.",
+   objeciones:[
+    {q:"¿Es mejor estudiar negocios internacionales en Bogotá?",a:"Para trabajar en organismos multilaterales o grandes corporaciones globales, Bogotá tiene ventajas de red. Pero para el comercio exterior del Pacífico colombiano —el corredor más dinámico del país— Cali y UAO son la mejor base. Y el costo de vida en Cali es 30% menor que en Bogotá."},
+    {q:"¿Con negocios internacionales UAO puedo trabajar fuera de Colombia?",a:"Sí. El perfil incluye inglés B2, competencias en comercio exterior e intercambios internacionales. Egresados UAO trabajan en Proexport, Bancolombia Comercio Exterior y empresas multinacionales en la región."}
+   ]},
+
+  {tab:"Emp",uao:{facultad:"Ciencias Empresariales y Jurídicas",programa:"Publicidad en Medios Digitales",modalidad:"Presencial / Virtual",semestres:"8",valor:10111000,acred:"Acreditación Alta Calidad CNA",concentracion:"Día Presencial · Noche Virtual",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Mercadeo Int. y Publicidad",modalidad:"Presencial",valor:15730000},
+    {universidad:"Javeriana Cali",programa:"Comunicación (ref.)",modalidad:"Presencial",valor:12195000},
+    {universidad:"U. Santiago de Cali",programa:"Publicidad",modalidad:"Presencial",valor:3848127}
+   ],
+   diferenciadores:[
+    "ÚNICO programa de Publicidad con Acreditación de Alta Calidad orientado 100% a medios digitales en Cali: el mercado de publicidad digital supera ya el 60% de la inversión publicitaria en Colombia",
+    "36% más económico que ICESI ($15.730.000/sem): el publicista digital UAO accede a agencias, marcas y plataformas de medios digitales con el mismo perfil técnico-creativo a menor inversión",
+    "Cali Ciudad Creativa UNESCO: el ecosistema publicitario de Cali es el tercero más activo de Colombia — agencias como Leo Burnett, McCann y startups creativas locales contratan activamente en UAO",
+    "Formación en programática, SEO/SEM, redes sociales y producción de contenidos: las 4 competencias que distinguen al publicista digital de los próximos 5 años en Colombia",
+    "Estudio de televisión, cabina de radio y laboratorio de fotografía en campus: el único publicista que puede producir, dirigir y publicar su propia campaña multimedia desde el pregrado"
+   ],
+   speech:"Publicidad en Medios Digitales UAO es la carrera que forma los creativos del ecosistema digital de Cali. Con acreditación, infraestructura de producción en campus y $10.1M por semestre, es la carrera más completa del mercado para quien quiere trabajar en agencias, marcas o crear su propia agencia digital. $5.6M por semestre menos que ICESI.",
+   objeciones:[
+    {q:"¿No es mejor Publicidad en Andes en Bogotá?",a:"Para grandes agencias multinacionales en Bogotá, Andes tiene más red. Pero a $20.5M por semestre vs $10.1M en UAO, la diferencia de $100M en la carrera es difícil de justificar. Para el mercado de Cali y el Pacífico, UAO es la mejor opción con acreditación y ecosistema empresarial local."},
+    {q:"¿Hay trabajo en publicidad digital o el mercado está saturado?",a:"La publicidad digital está creciendo: el mercado de e-commerce, redes sociales e influencer marketing en Colombia creció 38% en 2023. El perfil digital no está saturado — al contrario, hay escasez de publicistas con competencias técnicas."}
+   ]},
+
+  // ===== COMUNICACIÓN =====
+  {tab:"Com",uao:{facultad:"Com. Social, Humanidades y Artes",programa:"Cine",modalidad:"Presencial",semestres:"8",valor:10906000,acred:"Acreditación Alta Calidad CNA",concentracion:"Día",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Comunicación (ref.)",modalidad:"Presencial",valor:13270000},
+    {universidad:"Javeriana Cali",programa:"Comunicación (ref.)",modalidad:"Presencial",valor:12195000},
+    {universidad:"U. del Valle",programa:"Cine y Audiovisuales (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "ÚNICO programa de Cine en Cali con infraestructura audiovisual de nivel profesional: estudio de TV, plató, laboratorio de posproducción y cámara de cine en campus — el único en el suroccidente colombiano",
+    "Certificaciones opcionales en Animación, Posproducción/VFX y Realidad Virtual desde el pregrado: el único Cine en Colombia con rutas de profundización en tendencias de la industria cinematográfica global",
+    "Doble programa interno con Comunicación Social y Narrativas Digitales: el único Cine en Cali que permite titularse en dos programas simultáneamente sin costo adicional",
+    "Cali como ciudad de festivales: el Festival Internacional de Cine de Cali y el FICCI (Cartagena) son los principales escenarios de visibilidad para las producciones de estudiantes UAO — exposición nacional desde el pregrado",
+    "Plan de estudios en 8 semestres: el cineasta UAO entra al mercado 2 años antes que los programas de Bogotá, con un portafolio de producción real desarrollado durante la carrera"
+   ],
+   speech:"Estudiar Cine en UAO Cali significa tener acceso al único estudio de televisión y plató cinematográfico en una universidad del suroccidente colombiano. Con certificaciones en VFX, Animación y Realidad Virtual, la opción de doble programa y $10.9M por semestre, UAO forma cineastas que ya están produciendo al terminar su primer año.",
+   objeciones:[
+    {q:"¿Vale la pena estudiar Cine en Cali y no en Bogotá?",a:"Para la industria publicitaria y audiovisual local, Cali tiene ventajas únicas: es Ciudad Creativa UNESCO, tiene ecosistema de producción activo y costo de vida 30% menor que Bogotá. UAO además ofrece el único estudio cinematográfico universitario en la región."},
+    {q:"¿Cine tiene salidas laborales reales?",a:"Sí. La industria audiovisual colombiana factura $2.5 billones anuales y está en crecimiento. Las plataformas digitales (Netflix, HBO, Disney+) tienen co-producción con Colombia. El cineasta UAO sale con portafolio, certificaciones y red de festivales."}
+   ]},
+
+  {tab:"Com",uao:{facultad:"Com. Social, Humanidades y Artes",programa:"Comunicación Social – Periodismo",modalidad:"Presencial",semestres:"8",valor:10716000,acred:"Acreditación Alta Calidad CNA + SIP Internacional",concentracion:"Día/Noche",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Comunicación",modalidad:"Presencial",valor:13270000},
+    {universidad:"Javeriana Cali",programa:"Comunicación",modalidad:"Presencial",valor:12195000},
+    {universidad:"U. Santiago de Cali",programa:"Comunicación Social",modalidad:"Presencial",valor:5224605},
+    {universidad:"U. del Valle",programa:"Com. Social (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "🌎 ACREDITACIÓN SIP (Sociedad Interamericana de Prensa): doble sello CNA + SIP Internacional — la única acreditación de periodismo reconocida por los medios más importantes de las Américas (El País, El Tiempo, La Nación). Abre puertas en redacciones de EE.UU., México, España y toda Latinoamérica",
+    "Doble acreditación CNA + SIP sin costo adicional: ningún otro programa de Comunicación en Cali tiene este doble respaldo — Javeriana e ICESI solo tienen CNA, sin el reconocimiento internacional de SIP",
+    "Infraestructura de medios líder en Cali: estudio de televisión, cabina de radio, lab de fotografía y sala de edición multimedia propios — el comunicador UAO produce medios reales desde el 1° semestre",
+    "12% más económico que Javeriana Cali ($12.195.000/sem) y 19% vs ICESI ($13.270.000/sem) con DOBLE acreditación CNA+SIP: el mayor valor académico por peso invertido en Comunicación en el suroccidente colombiano",
+    "Doble programa interno con Cine y Narrativas Digitales: la única Comunicación en Cali que permite dos títulos simultáneos sin costo adicional significativo"
+   ],
+   speech:"Comunicación Social UAO tiene algo que ninguna otra universidad en Cali tiene: doble acreditación CNA + SIP (Sociedad Interamericana de Prensa). La SIP agrupa los medios más importantes de las Américas — El País, El Tiempo, La Nación — y su acreditación abre puertas en redacciones de toda Latinoamérica y España. Todo esto a $10.7M por semestre, con estudio de TV propio, cabina de radio y sala de edición. Javeriana e ICESI solo tienen CNA, sin el reconocimiento internacional que SIP da.",
+   objeciones:[
+    {q:"¿Javeriana o UAO para comunicación — cuál abre más puertas?",a:"Para medios locales y regionales, UAO tiene igual o mayor red que Javeriana Cali. Para trabajar en medios nacionales como El Tiempo o Semana, el título UAO con CLAEP tiene reconocimiento internacional. La diferencia de precio ($14M en total) habla a favor de UAO."},
+    {q:"¿El periodismo tiene futuro o el mercado está en crisis?",a:"El periodismo en papel sí está en declive. Pero el periodismo digital, los podcasts, el video para redes y el periodismo de datos están creciendo. UAO tiene el plan de estudios más actualizado en comunicación digital de Cali."}
+   ]},
+
+  {tab:"Com",uao:{facultad:"Com. Social, Humanidades y Artes",programa:"Narrativas y Entretenimiento Digital",modalidad:"Híbrida",semestres:"8",valor:9442000,acred:"Acreditación Alta Calidad CNA",concentracion:"Día",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Comunicación (ref.)",modalidad:"Presencial",valor:13270000},
+    {universidad:"Javeriana Cali",programa:"Comunicación (ref.)",modalidad:"Presencial",valor:12195000}
+   ],
+   diferenciadores:[
+    "ÚNICO programa con este nombre y perfil en Cali — no tiene competidor directo en el suroccidente: posición de monopolio académico en narrativas digitales e industria del entretenimiento",
+    "Modalidad HÍBRIDA en 8 semestres: diseñado para la generación Z que combina actividad digital con experiencias presenciales — el modelo educativo más alineado con sus hábitos",
+    "54% más económico que Andes y 40% vs ICESI para este mismo perfil: el narrador digital UAO accede a los mismos empleadores — Netflix, HBO, agencias de contenidos — a menor inversión",
+    "Doble programa interno con Cine y Comunicación Social: el perfil más versátil del mercado de entretenimiento — el estudiante puede hacer guión, producción y distribución digital en un solo plan de estudios",
+    "Énfasis en storytelling, podcasting, transmedia y creación de contenidos para plataformas: los 4 perfiles con mayor crecimiento en la industria del entretenimiento latinoamericano 2024–2030"
+   ],
+   speech:"Narrativas y Entretenimiento Digital UAO es el único programa de su tipo en Cali. Si su pasión es crear contenido para Netflix, YouTube, Spotify o plataformas de juegos, este es el único programa en el suroccidente que lo forma para eso. Modalidad híbrida, 8 semestres, $9.4M — y posibilidad de doble título con Cine.",
+   objeciones:[
+    {q:"¿Con narrativas digitales puedo trabajar en producción audiovisual?",a:"Sí. El perfil incluye guión, producción transmedia y distribución digital. Nuestros egresados trabajan en plataformas, agencias de contenido y producción audiovisual para marcas. Es el perfil del creador de contenido profesional."},
+    {q:"¿Es diferente a Comunicación Social?",a:"Sí. Comunicación tiene énfasis en periodismo y comunicación organizacional. Narrativas y Entretenimiento está orientado a la industria creativa y el entretenimiento digital. Son perfiles laborales distintos."}
+   ]},
+
+  {tab:"Com",uao:{facultad:"Com. Social, Humanidades y Artes",programa:"Psicología",modalidad:"Híbrida",semestres:"8",valor:9442000,acred:"Acreditación Alta Calidad CNA",concentracion:"Día",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Psicología",modalidad:"Presencial",valor:13140000},
+    {universidad:"Javeriana Cali",programa:"Psicología",modalidad:"Presencial",valor:11927000},
+    {universidad:"San Buenaventura",programa:"Psicología",modalidad:"Presencial",valor:9337000},
+    {universidad:"U. Santiago de Cali",programa:"Psicología",modalidad:"Presencial",valor:5746314},
+    {universidad:"U. del Valle",programa:"Psicología (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "ÚNICA Psicología con Acreditación de Alta Calidad en modalidad HÍBRIDA en Cali: combina formación clínica presencial con teoría en línea — la opción ideal para quien vive fuera de Cali o trabaja",
+    "21% más económico que Javeriana Cali ($11.927.000/sem) y 28% vs ICESI ($13.140.000/sem): el psicólogo UAO accede a los mismos campos laborales — clínica, organizacional, educativa y social — con formación integral equivalente",
+    "Formación integral en 4 enfoques: clínico, organizacional, educativo y social — el psicólogo UAO puede ejercer en empresas, colegios, hospitales y consultorías sin especialización adicional",
+    "Prácticas en más de 40 entidades en Cali: hospitales, empresas, colegios y ONG son los escenarios de práctica — la experiencia clínica y organizacional más diversa del suroccidente",
+    "Plan de estudios en 8 semestres: el psicólogo UAO sale 2 semestres antes que en la mayoría de universidades con programas de 10 semestres — ventaja competitiva de tiempo real"
+   ],
+   speech:"Psicología UAO es la única con Acreditación de Alta Calidad en modalidad híbrida en Cali. A $9.4M por semestre — $2.5M menos que Javeriana — con prácticas en más de 40 entidades de la ciudad y duración de 8 semestres, es el programa de Psicología con mejor relación calidad-precio-empleabilidad del suroccidente colombiano.",
+   objeciones:[
+    {q:"¿Es mejor Psicología Javeriana o UAO?",a:"Javeriana tiene más trayectoria en Psicología clínica. Pero UAO ofrece el mismo nivel de acreditación a $2.5M menos por semestre, con modalidad híbrida y 4 énfasis. Para RR.HH. y psicología organizacional, UAO tiene mejor red empresarial."},
+    {q:"¿Con Psicología UAO puedo hacer consultorio privado?",a:"Sí. El título UAO permite el ejercicio independiente. El registro profesional lo otorga el Colegio Colombiano de Psicólogos independientemente de la universidad. Lo que importa es la formación, que UAO tiene con acreditación."}
+   ]},
+
+  // ===== DISEÑO / ARQUITECTURA =====
+  {tab:"Dis",uao:{facultad:"Arquitectura, Urbanismo y Diseño",programa:"Arquitectura",modalidad:"Presencial",semestres:"9",valor:10111000,acred:"Acreditación Alta Calidad",concentracion:"Diurna",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"Javeriana Cali",programa:"Arquitectura",modalidad:"Presencial",valor:11802000},
+    {universidad:"San Buenaventura",programa:"Arquitectura",modalidad:"Presencial",valor:11026000},
+    {universidad:"U. del Valle",programa:"Arquitectura (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "Acreditación de Alta Calidad: el sello que reconocen el Consejo Profesional Nacional de Arquitectura y constructoras del Valle del Cauca para contratar arquitectos a posiciones de dirección",
+    "14% más económico que Javeriana Cali ($11.802.000/sem) y 8% vs San Buenaventura ($11.026.000/sem): el arquitecto UAO compite por los mismos proyectos con Acreditación Alta Calidad CNA",
+    "Campus UAO como referente arquitectónico: el edificio E10 de UAO recibió premio de arquitectura sostenible en 2023 — el estudiante aprende arquitectura estudiando en un edificio galardonado",
+    "Enfoque en sostenibilidad y BIM (Building Information Modeling): las habilidades más demandadas por el sector constructor colombiano en la era de la construcción 4.0",
+    "Convenios con Camacol Valle, Lonja de Propiedad Raíz y la Alcaldía de Cali: prácticas en proyectos de vivienda de interés social, planeación urbana y proyectos de ciudad en curso"
+   ],
+   speech:"Arquitectura UAO tiene Acreditación de Alta Calidad y un campus que es en sí mismo un laboratorio de arquitectura sostenible. A $10.1M por semestre — $3.4M menos que Javeriana — el arquitecto UAO aprende en un edificio premiado, con convenios en Camacol y con formación en BIM y sostenibilidad que el mercado exige.",
+   objeciones:[
+    {q:"¿Arquitectura UAO vs Javeriana — ¿cuál da más oportunidades?",a:"Para grandes proyectos de Bogotá o Medellín, Javeriana puede tener más red. Para el mercado de Cali, el Valle del Cauca y el Pacífico, UAO tiene igual reconocimiento, mejores convenios regionales y $3.4M menos por semestre."},
+    {q:"¿BIM es importante para Arquitectura?",a:"Es obligatorio. En Colombia ya es requisito para licitaciones públicas grandes. UAO incluye BIM en el plan de estudios porque sabe que sin esta habilidad el arquitecto no puede competir en proyectos de envergadura."}
+   ]},
+
+  {tab:"Dis",uao:{facultad:"Arquitectura, Urbanismo y Diseño",programa:"Diseño de la Comunicación Gráfica",modalidad:"Presencial",semestres:"9",valor:10111000,acred:"Acreditación Alta Calidad",concentracion:"Diurna",becas_url:"https://docs.google.com/spreadsheets/d/1GdxZdkTENIWhN7JaXU7Nb-UPngr6kavO/edit"},
+      competidores:[
+    {universidad:"ICESI",programa:"Diseño de Medios Interactivos",modalidad:"Presencial",valor:15010000},
+    {universidad:"Javeriana Cali",programa:"Diseño de Com. Visual",modalidad:"Presencial",valor:12844000},
+    {universidad:"U. del Valle",programa:"Diseño Gráfico (pública)",modalidad:"Presencial",valor:0}
+   ],
+   diferenciadores:[
+    "Acreditación de Alta Calidad: el único Diseño Gráfico acreditado en Cali — el sello que distingue el programa ante empleadores como agencias de publicidad, firmas de diseño y empresas de branding regional",
+    "33% más económico que ICESI Diseño de Medios Interactivos ($15.010.000/sem) y 21% vs Javeriana ($12.844.000/sem): la brecha de precio no se traduce en brecha de oportunidades laborales en agencias de Cali, Medellín o Bogotá",
+    "Cali Ciudad Creativa de la Música UNESCO: el ecosistema de diseño e industrias creativas de Cali es único en Colombia — el diseñador gráfico UAO trabaja en el entorno creativo más vibrante del país",
+    "Plan de estudios actualizado con UX/UI, branding digital y motion graphics: los perfiles de diseño con mayor demanda y mayor salario en la economía digital latinoamericana 2024–2030",
+    "Laboratorios de fotografía, diseño digital y taller de producción en campus: el diseñador UAO produce proyectos reales de cliente desde el segundo año de la carrera"
+   ],
+   speech:"Diseño de la Comunicación Gráfica UAO tiene Acreditación de Alta Calidad — única en Cali — y cuesta $10.1M por semestre. Cali, Ciudad Creativa UNESCO, es el laboratorio de diseño más estimulante del país, y UAO tiene los laboratorios de fotografía y producción digital para aprovecharlo desde el día uno.",
+   objeciones:[
+    {q:"¿No es mejor Diseño en ICESI o en Bogotá?",a:"ICESI es excelente pero cobra $5M más por semestre. Para el mercado de Cali y el ecosistema creativo local, UAO es la mejor opción. Para agencias globales, el portafolio importa más que la universidad — y UAO le da las herramientas para construirlo."},
+    {q:"¿Un diseñador puede trabajar de forma independiente?",a:"Sí, y es el perfil con mayor crecimiento freelance en Colombia. El diseñador UAO sale con portafolio real, competencias en UX y herramientas Adobe completas. El trabajo independiente para marcas y agencias digitales es una salida natural."}
+   ]}
+];
+
+// =====================================================================
+// HELPERS
+// =====================================================================
+function fmt(v){if(!v||v<=0)return "N/D";return "$"+Number(v).toLocaleString("es-CO");}
+function pctDiff(uao,comp){if(!uao||!comp||uao<=0||comp<=0)return null;return Math.round(((comp-uao)/comp)*100);}
+function modalBadge(m){
+  if(!m)return "";const ml=m.toLowerCase();
+  if(ml.includes("híbr")||ml.includes("hibr"))return '<span class="badge b-hybrid">Híbrida</span>';
+  if(ml.includes("virtual"))return '<span class="badge b-virtual">Virtual</span>';
+  return '<span class="badge b-green">Presencial</span>';
+}
+function acredBadge(a){
+  if(!a)return "";
+  var html="";
+  if(a.toLowerCase().includes("alta")||a.toLowerCase().includes("cna")||a.toLowerCase().includes("acreditado"))
+    html+='<span class="badge b-green">✦ Alta Calidad CNA</span>';
+  else
+    html+='<span class="badge b-gray">Reg. Calificado</span>';
+  if(a.includes("ABET"))
+    html+='<span class="badge b-teal" style="background:#fef3c7;color:#92400e;">🌐 ABET Internacional</span>';
+  if(a.includes("SIP")||a.includes("Interamericana"))
+    html+='<span class="badge b-purple" style="background:#ede9fe;color:#5b21b6;">🌎 SIP Internacional</span>';
+  return html;
+}
+let chartInstances={};
+function renderChart(id){
+  var canvas=document.getElementById("chart_"+id);
+  if(!canvas)return;
+  if(chartInstances[id])chartInstances[id].destroy();
+  var labels=JSON.parse(canvas.dataset.labels||"[]");
+  var values=JSON.parse(canvas.dataset.values||"[]");
+  var colors=JSON.parse(canvas.dataset.colors||"[]");
+  chartInstances[id]=new Chart(canvas,{
+    type:"bar",
+    data:{labels:labels,datasets:[{data:values,backgroundColor:colors,borderRadius:5,barThickness:18}]},
+    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return " $"+(ctx.raw/1000000).toFixed(1)+"M/sem";}}},
+      scales:{x:{ticks:{callback:function(v){return "$"+(v/1000000).toFixed(0)+"M";},font:{size:9}},grid:{color:"#f1f5f9"}},y:{ticks:{font:{size:10,weight:"600"}},grid:{display:false}}}}}
+  });
+}
+function toggleCard(id){
+  var body=document.getElementById("body_"+id);
+  var chevron=document.getElementById("chev_"+id);
+  var isOpen=body.classList.contains("open");
+  body.classList.toggle("open",!isOpen);
+  chevron.style.transform=isOpen?"":"rotate(180deg)";
+  if(!isOpen)setTimeout(function(){renderChart(id);},50);
+}
+function filterCards(prefix){
+  var q=document.getElementById("search"+prefix).value.toLowerCase();
+  document.getElementById("list"+prefix).querySelectorAll(".prog-card").forEach(function(card){
+    card.style.display=(card.dataset.search||"").includes(q)?"":"none";
+  });
+}
+function showTab(id,btn){
+  document.querySelectorAll(".section").forEach(function(s){s.classList.remove("active");});
+  document.querySelectorAll(".nav-btn").forEach(function(b){b.classList.remove("active");});
+  document.getElementById(id).classList.add("active");btn.classList.add("active");
+}
+
+// =====================================================================
+// BUILD PROGRAM CARDS
+// =====================================================================
+function buildList(tabId, kpiId, listId, filterId, searchId){
+  var groups=PREG_DATA.filter(function(d){return d.tab===tabId;});
+  buildKPI(groups,kpiId);
+  var list=document.getElementById(listId);
+  list.innerHTML="";
+  var faculties=[...new Set(groups.map(function(g){return g.uao.facultad;}))];
+  if(filterId&&faculties.length>1){
+    var fb=document.getElementById(filterId);
+    fb.innerHTML='<button class="filter-btn active" onclick="applyF(\'\',this,\''+listId+'\')">Todos</button>';
+    faculties.forEach(function(f){
+      fb.innerHTML+='<button class="filter-btn" onclick="applyF(\''+f+'\',this,\''+listId+'\')">'+f.substring(0,30)+'</button>';
+    });
+  }
+  groups.forEach(function(g,i){
+    var id=tabId+"_"+i;
+    var uao=g.uao;
+    var comps=g.competidores||[];
+    var compVals=comps.map(function(c){return c.valor;}).filter(function(v){return v&&v>0;});
+    var avgComp=compVals.length?compVals.reduce(function(a,b){return a+b;})/compVals.length:0;
+    var priceBadge="";
+    if(uao.valor>0&&avgComp>0){
+      var p=pctDiff(uao.valor,avgComp);
+      if(p>=20)priceBadge='<span class="badge b-green">↓'+p+'% vs promedio</span>';
+      else if(p>=10)priceBadge='<span class="badge b-amber">↓'+p+'% vs promedio</span>';
+      else if(p<-10)priceBadge='<span class="badge b-red">↑'+Math.abs(p)+'% vs promedio</span>';
+    }
+    var compRows="";
+    comps.forEach(function(c){
+      var p=pctDiff(uao.valor,c.valor);
+      var pctHtml="";
+      if(p!==null){
+        if(p>=10)pctHtml='<span class="diff-pct pct-win">UAO −'+p+'%</span>';
+        else if(p<=-10)pctHtml='<span class="diff-pct pct-lose">UAO +'+(Math.abs(p))+'%</span>';
+        else pctHtml='<span class="diff-pct pct-tie">Similar</span>';
+      }
+      var vc=(c.valor&&uao.valor&&c.valor>uao.valor)?"val-higher":(c.valor&&uao.valor&&c.valor<uao.valor?"val-lower":"val-similar");
+      compRows+='<tr><td><div class="comp-uni">'+c.universidad+'</div><div class="comp-prog">'+c.programa+'</div></td>'+
+        '<td>'+modalBadge(c.modalidad)+'</td>'+
+        '<td><div class="comp-val '+vc+'">'+fmt(c.valor)+'</div>'+pctHtml+'</td></tr>';
+    });
+    if(!compRows)compRows='<tr><td colspan="3" style="color:var(--muted);font-size:12px;padding:10px">Sin competidores identificados</td></tr>';
+    var alertStrip="";
+    if(uao.acred&&uao.acred.includes("ABET"))
+      alertStrip='<div style="padding:10px 20px;background:#fef3c7;border-top:2px solid #f59e0b;font-size:12px;font-weight:600;color:#92400e;display:flex;align-items:center;gap:8px;">🌐 ABET Internacional — título reconocido en 40+ países sin revalidación · Argumento #1 de cierre frente a ICESI y Javeriana</div>';
+    else if(uao.acred&&uao.acred.includes("SIP"))
+      alertStrip='<div style="padding:10px 20px;background:#ede9fe;border-top:2px solid #7c3aed;font-size:12px;font-weight:600;color:#5b21b6;display:flex;align-items:center;gap:8px;">🌎 Acreditación SIP Internacional — única en el suroccidente, reconocida por los principales medios de las Américas</div>';
+    var diffHtml=(g.diferenciadores||[]).map(function(d,j){
+      return '<div class="diff-item"><div class="diff-num">'+(j+1)+'</div><div class="diff-text">'+d+'</div></div>';
+    }).join("");
+    var chartLabels=["UAO"].concat(comps.filter(function(c){return c.valor;}).slice(0,5).map(function(c){return c.universidad.substring(0,10);}));
+    var chartValues=[uao.valor].concat(comps.filter(function(c){return c.valor;}).slice(0,5).map(function(c){return c.valor;}));
+    var REDS=["#DC142D","#475569","#64748b","#94a3b8","#b0bec5","#cfd8dc"];
+    var chartColors=comps.filter(function(c){return c.valor;}).slice(0,5).map(function(_,ci){return REDS[ci+1];});
+    chartColors=["#DC142D"].concat(chartColors);
+    var hasChart=uao.valor>0&&comps.some(function(c){return c.valor;});
+    var objHtml="";
+    if(g.objeciones&&g.objeciones.length){
+      objHtml='<div style="padding:0 20px 16px;border-top:1px solid var(--border);background:#fafaf8;"><div class="speech-title" style="margin-top:14px;">💬 Manejo de Objeciones Frecuentes</div>';
+      g.objeciones.forEach(function(o){
+        objHtml+='<div style="background:#fff;border-radius:8px;padding:10px 12px;margin-bottom:8px;border:1px solid var(--border);">'+
+          '<div style="font-size:12px;font-weight:700;color:#334155;margin-bottom:4px;">🔴 '+o.q+'</div>'+
+          '<div style="font-size:12px;color:#059669;line-height:1.5;">✅ '+o.a+'</div></div>';
+      });
+      objHtml+='</div>';
+    }
+    var card=document.createElement("div");card.className="prog-card";
+    card.dataset.search=(uao.programa+"|"+uao.facultad).toLowerCase();
+    card.innerHTML=
+      '<div class="prog-header" onclick="toggleCard(\''+id+'\')">'+
+        '<div class="prog-title-wrap">'+
+          '<div class="prog-name">'+uao.programa+'</div>'+
+          '<div class="prog-meta">'+modalBadge(uao.modalidad)+acredBadge(uao.acred)+
+            '<span class="badge b-purple">'+uao.semestres+' sem.</span>'+
+            priceBadge+
+            '<span class="badge b-gray" style="font-weight:400;color:#94a3b8">'+uao.concentracion+'</span>'+
+          '</div>'+
+        '</div>'+
+        '<div class="prog-price"><div class="price-uao">'+fmt(uao.valor)+'</div>'+
+          '<div class="price-label">por semestre · '+comps.length+' competidores</div></div>'+
+        '<span class="chevron" id="chev_'+id+'">▼</span>'+
+      '</div>'+
+      '<div class="prog-body" id="body_'+id+'">'+alertStrip+
+        '<div class="body-grid">'+
+          '<div class="comp-section"><div class="comp-section-title">🏫 Análisis de competidores ('+comps.length+')</div>'+
+            '<table class="comp-table"><thead><tr><th>Universidad / Programa</th><th>Modalidad</th><th>Valor & Diferencia</th></tr></thead>'+
+            '<tbody>'+compRows+'</tbody></table></div>'+
+          '<div class="diff-section"><div class="diff-section-title">⭐ ¿Por qué elegir este programa UAO?</div>'+diffHtml+'</div>'+
+        '</div>'+
+        (hasChart?'<div class="chart-wrap"><div class="chart-title">📊 Comparativo de precios por semestre (COP)</div><div class="chart-mini"><canvas id="chart_'+id+'" data-labels=\''+JSON.stringify(chartLabels)+'\' data-values=\''+JSON.stringify(chartValues)+'\' data-colors=\''+JSON.stringify(chartColors)+'\'></canvas></div></div>':'')+
+        objHtml+
+        '<div class="becas-box">📋 <strong style="color:var(--uao-mid)">Becas y beneficios UAO:</strong> <a class="becas-link" href="'+uao.becas_url+'" target="_blank">Ver tabla completa de becas y descuentos →</a></div>'+
+      '</div>';
+    list.appendChild(card);
+  });
+}
+function applyF(fac,btn,listId){
+  btn.closest(".filter-bar").querySelectorAll(".filter-btn").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+  document.getElementById(listId).querySelectorAll(".prog-card").forEach(function(card){
+    card.style.display=(!fac||card.dataset.search.includes(fac.toLowerCase()))?"":"none";
+  });
+}
+function buildKPI(groups,containerId){
+  var prices=groups.map(function(g){return g.uao.valor;}).filter(function(v){return v>0;});
+  var allComps=groups.flatMap(function(g){return g.competidores||[];});
+  var allPrices=allComps.map(function(c){return c.valor;}).filter(function(v){return v&&v>0;});
+  var tierPrices=allPrices.filter(function(v){return v>=6000000;}); // privadas misma franja
+  var avgUAO=prices.length?prices.reduce(function(a,b){return a+b;})/prices.length:0;
+  var avgAll=allPrices.length?allPrices.reduce(function(a,b){return a+b;})/allPrices.length:0;
+  var avgTier=tierPrices.length?tierPrices.reduce(function(a,b){return a+b;})/tierPrices.length:0;
+  var savAll=avgAll>0?Math.round(((avgAll-avgUAO)/avgAll)*100):null;
+  var savTier=avgTier>0?Math.round(((avgTier-avgUAO)/avgTier)*100):null;
+  var acred=groups.filter(function(g){return(g.uao.acred||"").toLowerCase().includes("alta")}).length;
+  function kpiSavings(val,note,lbl){
+    var col,tag;
+    if(val===null){col="#94a3b8";tag="—";}
+    else if(val>0){col="#059669";tag="↓"+val+"%";}
+    else if(val<0){col="#f59e0b";tag="↑"+Math.abs(val)+"%";}
+    else{col="#64748b";tag="≈ Similar";}
+    return'<div class="kpi" style="border-top-color:'+col+'"><div class="kpi-val" style="color:'+col+';font-size:22px">'+tag+'</div>'+
+      '<div class="kpi-lbl">'+lbl+'</div><div class="kpi-sub">'+note+'</div></div>';
+  }
+  document.getElementById(containerId).innerHTML=
+    '<div class="kpi"><div class="kpi-val" style="color:var(--uao-dark)">'+groups.length+'</div><div class="kpi-lbl">Programas</div><div class="kpi-sub">En esta facultad</div></div>'+
+    '<div class="kpi"><div class="kpi-val" style="color:#7c3aed">'+acred+'</div><div class="kpi-lbl">Acred. Alta Calidad</div><div class="kpi-sub">Programas</div></div>'+
+    kpiSavings(savTier,"vs. privadas pares (>$6M/sem)","Ahorro vs. privadas")+
+    kpiSavings(savAll,"incl. públicas del mercado","Ahorro vs. todo el mercado")+
+    '<div class="kpi" style="border-top-color:var(--uao-mid)"><div class="kpi-val" style="color:var(--uao-mid);font-size:20px">'+fmt(Math.round(avgUAO))+'</div><div class="kpi-lbl">Precio prom. UAO</div><div class="kpi-sub">Por semestre</div></div>';
+}
+
+// =====================================================================
+// OVERVIEW CHARTS
+// =====================================================================
+function buildOverview(){
+  buildKPI(PREG_DATA,"kpiOverview");
+  // Prices chart
+  var sorted=[...PREG_DATA].sort(function(a,b){return b.uao.valor-a.uao.valor;});
+  var labels=sorted.map(function(d){return d.uao.programa.substring(0,28);});
+  var values=sorted.map(function(d){return d.uao.valor;});
+  var colors=sorted.map(function(d){return d.uao.acred.toLowerCase().includes("alta")?"#DC142D":"#94a3b8";});
+  var ctx1=document.getElementById("chartPrices").getContext("2d");
+  new Chart(ctx1,{type:"bar",data:{labels:labels,datasets:[{data:values,backgroundColor:colors,borderRadius:4,barThickness:16}]},
+    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+      layout:{padding:{right:12}},
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{
+          label:function(c){return " $"+(c.raw/1000000).toFixed(2)+"M/sem";},
+          title:function(items){return labels[items[0].dataIndex];}
+        }}},
+      scales:{
+        x:{ticks:{callback:function(v){return "$"+(v/1000000).toFixed(0)+"M";},font:{size:10}},grid:{color:"#f1f5f9"}},
+        y:{ticks:{font:{size:11,weight:"500"},autoSkip:false,maxRotation:0,padding:8},
+           grid:{display:false},
+           afterFit:function(axis){axis.width=210;}}
+      }}});
+  // Modality chart
+  var mods={"Presencial":0,"Híbrida":0,"Virtual":0};
+  PREG_DATA.forEach(function(d){
+    var m=d.uao.modalidad.toLowerCase();
+    if(m.includes("híbr")||m.includes("hibr"))mods["Híbrida"]++;
+    else if(m.includes("virtual"))mods["Virtual"]++;
+    else mods["Presencial"]++;
+  });
+  var ctx2=document.getElementById("chartModality").getContext("2d");
+  new Chart(ctx2,{type:"doughnut",data:{labels:Object.keys(mods),datasets:[{data:Object.values(mods),backgroundColor:["#DC142D","#7c3aed","#2563eb"],borderWidth:2,borderColor:"#f5f0eb"}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{font:{size:11},padding:12}}}}});
+  // Positioning scatter
+  var uaoItems=PREG_DATA.map(function(d){return {x:d.uao.valor/1000000,y:d.competidores.filter(function(c){return c.valor>0;}).length,prog:d.uao.programa.substring(0,15)};});
+  var compAvgs=PREG_DATA.map(function(d){
+    var vals=d.competidores.filter(function(c){return c.valor>0;}).map(function(c){return c.valor/1000000;});
+    return vals.length?vals.reduce(function(a,b){return a+b;})/vals.length:0;
+  }).filter(function(v){return v>0;});
+  var ctx3=document.getElementById("chartPositioning").getContext("2d");
+  new Chart(ctx3,{type:"scatter",
+    data:{datasets:[
+      {label:"UAO (precio UAO vs competidores)",data:uaoItems,backgroundColor:"#DC142D",pointRadius:8,pointHoverRadius:10},
+      {label:"Precio promedio competidores",data:compAvgs.map(function(v,i){return {x:v,y:i+1};}),backgroundColor:"rgba(148,163,184,0.4)",pointRadius:5}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:"bottom"},tooltip:{callbacks:{label:function(ctx){return " $"+ctx.raw.x.toFixed(1)+"M/sem"+(ctx.raw.prog?" — "+ctx.raw.prog:"");}}}},
+      scales:{x:{title:{display:true,text:"Precio por semestre (millones COP)"},ticks:{callback:function(v){return "$"+v+"M";}}},y:{title:{display:true,text:"N° competidores identificados"}}}}});
+}
+
+// =====================================================================
+// SPEECH COMERCIAL TAB
+// =====================================================================
+function buildSpeech(){
+  var container=document.getElementById("speechContainer");
+  container.innerHTML="";
+  PREG_DATA.forEach(function(g){
+    var uao=g.uao;
+    var card=document.createElement("div");
+    card.className="speech-card";
+    var objRows=(g.objeciones||[]).map(function(o){
+      return '<div class="objection-row"><div class="obj-q">🔴 '+o.q+'</div><div class="obj-a">✅ '+o.a+'</div></div>';
+    }).join("");
+    var compsWithPrice=g.competidores.filter(function(c){return c.valor>0;});
+    var maxComp=compsWithPrice.length?compsWithPrice.reduce(function(a,b){return a.valor>b.valor?a:b;}):null;
+    var financialArg=maxComp?'💰 <strong>Argumento financiero:</strong> '+uao.programa+' en UAO cuesta <strong>'+fmt(uao.valor)+'</strong>/semestre vs <strong>'+fmt(maxComp.valor)+'</strong> en '+maxComp.universidad+' — un ahorro de <strong>'+fmt(maxComp.valor-uao.valor)+'</strong> por semestre o aprox. <strong>'+fmt((maxComp.valor-uao.valor)*parseInt(uao.semestres||8))+'</strong> en toda la carrera.':'';
+    card.innerHTML=
+      '<div class="speech-prog-name">'+uao.programa+'</div>'+
+      '<div class="speech-prog-sub">'+uao.facultad+' · '+uao.modalidad+' · '+uao.semestres+' semestres · '+uao.acred+'</div>'+
+      (financialArg?'<div style="background:#f0fdf4;border-radius:6px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:#334155;line-height:1.5;">'+financialArg+'</div>':'')+
+      '<div class="speech-section"><div class="section-lbl">🗣️ Speech de apertura</div><div class="section-txt">'+(g.speech||'')+'</div></div>'+
+      '<div class="speech-section"><div class="section-lbl">⭐ 3 argumentos de cierre</div><div class="section-txt">'+
+        (g.diferenciadores||[]).slice(0,3).map(function(d,i){return (i+1)+'. '+d;}).join('<br><br>')+
+      '</div></div>'+
+      (objRows?'<div class="speech-section"><div class="section-lbl">💬 Objeciones frecuentes</div>'+objRows+'</div>':'')+
+      '<div class="speech-section"><div class="section-lbl">📋 Becas como argumento</div><div class="section-txt">UAO ofrece descuentos del 10% al 100% sobre la matrícula según puntaje SABER 11, condición socioeconómica, convenios empresariales y mérito académico durante la carrera. <strong>Use las becas como argumento de cierre: "¿Sabe que podría acceder a un descuento del 25% si su puntaje ICFES supera 300 puntos?"</strong> Enlace tabla becas: <a href="'+uao.becas_url+'" target="_blank" style="color:var(--uao-mid)">Ver becas UAO</a></div></div>';
+    container.appendChild(card);
+  });
+}
+
+// =====================================================================
+// INIT
+// =====================================================================
+document.addEventListener("DOMContentLoaded",function(){
+  buildList("Ing","kpiIng","listIng","filterIng","searchIng");
+  buildList("Emp","kpiEmp","listEmp","filterEmp","searchEmp");
+  buildList("Com","kpiCom","listCom","filterCom","searchCom");
+  buildList("Dis","kpiDis","listDis",null,"searchDis");
+  buildOverview();
+  buildSpeech();
+});
+</script>
+</body>
+</html>
