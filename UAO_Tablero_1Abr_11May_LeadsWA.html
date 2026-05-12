@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tablero de Control · Mercadeo Digital UAO · 1 Abr – 11 May 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg0:#040b15;--bg1:#081422;--bg2:#0d1e32;--bg3:#162d47;
+  --blue:#1a6df5;--blu2:#5298ff;--teal:#0cbfaa;--gold:#f2a922;
+  --rose:#f0505f;--vio:#9c77f6;--grn:#2fd98c;--sky:#20d0eb;
+  --wa:#25d366;--wa2:#128c7e;--wa3:rgba(37,211,102,0.85);
+  --lead:#5298ff;--lead2:rgba(82,152,255,0.85);
+  --hi:#eaf0fb;--md:#7ea3c8;--lo:#3b5d7c;--dim:#1b3352;
+  --bdr:rgba(255,255,255,0.052);--bdrm:rgba(255,255,255,0.10);
+  --card:rgba(255,255,255,0.022);
+  --r1:7px;--r2:12px;--r3:17px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg0);color:var(--hi);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 45% at 5% 0%,rgba(26,109,245,.12) 0%,transparent 55%),
+             radial-gradient(ellipse 40% 40% at 95% 95%,rgba(37,211,102,.07) 0%,transparent 50%),
+             radial-gradient(ellipse 35% 35% at 80% 5%,rgba(242,169,34,.05) 0%,transparent 48%)}
+.page{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:26px 30px 68px}
+
+/* HEADER */
+header{display:grid;grid-template-columns:1fr auto;align-items:start;gap:14px;
+  border-bottom:1px solid var(--bdrm);padding-bottom:20px;margin-bottom:10px;animation:up .5s ease both}
+.lrow{display:flex;align-items:center;gap:12px;margin-bottom:7px}
+.logo{width:40px;height:40px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue),var(--teal));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#fff;
+  box-shadow:0 0 20px rgba(26,109,245,.36)}
+.eyebrow{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--blu2);margin-bottom:4px}
+h1{font-family:'Syne',sans-serif;font-size:clamp(17px,2.2vw,28px);font-weight:800;line-height:1.15;
+  background:linear-gradient(118deg,#eaf0fb 38%,var(--blu2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hsub{color:var(--md);font-size:11px;margin-top:4px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.hdot{width:3px;height:3px;border-radius:50%;background:var(--lo)}
+.hright{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.bdg{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:9.5px;font-weight:600}
+.b-bl{background:rgba(26,109,245,.13);border:1px solid rgba(26,109,245,.3);color:var(--blu2)}
+.b-tl{background:rgba(12,191,170,.11);border:1px solid rgba(12,191,170,.28);color:var(--teal)}
+.b-gd{background:rgba(242,169,34,.11);border:1px solid rgba(242,169,34,.28);color:var(--gold)}
+.b-wa{background:rgba(37,211,102,.11);border:1px solid rgba(37,211,102,.3);color:var(--wa)}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.72)}}
+
+/* SECTION LABEL */
+.sl{font-size:8.5px;letter-spacing:3px;text-transform:uppercase;color:var(--blu2);
+  margin-bottom:11px;display:flex;align-items:center;gap:10px}
+.sl::after{content:'';flex:1;height:1px;background:var(--bdr)}
+.mt{margin-top:22px}
+
+/* ─ RESULT SUMMARY STRIP ─────────────────── */
+.res-strip{
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;
+  margin-bottom:22px;animation:up .5s .06s ease both;
+}
+.rs-card{border-radius:var(--r2);padding:14px 16px;border:1px solid var(--bdrm);
+  position:relative;overflow:hidden;text-align:center}
+.rs-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.rs-leads::before{background:linear-gradient(90deg,var(--lead),transparent)}
+.rs-wa::before   {background:linear-gradient(90deg,var(--wa),transparent)}
+.rs-tot::before  {background:linear-gradient(90deg,var(--teal),transparent)}
+.rs-inv::before  {background:linear-gradient(90deg,var(--gold),transparent)}
+.rs-lbl{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--lo);margin-bottom:5px}
+.rs-val{font-family:'Syne',sans-serif;font-size:clamp(18px,2vw,26px);font-weight:800}
+.rs-sub{font-size:9.5px;color:var(--lo);margin-top:3px}
+.rs-leads .rs-val{color:var(--blu2)}
+.rs-wa    .rs-val{color:var(--wa)}
+.rs-tot   .rs-val{color:var(--teal)}
+.rs-inv   .rs-val{color:var(--gold)}
+
+/* KPI GRID */
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:9px;margin-bottom:24px}
+.kpi{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);
+  padding:14px 13px 11px;position:relative;overflow:hidden;transition:all .2s;animation:up .5s ease both}
+.kpi:hover{background:rgba(26,109,245,.05);border-color:rgba(26,109,245,.2);transform:translateY(-2px)}
+.kbar{position:absolute;top:0;left:0;right:0;height:2px}
+.kico{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;margin-bottom:7px}
+.klbl{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--lo);margin-bottom:4px}
+.kval{font-family:'Syne',sans-serif;font-size:clamp(14px,1.6vw,20px);font-weight:700;line-height:1}
+.kval sup{font-size:9px;font-weight:500;color:var(--md);margin-right:1px}
+.ksub{font-size:8.5px;color:var(--lo);margin-top:3px}
+
+/* PANELS */
+.panel{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r3);padding:17px 15px 13px;animation:up .6s ease both}
+.ptit{font-family:'Syne',sans-serif;font-size:12.5px;font-weight:700;color:var(--hi);margin-bottom:2px}
+.psub{font-size:9.5px;color:var(--lo);margin-bottom:14px}
+.cbox{position:relative;width:100%}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;margin-bottom:16px}
+.g75{display:grid;grid-template-columns:7fr 5fr;gap:13px;margin-bottom:16px}
+.g57{display:grid;grid-template-columns:5fr 7fr;gap:13px;margin-bottom:16px}
+@media(max-width:860px){.g2,.g3,.g75,.g57,.res-strip{grid-template-columns:1fr}}
+
+/* TYPE BARS */
+.trow{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.tnm{width:80px;font-size:10.5px;color:var(--md);flex-shrink:0}
+.ttrk{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.tfil{height:100%;border-radius:3px;transition:width 1s ease;width:0}
+.tld{width:38px;text-align:right;font-family:'Syne',sans-serif;font-size:11px;font-weight:700}
+.twa{width:38px;text-align:right;font-size:10.5px;font-weight:600;color:var(--wa)}
+.ttot{width:40px;text-align:right;font-size:10.5px;font-weight:700;color:var(--teal)}
+.tcpl{width:64px;text-align:right;font-size:9.5px;color:var(--lo)}
+
+/* WA BADGE */
+.wa-badge{display:inline-flex;align-items:center;gap:4px;
+  background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.25);
+  border-radius:10px;padding:1px 6px;font-size:8.5px;color:var(--wa)}
+.lead-badge{display:inline-flex;align-items:center;gap:4px;
+  background:rgba(82,152,255,.12);border:1px solid rgba(82,152,255,.25);
+  border-radius:10px;padding:1px 6px;font-size:8.5px;color:var(--blu2)}
+
+/* TABLE */
+.tscr{max-height:450px;overflow-y:auto}
+.tscr::-webkit-scrollbar{width:3px}
+.tscr::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:2px}
+table{width:100%;border-collapse:collapse;font-size:11px}
+thead th{font-size:7.5px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--lo);border-bottom:1px solid var(--bdr);
+  padding:6px 8px;text-align:right;white-space:nowrap;cursor:pointer;user-select:none}
+thead th:first-child{text-align:left;min-width:190px}
+thead th.wa-h{color:var(--wa)!important;background:rgba(37,211,102,.04)}
+thead th.lead-h{color:var(--blu2)!important;background:rgba(82,152,255,.04)}
+thead th:hover{color:var(--blu2)}
+thead th.srt{color:var(--gold)}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.02);transition:background .15s}
+tbody tr:hover{background:rgba(26,109,245,.05)}
+td{padding:6px 8px;text-align:right;color:var(--md);vertical-align:middle}
+td:first-child{text-align:left;color:var(--hi)}
+.pnm{font-size:10px;line-height:1.3;max-width:220px}
+.pill{display:inline-block;font-size:7px;letter-spacing:.4px;text-transform:uppercase;padding:1px 5px;border-radius:8px;margin-top:2px}
+.pd{background:rgba(82,152,255,.13);color:var(--blu2)}
+.pc{background:rgba(242,169,34,.11);color:var(--gold)}
+.ps{background:rgba(156,119,246,.11);color:var(--vio)}
+.po{background:rgba(255,255,255,.05);color:var(--lo)}
+.vg{color:#34d399!important;font-weight:600}
+.vok{color:#6ee7b7!important}
+.vw{color:var(--gold)!important;font-weight:600}
+.vb{color:#f87171!important;font-weight:600}
+.vh{color:var(--hi)!important;font-weight:600}
+.c-wa{color:var(--wa)!important;font-weight:600}
+.c-lead{color:var(--blu2)!important;font-weight:600}
+.mbar{display:inline-block;vertical-align:middle;width:30px;height:3px;background:var(--bg3);border-radius:2px;margin-left:3px;overflow:hidden}
+.mfil{height:100%;background:var(--blu2);border-radius:2px;display:block}
+/* stacked mini bars */
+.sbar{display:flex;gap:1px;vertical-align:middle;align-items:center;margin-left:4px}
+.sb-l{height:4px;border-radius:1px;background:var(--lead2)}
+.sb-w{height:4px;border-radius:1px;background:var(--wa3)}
+
+/* QUAD MATRIX */
+.qgrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;min-height:250px}
+.quad{border-radius:var(--r1);padding:10px;border:1px solid var(--bdr);display:flex;flex-direction:column;gap:3px}
+.ql{font-size:7.5px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;font-weight:700}
+.qstar{background:rgba(12,191,170,.05)} .qstar .ql{color:var(--teal)}
+.qscal{background:rgba(26,109,245,.05)} .qscal .ql{color:var(--blu2)}
+.qopt {background:rgba(242,169,34,.04)} .qopt  .ql{color:var(--gold)}
+.qrev {background:rgba(240,80,95,.04)}  .qrev  .ql{color:var(--rose)}
+.qitm{font-size:9px;color:var(--md);padding:2px 0;border-bottom:1px solid rgba(255,255,255,.03);line-height:1.3}
+.qitm:last-child{border-bottom:none}
+.qtg{font-size:8px;margin-left:3px}
+
+/* INSIGHT CARDS */
+.igrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:5px}
+.ins{border-radius:var(--r2);padding:12px 13px 11px;border:1px solid var(--bdr);position:relative;overflow:hidden}
+.ins::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.ip::before{background:var(--teal)} .iw::before{background:var(--gold)}
+.ic::before{background:var(--rose)} .ii::before{background:var(--blu2)}
+.iwa::before{background:var(--wa)}
+.il{font-size:7.5px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.ip .il{color:var(--teal)} .iw .il{color:var(--gold)}
+.ic .il{color:var(--rose)} .ii .il{color:var(--blu2)}
+.iwa .il{color:var(--wa)}
+.it{font-family:'Syne',sans-serif;font-size:11.5px;font-weight:700;color:var(--hi);margin-bottom:4px;line-height:1.3}
+.ib{font-size:10.5px;color:var(--md);line-height:1.55}
+.im{margin-top:6px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.ip .im{color:var(--teal)} .iw .im{color:var(--gold)}
+.ic .im{color:var(--rose)} .ii .im{color:var(--blu2)}
+.iwa .im{color:var(--wa)}
+
+/* RECO */
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(275px,1fr));gap:10px}
+.rcd{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r2);padding:13px}
+.rnum{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;color:var(--blu2);letter-spacing:1px;margin-bottom:4px}
+.rtit{font-family:'Syne',sans-serif;font-size:11.5px;font-weight:700;color:var(--hi);margin-bottom:4px}
+.rbod{font-size:10.5px;color:var(--md);line-height:1.55}
+.rtag{margin-top:6px;display:inline-flex;align-items:center;gap:4px;font-size:8px;letter-spacing:.3px;text-transform:uppercase;padding:2px 8px;border-radius:9px;background:rgba(26,109,245,.11);color:var(--blu2)}
+
+/* NOTE */
+.notegrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px}
+@media(max-width:720px){.notegrid{grid-template-columns:1fr}}
+.noteit{font-size:10.5px;color:var(--md);line-height:1.6}
+.noteh{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blu2);margin-bottom:5px}
+
+/* TABS */
+.tabs{display:flex;gap:5px;flex-wrap:wrap}
+.tbn{padding:3px 10px;border-radius:20px;border:1px solid var(--bdr);background:none;color:var(--lo);font-size:9.5px;cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif}
+.tbn.on,.tbn:hover{background:rgba(26,109,245,.13);color:var(--blu2);border-color:rgba(26,109,245,.28)}
+
+footer{margin-top:38px;padding-top:14px;border-top:1px solid var(--bdr);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px;font-size:9px;color:var(--lo)}
+
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.d1{animation-delay:.04s}.d2{animation-delay:.08s}.d3{animation-delay:.12s}
+.d4{animation-delay:.16s}.d5{animation-delay:.20s}.d6{animation-delay:.24s}
+.d7{animation-delay:.28s}.d8{animation-delay:.32s}.d9{animation-delay:.36s}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<header>
+  <div>
+    <div class="lrow">
+      <div class="logo">UAO</div>
+      <div>
+        <div class="eyebrow">Universidad Autónoma de Occidente · Educación Continua</div>
+        <h1>Tablero de Control · Mercadeo Digital</h1>
+      </div>
+    </div>
+    <div class="hsub">
+      <span>📅 <strong>1 abr – 11 may 2026</strong> (41 días)</span>
+      <span class="hdot"></span>
+      <span>45 programas · 109 registros procesados</span>
+      <span class="hdot"></span>
+      <span>🎯 Formatos: Lead Ads + WhatsApp Click-to-Chat</span>
+    </div>
+  </div>
+  <div class="hright">
+    <span class="bdg b-tl"><span class="pulse"></span> Corte: 11 may 2026</span>
+    <span class="bdg b-bl">⚡ meta-ads-analyzer skill</span>
+    <span class="bdg b-wa">💬 Desglose Leads vs WhatsApp</span>
+  </div>
+</header>
+
+<!-- ══ RESULTADO RESUMEN ═══════════════════════════ -->
+<div class="sl d1">01 · Desglose Total de Resultados por Tipo</div>
+<div class="res-strip">
+  <div class="rs-card rs-leads">
+    <div class="rs-lbl">📋 Leads (Lead Ads)</div>
+    <div class="rs-val">2,858</div>
+    <div class="rs-sub">71.2% del total · CPL COP 2,751</div>
+    <div style="margin-top:6px;font-size:9px;color:var(--lo)">Inversión: COP 7,862,050</div>
+  </div>
+  <div class="rs-card rs-wa">
+    <div class="rs-lbl">💬 Conversaciones WhatsApp</div>
+    <div class="rs-val">1,158</div>
+    <div class="rs-sub">28.8% del total · CPW COP 2,768</div>
+    <div style="margin-top:6px;font-size:9px;color:var(--lo)">Inversión: COP 3,205,804</div>
+  </div>
+  <div class="rs-card rs-tot">
+    <div class="rs-lbl">📊 Total Resultados</div>
+    <div class="rs-val">4,016</div>
+    <div class="rs-sub">Leads + Conversaciones WA</div>
+    <div style="margin-top:6px;font-size:9px;color:var(--lo)">CPR combinado: COP 2,770</div>
+  </div>
+  <div class="rs-card rs-inv">
+    <div class="rs-lbl">💰 Inversión Total (Amount Spent)</div>
+    <div class="rs-val">COP 11.1M</div>
+    <div class="rs-sub">$11,123,384 COP · 41 días</div>
+    <div style="margin-top:6px;font-size:9px;color:var(--lo)">Gasto/día: COP 271K</div>
+  </div>
+</div>
+
+<!-- ══ KPIs ═════════════════════════════════════ -->
+<div class="sl">02 · Indicadores Clave de Desempeño</div>
+<div class="kgrid">
+
+  <div class="kpi d1">
+    <div class="kbar" style="background:linear-gradient(90deg,var(--blu2),transparent)"></div>
+    <div class="kico" style="background:rgba(82,152,255,.11)">📋</div>
+    <div class="klbl">Leads (leadgen)</div>
+    <div class="kval" style="color:var(--blu2)">2,858</div>
+    <div class="ksub">actions:leadgen.other</div>
+  </div>
+
+  <div class="kpi d2">
+    <div class="kbar" style="background:linear-gradient(90deg,var(--wa),transparent)"></div>
+    <div class="kico" style="background:rgba(37,211,102,.10)">💬</div>
+    <div class="klbl">Conversaciones WhatsApp</div>
+    <div class="kval" style="color:var(--wa)">1,158</div>
+    <div class="ksub">messaging_conversation_started_7d</div>
+  </div>
+
+  <div class="kpi d3">
+    <div class="kbar" style="background:linear-gradient(90deg,var(--teal),transparent)"></div>
+    <div class="kico" style="background:rgba(12,191,170,.10)">📊</div>
+    <div class="klbl">Total Resultados</div>
+    <div class="kval" style="color:var(--teal)">4,016</div>
+    <div class="ksub">Leads + Convs. WA combinados</div>
+  </div>
+
+  <div class="kpi d4">
+    <div class="kbar" style="background:linear-gradient(90deg,var(--gold),transparent)"></div>
+    <div class="kico" style="background:rgba(242,169,34,.10)">💰</div>
+    <div class="klbl">Inversión (Amount Spent)</div>
+    <div class="kval" style="color:var(--gold)"><sup>COP</sup>11.1M</div>
+    <div class="ksub">$11,123,384 COP</div>
+  </div>
+
+  <div class="kpi d5">
+    <div class="kbar" style="background:linear-gradient(90deg,var(--rose),transparent)"></div>
+    <div class="kico" style="background:rgba(240,80,95,.10)">🎯</div>
+    <div class="klbl">CPL · Lead Ads</div>
+    <div class="kval" style="color:#f87171"><sup>COP</sup>2,751</div>
+    <div class="ksub">Solo leads · Spend COP 7.9M</div>
+  </div>
+
+  <div class="kpi d6">
+    <div class="kbar" style="background:linear-gradient(90deg,var(--wa),transparent)"></div>
+    <div class="kico" style="background:rgba(37,211,102,.10)">💬</div>
+    <div class="klbl">CPW · WhatsApp</div>
+    <div class="kval" style="color:var(--wa)"><sup>COP</sup>2,768</div>
+    <div class="ksub">Solo convs. WA · Spend COP 3.2M</div>
+  </div>
+
+  <div class="kpi d7">
+    <div class="kbar" style="background:linear-gradient(90deg,var(--vio),transparent)"></div>
+    <div class="kico" style="background:rgba(156,119,246,.10)">👁</div>
+    <div class="klbl">Impresiones</div>
+    <div class="kval" style="color:#c4b5fd">2.27M</div>
+    <div class="ksub">2,272,424 impresiones</div>
+  </div>
+
+  <div class="kpi d8">
+    <div class="kbar" style="background:linear-gradient(90deg,var(--grn),transparent)"></div>
+    <div class="kico" style="background:rgba(47,217,140,.10)">📡</div>
+    <div class="klbl">Alcance (Accounts Center)</div>
+    <div class="kval" style="color:var(--grn)">1.02M</div>
+    <div class="ksub">1,024,129 cuentas</div>
+  </div>
+
+  <div class="kpi d9">
+    <div class="kbar" style="background:linear-gradient(90deg,var(--sky),transparent)"></div>
+    <div class="kico" style="background:rgba(32,208,235,.10)">🔁</div>
+    <div class="klbl">Frec · CPM · Link Clicks</div>
+    <div class="kval" style="color:var(--sky)">2.22</div>
+    <div class="ksub">CPM COP 4,895 · Clicks 13,664</div>
+  </div>
+
+</div>
+
+<!-- ══ MIX LEADS VS WA + TIPO ═════════════════════ -->
+<div class="sl">03 · Distribución por Tipo y Formato de Resultado</div>
+<div class="g75">
+
+  <div class="panel">
+    <div class="ptit">Leads vs Conversaciones WhatsApp por tipo de programa</div>
+    <div class="psub">Desglose del mix de resultados según tipo de campaña activa</div>
+    <div id="typeBars"></div>
+    <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+      <span class="lead-badge">📋 Lead Ads · 2,858 (71.2%)</span>
+      <span class="wa-badge">💬 WhatsApp · 1,158 (28.8%)</span>
+    </div>
+    <div class="cbox" style="height:175px;margin-top:12px"><canvas id="typeChart"></canvas></div>
+  </div>
+
+  <div class="panel">
+    <div class="ptit">Mix de resultados — Leads vs WA</div>
+    <div class="psub">Donut: total 4,016 resultados por formato</div>
+    <div class="cbox" style="height:185px"><canvas id="mixDonut"></canvas></div>
+    <div style="margin-top:10px">
+      <div style="font-size:10px;color:var(--md);margin-bottom:3px">📋 Leads por tipo:</div>
+      <div id="leadByType" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px"></div>
+      <div style="font-size:10px;color:var(--md);margin-bottom:3px">💬 WhatsApp por tipo:</div>
+      <div id="waByType" style="display:flex;flex-wrap:wrap;gap:5px"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ CPL + INVESTMENT ════════════════════════════ -->
+<div class="sl">04 · Eficiencia de Campañas — CPL y Costo por WhatsApp</div>
+<div class="g2">
+
+  <div class="panel">
+    <div class="ptit">Top programas — CPL (Lead Ads) · ≥20 leads</div>
+    <div class="psub">Azul = Lead Ad · Verde = programa de WhatsApp click-to-chat</div>
+    <div class="cbox" style="height:310px"><canvas id="cplChart"></canvas></div>
+  </div>
+
+  <div class="panel">
+    <div class="ptit">Top 10 inversión vs resultados totales</div>
+    <div class="psub">Verde = eficiente (CPR&lt;2K) · Rojo = crítico (CPR&gt;5K) · Azul = medio</div>
+    <div class="cbox" style="height:310px"><canvas id="invChart"></canvas></div>
+  </div>
+
+</div>
+
+<!-- ══ MATRIX + CVR ════════════════════════════════ -->
+<div class="sl">05 · Matriz de Eficiencia y Top CVR</div>
+<div class="g57">
+
+  <div class="panel">
+    <div class="ptit">Cuadrante — Total resultados × Costo por resultado (CPR)</div>
+    <div class="psub">Lead + WhatsApp combinados · 1 Abr – 11 May 2026</div>
+    <div class="qgrid" style="margin-top:9px">
+      <div class="quad qstar">
+        <div class="ql">⭐ Estrella — Alto vol · Bajo CPR</div>
+        <div class="qitm">Curso Excel Online <span class="qtg" style="color:var(--teal)">440 · L290+WA150 · CPR 1,423</span></div>
+        <div class="qitm">Sem. Capcut y Contenido <span class="qtg" style="color:var(--teal)">338L · CPL 940</span></div>
+        <div class="qitm">Dip. Master Training RCN <span class="qtg" style="color:var(--teal)">265L · CPL 719</span></div>
+        <div class="qitm">Sem. Pauta FB/IG/WA <span class="qtg" style="color:var(--teal)">204L · CPL 1,555</span></div>
+        <div class="qitm">WA Sem. Contadores 2026 <span class="qtg" style="color:var(--wa)">158 WA · CPW 1,056</span></div>
+      </div>
+      <div class="quad qscal">
+        <div class="ql">📈 Escalar — Bajo vol · Bajo CPR</div>
+        <div class="qitm">Sem. Persuasión y Pres. Orales <span class="qtg" style="color:var(--blu2)">105L · 1,284</span></div>
+        <div class="qitm">Sem. Habilidades Hablar Público <span class="qtg" style="color:var(--wa)">95 WA · 1,753</span></div>
+        <div class="qitm">Sem. Estrategias Redes Soc. <span class="qtg" style="color:var(--blu2)">54L · 1,988</span></div>
+        <div class="qitm">Sem. Diseño de Interiores <span class="qtg" style="color:var(--blu2)">4L · 906</span></div>
+        <div class="qitm">Sem. Montaje Cinematog. <span class="qtg" style="color:var(--blu2)">6L · 942</span></div>
+      </div>
+      <div class="quad qopt">
+        <div class="ql">⚠ Optimizar — Vol medio · CPR alto</div>
+        <div class="qitm">Dip. Auditoría Inteligente IA <span class="qtg" style="color:var(--gold)">155L · 2,961</span></div>
+        <div class="qitm">Dip. Marketing Digital IA <span class="qtg" style="color:var(--gold)">156L · 2,834</span></div>
+        <div class="qitm">Dip. Ciencia Datos Python <span class="qtg" style="color:var(--wa)">136 WA · 3,018</span></div>
+        <div class="qitm">Dip. Pauta Digital IA <span class="qtg" style="color:var(--wa)">124 WA · 3,413</span></div>
+        <div class="qitm">WA Sem. Venta Consultiva <span class="qtg" style="color:var(--wa)">108 WA · 2,330</span></div>
+      </div>
+      <div class="quad qrev">
+        <div class="ql">🔴 Revisar — Bajo vol · CPR crítico</div>
+        <div class="qitm">Dip. Logística Integral <span class="qtg" style="color:var(--rose)">4L · CPL 29,099 🚨</span></div>
+        <div class="qitm">Dip. Ecommerce Mkt Digital <span class="qtg" style="color:var(--rose)">56L · 10,678</span></div>
+        <div class="qitm">Dip. Lean Six Sigma G/B <span class="qtg" style="color:var(--rose)">60L · 8,355</span></div>
+        <div class="qitm">Escuela de Liderazgo <span class="qtg" style="color:var(--rose)">90L · 8,162</span></div>
+        <div class="qitm">Sem. Retail 2030 <span class="qtg" style="color:var(--rose)">14 WA · 7,649</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ptit">Top 14 programas por CVR (Resultados / Impresiones)</div>
+    <div class="psub">Azul = Lead Ads · Verde = WhatsApp · mayor CVR = más eficaz por impresión</div>
+    <div class="cbox" style="height:310px"><canvas id="cvrChart"></canvas></div>
+  </div>
+
+</div>
+
+<!-- ══ TABLA ════════════════════════════════════════ -->
+<div class="sl">06 · Tabla Detallada — Leads + WhatsApp por Programa</div>
+<div class="panel" style="margin-bottom:18px">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+    <div>
+      <div class="ptit">Métricas por programa · Desglose Leads vs Conversaciones WA</div>
+      <div class="psub" style="margin:0">Clic en columna para ordenar · 🔵 Lead Ads · 🟢 WhatsApp Click-to-Chat</div>
+    </div>
+    <div class="tabs">
+      <button class="tbn on" onclick="filt('all',this)">Todos</button>
+      <button class="tbn" onclick="filt('Diplomado',this)">Diplomados</button>
+      <button class="tbn" onclick="filt('Curso',this)">Cursos</button>
+      <button class="tbn" onclick="filt('Seminario',this)">Seminarios</button>
+      <button class="tbn" onclick="filt('Otro',this)">Otro</button>
+      <button class="tbn" onclick="filt('hasWA',this)">Con WA</button>
+    </div>
+  </div>
+  <div class="tscr">
+    <table id="MT">
+      <thead><tr>
+        <th onclick="srt(0)" style="text-align:left">Programa ↕</th>
+        <th onclick="srt(1)" class="lead-h">Leads 🔵 ↕</th>
+        <th onclick="srt(2)" class="wa-h">WA 💬 ↕</th>
+        <th onclick="srt(3)">Total ↕</th>
+        <th onclick="srt(4)">Inversión ↕</th>
+        <th onclick="srt(5)" class="lead-h">CPL ↕</th>
+        <th onclick="srt(6)" class="wa-h">CPW ↕</th>
+        <th onclick="srt(7)">CPR Total ↕</th>
+        <th onclick="srt(8)">Imp. ↕</th>
+        <th onclick="srt(9)">Alcance ↕</th>
+        <th onclick="srt(10)">Frec. ↕</th>
+        <th onclick="srt(11)">CPM ↕</th>
+        <th onclick="srt(12)">Clicks ↕</th>
+        <th onclick="srt(13)">CVR% ↕</th>
+      </tr></thead>
+      <tbody id="TB"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ HALLAZGOS ════════════════════════════════════ -->
+<div class="sl">07 · Hallazgos Clave e Insights Estratégicos</div>
+<div class="igrid" style="margin-bottom:20px">
+
+  <div class="ins iwa">
+    <div class="il">💬 Hallazgo · WhatsApp</div>
+    <div class="it">28.8% de los resultados son conversaciones WA</div>
+    <div class="ib">De los 4,016 resultados totales, <strong>1,158 (28.8%)</strong> son conversaciones de WhatsApp Click-to-Chat, con un CPW de <strong>COP 2,768</strong> — prácticamente igual al CPL de Lead Ads (COP 2,751). Sin embargo, la calidad del lead WA suele ser superior al tener intención de contacto activa. Representan COP 3.2M del presupuesto total.</div>
+    <div class="im">1,158 WA · COP 2,768 CPW</div>
+  </div>
+
+  <div class="ins iwa">
+    <div class="il">💬 Hallazgo · WhatsApp</div>
+    <div class="it">Programas con WA exclusivo: 6 programas clave</div>
+    <div class="ib">Diplomado Ciencia de Datos Python (<strong>136 WA</strong>), Pauta Digital IA (<strong>124 WA</strong>), Venta Consultiva (<strong>108 WA</strong>), Hablar en Público (<strong>95 WA</strong>), Power BI IA (<strong>94 WA</strong>), IA Generativa No-Code (<strong>82 WA</strong>) operan 100% en formato WhatsApp. Estos programas no generan leads tradicionales — sus conversiones son únicamente conversaciones iniciadas.</div>
+    <div class="im">6 programas · 100% WA</div>
+  </div>
+
+  <div class="ins ip">
+    <div class="il">✅ Hallazgo positivo</div>
+    <div class="it">Curso Excel Online: mix óptimo Lead + WhatsApp</div>
+    <div class="ib">El único programa que combina eficientemente ambos formatos: <strong>290 leads</strong> (CPL 1,383) + <strong>150 conversaciones WA</strong> (CPW 1,500) = 440 resultados totales a CPR de COP 1,423. Modelo de captación mixta que maximiza el alcance de la audiencia usando dos puntos de conversión distintos.</div>
+    <div class="im">290 leads + 150 WA = 440</div>
+  </div>
+
+  <div class="ins ic">
+    <div class="il">🔴 Alerta crítica</div>
+    <div class="it">Dip. Logística: CPL 29,099 — el peor del período</div>
+    <div class="ib"><strong>COP 116,397</strong> invertidos, solo <strong>4 leads</strong> y CVR de 0.012%. Sin conversaciones WA complementarias. La audiencia técnica de logística no responde a Lead Ads directos. Se requiere pausa inmediata y diagnóstico de targeting + propuesta de valor antes de reactivar con cualquier formato.</div>
+    <div class="im">CPL COP 29,099 · CVR 0.012%</div>
+  </div>
+
+  <div class="ins ic">
+    <div class="il">🔴 Alerta crítica · Inversión</div>
+    <div class="it">Escuela, Ecommerce y Lean Six Sigma: COP 1.83M en riesgo</div>
+    <div class="ib">Tres programas con inversión combinada de <strong>COP 1,833,872</strong> y resultados totales de apenas 206 (todos Lead Ads, sin WA): CPR promedio de COP 8,902 — 3.2x el benchmark. Ninguno de los tres utiliza WhatsApp Click-to-Chat, formato que podría mejorar la tasa de contacto inicial en audiencias de perfil directivo.</div>
+    <div class="im">COP 1.83M · CPR prom. 8,902</div>
+  </div>
+
+  <div class="ins iw">
+    <div class="il">⚠ Oportunidad</div>
+    <div class="it">Dip. Project Management: mezcla ineficiente de formatos</div>
+    <div class="ib">Único programa además de Excel Online con ambos formatos: <strong>11 leads</strong> (CPL 4,093) + <strong>62 WA</strong> (CPW 6,127) = 73 resultados a CPR de COP 5,833. La campaña WA tiene CPW 50% más alto que el Lead Ad. <em>Hipótesis:</em> el formato WA no es el adecuado para este perfil de audiencia — concentrar presupuesto en Lead Ads y mejorar el creativo.</div>
+    <div class="im">CPW 6,127 vs CPL 4,093</div>
+  </div>
+
+  <div class="ins ii">
+    <div class="il">💡 Insight estratégico</div>
+    <div class="it">WhatsApp funciona mejor en Diplomados de alta decisión</div>
+    <div class="ib">El 100% del presupuesto WA en Diplomados va a programas de alta complejidad (IA, Python, Pauta Digital, IA Generativa) donde el ciclo de decisión es largo. El click-to-chat permite conversaciones consultivas previas a la inscripción. CPW promedio en Diplomados: <strong>COP 3,680</strong>. En Seminarios: <strong>COP 1,942</strong> — los Seminarios WA son más eficientes.</div>
+    <div class="im">Sem. WA CPW: COP 1,942</div>
+  </div>
+
+  <div class="ins ip">
+    <div class="il">✅ Hallazgo positivo</div>
+    <div class="it">Sem. Montaje Cinematográfico: menor CPL del período</div>
+    <div class="ib">Con solo 6 leads pero CPL de <strong>COP 942</strong> — el 2do más bajo (excluyendo Dip. RCN). Con apenas COP 7,759 invertidos y CVR del 0.359%, es un programa nuevo con métricas prometedoras. Todavía en fase de aprendizaje; si mantiene este CPL con mayor presupuesto, sería candidato a escalar como Seminario ancla.</div>
+    <div class="im">CPL COP 942 · CVR 0.359%</div>
+  </div>
+
+</div>
+
+<!-- ══ RECOMENDACIONES ══════════════════════════════ -->
+<div class="sl">08 · Recomendaciones Priorizadas</div>
+<div class="rgrid" style="margin-bottom:24px">
+
+  <div class="rcd">
+    <div class="rnum">REC 01 · ACCIÓN INMEDIATA</div>
+    <div class="rtit">Pausa urgente: Logística, Ecommerce y Lean Six Sigma</div>
+    <div class="rbod">CPR combinado de COP 16,044 con <strong>COP 1.2M</strong> invertidos. <em>Acción:</em> pausar los conjuntos activos. Antes de reactivar, probar formato WhatsApp Click-to-Chat para Lean Six Sigma y Ecommerce (audiencias ejecutivas que prefieren contacto directo). Para Logística, rediseñar la segmentación por cargo/sector antes de cualquier reinversión.</div>
+    <div class="rtag">⛔ Inmediato · COP 1.2M en riesgo</div>
+  </div>
+
+  <div class="rcd">
+    <div class="rnum">REC 02 · ALTA PRIORIDAD</div>
+    <div class="rtit">Activar WhatsApp Click-to-Chat en Escuela de Liderazgo</div>
+    <div class="rbod">COP 734K invertidos solo en Lead Ads con CPL de COP 8,162. El perfil directivo de este programa (líderes empresariales) responde mejor al contacto consultivo por WhatsApp. <em>Hipótesis testeable:</em> convertir el 50% del presupuesto a formato WhatsApp Click-to-Chat podría mejorar el CPW vs CPL actual al tener mayor intención de contacto.</div>
+    <div class="rtag">💬 WA format · Perfil directivo</div>
+  </div>
+
+  <div class="rcd">
+    <div class="rnum">REC 03 · ALTA PRIORIDAD</div>
+    <div class="rtit">Escalar los 3 Seminarios de mayor eficiencia</div>
+    <div class="rbod">Capcut (CPL 940 · Lead), WA Contadores (CPW 1,056 · WA), Persuasión Oral (CPL 1,284 · Lead) tienen margen de escala comprobado. <em>Hipótesis:</em> incrementar 40% el presupuesto diario generaría ~350 resultados adicionales a CPR <COP 1,500. Monitorear CPR marginal en tiempo real para detectar saturación.</div>
+    <div class="rtag">📈 Escala · Bajo riesgo</div>
+  </div>
+
+  <div class="rcd">
+    <div class="rnum">REC 04 · MEDIA PRIORIDAD</div>
+    <div class="rtit">Replicar modelo mixto del Curso Excel Online</div>
+    <div class="rbod">290 leads + 150 WA = 440 resultados a CPR COP 1,423. El modelo mixto Lead Ad + WhatsApp captura dos tipos de audiencia: quienes prefieren formulario y quienes prefieren conversación directa. <em>Hipótesis:</em> activar WA Click-to-Chat en Dip. Automatización Contable (solo lead Ads actualmente) podría incrementar resultados un 20–30%.</div>
+    <div class="rtag">🔀 Estrategia mixta · Lead + WA</div>
+  </div>
+
+  <div class="rcd">
+    <div class="rnum">REC 05 · MEDIA PRIORIDAD</div>
+    <div class="rtit">Revisar CPW en Dip. Project Management</div>
+    <div class="rbod">CPW de COP 6,127 vs benchmark WA de COP 2,768 — 2.2x más caro. El formato WA está subperformando en este programa. <em>Hipótesis:</em> la audiencia de Project Management no responde bien al click-to-chat. Concentrar el presupuesto en Lead Ads y optimizar el creativo con casos de éxito y certificaciones PMI.</div>
+    <div class="rtag">🔍 Formato WA · Revisar</div>
+  </div>
+
+  <div class="rcd">
+    <div class="rnum">REC 06 · SEGUIMIENTO</div>
+    <div class="rtit">Definir benchmark separado para CPL y CPW</div>
+    <div class="rbod">El CPL (COP 2,751) y CPW (COP 2,768) son casi idénticos en este período, pero la calidad del contacto WA tiende a ser superior. Se recomienda crear un reporte separado que rastree: leads calificados / conversaciones WA atendidas / tasa de respuesta WA, para comparar el valor real de cada canal y justificar la distribución de presupuesto.</div>
+    <div class="rtag">📊 Gobernanza · Métricas</div>
+  </div>
+
+</div>
+
+<!-- ══ NOTAS ════════════════════════════════════════ -->
+<div class="sl">09 · Notas Metodológicas</div>
+<div class="panel" style="margin-bottom:16px">
+  <div class="notegrid">
+    <div class="noteit">
+      <div class="noteh">Tipos de resultado en este período</div>
+      Se identificaron <strong style="color:var(--hi)">dos tipos de indicador de resultado</strong> en los datos:<br>
+      <span class="lead-badge" style="margin:4px 0;display:inline-flex">📋 actions:leadgen.other</span><br>
+      → Formulario de Lead Ads nativo de Meta. 69 registros · 2,858 resultados.<br><br>
+      <span class="wa-badge" style="margin:4px 0;display:inline-flex">💬 messaging_conversation_started_7d</span><br>
+      → Click-to-Chat WhatsApp iniciado en los últimos 7 días. 27 registros · 1,158 resultados.<br><br>
+      13 registros sin indicador (NaN) corresponden a anuncios sin resultados en el período.
+    </div>
+    <div class="noteit">
+      <div class="noteh">Diferencia entre CPL y CPW</div>
+      <strong style="color:var(--hi)">CPL</strong> (Costo por Lead) mide el costo de obtener un formulario completado en Meta.<br><br>
+      <strong style="color:var(--hi)">CPW</strong> (Costo por Conversación WhatsApp) mide el costo de iniciar una conversación en WhatsApp. Este tipo de resultado indica <em>mayor intención de contacto</em> del prospecto, pero requiere seguimiento activo del equipo de ventas/admisiones para calificar y convertir.<br><br>
+      El <strong style="color:var(--hi)">CPR</strong> (Costo por Resultado) representa el costo combinado cuando el programa usa ambos formatos.
+    </div>
+    <div class="noteit">
+      <div class="noteh">Nomenclatura Meta Ads (skill)</div>
+      · <strong style="color:var(--hi)">Link Clicks</strong> = clics en enlace de salida offsite<br>
+      · <strong style="color:var(--hi)">Alcance</strong> = Accounts Center accounts (nunca "personas")<br>
+      · <strong style="color:var(--hi)">Frecuencia</strong> = Impresiones ÷ Alcance<br>
+      · <strong style="color:var(--hi)">CVR</strong> = Resultados ÷ Impresiones × 100<br>
+      · <strong style="color:var(--hi)">CPM</strong> = (Spend ÷ Impresiones) × 1,000<br>
+      · Los CPLs de programas en <strong style="color:var(--gold)">fase de aprendizaje</strong> son preliminares (&lt;50 eventos).
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>📊 Tablero Mercadeo Digital · Educación Continua UAO</span>
+  <span>Período: 01 abr – 11 may 2026 · 41 días · 109 registros · 45 programas · Leads + WhatsApp</span>
+  <span>meta-ads-analyzer skill · Corte: 11 may 2026</span>
+</footer>
+</div>
+
+<script>
+/* ══ DATA ═══════════════════════════════════════════ */
+const TYPE_DATA = [
+  {tipo:"Diplomado",leads:1182,wa:450,total:1632,spend:6005858},
+  {tipo:"Seminario",leads:751, wa:407,total:1158,spend:1809005},
+  {tipo:"Curso",    leads:788, wa:301,total:1089,spend:2421847},
+  {tipo:"Otro",     leads:137, wa:0,  total:137, spend:886674}
+];
+
+const PROGS = [
+  {name:"Curso Excel Básico - Online",tipo:"Curso",leads:290,wa:150,total:440,spend:626280,cpl:1383,cpw:1500,cptr:1423,imp:171230,reach:75974,freq:2.25,cpm:3658,clicks:1335,cvr:0.257},
+  {name:"Seminario Capcut y Creación de Contenido",tipo:"Seminario",leads:338,wa:0,total:338,spend:317832,cpl:940,cpw:null,cptr:940,imp:112779,reach:46372,freq:2.43,cpm:2818,clicks:887,cvr:0.300},
+  {name:"Dip. Master Training UAO-RCN (Ana Karina)",tipo:"Diplomado",leads:265,wa:0,total:265,spend:190508,cpl:719,cpw:null,cptr:719,imp:67795,reach:53530,freq:1.27,cpm:2810,clicks:609,cvr:0.391},
+  {name:"Sem. Pauta Publicitaria FB/IG/WhatsApp",tipo:"Seminario",leads:204,wa:0,total:204,spend:317135,cpl:1555,cpw:null,cptr:1555,imp:71307,reach:23934,freq:2.98,cpm:4447,clicks:520,cvr:0.286},
+  {name:"Curso Excel Básico - Presencial Sábados",tipo:"Curso",leads:193,wa:0,total:193,spend:393239,cpl:2038,cpw:null,cptr:2038,imp:97460,reach:41903,freq:2.33,cpm:4035,clicks:675,cvr:0.198},
+  {name:"Dip. Automatización Contable + IA",tipo:"Diplomado",leads:192,wa:0,total:192,spend:480112,cpl:2501,cpw:null,cptr:2501,imp:84221,reach:22889,freq:3.68,cpm:5701,clicks:681,cvr:0.228},
+  {name:"WA - Sem. Actualización Contadores 2026",tipo:"Seminario",leads:0,wa:158,total:158,spend:166796,cpl:null,cpw:1056,cptr:1056,imp:27755,reach:10664,freq:2.60,cpm:6010,clicks:308,cvr:0.569},
+  {name:"Dip. Marketing Digital + IA",tipo:"Diplomado",leads:156,wa:0,total:156,spend:442132,cpl:2834,cpw:null,cptr:2834,imp:153925,reach:79073,freq:1.95,cpm:2872,clicks:693,cvr:0.101},
+  {name:"Dip. Auditoría Inteligente + IA",tipo:"Diplomado",leads:155,wa:0,total:155,spend:458955,cpl:2961,cpw:null,cptr:2961,imp:57079,reach:20357,freq:2.80,cpm:8041,clicks:484,cvr:0.272},
+  {name:"Dip. Ciencia de Datos con Python",tipo:"Diplomado",leads:0,wa:136,total:136,spend:410394,cpl:null,cpw:3018,cptr:3018,imp:73773,reach:24620,freq:3.00,cpm:5563,clicks:400,cvr:0.184},
+  {name:"Dip. Pauta Digital con IA",tipo:"Diplomado",leads:0,wa:124,total:124,spend:423269,cpl:null,cpw:3413,cptr:3413,imp:41587,reach:13630,freq:3.05,cpm:10178,clicks:302,cvr:0.298},
+  {name:"WA - Sem. Venta Consultiva",tipo:"Seminario",leads:0,wa:108,total:108,spend:251687,cpl:null,cpw:2330,cptr:2330,imp:27308,reach:12333,freq:2.21,cpm:9217,clicks:212,cvr:0.395},
+  {name:"Sem. Persuasión y Presentaciones Orales",tipo:"Seminario",leads:105,wa:0,total:105,spend:134838,cpl:1284,cpw:null,cptr:1284,imp:33225,reach:15001,freq:2.21,cpm:4058,clicks:267,cvr:0.316},
+  {name:"Dip. Alta Gerencia Seguridad y Salud (SST)",tipo:"Diplomado",leads:98,wa:0,total:98,spend:442334,cpl:4514,cpw:null,cptr:4514,imp:74903,reach:26306,freq:2.85,cpm:5905,clicks:379,cvr:0.131},
+  {name:"Sem. Desarrollo Habilidades Hablar en Público",tipo:"Seminario",leads:0,wa:95,total:95,spend:166577,cpl:null,cpw:1753,cptr:1753,imp:26569,reach:10682,freq:2.49,cpm:6270,clicks:204,cvr:0.358},
+  {name:"Curso Power BI + IA",tipo:"Curso",leads:0,wa:94,total:94,spend:223554,cpl:null,cpw:2378,cptr:2378,imp:37385,reach:12727,freq:2.94,cpm:5980,clicks:253,cvr:0.251},
+  {name:"ESCUELA DE LIDERAZGO EMPRESARIAL",tipo:"Otro",leads:90,wa:0,total:90,spend:734610,cpl:8162,cpw:null,cptr:8162,imp:115106,reach:49105,freq:2.34,cpm:6382,clicks:443,cvr:0.078},
+  {name:"Dip. IA Generativa y Herramientas No-Code",tipo:"Diplomado",leads:0,wa:82,total:82,spend:315547,cpl:null,cpw:3848,cptr:3848,imp:57706,reach:42297,freq:1.36,cpm:5468,clicks:270,cvr:0.142},
+  {name:"Dip. Inteligencia de Negocios + IA Microsoft",tipo:"Diplomado",leads:79,wa:0,total:79,spend:391571,cpl:4957,cpw:null,cptr:4957,imp:76797,reach:31294,freq:2.45,cpm:5099,clicks:351,cvr:0.103},
+  {name:"Dip. Project Management PMBOK® 8 + IA",tipo:"Diplomado",leads:11,wa:62,total:73,spend:425795,cpl:4093,cpw:6127,cptr:5833,imp:52193,reach:22491,freq:2.32,cpm:8158,clicks:291,cvr:0.140},
+  {name:"Curso Sistemas Energéticos Eficientes",tipo:"Curso",leads:67,wa:0,total:67,spend:224551,cpl:3352,cpw:null,cptr:3352,imp:76548,reach:20036,freq:3.82,cpm:2933,clicks:358,cvr:0.088},
+  {name:"Curso Analista Datos IA / Excel / Power Query",tipo:"Curso",leads:66,wa:0,total:66,spend:235088,cpl:3562,cpw:null,cptr:3562,imp:62831,reach:28790,freq:2.18,cpm:3742,clicks:334,cvr:0.105},
+  {name:"Dip. Lean Six Sigma Green/Black Belts",tipo:"Diplomado",leads:60,wa:0,total:60,spend:501314,cpl:8355,cpw:null,cptr:8355,imp:127035,reach:57713,freq:2.20,cpm:3946,clicks:424,cvr:0.047},
+  {name:"Curso Diseño y Modelado 3D con IA",tipo:"Curso",leads:0,wa:57,total:57,spend:161058,cpl:null,cpw:2826,cptr:2826,imp:33789,reach:17529,freq:1.93,cpm:4767,clicks:180,cvr:0.169},
+  {name:"Dip. Ecommerce Marketing Digital",tipo:"Diplomado",leads:56,wa:0,total:56,spend:597948,cpl:10678,cpw:null,cptr:10678,imp:83440,reach:46194,freq:1.81,cpm:7166,clicks:400,cvr:0.067},
+  {name:"Dip. IA y Automatización Gestión Financiera",tipo:"Diplomado",leads:56,wa:0,total:56,spend:320021,cpl:5715,cpw:null,cptr:5715,imp:38934,reach:20934,freq:1.86,cpm:8220,clicks:235,cvr:0.144},
+  {name:"Sem. Estrategias Redes Sociales Marcas",tipo:"Seminario",leads:54,wa:0,total:54,spend:107355,cpl:1988,cpw:null,cptr:1988,imp:21500,reach:10971,freq:1.96,cpm:4993,clicks:153,cvr:0.251},
+  {name:"CURSO PSICOLOGÍA ORGANIZACIONAL DIGIT.",tipo:"Curso",leads:52,wa:0,total:52,spend:250500,cpl:4817,cpw:null,cptr:4817,imp:31089,reach:11120,freq:2.80,cpm:8058,clicks:178,cvr:0.167},
+  {name:"Curso Diseño de Espacios Comerciales",tipo:"Curso",leads:50,wa:0,total:50,spend:96796,cpl:1936,cpw:null,cptr:1936,imp:32261,reach:14511,freq:2.22,cpm:3000,clicks:185,cvr:0.155},
+  {name:"Curso Animación 3D en Blender",tipo:"Curso",leads:46,wa:0,total:46,spend:109126,cpl:2372,cpw:null,cptr:2372,imp:44387,reach:14544,freq:3.05,cpm:2459,clicks:293,cvr:0.104},
+  {name:"Dip. Inteligencia de Negocios e IA (Power BI)",tipo:"Diplomado",leads:0,wa:46,total:46,spend:253000,cpl:null,cpw:5500,cptr:5500,imp:37070,reach:23734,freq:1.56,cpm:6825,clicks:179,cvr:0.124},
+  {name:"Sem. Producción de Podcast",tipo:"Seminario",leads:40,wa:0,total:40,spend:105440,cpl:2636,cpw:null,cptr:2636,imp:33298,reach:16373,freq:2.03,cpm:3167,clicks:180,cvr:0.120},
+  {name:"Dip. Iluminación y Alumbrado RETILAP",tipo:"Diplomado",leads:40,wa:0,total:40,spend:188805,cpl:4720,cpw:null,cptr:4720,imp:46302,reach:28461,freq:1.63,cpm:4078,clicks:266,cvr:0.086},
+  {name:"Colombia Big Data + IA + Power BI",tipo:"Otro",leads:35,wa:0,total:35,spend:113349,cpl:3239,cpw:null,cptr:3239,imp:28780,reach:20058,freq:1.43,cpm:3938,clicks:140,cvr:0.122},
+  {name:"Sem. Diseño Intervenciones Energías Peligrosas",tipo:"Seminario",leads:0,wa:32,total:32,spend:121903,cpl:null,cpw:3809,cptr:3809,imp:24210,reach:10778,freq:2.25,cpm:5035,clicks:123,cvr:0.132},
+  {name:"Curso Inglés para Niños - Módulo I",tipo:"Curso",leads:20,wa:0,total:20,spend:93512,cpl:4676,cpw:null,cptr:4676,imp:23964,reach:12487,freq:1.92,cpm:3902,clicks:151,cvr:0.083},
+  {name:"Sem. Retail 2030 (Interacción)",tipo:"Seminario",leads:0,wa:14,total:14,spend:107082,cpl:null,cpw:7649,cptr:7649,imp:11717,reach:6110,freq:1.92,cpm:9139,clicks:60,cvr:0.119},
+  {name:"Dip. Diseño Estratégico de Empaque",tipo:"Diplomado",leads:8,wa:0,total:8,spend:34627,cpl:4328,cpw:null,cptr:4328,imp:6383,reach:3054,freq:2.09,cpm:5425,clicks:48,cvr:0.125},
+  {name:"Inglés General Nivel Independent Plus",tipo:"Otro",leads:7,wa:0,total:7,spend:23976,cpl:3425,cpw:null,cptr:3425,imp:5331,reach:3569,freq:1.49,cpm:4497,clicks:34,cvr:0.131},
+  {name:"Sem. Montaje Cinematográfico",tipo:"Seminario",leads:6,wa:0,total:6,spend:7759,cpl:942,cpw:null,cptr:1293,imp:1670,reach:1375,freq:1.21,cpm:4646,clicks:16,cvr:0.359},
+  {name:"Charla informativa posgrados UAO",tipo:"Otro",leads:5,wa:0,total:5,spend:14739,cpl:2948,cpw:null,cptr:2948,imp:2094,reach:1194,freq:1.75,cpm:7039,clicks:16,cvr:0.239},
+  {name:"Curso Herramientas Tecnológicas Proyectos IA",tipo:"Curso",leads:4,wa:0,total:4,spend:5277,cpl:1319,cpw:null,cptr:1319,imp:773,reach:642,freq:1.20,cpm:6827,clicks:9,cvr:0.517},
+  {name:"Dip. Logística Integral",tipo:"Diplomado",leads:4,wa:0,total:4,spend:116397,cpl:29099,cpw:null,cptr:29099,imp:33932,reach:15361,freq:2.21,cpm:3430,clicks:106,cvr:0.012},
+  {name:"Sem. Diseño de Interiores para el Hogar",tipo:"Seminario",leads:4,wa:0,total:4,spend:4601,cpl:906,cpw:null,cptr:1150,imp:751,reach:715,freq:1.05,cpm:6126,clicks:11,cvr:0.533},
+  {name:"Dip. Iluminación RETILAP - Ciudades",tipo:"Diplomado",leads:2,wa:0,total:2,spend:13129,cpl:4516,cpw:null,cptr:6564,imp:3637,reach:2150,freq:1.69,cpm:3610,clicks:20,cvr:0.055}
+];
+
+const C = {Diplomado:'rgba(82,152,255,0.82)',Seminario:'rgba(156,119,246,0.82)',Curso:'rgba(242,169,34,0.82)',Otro:'rgba(100,116,139,0.72)'};
+const WA_COLOR = 'rgba(37,211,102,0.80)';
+const LEAD_COLOR = 'rgba(82,152,255,0.82)';
+
+Chart.defaults.color='#3b5d7c';
+Chart.defaults.font.family="'DM Sans',sans-serif";
+
+/* TYPE BARS */
+function buildTypeBars(){
+  const el=document.getElementById('typeBars');
+  const maxT=Math.max(...TYPE_DATA.map(d=>d.total));
+  TYPE_DATA.forEach(d=>{
+    const w=Math.round(d.total/maxT*100);
+    el.innerHTML+=`<div class="trow">
+      <span class="tdot" style="background:${C[d.tipo]}"></span>
+      <span class="tnm">${d.tipo}</span>
+      <div class="ttrk"><div class="tfil" style="background:${C[d.tipo]}" data-w="${w}"></div></div>
+      <span class="tld" style="color:${LEAD_COLOR}">${d.leads.toLocaleString('es-CO')}</span>
+      <span class="twa">${d.wa>0?d.wa:'-'}</span>
+      <span class="ttot">${d.total.toLocaleString('es-CO')}</span>
+    </div>`;
+  });
+  setTimeout(()=>{document.querySelectorAll('.tfil').forEach(b=>b.style.width=b.dataset.w+'%')},200);
+}
+
+/* TYPE CHART — stacked Leads+WA */
+function buildTypeChart(){
+  new Chart(document.getElementById('typeChart').getContext('2d'),{type:'bar',
+    data:{labels:TYPE_DATA.map(d=>d.tipo),datasets:[
+      {label:'Leads 📋',data:TYPE_DATA.map(d=>d.leads),backgroundColor:LEAD_COLOR,borderRadius:3,stack:'s'},
+      {label:'WhatsApp 💬',data:TYPE_DATA.map(d=>d.wa),backgroundColor:WA_COLOR,borderRadius:3,stack:'s'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{font:{size:9},color:'#3b5d7c',boxWidth:9}},
+        tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y.toLocaleString('es-CO')}`}}},
+      scales:{
+        y:{grid:{color:'rgba(255,255,255,.03)'},stacked:true,ticks:{font:{size:8.5},color:'#3b5d7c'}},
+        x:{grid:{display:false},stacked:true,ticks:{font:{size:9},color:'#7ea3c8'}}
+      }
+    }
+  });
+}
+
+/* MIX DONUT */
+function buildMixDonut(){
+  new Chart(document.getElementById('mixDonut').getContext('2d'),{type:'doughnut',
+    data:{labels:['Leads (leadgen)','WhatsApp (click-to-chat)'],
+      datasets:[{data:[2858,1158],backgroundColor:[LEAD_COLOR,WA_COLOR],
+        borderColor:'#040b15',borderWidth:3,hoverOffset:5}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,cutout:'68%',
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed.toLocaleString('es-CO')} (${Math.round(c.parsed/4016*100)}%)`}}
+      }
+    }
+  });
+  // mini legends
+  const lbt=document.getElementById('leadByType');
+  const wbt=document.getElementById('waByType');
+  TYPE_DATA.forEach(d=>{
+    lbt.innerHTML+=`<span style="font-size:9px;color:var(--md);display:flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:2px;background:${C[d.tipo]};display:inline-block"></span>${d.tipo}: ${d.leads}</span>`;
+    if(d.wa>0) wbt.innerHTML+=`<span style="font-size:9px;color:var(--wa);display:flex;align-items:center;gap:4px">💬 ${d.tipo}: ${d.wa}</span>`;
+  });
+}
+
+/* CPL CHART */
+function buildCPLChart(){
+  const eligible = PROGS.filter(d=>d.leads>=20||d.wa>=20).sort((a,b)=>a.cptr-b.cptr).slice(0,14);
+  const bgs = eligible.map(d=>d.wa>0&&d.leads===0?WA_COLOR:LEAD_COLOR);
+  new Chart(document.getElementById('cplChart').getContext('2d'),{type:'bar',
+    data:{labels:eligible.map(d=>d.name.length>44?d.name.slice(0,44)+'…':d.name),
+      datasets:[{label:'CPR COP',data:eligible.map(d=>d.cptr),
+        backgroundColor:bgs,borderRadius:3,borderSkipped:false}]
+    },
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>`CPR: COP ${c.parsed.x.toLocaleString('es-CO')} · L:${eligible[c.dataIndex].leads} WA:${eligible[c.dataIndex].wa}`}}
+      },
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{font:{size:8},callback:v=>'COP '+v.toLocaleString('es-CO')}},
+        y:{grid:{display:false},ticks:{font:{size:8.5},color:'#7ea3c8'}}
+      }
+    }
+  });
+}
+
+/* INV CHART */
+function buildInvChart(){
+  const inv=[...PROGS].sort((a,b)=>b.spend-a.spend).slice(0,10);
+  const bgs=inv.map(d=>d.cptr>5000?'rgba(240,80,95,0.72)':d.cptr<2000?'rgba(47,217,140,0.65)':'rgba(82,152,255,0.65)');
+  new Chart(document.getElementById('invChart').getContext('2d'),{type:'bar',
+    data:{labels:inv.map(d=>d.name.length>34?d.name.slice(0,34)+'…':d.name),
+      datasets:[
+        {label:'Inversión COP',data:inv.map(d=>d.spend),backgroundColor:bgs,borderRadius:3,yAxisID:'y'},
+        {label:'Resultados',data:inv.map(d=>d.total),backgroundColor:'rgba(255,255,255,.1)',borderRadius:3,yAxisID:'y1'}
+      ]
+    },
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{font:{size:9},color:'#3b5d7c',boxWidth:8}},
+        tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.x.toLocaleString('es-CO')} · CPR: COP ${inv[c.dataIndex].cptr.toLocaleString('es-CO')}`}}
+      },
+      scales:{
+        y:{grid:{display:false},ticks:{font:{size:8},color:'#7ea3c8'}},
+        x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{font:{size:8},callback:v=>v>=1e6?'$'+(v/1e6).toFixed(1)+'M':'$'+(v/1e3).toFixed(0)+'K'}},
+        y1:{display:false}
+      }
+    }
+  });
+}
+
+/* CVR CHART */
+function buildCVRChart(){
+  const sorted=[...PROGS].sort((a,b)=>b.cvr-a.cvr).slice(0,14);
+  const bgs=sorted.map(d=>d.wa>0&&d.leads===0?WA_COLOR:LEAD_COLOR);
+  new Chart(document.getElementById('cvrChart').getContext('2d'),{type:'bar',
+    data:{labels:sorted.map(d=>d.name.length>40?d.name.slice(0,40)+'…':d.name),
+      datasets:[{label:'CVR %',data:sorted.map(d=>d.cvr),
+        backgroundColor:bgs,borderRadius:3,borderSkipped:false}]
+    },
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>`CVR: ${c.parsed.x}% · L:${sorted[c.dataIndex].leads} WA:${sorted[c.dataIndex].wa} · CPR: COP ${sorted[c.dataIndex].cptr.toLocaleString('es-CO')}`}}
+      },
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,.03)'},ticks:{font:{size:8.5},callback:v=>v+'%'}},
+        y:{grid:{display:false},ticks:{font:{size:8.5},color:'#7ea3c8'}}
+      }
+    }
+  });
+}
+
+/* TABLE */
+const TC={Diplomado:'pd',Curso:'pc',Seminario:'ps',Otro:'po'};
+let sDir=1,sCol=1,af='all';
+const acc=[d=>d.name,d=>d.leads,d=>d.wa,d=>d.total,d=>d.spend,d=>d.cpl||0,d=>d.cpw||0,d=>d.cptr,d=>d.imp,d=>d.reach,d=>d.freq,d=>d.cpm,d=>d.clicks,d=>d.cvr];
+
+function cprCls(v){if(v<=1400)return 'vg';if(v<=2770)return 'vok';if(v<=5000)return 'vw';return 'vb';}
+function freqCls(v){if(v<=2.5)return 'vok';if(v<=3.5)return 'vw';return 'vb';}
+function fmt(n){return Math.round(n).toLocaleString('es-CO')}
+
+function renderTable(){
+  let data=[...PROGS];
+  if(af==='hasWA') data=data.filter(d=>d.wa>0);
+  else if(af!=='all') data=data.filter(d=>d.tipo===af);
+  data.sort((a,b)=>(acc[sCol](a)-acc[sCol](b))*sDir);
+  const maxT=Math.max(...data.map(d=>d.total));
+  document.getElementById('TB').innerHTML=data.map(d=>{
+    const lbar=Math.round(d.leads/d.total*100)||0;
+    const wbar=Math.round(d.wa/d.total*100)||0;
+    return`<tr>
+      <td>
+        <div class="pnm">${d.name}</div>
+        <span class="pill ${TC[d.tipo]||'po'}">${d.tipo}</span>
+        ${d.wa>0&&d.leads>0?'<span class="wa-badge" style="font-size:7px;padding:1px 4px">L+WA</span>':''}
+        ${d.wa>0&&d.leads===0?'<span class="wa-badge" style="font-size:7px;padding:1px 4px">💬 WA</span>':''}
+      </td>
+      <td class="c-lead">${d.leads>0?d.leads:'-'}</td>
+      <td class="${d.wa>0?'c-wa':''}">${d.wa>0?d.wa:'-'}</td>
+      <td class="vh">${fmt(d.total)}<span class="mbar"><span class="mfil" style="width:${Math.round(d.total/maxT*100)}%;background:${d.wa>0&&d.leads===0?'var(--wa)':'var(--blu2)'}"></span></span></td>
+      <td>${fmt(d.spend)}</td>
+      <td class="${d.cpl?cprCls(d.cpl):''}">${d.cpl?fmt(d.cpl):'-'}</td>
+      <td class="${d.cpw?cprCls(d.cpw):''}${d.cpw?' c-wa':''}">${d.cpw?fmt(d.cpw):'-'}</td>
+      <td class="${cprCls(d.cptr)}">${fmt(d.cptr)}</td>
+      <td>${fmt(d.imp)}</td>
+      <td>${fmt(d.reach)}</td>
+      <td class="${freqCls(d.freq)}">${d.freq.toFixed(2)}</td>
+      <td>${fmt(d.cpm)}</td>
+      <td>${fmt(d.clicks)}</td>
+      <td>${d.cvr.toFixed(3)}%</td>
+    </tr>`;
+  }).join('');
+}
+function srt(col){if(sCol===col)sDir*=-1;else{sCol=col;sDir=-1;}
+  document.querySelectorAll('thead th').forEach((t,i)=>t.classList.toggle('srt',i===col));renderTable();}
+function filt(tipo,btn){af=tipo;document.querySelectorAll('.tbn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderTable();}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  buildTypeBars();buildTypeChart();buildMixDonut();
+  buildCPLChart();buildInvChart();buildCVRChart();renderTable();
+});
+</script>
+</body>
+</html>
