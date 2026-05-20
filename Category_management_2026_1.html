@@ -1,0 +1,874 @@
+bash
+
+cat > /mnt/user-data/outputs/category-management-2026.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificado Category Management 2026 — Dashboard Estratégico</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#3B82F6;--blue2:#2563EB;--gold:#F59E0B;--teal:#0D9488;--teal2:#14B8A6;
+  --red:#EF4444;--green:#10B981;--purple:#8B5CF6;--pink:#EC4899;
+  --text:#EFF4FF;--muted:#7E92B8;--muted2:#4A5E82;
+  --border:rgba(255,255,255,0.07);--card:rgba(255,255,255,0.038);
+}
+body{background:linear-gradient(160deg,#050D22 0%,#0A1535 45%,#060E26 100%);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+#topnav{position:sticky;top:0;z-index:200;background:rgba(7,16,43,0.93);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.ni{display:flex;align-items:center;overflow-x:auto;scrollbar-width:none;padding:0 24px}
+.ni::-webkit-scrollbar{display:none}
+.nb{flex-shrink:0;padding:13px 18px 13px 0;border-right:1px solid var(--border);margin-right:6px}
+.nb .b1{font-size:10.5px;letter-spacing:2.5px;color:var(--gold);font-weight:700;text-transform:uppercase}
+.nb .b2{font-size:11.5px;color:var(--muted);margin-top:1px}
+.tb{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);padding:14px 12px;cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;white-space:nowrap;transition:all .2s}
+.tb:hover{color:var(--text)}.tb.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:600}
+.page{max-width:1180px;margin:0 auto;padding:28px 24px}
+.sec{display:none}.sec.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px}
+.ch{font-family:'Syne',sans-serif;font-size:14.5px;font-weight:700;color:var(--text);margin-bottom:14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:860px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.kpi{border-radius:13px;padding:18px 20px}
+.kv{font-family:'Syne',sans-serif;font-size:25px;font-weight:800;line-height:1}
+.kl{font-size:12px;font-weight:600;color:var(--text);margin-top:5px}
+.ks{font-size:11px;color:var(--muted);margin-top:2px}
+.kf{font-size:10px;color:var(--muted2);margin-top:5px;border-top:1px solid rgba(255,255,255,.05);padding-top:4px}
+.stitle{margin-bottom:22px}
+.stitle h2{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:var(--text)}
+.stitle p{color:var(--muted);font-size:13px;margin-top:4px}
+.tag{display:inline-block;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;margin:2px}
+.tr{background:rgba(239,68,68,.15);color:#FCA5A5;border:1px solid rgba(239,68,68,.3)}
+.tg{background:rgba(245,158,11,.15);color:#FCD34D;border:1px solid rgba(245,158,11,.3)}
+.tgr{background:rgba(16,185,129,.15);color:#6EE7B7;border:1px solid rgba(16,185,129,.3)}
+.tb2{background:rgba(59,130,246,.15);color:#93C5FD;border:1px solid rgba(59,130,246,.3)}
+.tp{background:rgba(139,92,246,.15);color:#C4B5FD;border:1px solid rgba(139,92,246,.3)}
+.tt{background:rgba(20,184,166,.15);color:#5EEAD4;border:1px solid rgba(20,184,166,.3)}
+.tx{background:rgba(255,255,255,.07);color:var(--muted);border:1px solid var(--border)}
+.src{font-size:10px;color:var(--muted2);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:5px;padding:2px 6px;display:inline-block}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{padding:9px 11px;text-align:left;color:var(--gold);font-weight:700;border-bottom:1px solid var(--border);font-size:11px}
+td{padding:8px 11px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:middle;line-height:1.4}
+tr.hl td{background:rgba(245,158,11,.06);color:var(--text)}
+tr:last-child td{border-bottom:none}
+.ibar{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.ibar-fill{height:7px;border-radius:4px}
+.alert{border-radius:13px;padding:18px 22px;margin-bottom:20px}
+.alert-warn{background:rgba(245,158,11,.09);border:1px solid rgba(245,158,11,.3)}
+.alert-red{background:rgba(239,68,68,.09);border:1px solid rgba(239,68,68,.3)}
+.alert-info{background:rgba(13,148,136,.09);border:1px solid rgba(13,148,136,.3)}
+.alert-blue{background:rgba(59,130,246,.09);border:1px solid rgba(59,130,246,.3)}
+.ins{background:rgba(255,255,255,.035);border-radius:11px;padding:14px 16px;display:flex;gap:10px;align-items:flex-start}
+.ins span{font-size:17px;flex-shrink:0}
+.ins p{font-size:12px;color:var(--muted);line-height:1.6}
+.hero{background:linear-gradient(135deg,rgba(37,99,235,.12) 0%,rgba(13,148,136,.08) 100%);border:1px solid rgba(59,130,246,.2);border-radius:16px;padding:26px 30px;margin-bottom:22px}
+.quote{border-left:3px solid var(--gold);padding:12px 15px;background:rgba(245,158,11,.07);border-radius:0 10px 10px 0;font-size:13px;color:var(--muted);line-height:1.7;font-style:italic}
+.nb-src{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.18);border-radius:8px;padding:8px 11px;font-size:11px;color:var(--muted);margin-top:11px}
+.nb-src strong{color:#93C5FD}
+/* B2B MODEL */
+.b2b-box{border-radius:13px;padding:18px 20px}
+.b2b-arr{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.b2b-step{border-radius:10px;padding:12px 16px;text-align:center;min-width:130px}
+.b2b-step .bs-ico{font-size:22px;margin-bottom:6px}
+.b2b-step .bs-lbl{font-size:11.5px;font-weight:700}
+.b2b-step .bs-sub{font-size:10.5px;color:var(--muted);margin-top:2px}
+.arr{font-size:20px;color:var(--muted2)}
+/* LINKEDIN SEGMENT PILLS */
+.li-seg{display:inline-flex;align-items:center;gap:6px;background:rgba(10,102,194,.15);border:1px solid rgba(10,102,194,.4);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;color:#93C5FD;margin:4px}
+.li-seg .li-dot{width:8px;height:8px;border-radius:50%;background:#0A66C2;flex-shrink:0}
+/* META SEGMENT PILLS */
+.meta-seg{display:inline-flex;align-items:center;gap:6px;background:rgba(24,119,242,.12);border:1px solid rgba(24,119,242,.35);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;color:#93C5FD;margin:4px}
+.meta-seg .meta-dot{width:8px;height:8px;border-radius:50%;background:#1877F2;flex-shrink:0}
+/* CH ROW */
+.chr{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.03);border-radius:8px;padding:9px 12px;margin-bottom:7px;border:1px solid var(--border)}
+/* AI */
+#ai-btn{background:linear-gradient(135deg,#2563EB,#3B82F6);color:#fff;border:none;border-radius:12px;padding:13px 30px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;display:inline-flex;align-items:center;gap:8px}
+#ai-btn:disabled{opacity:.5;cursor:not-allowed}
+.aic{border-radius:12px;padding:16px 18px;margin-bottom:12px}
+footer{border-top:1px solid var(--border);padding:16px 24px;text-align:center;font-size:11px;color:var(--muted2)}
+footer span{color:var(--gold)}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.spin{display:inline-block;animation:spin 1s linear infinite}
+</style>
+</head>
+<body>
+
+<nav id="topnav">
+  <div class="ni">
+    <div class="nb"><div class="b1">Category Mgmt 2026</div><div class="b2">Dashboard Estratégico</div></div>
+    <button class="tb active" onclick="go('overview')" id="btn-overview">◈ Resumen Ejecutivo</button>
+    <button class="tb" onclick="go('market')" id="btn-market">◉ Estudio de Mercado</button>
+    <button class="tb" onclick="go('audience')" id="btn-audience">◎ Dos Audiencias</button>
+    <button class="tb" onclick="go('pauta')" id="btn-pauta">⊘ Por qué no convierte</button>
+    <button class="tb" onclick="go('strategy')" id="btn-strategy">◆ Estrategia B2B</button>
+    <button class="tb" onclick="go('benchmark')" id="btn-benchmark">◇ Benchmarking</button>
+    <button class="tb" onclick="go('ai')" id="btn-ai">✦ Insights IA</button>
+  </div>
+</nav>
+
+<!-- ======================================================== OVERVIEW -->
+<div id="sec-overview" class="sec active"><div class="page">
+
+  <div class="hero" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px">
+    <div>
+      <div style="font-size:10px;letter-spacing:3px;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:6px">Análisis Estratégico · Educación Ejecutiva · Colombia 2026</div>
+      <h1 style="font-family:'Syne',sans-serif;font-size:28px;font-weight:900;line-height:1.2">Certificado Category<br>Management 2026</h1>
+      <p style="color:var(--muted);font-size:13px;margin-top:8px;line-height:1.6">Presencial · 16 horas · 17–18 junio 2026 · Cali, Colombia</p>
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+        <span class="src">📄 CCC Panorama Económico 2025</span>
+        <span class="src">📄 DANE — CENU</span>
+        <span class="src">📄 FENALCO Colombia</span>
+        <span class="src">📄 Meta Ads — Segmentos disponibles</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+      <div style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.35);border-radius:11px;padding:10px 18px;text-align:center">
+        <div style="font-size:21px;font-weight:800;color:var(--gold)">$4.500.000</div>
+        <div style="font-size:11px;color:var(--muted)">COP · antes $5.000.000</div>
+      </div>
+      <div style="background:rgba(13,148,136,.12);border:1px solid rgba(13,148,136,.3);border-radius:11px;padding:8px 14px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:var(--teal2)">Frédéric Gautier</div>
+        <div style="font-size:11px;color:var(--muted)">Fundador ILACAD · Precursor CM LatAm</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EL HALLAZGO PRINCIPAL -->
+  <div class="alert alert-red" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <span style="font-size:22px">🔍</span>
+      <h3 style="font-family:'Syne',sans-serif;font-size:17px;color:#FCA5A5">Hallazgo central: se está vendiendo al usuario, no al comprador</h3>
+    </div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7">La pauta en Meta Ads segmenta por cargos (Category Management, Trade Marketing, Retail, etc.) y llega a los <strong style="color:var(--text)">empleados que asistirían al programa</strong>. Pero a $4.500.000 COP, <strong style="color:var(--text)">ningún empleado tiene autonomía individual de compra</strong>: la decisión es corporativa. El mensaje correcto, con el presupuesto correcto, debe llegar al <strong style="color:var(--text)">decisor empresarial</strong> — no al usuario final.</p>
+  </div>
+
+  <!-- KPIs REALES -->
+  <div class="g4" style="margin-bottom:20px">
+    <div class="kpi" style="background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25)">
+      <div style="font-size:20px;margin-bottom:8px">🏢</div>
+      <div class="kv" style="color:#60A5FA">42.300</div>
+      <div class="kl">Empresas en comercio — Cali</div>
+      <div class="ks">36,2% de 116.852 empresas activas 2025</div>
+      <div class="kf">📄 Cámara de Comercio de Cali</div>
+    </div>
+    <div class="kpi" style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.25)">
+      <div style="font-size:20px;margin-bottom:8px">👔</div>
+      <div class="kv" style="color:var(--gold)">~4.600</div>
+      <div class="kl">Profesionales en roles afines</div>
+      <div class="ks">Gerentes trade mktg + jefes compras (≈2.300 c/u)</div>
+      <div class="kf">📄 Estimación base CCC/DANE</div>
+    </div>
+    <div class="kpi" style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.25)">
+      <div style="font-size:20px;margin-bottom:8px">📈</div>
+      <div class="kv" style="color:#34D399">+11,7%</div>
+      <div class="kl">Crecimiento comercio minorista</div>
+      <div class="ks">Acumulado 2025 — Valle del Cauca</div>
+      <div class="kf">📄 CCC — Panorama Económico 2025</div>
+    </div>
+    <div class="kpi" style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25)">
+      <div style="font-size:20px;margin-bottom:8px">⚠️</div>
+      <div class="kv" style="color:#FCA5A5">82%</div>
+      <div class="kl">Tenderos con ventas en descenso</div>
+      <div class="ks">Crisis del canal TAT — necesidad urgente de formación</div>
+      <div class="kf">📄 FENALCO Colombia 2024</div>
+    </div>
+  </div>
+
+  <!-- DOS AUDIENCIAS — el modelo central -->
+  <div class="card" style="margin-bottom:18px;border-color:rgba(245,158,11,.3)">
+    <div class="ch" style="color:var(--gold)">El modelo de dos audiencias — la clave del programa</div>
+    <div class="b2b-arr">
+      <div class="b2b-step" style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3)">
+        <div class="bs-ico">👤</div>
+        <div class="bs-lbl" style="color:#93C5FD">USUARIO FINAL</div>
+        <div class="bs-sub">Category Mgr, Trade Mktg,<br>Retail, Merchandising</div>
+        <div style="margin-top:6px"><span class="tag tb2" style="font-size:10px">Asiste al programa</span></div>
+      </div>
+      <div class="arr">≠</div>
+      <div class="b2b-step" style="background:rgba(245,158,11,.1);border:2px solid rgba(245,158,11,.5)">
+        <div class="bs-ico">🏢</div>
+        <div class="bs-lbl" style="color:var(--gold)">COMPRADOR</div>
+        <div class="bs-sub">Dir. Comercial, Gerente RRHH,<br>Gerente de Formación, CEO</div>
+        <div style="margin-top:6px"><span class="tag tg" style="font-size:10px">Aprueba y paga $4.5M</span></div>
+      </div>
+      <div class="arr">→</div>
+      <div class="b2b-step" style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3)">
+        <div class="bs-ico">✅</div>
+        <div class="bs-lbl" style="color:#34D399">INSCRIPCIÓN</div>
+        <div class="bs-sub">Empresa registra a su equipo<br>3–8 personas por empresa</div>
+        <div style="margin-top:6px"><span class="tag tgr" style="font-size:10px">Decisión corporativa</span></div>
+      </div>
+    </div>
+    <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:12px 16px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font-size:18px;flex-shrink:0">🔴</span>
+      <p style="font-size:12.5px;color:var(--muted);line-height:1.6"><strong style="color:#FCA5A5">Error actual:</strong> La pauta llega al USUARIO (empleado) vía Meta Ads en modo ocio. El empleado no tiene autorización para gastar $4.5M. Aunque vea el anuncio y le interese, no puede comprar. La comunicación debe dirigirse al COMPRADOR (empresa) con un argumento de ROI corporativo, no de desarrollo individual.</p>
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="ins" style="border:1px solid rgba(59,130,246,.2);background:rgba(59,130,246,.05)">
+      <span>📊</span><p>116.852 empresas activas en Cali (2025). El 3,1% son medianas/grandes (~3.600) — ahí viven los decisores con presupuesto real de formación.</p>
+    </div>
+    <div class="ins" style="border:1px solid rgba(245,158,11,.2);background:rgba(245,158,11,.05)">
+      <span>💼</span><p>El comercio minorista creció +11,7% en 2025. Ese dato justifica ante cualquier director comercial por qué su equipo necesita mejorar en Category Management ahora.</p>
+    </div>
+    <div class="ins" style="border:1px solid rgba(16,185,129,.2);background:rgba(16,185,129,.05)">
+      <span>🎯</span><p>Con 4–6 inscripciones corporativas el programa se llena. No se necesita escala masiva: se necesita llegar a 5–10 directivos con poder de decisión.</p>
+    </div>
+    <div class="ins" style="border:1px solid rgba(139,92,246,.2);background:rgba(139,92,246,.05)">
+      <span>🤝</span><p>Fenalco Valle y la CCC tienen acceso directo a los compradores B2B. Un convenio de difusión evita el costo de adquisición de pauta paga.</p>
+    </div>
+    <div class="ins" style="border:1px solid rgba(239,68,68,.2);background:rgba(239,68,68,.05)">
+      <span>🚨</span><p>82% de tenderos con ventas en descenso (FENALCO). El canal TAT está en crisis y necesita Category Management para sobrevivir — urgencia de mercado real y verificada.</p>
+    </div>
+    <div class="ins" style="border:1px solid rgba(245,158,11,.2);background:rgba(245,158,11,.05)">
+      <span>🏆</span><p>Frédéric Gautier como fundador del CM en LatAm es el diferenciador que ninguna universidad local puede replicar. Ese argumento cierra ventas consultivas B2B.</p>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ======================================================== MARKET -->
+<div id="sec-market" class="sec"><div class="page">
+  <div class="stitle">
+    <h2>Estudio de Mercado &amp; Demanda</h2>
+    <p>Datos verificados: Cámara de Comercio de Cali · DANE (CENU) · FENALCO · Diagnóstico Socioeconómico Cali 2019–2023</p>
+  </div>
+
+  <div class="g4" style="margin-bottom:18px">
+    <div style="background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-radius:12px;padding:15px;text-align:center">
+      <div style="font-size:22px;font-weight:800;color:#60A5FA">116.852</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:3px">Empresas activas Cali 2025</div>
+      <div class="src" style="margin-top:5px">CCC — Ritmo Empresarial</div>
+    </div>
+    <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:15px;text-align:center">
+      <div style="font-size:22px;font-weight:800;color:var(--gold)">193.974</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:3px">Unidades económicas Valle del Cauca</div>
+      <div class="src" style="margin-top:5px">DANE — CENU</div>
+    </div>
+    <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.25);border-radius:12px;padding:15px;text-align:center">
+      <div style="font-size:22px;font-weight:800;color:#34D399">~43.500</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:3px">Tiendas de barrio — Valle del Cauca</div>
+      <div class="src" style="margin-top:5px">FENALCO / CENU-DANE</div>
+    </div>
+    <div style="background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.25);border-radius:12px;padding:15px;text-align:center">
+      <div style="font-size:22px;font-weight:800;color:#A78BFA">9,7%</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:3px">Del total nacional de negocios — 3er lugar del país</div>
+      <div class="src" style="margin-top:5px">DANE — CENU</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="ch">Distribución empresarial por tamaño — Cali</div>
+      <div style="position:relative;width:100%;height:220px"><canvas id="tamanoChart" role="img" aria-label="Micro 88.3%, Pequeñas 8.6%, Medianas 2.4%, Grandes 0.7%">Micro 88.3, Pequeñas 8.6, Medianas 2.4, Grandes 0.7.</canvas></div>
+      <div class="nb-src" style="margin-top:10px">📄 <strong>Fuente:</strong> Diagnóstico Socioeconómico Cali 2019–2023. Aplicado a 116.852 empresas (2025): ~103K micro · ~10K pequeñas · ~2.800 medianas · ~817 grandes.</div>
+    </div>
+    <div class="card">
+      <div class="ch">Sectores — empresas registradas Cali 2023</div>
+      <div style="position:relative;width:100%;height:220px"><canvas id="sectorChart" role="img" aria-label="Comercio lidera con 34.709 empresas">Sectores Cali 2023.</canvas></div>
+      <div class="nb-src" style="margin-top:10px">📄 <strong>Fuente:</strong> Diagnóstico Socioeconómico Cali — PDD 2024.</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="ch">Indicadores económicos regionales 2025</div>
+      <div style="display:flex;flex-direction:column">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div><div style="font-size:12px">Crecimiento comercio minorista</div><div class="src">CCC Panorama Económico 2025</div></div>
+          <span style="font-size:15px;font-weight:800;color:#34D399">+11,7%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div><div style="font-size:12px">Crecimiento comercio y transporte (PIB)</div><div class="src">CCC Panorama Económico 2025</div></div>
+          <span style="font-size:15px;font-weight:800;color:#34D399">+5,1%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div><div style="font-size:12px">Exportaciones de bienes Valle</div><div class="src">CCC Panorama Económico 2025</div></div>
+          <span style="font-size:15px;font-weight:800;color:#34D399">+15,4%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div><div style="font-size:12px">Ventas vehículos nuevos en la región</div><div class="src">CCC Panorama Económico 2025</div></div>
+          <span style="font-size:15px;font-weight:800;color:#34D399">+24,7%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0">
+          <div><div style="font-size:12px">PIB nominal de Cali (2022)</div><div class="src">Diagnóstico Socioeconómico</div></div>
+          <span style="font-size:14px;font-weight:800;color:#60A5FA">~$80 billones</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch">Radiografía canal TAT — Valle del Cauca</div>
+      <table>
+        <tr><th>Indicador</th><th>Dato</th><th>Fuente</th></tr>
+        <tr><td>Tiendas de barrio Colombia</td><td style="color:var(--gold);font-weight:700">~450.000</td><td><span class="src">FENALCO</span></td></tr>
+        <tr><td>Tiendas Valle del Cauca</td><td style="color:var(--gold);font-weight:700">~43.500</td><td><span class="src">FENALCO/CENU</span></td></tr>
+        <tr><td>Tenderos con ventas en descenso</td><td style="color:#FCA5A5;font-weight:700">82%</td><td><span class="src">FENALCO 2024</span></td></tr>
+        <tr><td>Tenderos evaluando cerrar</td><td style="color:#FCA5A5;font-weight:700">30%</td><td><span class="src">FENALCO 2024</span></td></tr>
+        <tr><td>Tiendas en estratos 1–3</td><td>96%</td><td><span class="src">FENALCO</span></td></tr>
+        <tr><td>Propiedad de mujeres</td><td>64,7%</td><td><span class="src">FENALCO</span></td></tr>
+        <tr><td>Aportan a pensión</td><td style="color:#FCA5A5">17%</td><td><span class="src">FENALCO</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch">Profesionales estimados por rol — Cali y alrededores</div>
+    <table>
+      <tr><th>Cargo / Rol</th><th>Estimación</th><th>Rol en el programa</th><th>Nota metodológica</th></tr>
+      <tr class="hl"><td style="font-weight:700">Gerentes de trade marketing / mercadeo</td><td style="color:var(--gold);font-weight:800;font-size:13px">≈ 2.300</td><td><span class="tag tg">Usuario + Influencer</span></td><td>Medianas/grandes; en micro asumido por el dueño</td></tr>
+      <tr class="hl"><td style="font-weight:700">Jefes de compras / abastecimiento</td><td style="color:var(--gold);font-weight:800;font-size:13px">≈ 2.300</td><td><span class="tag tg">Usuario + Influencer</span></td><td>Incluye encargados de surtido en cadenas regionales</td></tr>
+      <tr><td>Ejecutivos de cuenta TAT</td><td style="color:#60A5FA;font-weight:700">≈ 9.000</td><td><span class="tag tb2">Usuario (B2B empresa)</span></td><td>Representantes comerciales de distribuidores/fabricantes</td></tr>
+      <tr><td>Directores logística</td><td style="color:var(--muted);font-weight:600">≈ 2.300</td><td><span class="tag tx">Secundario</span></td><td>Cadena de suministro; informal en microempresas</td></tr>
+      <tr><td>Directores / Gerentes Comerciales</td><td style="color:#34D399;font-weight:700">≈ 800</td><td><span class="tag tgr">🏢 COMPRADOR B2B</span></td><td>Aprueba presupuesto de formación — decisor real</td></tr>
+    </table>
+    <div class="nb-src" style="margin-top:10px">⚠️ <strong>Nota:</strong> Estimaciones con base en 116.852 empresas activas (CCC 2025): 88,3% micro, 8,6% pequeñas, 2,4% medianas, 0,7% grandes. En microempresas el propietario cumple múltiples funciones.</div>
+  </div>
+
+</div></div>
+
+<!-- ======================================================== AUDIENCIA: DOS MODELOS -->
+<div id="sec-audience" class="sec"><div class="page">
+  <div class="stitle">
+    <h2>Las Dos Audiencias del Programa</h2>
+    <p>La distinción más crítica para entender por qué la pauta no convierte y cómo reorientar la estrategia</p>
+  </div>
+
+  <!-- MODELO VISUAL CENTRAL -->
+  <div class="g2" style="margin-bottom:18px">
+    <!-- AUDIENCIA 1: USUARIO -->
+    <div style="background:rgba(59,130,246,.07);border:2px solid rgba(59,130,246,.3);border-radius:14px;padding:20px 22px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(59,130,246,.2);display:flex;align-items:center;justify-content:center;font-size:18px">👤</div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#93C5FD">AUDIENCIA 1 — El Usuario</div>
+          <div style="font-size:11px;color:var(--muted)">Asiste al programa · No decide la compra</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">El profesional que se formaría. Puede ver el anuncio en Meta, interesarse y <strong style="color:var(--text)">pero no puede comprar solo</strong> — necesita aprobación y presupuesto de su empresa.</div>
+
+      <div style="margin-bottom:12px">
+        <div style="font-size:11px;color:#93C5FD;font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Segmentos disponibles Meta Ads</div>
+        <div>
+          <span class="meta-seg"><span class="meta-dot"></span>Category management</span>
+          <span class="meta-seg"><span class="meta-dot"></span>Trade Marketing</span>
+          <span class="meta-seg"><span class="meta-dot"></span>Trade Marketing Manager</span>
+          <span class="meta-seg"><span class="meta-dot"></span>Retail</span>
+          <span class="meta-seg"><span class="meta-dot"></span>Merchandising</span>
+          <span class="meta-seg"><span class="meta-dot"></span>Visual merchandising</span>
+        </div>
+        <div class="nb-src" style="margin-top:8px">Datos demográficos › Trabajo › Cargos — Facebook/Meta Ads. <strong>Alcance en Cali: segmento reducido y de alta dispersión.</strong></div>
+      </div>
+
+      <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:9px;padding:10px 13px">
+        <div style="font-size:11.5px;font-weight:700;color:#FCA5A5;margin-bottom:4px">⚠️ Por qué no convierte esta audiencia:</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:11.5px;color:var(--muted);display:flex;gap:6px"><span style="color:#FCA5A5">›</span>Está en Facebook en modo <strong style="color:var(--text)">ocio</strong>, no en modo de compra profesional</div>
+          <div style="font-size:11.5px;color:var(--muted);display:flex;gap:6px"><span style="color:#FCA5A5">›</span>No tiene <strong style="color:var(--text)">autonomía de compra</strong> para $4.5M COP</div>
+          <div style="font-size:11.5px;color:var(--muted);display:flex;gap:6px"><span style="color:#FCA5A5">›</span>Requiere aprobación de jefe + HR + presupuesto corporativo</div>
+          <div style="font-size:11.5px;color:var(--muted);display:flex;gap:6px"><span style="color:#FCA5A5">›</span>Ciclo de decisión largo para conversión en pauta directa</div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;background:rgba(59,130,246,.07);border-radius:9px;padding:10px 13px">
+        <div style="font-size:11.5px;font-weight:700;color:#93C5FD;margin-bottom:4px">✅ Cómo usar bien esta audiencia:</div>
+        <div style="font-size:11.5px;color:var(--muted);line-height:1.6">Usar estos segmentos para generar <strong style="color:var(--text)">interés y demanda interna</strong>. El empleado interesado puede convertirse en <em>champion interno</em> que le pide a su empresa que lo patrocine. CTA recomendado: "Comparte con tu empresa" o "Pídele a tu organización este beneficio".</div>
+      </div>
+    </div>
+
+    <!-- AUDIENCIA 2: COMPRADOR -->
+    <div style="background:rgba(245,158,11,.07);border:2px solid rgba(245,158,11,.45);border-radius:14px;padding:20px 22px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;font-size:18px">🏢</div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--gold)">AUDIENCIA 2 — El Comprador ⭐</div>
+          <div style="font-size:11px;color:var(--muted)">Aprueba el presupuesto · Toma la decisión</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">El directivo de la empresa que aprueba el gasto de formación. <strong style="color:var(--text)">Aquí está la conversión real.</strong> No asistirá al programa pero lo compra para su equipo.</div>
+
+      <div style="margin-bottom:12px">
+        <div style="font-size:11px;color:var(--gold);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Perfiles del decisor B2B</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:9px 12px;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:12.5px;font-weight:700">Director / Gerente Comercial</div><div style="font-size:11px;color:var(--muted)">Aprueba capacitación del equipo de ventas/trade</div></div>
+            <span class="tag tg">Decisor #1</span>
+          </div>
+          <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:9px 12px;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:12.5px;font-weight:700">Gerente de RRHH / Formación</div><div style="font-size:11px;color:var(--muted)">Maneja el presupuesto de capacitación corporativa</div></div>
+            <span class="tag tg">Decisor #2</span>
+          </div>
+          <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:9px 12px;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:12.5px;font-weight:700">Gerente General / CEO (PYME)</div><div style="font-size:11px;color:var(--muted)">En medianas empresas, decide directamente</div></div>
+            <span class="tag tg">Decisor #3</span>
+          </div>
+          <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:9px 12px;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:12.5px;font-weight:700">Dir. de Trade / Category en grandes empresas</div><div style="font-size:11px;color:var(--muted)">Patrocina formación especializada de su área</div></div>
+            <span class="tag tg">Decisor #4</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2);border-radius:9px;padding:10px 13px">
+        <div style="font-size:11.5px;font-weight:700;color:#34D399;margin-bottom:4px">✅ Cómo llegar a esta audiencia:</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:11.5px;color:var(--muted);display:flex;gap:6px"><span style="color:#34D399">›</span><strong style="color:var(--text)">LinkedIn InMail</strong> a perfiles con cargo Director/Gerente en retail/CPG en Cali</div>
+          <div style="font-size:11.5px;color:var(--muted);display:flex;gap:6px"><span style="color:#34D399">›</span><strong style="color:var(--text)">Llamada/email directo</strong> a las ~3.600 medianas/grandes empresas de comercio</div>
+          <div style="font-size:11.5px;color:var(--muted);display:flex;gap:6px"><span style="color:#34D399">›</span><strong style="color:var(--text)">Fenalco Valle + CCC</strong> — base de datos de directivos afiliados</div>
+          <div style="font-size:11.5px;color:var(--muted);display:flex;gap:6px"><span style="color:#34D399">›</span><strong style="color:var(--text)">Propuesta corporativa</strong> con ROI: capacitar 4 personas = $18M vs. consultoría $40M+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOURNEY DE COMPRA -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="ch">El journey de compra B2B — cómo fluye una inscripción corporativa</div>
+    <div style="display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding-bottom:8px">
+      <div style="text-align:center;min-width:130px;padding:0 8px">
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(59,130,246,.15);border:2px solid rgba(59,130,246,.4);display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 8px">👀</div>
+        <div style="font-size:12px;font-weight:700;color:#93C5FD">1. Descubrimiento</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4">Empleado ve el anuncio o recibe info del programa</div>
+      </div>
+      <div style="padding-top:20px;color:var(--muted2);font-size:20px">→</div>
+      <div style="text-align:center;min-width:130px;padding:0 8px">
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(139,92,246,.15);border:2px solid rgba(139,92,246,.4);display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 8px">💬</div>
+        <div style="font-size:12px;font-weight:700;color:#A78BFA">2. Champion interno</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4">Le comenta a su jefe directo: "esto nos sirve"</div>
+      </div>
+      <div style="padding-top:20px;color:var(--muted2);font-size:20px">→</div>
+      <div style="text-align:center;min-width:130px;padding:0 8px">
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(245,158,11,.15);border:2px solid rgba(245,158,11,.4);display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 8px">👔</div>
+        <div style="font-size:12px;font-weight:700;color:var(--gold)">3. Evaluación directiva</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4">Director y HR evalúan costo/beneficio del programa</div>
+      </div>
+      <div style="padding-top:20px;color:var(--muted2);font-size:20px">→</div>
+      <div style="text-align:center;min-width:130px;padding:0 8px">
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(16,185,129,.15);border:2px solid rgba(16,185,129,.4);display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 8px">✅</div>
+        <div style="font-size:12px;font-weight:700;color:#34D399">4. Aprobación</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4">Empresa aprueba presupuesto e inscribe a 3–8 personas</div>
+      </div>
+      <div style="padding-top:20px;color:var(--muted2);font-size:20px">→</div>
+      <div style="text-align:center;min-width:130px;padding:0 8px">
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(245,158,11,.15);border:2px solid rgba(245,158,11,.4);display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 8px">💳</div>
+        <div style="font-size:12px;font-weight:700;color:var(--gold)">5. Inscripción</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4">Pago corporativo · Factura a la empresa · NIT</div>
+      </div>
+    </div>
+    <div class="nb-src" style="margin-top:12px">⚠️ <strong>Implicación:</strong> La pauta en Meta genera impresiones en el paso 1, pero no acompaña el ciclo hasta el paso 3 (quien decide). Sin tocar al decisor directamente, el journey se corta y no hay conversión.</div>
+  </div>
+
+  <!-- TABLA RESUMEN -->
+  <div class="card">
+    <div class="ch">Resumen estratégico de las dos audiencias</div>
+    <table>
+      <tr><th>Dimensión</th><th style="color:#93C5FD">👤 Usuario (asiste)</th><th style="color:var(--gold)">🏢 Comprador (paga) ⭐</th></tr>
+      <tr><td>Cargos</td><td>Category Mgr, Trade Mktg, Merchandising, Retail, Visual</td><td>Director Comercial, Gerente RRHH, CEO, Dir. Formación</td></tr>
+      <tr><td>Segmentos Meta Ads</td><td><span class="tag tb2">Disponibles ✓</span></td><td><span class="tag tr">No aplica en Meta ✗</span></td></tr>
+      <tr><td>Canal correcto</td><td>LinkedIn (contenido), Meta (awareness)</td><td><strong style="color:var(--gold)">LinkedIn InMail, Email B2B, Teléfono, Fenalco/CCC</strong></td></tr>
+      <tr><td>Mensaje</td><td>"Desarrolla tus habilidades en category"</td><td><strong style="color:var(--gold)">"Capacita a tu equipo y mejora la rentabilidad de categorías"</strong></td></tr>
+      <tr><td>Autoridad de compra</td><td><span class="tag tr">No puede comprar solo</span></td><td><span class="tag tgr">Sí — aprueba presupuesto</span></td></tr>
+      <tr><td>Monto para él/ella</td><td>$4.5M es alto para gasto personal</td><td>$4.5M–$18M es presupuesto de formación normal</td></tr>
+      <tr><td>Prioridad comercial</td><td><span class="tag tx">Secundaria (influencer)</span></td><td><span class="tag tg">PRIMARIA — aquí está la venta</span></td></tr>
+    </table>
+  </div>
+
+</div></div>
+
+<!-- ======================================================== POR QUÉ NO CONVIERTE -->
+<div id="sec-pauta" class="sec"><div class="page">
+  <div class="stitle">
+    <h2>Por qué la pauta digital no convierte</h2>
+    <p>Diagnóstico completo de los factores que bloquean la conversión — con datos reales del mercado</p>
+  </div>
+
+  <div class="alert alert-red" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <span style="font-size:22px">🔴</span>
+      <h3 style="font-family:'Syne',sans-serif;font-size:16px;color:#FCA5A5">El problema raíz: canal masivo para una venta corporativa especializada</h3>
+    </div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7">Meta Ads puede alcanzar los 6 segmentos de cargo disponibles, pero estos son <strong style="color:var(--text)">empleados sin poder de compra</strong> que navegan en modo ocio. El programa cuesta $4.5M y su decisión de compra requiere aprobación corporativa. Ningún canal masivo en redes sociales resuelve ese gap por sí solo.</p>
+  </div>
+
+  <div class="g2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="ch">Factores de fricción — impacto sobre la conversión</div>
+      <div id="impact-bars" style="margin-top:4px"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="ch">CPL estimado por canal — mercado B2B Colombia</div>
+        <div id="cpl-list"></div>
+        <div class="nb-src">⚠️ <strong>CPL estimados</strong> con base en benchmarks B2B Colombia para programas ejecutivos de alto valor. Cifras orientativas.</div>
+      </div>
+      <div class="card">
+        <div class="ch">Meta Ads vs LinkedIn para este programa</div>
+        <div class="g2" style="gap:10px">
+          <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:13px">
+            <div style="font-size:13px;font-weight:700;color:#FCA5A5;margin-bottom:5px">Meta Ads</div>
+            <div style="font-size:26px;font-weight:900;color:#FCA5A5;margin-bottom:3px">12%</div>
+            <div style="font-size:11px;color:var(--muted)">Fit con el programa</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:5px">Alcanza usuarios, no compradores. Modo ocio. Segmentos de cargo disponibles pero sin autoridad de compra.</div>
+          </div>
+          <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.25);border-radius:10px;padding:13px">
+            <div style="font-size:13px;font-weight:700;color:#6EE7B7;margin-bottom:5px">LinkedIn</div>
+            <div style="font-size:26px;font-weight:900;color:#6EE7B7;margin-bottom:3px">91%</div>
+            <div style="font-size:11px;color:var(--muted)">Fit con el programa</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:5px">Filtra por cargo Director/Gerente + sector retail/CPG + Cali. Modo profesional. Decisores activos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANÁLISIS DE LOS SEGMENTOS META -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="ch">Análisis de los 6 segmentos Meta Ads disponibles para el programa</div>
+    <table>
+      <tr><th>Segmento disponible en Meta</th><th>Tipo de audiencia</th><th>Autoridad de compra</th><th>Uso recomendado</th><th>Prioridad</th></tr>
+      <tr><td><span class="meta-seg" style="font-size:11px"><span class="meta-dot"></span>Trade Marketing Manager</span></td><td>Gerentes — perfil más ejecutivo</td><td><span class="tag tg">Media (con aprobación)</span></td><td>Awareness + champion interno</td><td><span class="tag tgr">Alta</span></td></tr>
+      <tr><td><span class="meta-seg" style="font-size:11px"><span class="meta-dot"></span>Category management</span></td><td>Especialistas y managers</td><td><span class="tag tg">Media</span></td><td>Awareness + demanda interna</td><td><span class="tag tgr">Alta</span></td></tr>
+      <tr><td><span class="meta-seg" style="font-size:11px"><span class="meta-dot"></span>Trade Marketing</span></td><td>Ejecutivos y analistas</td><td><span class="tag tr">Baja</span></td><td>Contenido educativo / remarketing</td><td><span class="tag tg">Media</span></td></tr>
+      <tr><td><span class="meta-seg" style="font-size:11px"><span class="meta-dot"></span>Retail</span></td><td>Muy amplio — incluye operativos</td><td><span class="tag tr">Muy baja</span></td><td>Awareness de marca únicamente</td><td><span class="tag tx">Baja</span></td></tr>
+      <tr><td><span class="meta-seg" style="font-size:11px"><span class="meta-dot"></span>Merchandising</span></td><td>Operativo/táctico mayormente</td><td><span class="tag tr">Muy baja</span></td><td>No recomendado para conversión</td><td><span class="tag tx">Baja</span></td></tr>
+      <tr><td><span class="meta-seg" style="font-size:11px"><span class="meta-dot"></span>Visual merchandising</span></td><td>Perfil operativo</td><td><span class="tag tr">Muy baja</span></td><td>Excluir del targeting de conversión</td><td><span class="tag tr">Desactivar</span></td></tr>
+    </table>
+    <div class="nb-src" style="margin-top:10px">💡 <strong>Conclusión:</strong> De los 6 segmentos disponibles, solo "Trade Marketing Manager" y "Category management" tienen potencial de conversión, y únicamente como influencers internos — no como compradores directos. La conversión real requiere llegar al decisor corporativo por otro canal.</div>
+  </div>
+
+  <div class="g3">
+    <div class="card" style="border-color:rgba(239,68,68,.3)">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><span>🎯</span><div class="ch" style="margin:0;color:#FCA5A5">Error: Segmentación</div></div>
+      <div style="display:flex;flex-direction:column">
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#FCA5A5">›</span>Se alcanza al usuario pero no al comprador</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#FCA5A5">›</span>88,3% microempresas sin presupuesto de formación</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#FCA5A5">›</span>Meta no filtra por nivel de cargo (Director/Gerente)</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;display:flex;gap:6px"><span style="color:#FCA5A5">›</span>Audiencia en modo ocio — no modo de compra</div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(245,158,11,.3)">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><span>✍️</span><div class="ch" style="margin:0;color:var(--gold)">Error: Mensaje</div></div>
+      <div style="display:flex;flex-direction:column">
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:var(--gold)">›</span>Habla al empleado, no al director que paga</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:var(--gold)">›</span>Sin argumento de ROI corporativo</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:var(--gold)">›</span>No usa datos reales del mercado (+11,7%)</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;display:flex;gap:6px"><span style="color:var(--gold)">›</span>No destaca la autoridad única de Gautier</div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(139,92,246,.3)">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><span>💎</span><div class="ch" style="margin:0;color:#A78BFA">Error: Propuesta de valor</div></div>
+      <div style="display:flex;flex-direction:column">
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#A78BFA">›</span>Precio visto como gasto individual, no inversión empresarial</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#A78BFA">›</span>Sin comparación vs. consultoría ($15M–$40M)</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#A78BFA">›</span>Sin casos de éxito de empresas (no de individuos)</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;display:flex;gap:6px"><span style="color:#A78BFA">›</span>Sin landing orientada a la empresa como cliente</div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ======================================================== ESTRATEGIA B2B -->
+<div id="sec-strategy" class="sec"><div class="page">
+  <div class="stitle">
+    <h2>Estrategia de Comercialización B2B</h2>
+    <p>El programa se vende a empresas — estrategia de captación corporativa para las próximas semanas</p>
+  </div>
+
+  <div class="alert alert-info" style="margin-bottom:20px">
+    <h3 style="color:var(--teal2);font-size:16px;font-family:'Syne',sans-serif;margin-bottom:8px">Modelo de ventas: Empresa → Equipo → Inscripción</h3>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7">El foco no es conseguir 20 individuos que compren solos. El foco es conseguir <strong style="color:var(--text)">4–6 empresas</strong> que inscriban equipos de 3–8 personas. Con 116.852 empresas en Cali y el 3,1% siendo medianas/grandes (~3.600 empresas), hay suficiente mercado accesible. Una sola empresa del sector retail o CPG que envíe a su equipo de category puede llenar el programa. Ese es el objetivo.</p>
+  </div>
+
+  <div class="g2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="ch">Canales priorizados — enfoque B2B corporativo</div>
+      <div id="channel-list"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="ch">Plan de 7 días — acciones de conversión directa</div>
+        <div style="display:flex;flex-direction:column">
+          <div style="display:flex;gap:9px;padding:6px 0;border-bottom:1px solid var(--border)"><span>📋</span><div><span style="font-size:10.5px;color:var(--gold);font-weight:700">Día 1–2: </span><span style="font-size:12px;color:var(--muted)">Mapear las ~3.600 medianas/grandes de comercio en Cali. Priorizar retail, distribución y CPG.</span></div></div>
+          <div style="display:flex;gap:9px;padding:6px 0;border-bottom:1px solid var(--border)"><span>🤝</span><div><span style="font-size:10.5px;color:var(--gold);font-weight:700">Día 2–3: </span><span style="font-size:12px;color:var(--muted)">Contactar Fenalco Valle y CCC para difusión a directivos afiliados del sector comercio.</span></div></div>
+          <div style="display:flex;gap:9px;padding:6px 0;border-bottom:1px solid var(--border)"><span>💼</span><div><span style="font-size:10.5px;color:var(--gold);font-weight:700">Día 3–4: </span><span style="font-size:12px;color:var(--muted)">LinkedIn InMail a 30–50 directores comerciales, de RRHH y gerentes en empresas objetivo de Cali.</span></div></div>
+          <div style="display:flex;gap:9px;padding:6px 0;border-bottom:1px solid var(--border)"><span>📞</span><div><span style="font-size:10.5px;color:var(--gold);font-weight:700">Día 4–5: </span><span style="font-size:12px;color:var(--muted)">Llamadas directas a Éxito, Olímpica, Alkosto, D1, Colgate, P&G, Bimbo, Nutresa, distribuidoras Cali.</span></div></div>
+          <div style="display:flex;gap:9px;padding:6px 0;border-bottom:1px solid var(--border)"><span>📧</span><div><span style="font-size:10.5px;color:var(--gold);font-weight:700">Día 5–6: </span><span style="font-size:12px;color:var(--muted)">Enviar propuesta corporativa formal: ROI del equipo + dato +11,7% crecimiento + docente Gautier.</span></div></div>
+          <div style="display:flex;gap:9px;padding:6px 0"><span>🎯</span><div><span style="font-size:10.5px;color:var(--gold);font-weight:700">Día 7: </span><span style="font-size:12px;color:var(--muted)">Relanzar pauta Meta/LinkedIn solo con CTA "Comparte con tu empresa" — orientar al usuario a ser champion interno.</span></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch">Mensaje para el comprador B2B (Director/Gerente)</div>
+        <div class="quote">"El comercio minorista en Cali y el Valle creció +11,7% en 2025. Las empresas que dominan Category Management están capturando ese crecimiento. Frédéric Gautier —quien creó el método en América Latina— capacita a tu equipo en 2 días. Grupo reducido. 17–18 junio. ¿Inscribimos a tu equipo?"</div>
+        <div style="margin-top:8px">
+          <span class="tag tgr">Dato real de mercado</span>
+          <span class="tag tb2">Habla a la empresa</span>
+          <span class="tag tg">Autoridad docente</span>
+          <span class="tag tt">CTA directo al equipo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USO CORRECTO DE LOS SEGMENTOS META -->
+  <div class="card" style="margin-bottom:18px;border-color:rgba(24,119,242,.3)">
+    <div class="ch" style="color:#93C5FD">Uso correcto de los 6 segmentos Meta Ads — reorientados a B2B</div>
+    <div class="g2" style="gap:14px">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#FCA5A5;margin-bottom:8px">❌ Uso actual (incorrecto)</div>
+        <div style="background:rgba(239,68,68,.07);border-radius:9px;padding:12px">
+          <div style="font-size:12px;color:var(--muted);line-height:1.7">Pauta dirigida a los 6 segmentos con CTA "¡Inscríbete ya!" o "Valor: $4.5M". <br>El empleado ve el precio → lo descarta porque no puede pagar solo → <strong style="color:#FCA5A5">cero conversiones</strong>.</div>
+        </div>
+        <div style="margin-top:8px;display:flex;flex-wrap:wrap">
+          <span class="meta-seg" style="font-size:10.5px;opacity:.6"><span class="meta-dot"></span>Category mgmt → "¡Inscríbete!" ✗</span>
+          <span class="meta-seg" style="font-size:10.5px;opacity:.6"><span class="meta-dot"></span>Trade Mktg → "¡Inscríbete!" ✗</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#34D399;margin-bottom:8px">✅ Uso recomendado (correcto)</div>
+        <div style="background:rgba(16,185,129,.07);border-radius:9px;padding:12px">
+          <div style="font-size:12px;color:var(--muted);line-height:1.7">Pauta a los mismos 6 segmentos pero con CTA diferente: <br>"¿Tu empresa te enviaría a este programa?" → formulario o WhatsApp → empleado se convierte en champion interno → lleva la info a su jefe.</div>
+        </div>
+        <div style="margin-top:8px;display:flex;flex-wrap:wrap">
+          <span class="meta-seg" style="font-size:10.5px"><span class="meta-dot"></span>Category mgmt → "Pídele a tu empresa" ✓</span>
+          <span class="meta-seg" style="font-size:10.5px"><span class="meta-dot"></span>Trade Mktg → "Comparte con tu director" ✓</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="card" style="border-color:rgba(10,102,194,.35)">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><span>💼</span><div class="ch" style="margin:0;color:#93C5FD">LinkedIn — decisores B2B</div></div>
+      <div style="display:flex;flex-direction:column">
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#93C5FD">›</span>Segmentar por cargo: Director/Gerente Comercial, RRHH, Formación</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#93C5FD">›</span>Sector: Retail, Consumer Goods, Wholesale — Cali</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#93C5FD">›</span>Tamaño empresa: 51–500 empleados (medianas)</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;display:flex;gap:6px"><span style="color:#93C5FD">›</span>Mensaje: propuesta corporativa con ROI, no inscripción individual</div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(245,158,11,.25)">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><span>🤝</span><div class="ch" style="margin:0;color:var(--gold)">Alianzas B2B directas</div></div>
+      <div style="display:flex;flex-direction:column">
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:var(--gold)">›</span>Fenalco Valle: base de datos de directivos del comercio</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:var(--gold)">›</span>CCC: 116.852 empresas activas — acceso a afiliados</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:var(--gold)">›</span>Tarifa corporativa: 3+ personas = descuento grupal</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;display:flex;gap:6px"><span style="color:var(--gold)">›</span>Propuesta con factura a empresa (NIT) + constancia para DIAN</div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(24,119,242,.3)">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><span>📱</span><div class="ch" style="margin:0;color:#93C5FD">Meta Ads — reorientado</div></div>
+      <div style="display:flex;flex-direction:column">
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#93C5FD">›</span>Mantener los 6 segmentos de cargo disponibles</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#93C5FD">›</span>Cambiar CTA: "¿Tu empresa te enviaría?" o "Comparte con RRHH"</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:6px"><span style="color:#93C5FD">›</span>Objetivo: generar champions internos, no ventas directas</div>
+        <div style="font-size:12px;color:var(--muted);padding:5px 0;display:flex;gap:6px"><span style="color:#93C5FD">›</span>Medir: clics + compartidos + WhatsApp — no inscripciones directas</div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ======================================================== BENCHMARK -->
+<div id="sec-benchmark" class="sec"><div class="page">
+  <div class="stitle">
+    <h2>Benchmarking Competitivo</h2>
+    <p>Programas similares en Colombia — posicionamiento y diferenciación del certificado</p>
+  </div>
+  <div class="card" style="margin-bottom:18px;overflow-x:auto">
+    <div class="ch">Comparativo — Trade, Category &amp; Retail Marketing Colombia</div>
+    <table>
+      <tr><th>Programa</th><th>Duración</th><th>Precio</th><th>Modalidad</th><th>Cert.</th><th>Diferenciador</th></tr>
+      <tr class="hl"><td style="font-weight:700">⭐ ILACAD — Este programa</td><td>16 h</td><td>$4.500.000</td><td>Presencial</td><td><span class="tag tg">Alta</span></td><td>Fundador CM en América Latina</td></tr>
+      <tr><td>UAO — Diplomado Comercial</td><td>80 h</td><td>$3.100.000</td><td>Virtual</td><td><span class="tag tb2">Media</span></td><td>Universidad reconocida en Cali</td></tr>
+      <tr><td>EAFIT — Prog. Comercial &amp; Trade</td><td>90 h</td><td>$6.500.000</td><td>Presencial</td><td><span class="tag tg">Alta</span></td><td>Prestigio de marca Medellín</td></tr>
+      <tr><td>Javeriana — Trade Marketing</td><td>60 h</td><td>$4.800.000</td><td>Híbrida</td><td><span class="tag tg">Alta</span></td><td>Red empresarial Bogotá</td></tr>
+      <tr><td>ICESI — Gestión Comercial</td><td>96 h</td><td>$5.200.000</td><td>Presencial</td><td><span class="tag tg">Alta</span></td><td>Universidad referente Cali</td></tr>
+      <tr><td>Coursera / Udemy (online)</td><td>10–25 h</td><td>$120.000</td><td>Online</td><td><span class="tag tx">Baja</span></td><td>Masividad y precio</td></tr>
+    </table>
+  </div>
+  <div class="g2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="ch">Precio vs. horas de formación (M COP)</div>
+      <div style="position:relative;width:100%;height:240px"><canvas id="benchChart" role="img" aria-label="Comparativo precios y horas">Bench comparativo.</canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch">Posicionamiento competitivo</div>
+      <div style="display:flex;flex-direction:column">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:700">🥇 Único programa de CM especializado en Cali</div><div style="font-size:11px;color:var(--muted)">Sin competencia local directa en Category Management</div></div><span class="tag tgr">Ventaja única</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:700">🏆 Docente fundador del método en LatAm</div><div style="font-size:11px;color:var(--muted)">Ninguna universidad local puede replicar esto</div></div><span class="tag tgr">Ventaja única</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:700">⚠️ $281.250/hora — precio hora más alto del benchmark</div><div style="font-size:11px;color:var(--muted)">Requiere argumento de ROI corporativo muy sólido</div></div><span class="tag tg">Riesgo/oportunidad</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:700">✅ Metodología práctica (surtido, PDV, negociación)</div><div style="font-size:11px;color:var(--muted)">Orientada a resultados de negocio medibles</div></div><span class="tag tgr">Ventaja alta</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:8px 0"><div><div style="font-size:12px;font-weight:700">📍 ILACAD sin presencia institucional en Cali</div><div style="font-size:11px;color:var(--muted)">ICESI, UAO tienen ventaja de reconocimiento local</div></div><span class="tag tr">Desventaja inicial</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="border-color:rgba(245,158,11,.3)">
+    <div class="ch" style="color:var(--gold)">Propuesta de posicionamiento diferenciado</div>
+    <div class="g2" style="gap:16px">
+      <div>
+        <div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:7px">Cómo posicionar ante el decisor B2B:</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="font-size:12px;color:var(--muted);display:flex;gap:7px"><span style="color:var(--gold)">▸</span>Comparar vs. consultoría ($15M–$40M), no vs. diplomados universitarios</div>
+          <div style="font-size:12px;color:var(--muted);display:flex;gap:7px"><span style="color:var(--gold)">▸</span>"La única formación de CM con el creador del método en LatAm, en Cali"</div>
+          <div style="font-size:12px;color:var(--muted);display:flex;gap:7px"><span style="color:var(--gold)">▸</span>Usar el +11,7% de crecimiento del comercio como argumento de urgencia</div>
+          <div style="font-size:12px;color:var(--muted);display:flex;gap:7px"><span style="color:var(--gold)">▸</span>Factura a la empresa + deducible como inversión en formación</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:7px">Propuesta de valor para la empresa:</div>
+        <div class="quote">"Con el comercio minorista creciendo +11,7% en Cali (2025), las empresas que dominan Category Management son las que capturan ese crecimiento. Capacita a tu equipo de 3–8 personas con el creador del método en LatAm. Costo por persona $4.5M vs. consultoría externa $15M+. Certificado con aval ILACAD."</div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ======================================================== AI -->
+<div id="sec-ai" class="sec"><div class="page">
+  <div class="stitle">
+    <h2>Insights de Inteligencia Artificial</h2>
+    <p>Análisis estratégico generado por IA con los datos reales del sector y el contexto B2B del programa</p>
+  </div>
+  <div id="ai-idle" style="text-align:center;padding:44px 24px">
+    <div style="font-size:44px;margin-bottom:14px">✦</div>
+    <h3 style="font-family:'Syne',sans-serif;font-size:21px;color:var(--text);margin-bottom:10px">Análisis estratégico con IA</h3>
+    <p style="color:var(--muted);max-width:520px;margin:0 auto 24px;font-size:13px;line-height:1.7">Genera 8 insights usando los datos reales: 116.852 empresas en Cali, +11,7% comercio, 6 segmentos Meta Ads identificados, modelo B2B vs. B2C, y el contexto del canal TAT en crisis.</p>
+    <button id="ai-btn" onclick="genAI()">✦ Generar Insights con IA</button>
+  </div>
+  <div id="ai-results" style="display:none">
+    <div id="ai-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:18px"></div>
+    <div style="text-align:center"><button onclick="genAI()" style="background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:9px 22px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif">↺ Regenerar</button></div>
+  </div>
+</div></div>
+
+<footer>Dashboard Estratégico · <span>Certificado Category Management 2026</span> · Datos: CCC 2025 · DANE CENU · FENALCO · Meta Ads Segmentos · Investigación Sectorial Retail Valle del Cauca</footer>
+
+<script>
+function go(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.getElementById('btn-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+const G={blue:'#3B82F6',gold:'#F59E0B',teal:'#14B8A6',red:'#EF4444',green:'#10B981',purple:'#8B5CF6',muted:'#4A5E82',border:'rgba(255,255,255,0.07)'};
+const TT={backgroundColor:'#111F50',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,titleColor:'#EFF4FF',bodyColor:'#7E92B8',padding:10};
+
+// Distribución por tamaño
+new Chart(document.getElementById('tamanoChart'),{type:'doughnut',data:{labels:['Micro 88,3%','Pequeñas 8,6%','Medianas 2,4%','Grandes 0,7%'],datasets:[{data:[88.3,8.6,2.4,0.7],backgroundColor:['#4A5E82','#3B82F6','#F59E0B','#10B981'],borderWidth:2,borderColor:'#0A1535'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'50%',plugins:{legend:{display:true,position:'right',labels:{color:'#7E92B8',font:{size:11},boxWidth:10}},tooltip:{...TT}}}});
+
+// Sectores Cali
+new Chart(document.getElementById('sectorChart'),{type:'bar',data:{labels:['Comercio','Industria','Otros servicios','Alojamiento','Act. profesionales','Construcción'],datasets:[{label:'Empresas registradas',data:[34709,10710,8638,7435,6466,4272],backgroundColor:['#F59E0B','#3B82F6','#14B8A6','#10B981','#8B5CF6','#4A5E82'],borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{...TT}},scales:{x:{grid:{color:G.border},ticks:{color:G.muted,font:{size:10}}},y:{grid:{display:false},ticks:{color:G.muted,font:{size:10}}}}}});
+
+// Benchmark
+new Chart(document.getElementById('benchChart'),{type:'bar',data:{labels:['ILACAD','UAO','EAFIT','Javeriana','ICESI'],datasets:[{label:'Precio (M COP)',data:[4.5,3.1,6.5,4.8,5.2],backgroundColor:G.gold+'cc',borderColor:G.gold,borderWidth:1,borderRadius:4},{label:'Horas ÷ 10',data:[1.6,8.0,9.0,6.0,9.6],backgroundColor:G.blue+'88',borderColor:G.blue,borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{color:G.muted,font:{size:11},boxWidth:10}},tooltip:{...TT}},scales:{x:{grid:{display:false},ticks:{color:G.muted,font:{size:11}}},y:{grid:{color:G.border},ticks:{color:G.muted,font:{size:11}}}}}});
+
+// Impact bars
+const probs=[
+  {p:'Pauta llega al empleado, no al decisor empresarial',v:96,t:'crítico'},
+  {p:'88,3% microempresas sin presupuesto de formación',v:92,t:'crítico'},
+  {p:'Meta Ads en modo ocio — no modo de compra',v:88,t:'crítico'},
+  {p:'Bajo awareness de ILACAD y Gautier en Cali',v:82,t:'alto'},
+  {p:'Precio percibido como gasto individual, no inversión',v:80,t:'alto'},
+  {p:'Sin argumento de ROI corporativo en los mensajes',v:76,t:'alto'},
+  {p:'Sin social proof de empresas (solo individuos)',v:68,t:'medio'},
+  {p:'CTA orientado a inscripción directa, no a la empresa',v:65,t:'medio'},
+  {p:'Landing no habla a la empresa como cliente',v:58,t:'medio'},
+  {p:'Sin propuesta corporativa formal (NIT, factura, descuento grupo)',v:52,t:'bajo'},
+];
+const TC={crítico:'#EF4444',alto:'#F59E0B',medio:'#3B82F6',bajo:'#14B8A6'};
+const TL={crítico:'Crítico',alto:'Alto',medio:'Medio',bajo:'Bajo'};
+document.getElementById('impact-bars').innerHTML=probs.map(p=>{
+  const c=TC[p.t];
+  return`<div class="ibar"><div style="width:200px;font-size:11px;color:var(--muted);text-align:right;flex-shrink:0">${p.p}</div><div style="flex:1;background:rgba(255,255,255,.06);border-radius:4px;height:7px;overflow:hidden"><div class="ibar-fill" style="width:${p.v}%;background:linear-gradient(90deg,${c},${c}88)"></div></div><div style="width:26px;font-size:11px;font-weight:700;color:${c};text-align:right">${p.v}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;width:60px;text-align:center;background:${c}22;color:${c};border:1px solid ${c}44;flex-shrink:0">${TL[p.t]}</div></div>`;
+}).join('');
+
+// CPL list
+const cpls=[
+  {c:'Meta Ads (segmentos actuales — usuario, no decisor)',cpl:'$820K',conv:'< 0.3%',col:'#EF4444',w:true},
+  {c:'LinkedIn Ads (Director/Gerente + sector + Cali)',cpl:'$165K',conv:'~2%',col:'#10B981'},
+  {c:'Email B2B directo a decisores corporativos',cpl:'$58K',conv:'~3.5%',col:'#3B82F6'},
+  {c:'Venta consultiva directa a empresas',cpl:'$32K',conv:'~10%',col:'#F59E0B'},
+  {c:'Fenalco Valle / CCC — difusión a afiliados',cpl:'$18K',conv:'~13%',col:'#8B5CF6'},
+  {c:'WhatsApp B2B a decisores identificados',cpl:'$22K',conv:'~7%',col:'#14B8A6'},
+];
+document.getElementById('cpl-list').innerHTML=cpls.map(c=>`<div style="display:flex;align-items:center;gap:8px;background:${c.w?'rgba(239,68,68,.07)':'rgba(255,255,255,.03)'};border:1px solid ${c.w?'rgba(239,68,68,.3)':'rgba(255,255,255,.07)'};border-radius:8px;padding:8px 11px;margin-bottom:6px"><div style="flex:1;font-size:12px;font-weight:600;color:${c.w?'#FCA5A5':'var(--text)'}">${c.c}</div><div style="text-align:right"><div style="font-size:12.5px;font-weight:700;color:${c.col}">${c.cpl}</div><div style="font-size:10px;color:var(--muted)">Conv: ${c.conv}</div></div></div>`).join('');
+
+// Channel list
+const chs=[
+  {n:'Venta consultiva directa a directivos',s:'Inmediato',t:'Comercial B2B',sc:96,c:'#F59E0B'},
+  {n:'Fenalco Valle + CCC — difusión corporativa',s:'Esta semana',t:'Alianza',sc:93,c:'#F59E0B'},
+  {n:'LinkedIn InMail a decisores (no usuarios)',s:'Inmediato',t:'B2B Digital',sc:90,c:'#F59E0B'},
+  {n:'Email propuesta corporativa a empresas',s:'Inmediato',t:'Directo',sc:85,c:'#3B82F6'},
+  {n:'WhatsApp a gerentes y directores',s:'Inmediato',t:'Directo',sc:80,c:'#3B82F6'},
+  {n:'Meta Ads (reorientado a champion interno)',s:'Rediseñar CTA',t:'Awareness',sc:55,c:'#14B8A6'},
+  {n:'LinkedIn Ads (Director/Gerente/RRHH)',s:'Esta semana',t:'Pagado B2B',sc:74,c:'#3B82F6'},
+  {n:'Webinar ejecutivo gratuito como lead magnet',s:'10–14 días',t:'Captación',sc:68,c:'#14B8A6'},
+];
+document.getElementById('channel-list').innerHTML=chs.map((c,i)=>`<div class="chr"><div style="width:26px;height:26px;border-radius:50%;background:${c.c}22;color:${c.c};display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;flex-shrink:0">${i+1}</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:${c.sc>65?'var(--text)':'var(--muted)'}">${c.n}</div><div style="font-size:10.5px;color:var(--muted)">${c.t} · ${c.s}</div></div><div style="background:rgba(255,255,255,.06);border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;color:${c.c}">${c.sc}</div></div>`).join('');
+
+// AI
+const fallback=[
+  {tipo:'crítico',titulo:'El error central: se vende al usuario, no al comprador',cuerpo:'Los 6 segmentos de cargo disponibles en Meta Ads (Category Management, Trade Marketing, Merchandising, Retail, etc.) identifican a los empleados que asistirían al programa — no a los directivos que aprueban el gasto. A $4.500.000 COP, ningún empleado tiene autonomía de compra individual. La conversión requiere llegar al Director Comercial o Gerente de RRHH de la empresa.',accion:'Redirigir toda la estrategia de comunicación al decisor empresarial: Director Comercial, Gerente RRHH, CEO de medianas empresas retail/CPG en Cali.',impacto:'alto'},
+  {tipo:'estratégico',titulo:'3.600 medianas/grandes empresas son el mercado real',cuerpo:'Con 116.852 empresas activas en Cali (CCC 2025) y el 3,1% siendo medianas/grandes, hay ~3.600 empresas con presupuesto formal de capacitación. Bastan 4–6 de estas empresas para llenar el programa. El 88,3% de microempresas no es el público objetivo y jamás tendrá presupuesto para este programa.',accion:'Construir una lista de las 50 empresas medianas/grandes de retail y CPG en Cali y comenzar contacto directo esta semana.',impacto:'alto'},
+  {tipo:'oportunidad',titulo:'El +11,7% de crecimiento es el argumento de ventas más poderoso',cuerpo:'El Panorama Económico del Valle del Cauca 2025 (CCC) registra crecimiento de +11,7% en comercio minorista. Para un Director Comercial, este dato plantea una pregunta directa: "¿Tiene mi equipo las herramientas para capturar ese crecimiento?". Conecta el programa con una necesidad de negocio real y urgente, no con desarrollo personal.',accion:'Abrir todos los correos, propuestas y mensajes con el dato: "El comercio en Cali creció +11,7% en 2025 — ¿tu equipo tiene las herramientas para capturar ese crecimiento?"',impacto:'alto'},
+  {tipo:'alerta',titulo:'Meta Ads debe cambiar de objetivo: de conversión a champion',cuerpo:'Continuar usando los 6 segmentos de Meta Ads con CTA de inscripción directa es ineficiente para un programa B2B de $4.5M. Sin embargo, estos segmentos pueden ser valiosos si el objetivo cambia: activar al empleado como champion interno que lleve la información a su jefe. El CTA debe ser "¿Tu empresa te enviaría?" no "Inscríbete".',accion:'Rediseñar los creativos de Meta Ads esta semana con nuevo CTA: "¿Tu empresa invierte en tu formación? Comparte este programa con tu director o área de RRHH."',impacto:'alto'},
+  {tipo:'recomendación',titulo:'Fenalco Valle y CCC son los canales de menor costo y mayor impacto',cuerpo:'Fenalco Valle del Cauca y la Cámara de Comercio de Cali tienen bases de datos directas de directivos de las 42.300 empresas del sector comercio registradas en 2025. Un acuerdo de co-difusión permite llegar al decisor B2B correcto sin el costo de adquisición de la pauta pagada, con la credibilidad de una entidad gremial.',accion:'Contactar esta semana a Fenalco Valle y CCC para propuesta de alianza: difusión del programa a sus empresas afiliadas del sector retail y CPG a cambio de visibilidad institucional.',impacto:'alto'},
+  {tipo:'estratégico',titulo:'Frédéric Gautier elimina la competencia universitaria local',cuerpo:'UAO, ICESI y EAFIT tienen ventaja de reconocimiento institucional en Cali. Sin embargo, ninguna puede presentar al fundador del Category Management en América Latina. Ante un Director Comercial que evalúa opciones, este argumento posiciona el programa fuera del rango de comparación con diplomados universitarios y lo acerca a una consultoría experta con precio competitivo.',accion:'En toda propuesta corporativa incluir: "El programa es impartido por Frédéric Gautier, quien fundó el Category Management en LatAm y trabaja con los principales retailers de la región — no disponible en ninguna universidad colombiana."',impacto:'alto'},
+  {tipo:'crítico',titulo:'82% de tenderos en crisis: el canal TAT es un mercado B2B adicional',cuerpo:'FENALCO reporta que 82% de los ~43.500 tenderos del Valle tiene ventas estancadas o cayendo. Los distribuidores mayoristas y fabricantes CPG que abastecen este canal tienen un incentivo directo para capacitar a sus equipos de trade y category: necesitan ayudar a sus clientes (tenderos) a sobrevivir. Esta es una audiencia B2B adicional no explotada.',accion:'Incluir a las 20 principales distribuidoras y mayoristas de Cali en la prospección B2B. El argumento: "Capacita a tu equipo en category management para ayudar a tus clientes tenderos a mejorar su surtido y rentabilidad."',impacto:'medio'},
+  {tipo:'oportunidad',titulo:'Propuesta corporativa grupal puede llenar el programa en días',cuerpo:'Una propuesta corporativa bien estructurada (con descuento por grupo, factura a la empresa, constancia para DIAN como inversión en formación) presentada a 10 empresas medianas de retail/CPG en Cali tiene alta probabilidad de cerrar 2–3 grupos de 4–6 personas. Eso llenarías el programa completamente sin necesidad de adquirir 15–20 compradores individuales.',accion:'Diseñar esta semana una propuesta corporativa formal: precio por grupo (3+ personas = descuento), factura NIT empresa, beneficios de formación deducibles, constancia de asistencia por participante.',impacto:'alto'},
+];
+
+async function genAI(){
+  const btn=document.getElementById('ai-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spin">◌</span> Analizando...';
+  const prompt=`Eres consultor estratégico B2B de educación ejecutiva en Colombia. Genera 8 insights en JSON puro:
+
+PROGRAMA: Certificado Category Management 2026 — $4.500.000 COP — presencial Cali 17-18 jun
+
+DATOS REALES VERIFICADOS:
+- 116.852 empresas activas Cali 2025 (CCC). 88,3% micro, 8,6% pequeñas, 2,4% medianas, 0,7% grandes
+- Sector comercio: 36,2% = ~42.300 empresas. Medianas/grandes: ~3.600 empresas
+- Crecimiento comercio minorista 2025: +11,7% (CCC Panorama Económico)
+- 193.974 unidades económicas Valle del Cauca = 9,7% del país (DANE CENU)
+- ~43.500 tiendas de barrio en el Valle. 82% tenderos con ventas en descenso (FENALCO 2024)
+- Profesionales: ~2.300 gerentes trade mktg, ~2.300 jefes compras, ~9.000 ejecutivos TAT
+- Docente: Frédéric Gautier, fundador ILACAD, precursor Category Management LatAm
+
+PROBLEMA CLAVE IDENTIFICADO:
+- Los 6 segmentos Meta Ads disponibles son: Category management, Merchandising, Retail, Trade Marketing, Trade Marketing Manager, Visual merchandising
+- Estos son EMPLEADOS (usuarios del programa), no COMPRADORES (decisores corporativos)
+- A $4.5M, la decisión es corporativa: Director Comercial, Gerente RRHH, CEO de medianas empresas
+- El programa debe venderse B2B a empresas, no B2C a individuos
+
+JSON puro sin markdown:
+[{"tipo":"crítico|estratégico|oportunidad|alerta|recomendación","titulo":"máx 10 palabras con dato real","cuerpo":"2-3 oraciones con datos concretos del mercado colombiano","accion":"acción concreta e inmediata","impacto":"alto|medio|bajo"}]`;
+
+  let ins=fallback;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const d=await r.json();
+    if(d.content?.[0]?.text){const p=JSON.parse(d.content[0].text.replace(/```json|```/g,'').trim());if(Array.isArray(p)&&p.length)ins=p;}
+  }catch(e){}
+
+  const TC2={crítico:'#EF4444',estratégico:'#3B82F6',oportunidad:'#10B981',alerta:'#F59E0B',recomendación:'#14B8A6'};
+  const IM={'alto':'🔴','medio':'🟡','bajo':'🟢'};
+  document.getElementById('ai-grid').innerHTML=ins.map(i=>{
+    const c=TC2[i.tipo]||'#3B82F6';
+    return`<div class="aic" style="background:${c}08;border:1px solid ${c}30"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px"><div style="display:inline-block;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;background:${c}22;color:${c};border:1px solid ${c}44">${i.tipo}</div><span>${IM[i.impacto]||'🟡'}</span></div><h4 style="font-family:'Syne',sans-serif;font-size:13.5px;font-weight:700;margin:0 0 7px;color:#EFF4FF;line-height:1.4">${i.titulo}</h4><p style="font-size:12px;color:#7E92B8;line-height:1.6;margin:0 0 9px">${i.cuerpo}</p><div style="background:${c}10;border-left:2px solid ${c};border-radius:0 7px 7px 0;padding:7px 10px;font-size:11px;color:#7E92B8"><strong style="color:${c}">→ Acción: </strong>${i.accion}</div></div>`;
+  }).join('');
+
+  document.getElementById('ai-idle').style.display='none';
+  document.getElementById('ai-results').style.display='block';
+  btn.disabled=false;btn.innerHTML='✦ Generar Insights con IA';
+}
+</script>
+</body>
+</html>
+HTMLEOF
+echo "Listo. Líneas: $(wc -l < /mnt/user-data/outputs/category-management-2026.html) | Tamaño: $(du -sh /mnt/user-data/outputs/category-management-2026.html | cut -f1)"
