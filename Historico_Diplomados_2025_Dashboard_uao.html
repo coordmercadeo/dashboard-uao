@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Matriculados Diplomados 2025 - UAO</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --r:#DC142D;--dr:#961423;--lr:#F03C46;
+  --bg:#ECE5DC;--white:#fff;--dark:#1C1C1C;--mid:#5A5A5A;
+  --card:#fff;--bord:rgba(220,20,45,0.12);--shadow:0 3px 18px rgba(0,0,0,0.07);
+  --radius:12px;
+}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--dark);min-height:100vh}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,var(--dr) 0%,var(--r) 55%,var(--lr) 100%);
+  padding:14px 28px;display:flex;align-items:center;gap:18px;
+  box-shadow:0 4px 18px rgba(150,20,35,0.35);position:sticky;top:0;z-index:100}
+.hdr-logo{background:#fff;border-radius:9px;padding:7px 12px;flex-shrink:0}
+.hdr-logo img{height:38px;display:block}
+.hdr-sep{width:2px;height:46px;background:rgba(255,255,255,0.28);flex-shrink:0}
+.hdr-txt{flex:1}
+.hdr-txt h1{color:#fff;font-size:1.25rem;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.hdr-txt p{color:rgba(255,255,255,0.78);font-size:0.78rem;margin-top:3px}
+.hdr-badge{background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);
+  border-radius:18px;padding:5px 14px;color:#fff;font-size:0.75rem;font-weight:600;white-space:nowrap}
+
+/* CONTAINER */
+.wrap{max-width:1560px;margin:0 auto;padding:18px 22px 40px}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+.kpi{background:var(--card);border-radius:var(--radius);padding:16px 18px;
+  box-shadow:var(--shadow);border:1px solid var(--bord);position:relative;overflow:hidden;
+  transition:transform .18s,box-shadow .18s}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(0,0,0,0.11)}
+.kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--r),var(--lr))}
+.kpi-ico{font-size:1.3rem;margin-bottom:5px}
+.kpi-val{font-size:1.9rem;font-weight:800;color:var(--r);line-height:1;letter-spacing:-.03em}
+.kpi-lbl{font-size:0.67rem;font-weight:600;color:var(--mid);text-transform:uppercase;
+  letter-spacing:.06em;margin-top:3px;line-height:1.3}
+.kpi-sub{font-size:0.72rem;color:var(--mid);margin-top:2px}
+
+/* FILTER BAR */
+.fbar{background:var(--card);border-radius:var(--radius);padding:14px 20px;
+  margin-bottom:18px;box-shadow:var(--shadow);border:1px solid var(--bord)}
+.ftitle{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--r);margin-bottom:11px;display:flex;align-items:center;gap:8px}
+.fcnt{display:inline-flex;align-items:center;background:rgba(220,20,45,0.08);
+  border:1px solid rgba(220,20,45,0.2);border-radius:16px;padding:3px 10px;
+  font-size:0.72rem;font-weight:600;color:var(--r);margin-left:auto}
+.fgrid{display:grid;grid-template-columns:repeat(7,1fr) auto;gap:9px;align-items:end}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:0.64rem;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:.05em}
+.fg select{font-family:"DM Sans",sans-serif;font-size:0.77rem;font-weight:500;color:var(--dark);
+  background:#f8f5f0;border:1.5px solid #ddd6cc;border-radius:7px;padding:6px 9px;
+  cursor:pointer;outline:none;transition:border-color .18s;width:100%}
+.fg select:focus{border-color:var(--r)}
+.btn-r{font-family:"DM Sans",sans-serif;font-size:0.75rem;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,var(--r),var(--lr));border:none;border-radius:7px;
+  padding:7px 14px;cursor:pointer;height:32px;transition:opacity .18s}
+.btn-r:hover{opacity:0.88}
+
+/* SECTION SEP */
+.sep{display:flex;align-items:center;gap:10px;margin:6px 0 14px}
+.sep-line{flex:1;height:1px;background:var(--bord)}
+.sep-lbl{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--r);opacity:.75}
+
+/* CHART GRID */
+.row{display:grid;gap:14px;margin-bottom:14px}
+.r2l{grid-template-columns:2fr 1fr}
+.r3{grid-template-columns:1fr 1fr 1fr}
+.r2{grid-template-columns:1fr 1fr}
+.r1{grid-template-columns:1fr}
+
+/* CHART CARD */
+.cc{background:var(--card);border-radius:var(--radius);padding:18px 20px;
+  box-shadow:var(--shadow);border:1px solid var(--bord);display:flex;flex-direction:column;
+  transition:box-shadow .18s}
+.cc:hover{box-shadow:0 6px 28px rgba(0,0,0,0.11)}
+.ch{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
+.ct{font-size:0.88rem;font-weight:700;color:var(--dark);line-height:1.3}
+.cs{font-size:0.68rem;color:var(--mid);margin-top:2px}
+.ctag{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--r);background:rgba(220,20,45,0.08);border-radius:5px;padding:2px 7px;flex-shrink:0}
+.cb{flex:1;position:relative;min-height:0}
+
+/* RANKING TABLE */
+.rtbl{width:100%;border-collapse:collapse}
+.rtbl tr{border-bottom:1px solid rgba(0,0,0,0.055)}
+.rtbl tr:last-child{border-bottom:none}
+.rtbl td{padding:6px 3px;font-size:0.75rem;vertical-align:middle}
+.rn{font-size:0.69rem;font-weight:800;color:var(--lr);width:22px;text-align:center}
+.rb{position:relative;background:#f0ece6;border-radius:4px;height:7px;overflow:hidden;min-width:60px}
+.rbf{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--r),var(--lr));border-radius:4px}
+.rc{font-weight:700;color:var(--r);font-size:0.79rem;text-align:right;width:32px}
+.rp{font-size:0.65rem;color:var(--mid);text-align:right;width:38px}
+
+/* HEATMAP */
+.hm-wrap{overflow:auto;max-height:360px}
+.hm{border-collapse:collapse;width:100%;font-size:0.7rem}
+.hm th{background:#f8f5f0;padding:7px 9px;text-align:left;font-weight:700;
+  font-size:0.64rem;text-transform:uppercase;letter-spacing:.04em;color:var(--mid);
+  border-bottom:2px solid var(--bord);white-space:nowrap;position:sticky;top:0;z-index:2}
+.hm th:first-child{position:sticky;left:0;z-index:3;background:#f8f5f0}
+.hm td{padding:6px 9px;border-bottom:1px solid rgba(0,0,0,0.04);text-align:center;
+  font-weight:500;white-space:nowrap}
+.hm td:first-child{text-align:left;font-weight:600;color:var(--dark);position:sticky;
+  left:0;background:#fff;border-right:1px solid var(--bord);
+  min-width:170px;max-width:190px;white-space:normal;font-size:0.7rem}
+
+/* FOOTER */
+.ftr{text-align:center;padding:18px;font-size:0.69rem;color:rgba(90,90,90,0.65);
+  border-top:1px solid var(--bord);margin-top:6px}
+
+.fab{position:fixed;bottom:22px;right:22px;width:40px;height:40px;background:var(--r);
+  color:#fff;border:none;border-radius:50%;font-size:1rem;cursor:pointer;
+  box-shadow:0 4px 14px rgba(220,20,45,0.38);z-index:999;transition:transform .18s}
+.fab:hover{transform:scale(1.12)}
+
+@media(max-width:1100px){
+  .kpi-row{grid-template-columns:repeat(3,1fr)}
+  .r2l,.r3,.r2{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:680px){
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .fgrid{grid-template-columns:repeat(2,1fr)}
+  .hdr-txt h1{font-size:.98rem}
+}
+</style>
+</head>
+<body>
+<div class="hdr"><div class="hdr-logo"><img src="data:image/png;base64,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" alt="UAO"></div><div class="hdr-sep"></div>
+<div class="hdr-txt">
+  <h1>Caracterizacion de Matriculados - Diplomados 2025</h1>
+  <p>Vicerrectoria Academica &middot; Educacion Continua y Permanente &middot; Universidad Autonoma de Occidente</p>
+</div>
+<div class="hdr-badge">Dashboard Interactivo</div>
+</div><div class="wrap">
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-ico">&#128101;</div><div class="kpi-val" id="kv1">409</div><div class="kpi-lbl">Total Matriculados</div><div class="kpi-sub" id="ks1">Registros 2025</div></div>
+  <div class="kpi"><div class="kpi-ico">&#127891;</div><div class="kpi-val" id="kv2">-</div><div class="kpi-lbl">Diplomados Ofertados</div><div class="kpi-sub" id="ks2">Programas activos</div></div>
+  <div class="kpi"><div class="kpi-ico">&#128188;</div><div class="kpi-val" id="kv3">-</div><div class="kpi-lbl">Profesiones</div><div class="kpi-sub" id="ks3">Perfiles representados</div></div>
+  <div class="kpi"><div class="kpi-ico">&#127758;</div><div class="kpi-val" id="kv4">-</div><div class="kpi-lbl">Ciudades de Origen</div><div class="kpi-sub" id="ks4">Alcance regional</div></div>
+  <div class="kpi"><div class="kpi-ico">&#127963;</div><div class="kpi-val" id="kv5">-</div><div class="kpi-lbl">Egresados UAO</div><div class="kpi-sub" id="ks5">Del total filtrado</div></div>
+</div>
+
+<div class="fbar">
+  <div class="ftitle">Filtros Dinamicos <span class="fcnt" id="fcnt">409 registros</span></div>
+  <div class="fgrid">
+    <div class="fg"><label>Diplomado</label><select id="fd"></select></div>
+    <div class="fg"><label>Mes</label><select id="fm"></select></div>
+    <div class="fg"><label>Genero</label><select id="fg2"></select></div>
+    <div class="fg"><label>Modalidad</label><select id="fmo"></select></div>
+    <div class="fg"><label>Ciudad</label><select id="fc"></select></div>
+    <div class="fg"><label>Profesion</label><select id="fp"></select></div>
+    <div class="fg"><label>Tipo Estudiante</label><select id="fe"></select></div>
+    <button class="btn-r" onclick="resetF()">Limpiar</button>
+  </div>
+</div>
+
+<div class="sep"><div class="sep-line"></div><span class="sep-lbl">Perfil Profesional</span><div class="sep-line"></div></div>
+
+<div class="row r2l">
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Top Profesiones - Mayor Participacion</div><div class="cs">N de matriculados por profesion</div></div><span class="ctag">Ranking</span></div>
+    <div class="cb" style="min-height:340px"><canvas id="c1"></canvas></div>
+  </div>
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Ranking de Profesiones</div><div class="cs">Participacion relativa del total</div></div><span class="ctag">Top 10</span></div>
+    <div style="overflow-y:auto;max-height:340px"><table class="rtbl" id="t-rank"></table></div>
+  </div>
+</div>
+
+<div class="row r3">
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Distribucion Porcentual</div><div class="cs">Top 8 profesiones - porcentaje</div></div><span class="ctag">Pie</span></div>
+    <div class="cb" style="min-height:240px"><canvas id="c2"></canvas></div>
+  </div>
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Distribucion por Genero</div><div class="cs">Femenino vs Masculino</div></div><span class="ctag">Donut</span></div>
+    <div class="cb" style="min-height:240px"><canvas id="c3"></canvas></div>
+  </div>
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Distribucion por Modalidad</div><div class="cs">Formato de entrega del programa</div></div><span class="ctag">Donut</span></div>
+    <div class="cb" style="min-height:240px"><canvas id="c4"></canvas></div>
+  </div>
+</div>
+
+<div class="sep"><div class="sep-line"></div><span class="sep-lbl">Tendencias Temporales</span><div class="sep-line"></div></div>
+
+<div class="row r1">
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Comportamiento de Matricula por Mes</div><div class="cs">Evolucion mensual de inscripciones durante 2025</div></div><span class="ctag">Tendencia</span></div>
+    <div class="cb" style="min-height:200px"><canvas id="c5"></canvas></div>
+  </div>
+</div>
+
+<div class="sep"><div class="sep-line"></div><span class="sep-lbl">Oferta y Geografia</span><div class="sep-line"></div></div>
+
+<div class="row r2">
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Matriculas por Diplomado</div><div class="cs">Comparativo entre programas ofertados</div></div><span class="ctag">Comparativo</span></div>
+    <div class="cb" style="min-height:340px"><canvas id="c6"></canvas></div>
+  </div>
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Top Ciudades de Residencia</div><div class="cs">Distribucion geografica - Top 12</div></div><span class="ctag">Geografia</span></div>
+    <div class="cb" style="min-height:340px"><canvas id="c7"></canvas></div>
+  </div>
+</div>
+
+<div class="sep"><div class="sep-line"></div><span class="sep-lbl">Afinidad Profesion x Diplomado</span><div class="sep-line"></div></div>
+
+<div class="row r1">
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Heatmap - Profesiones con mayor interes en cada Diplomado</div><div class="cs">Intensidad de inscripcion: top 10 profesiones vs diplomados</div></div><span class="ctag">Heatmap</span></div>
+    <div class="hm-wrap"><table class="hm" id="t-heat"></table></div>
+  </div>
+</div>
+
+<div class="sep"><div class="sep-line"></div><span class="sep-lbl">Perfil Socioeconomico</span><div class="sep-line"></div></div>
+
+<div class="row r3">
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Egresados UAO vs Externos</div><div class="cs">Procedencia academica</div></div><span class="ctag">UAO</span></div>
+    <div class="cb" style="min-height:200px"><canvas id="c8"></canvas></div>
+  </div>
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Distribucion por Estrato</div><div class="cs">Clasificacion socioeconomica</div></div><span class="ctag">Social</span></div>
+    <div class="cb" style="min-height:200px"><canvas id="c9"></canvas></div>
+  </div>
+  <div class="cc">
+    <div class="ch"><div><div class="ct">Top Afinidades Profesion - Diplomado</div><div class="cs">Combinaciones con mayor frecuencia</div></div><span class="ctag">Afinidad</span></div>
+    <div style="overflow-y:auto;max-height:220px"><table style="width:100%;border-collapse:collapse;font-size:0.73rem" id="t-afin"></table></div>
+  </div>
+</div>
+
+</div>
+<div class="ftr">Dashboard generado para la Universidad Autonoma de Occidente &middot; Educacion Continua y Permanente &middot; 2025</div>
+<button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</button>
+<script>
+var RAW = {"total": 409, "records": [{"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Jamundi", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Casado"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Pradera", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Unión libre"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Abogado(a)", "city": "Yumbo", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Estudiante", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Masculino", "prof": "Sin informacion", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Febrero", "gen": "Femenino", "prof": "Admon De Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Disenador(a) Industrial", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Unión libre"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Femenino", "prof": "Comerciante", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Femenino", "prof": "Asesora Comercial", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Empresario(a) / Independiente", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Disenador(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Disenador(a)", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Ing. Mecanico(a)", "city": "Cali", "est": "5", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Maestro en artes visuales", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Publicista", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Femenino", "prof": "Gerente", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Femenino", "prof": "Licensiada En Ciencias Sociales", "city": "Villa Rica", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Economista", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Divorciado"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Ing. Mecanico(a)", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Admin", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "5", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Mercadeo / Marketing", "city": "Palmira", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Psicologo(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Masculino", "prof": "Publicista", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Marzo", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Logistica Integral", "mod": "Presencial", "mes": "Abril", "gen": "Masculino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Logistica Integral", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Logistica Integral", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Logistica Integral", "mod": "Presencial", "mes": "Abril", "gen": "Masculino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Logistica Integral", "mod": "Presencial", "mes": "Abril", "gen": "Masculino", "prof": "Esp. En Admon De La Seguridad", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Logistica Integral", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Logistica Integral", "mod": "Presencial", "mes": "Abril", "gen": "Masculino", "prof": "Ingeniero informático", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Logistica Integral", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Logistica Integral", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Masculino", "prof": "Sin informacion", "city": "Palmira", "est": "Sin información", "egr": "Externo", "ecivil": "Sin información"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Masculino", "prof": "Bachiller", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "4", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Masculino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Sin informacion", "city": "Sin informacion", "est": "Sin información", "egr": "Externo", "ecivil": "Sin información"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Publicista", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Publicista", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Masculino", "prof": "Disenador(a)", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Tulua", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Docente / Licenciado(a)", "city": "Sin informacion", "est": "Sin información", "egr": "Externo", "ecivil": "Sin información"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Cosmetologa Esteticista", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Psicologo(a)", "city": "Cali", "est": "6", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "6", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Abril", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Masculino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin información"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Palmira", "est": "4", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Santander de Quilichao", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Masculino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Masculino", "prof": "Ing. Electronico(a)", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Casado"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "1", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Estudiante", "city": "Palmira", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Psicologo(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Economista", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Sin informacion", "city": "Palmira", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "1", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Masculino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Mayo", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "5", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Abogado(a)", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Obras Civiles", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Economista", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Ing. Mecanico(a)", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Especialista en seguridad informática", "city": "Cali", "est": "5", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Palmira", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Arquitecto(a)", "city": "Florida", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Comunicador(a) Social", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Unión libre"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Buenaventura", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Ing. Informatico(a)", "city": "Yumbo", "est": "4", "egr": "Egresado UAO", "ecivil": "Casado"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Copacabana", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Candelaria", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Casado"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Trabajador(a) Social", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Trabajador(a) Social", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Contador(a) Publico(a)", "city": "Palmira", "est": "3", "egr": "Egresado UAO", "ecivil": "Unión libre"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Yumbo", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Finanzas Y Negocios Internacionales", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Economista", "city": "Popayan", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Ing. Electricista", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Popayan", "est": "2", "egr": "Egresado UAO", "ecivil": "Unión libre"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Admon De Empresas", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Virtual", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Melgar", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Yumbo", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Auxiliar Contable", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Buga", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Economista", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Masculino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Economista", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Finanzas y Analitica de Datos", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Masculino", "prof": "Ing. Sistemas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Masculino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Disenador(a) Grafico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Masculino", "prof": "Hipnoterapeuta Clinico", "city": "Londres", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Masculino", "prof": "Publicista", "city": "Palmira", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Masculino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Cine / Comunicacion Audiovisual", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Tecnologa En Gestion Contable Y Costos", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "3d artist", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "5", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Junio", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Empresario(a) / Independiente", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Masculino", "prof": "Sin informacion", "city": "Corinto", "est": "Sin información", "egr": "Externo", "ecivil": "Sin información"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Sin informacion", "city": "Palmira", "est": "Sin información", "egr": "Externo", "ecivil": "Sin información"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Jamundi", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Empresario(a) / Independiente", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Gerencia industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Licda. En Relaciones Industriales", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Masculino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Empresario(a) / Independiente", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Ingenieria Multimedia", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Masculino", "prof": "Contador(a) Publico(a)", "city": "Corinto", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Masculino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin información"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "5", "egr": "Externo", "ecivil": "Casado"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Odontologo", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Masculino", "prof": "Fisioterapeuta", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Publicista", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Asesor Comercial", "city": "Candelaria", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Masculino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Empresario(a) / Independiente", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Pauta Digital con IA", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Publicista", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Admón en Salud", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Masculino", "prof": "Mercadeo / Marketing", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Matemáticas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Ing. Sistemas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Masculino", "prof": "Ingeniero", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Economista", "city": "Buenaventura", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Economista", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Julio", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Masculino", "prof": "Estudiante", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Masculino", "prof": "Ingeniero Quimico", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Palmira", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Masculino", "prof": "Administrador(a) de Empresas", "city": "Yumbo", "est": "2", "egr": "Externo", "ecivil": "Unión libre"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "1", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Ing. Mecanico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Lean Six Sigma Green/Black Belts", "mod": "Presencial", "mes": "Agosto", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Femenino", "prof": "Ing. Electricista", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Femenino", "prof": "Ing. Electricista", "city": "Monteria", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Sistemas", "city": "Monteria", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Yumbo", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Roldanillo", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Monteria", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Barrancabermeja", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Cali", "est": "6", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Sin informacion", "city": "Yumbo", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Femenino", "prof": "Ing. Electricista", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Femenino", "prof": "Ing. Electricista", "city": "Bolivar", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Ing. Electricista", "city": "Villa Rica", "est": "1", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Iluminacion y Alumbrado (RETILAP)", "mod": "Híbrida", "mes": "Agosto", "gen": "Masculino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Masculino", "prof": "Publicista", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Empresario(a) / Independiente", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Productora Multimedia", "city": "Jamundi", "est": "2", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Masculino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Femenino", "prof": "Sin informacion", "city": "Palmira", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital - Ecommerce", "mod": "Presencial", "mes": "Agosto", "gen": "Masculino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "4", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "5", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Estudiante", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "5", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "4", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Masculino", "prof": "Estudiante", "city": "Cali", "est": "5", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Abogado(a)", "city": "Tulua", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Masculino", "prof": "Sin informacion", "city": "Cali", "est": "4", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Florencia", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "5", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "6", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Masculino", "prof": "Cine / Comunicacion Audiovisual", "city": "Candelaria", "est": "1", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Masculino", "prof": "Sin informacion", "city": "Ibague", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Ibague", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Masculino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Masculino", "prof": "Estudiante", "city": "Cali", "est": "4", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Masculino", "prof": "Comunicador(a) Social", "city": "Santander de Quilichao", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "4", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Medellin", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Estudiante", "city": "Sibate", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "El Carmen de Viboral", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Sin informacion", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Cine / Comunicacion Audiovisual", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Sin informacion", "city": "Villavicencio", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Medellin", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "5", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Manizales", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "4", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Publicista", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Arauca", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Unión libre"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Yumbo", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "5", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Masculino", "prof": "Estudiante", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Cine / Comunicacion Audiovisual", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Estudiante", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Productor musical - Músico", "city": "Bogota D.C.", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Sin informacion", "est": "Sin información", "egr": "Externo", "ecivil": "Sin información"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Villavicencio", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Armenia", "est": "Sin información", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Armenia", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Master Training UAO-RCN", "mod": "Híbrida", "mes": "Septiembre", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Septiembre", "gen": "Masculino", "prof": "Tecnólogo Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Septiembre", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Sin informacion", "est": "Sin información", "egr": "Externo", "ecivil": "Sin información"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Septiembre", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Septiembre", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Septiembre", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Septiembre", "gen": "Masculino", "prof": "Profesional En Sgsst", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Septiembre", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Septiembre", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Septiembre", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Inteligencia Negocios e IA - Power BI", "mod": "Presencial", "mes": "Septiembre", "gen": "Femenino", "prof": "Ingeniera Ambiental", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Jamundi", "est": "4", "egr": "Externo", "ecivil": "Casado"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Masculino", "prof": "Administrador(a) de Empresas", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Femenino", "prof": "Directora comercial", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Masculino", "prof": "ESPECIALISTA GERENCIA PROYECTOS", "city": "Medellin", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Femenino", "prof": "Ingeniero De Alimentos", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Buga", "est": "3", "egr": "Egresado UAO", "ecivil": "Casado"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Femenino", "prof": "Ing. Informatico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Femenino", "prof": "Ing. Civil", "city": "Cali", "est": "6", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Masculino", "prof": "Ing. Civil", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "IA para Automatizar Procesos", "mod": "Virtual", "mes": "Septiembre", "gen": "Femenino", "prof": "Economista", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Liderazgo Femenino Transformacional", "mod": "Presencial", "mes": "Octubre", "gen": "Femenino", "prof": "Coordinadora de ventas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Liderazgo Femenino Transformacional", "mod": "Presencial", "mes": "Octubre", "gen": "Femenino", "prof": "Psicologo(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Liderazgo Femenino Transformacional", "mod": "Presencial", "mes": "Octubre", "gen": "Femenino", "prof": "Odontologia", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Liderazgo Femenino Transformacional", "mod": "Presencial", "mes": "Octubre", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "2", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Liderazgo Femenino Transformacional", "mod": "Presencial", "mes": "Octubre", "gen": "Femenino", "prof": "Empresario(a) / Independiente", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Liderazgo Femenino Transformacional", "mod": "Presencial", "mes": "Octubre", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Liderazgo Femenino Transformacional", "mod": "Presencial", "mes": "Octubre", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Liderazgo Femenino Transformacional", "mod": "Presencial", "mes": "Octubre", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Comunicador(a) Social", "city": "Palmira", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Sin informacion", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Unión libre"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Disenador(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Disenador(a) Grafico(a)", "city": "Palmira", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Masculino", "prof": "Ingeniero Mecatrónico", "city": "Ibague", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Abogado(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Masculino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Masculino", "prof": "Comunicador(a) Social", "city": "Cali", "est": "6", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Disenador(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Ing. Sistemas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Mercadeo / Marketing", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Publicista", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Masculino", "prof": "Finanzas", "city": "Cali", "est": "4", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Masculino", "prof": "Publicista", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Marketing Digital con IA", "mod": "Híbrida", "mes": "Octubre", "gen": "Femenino", "prof": "Estudiante", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Masculino", "prof": "Ingeniero", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Soltero"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Masculino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Palmira", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Palmira", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Femenino", "prof": "Secretaria", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Masculino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Palmira", "est": "3", "egr": "Egresado UAO", "ecivil": "Sin informacion"}, {"dip": "Automatizacion Contable con IA", "mod": "ONLINE", "mes": "Octubre", "gen": "Masculino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Femenino", "prof": "Comerciante", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Femenino", "prof": "Ingeniería en Informando", "city": "Candelaria", "est": "1", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Femenino", "prof": "Comerciante", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Unión libre"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Masculino", "prof": "Enfermero", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Masculino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Femenino", "prof": "Administrador(a) de Empresas", "city": "Cali", "est": "3", "egr": "Externo", "ecivil": "Unión libre"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Masculino", "prof": "Cine / Comunicacion Audiovisual", "city": "Cali", "est": "5", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Casado"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Escuela de Liderazgo Empresarial", "mod": "Híbrida", "mes": "Noviembre", "gen": "Femenino", "prof": "Ingeniería en Informando", "city": "Candelaria", "est": "1", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Unión libre"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Masculino", "prof": "Estudiante", "city": "Cali", "est": "3", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Femenino", "prof": "Tec Sistemas", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Masculino", "prof": "Ingeniero Eletronico", "city": "Jamundi", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Masculino", "prof": "Ing. Biomedico(a)", "city": "Cali", "est": "4", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Femenino", "prof": "Ingeniero Biomédico", "city": "Tulua", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Femenino", "prof": "Economista", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Femenino", "prof": "Contador(a) Publico(a)", "city": "Cali", "est": "2", "egr": "Egresado UAO", "ecivil": "Soltero"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Femenino", "prof": "Estudiante", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Femenino", "prof": "Ingeniero(a) Industrial", "city": "Popayan", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}, {"dip": "Ciencia de Datos con Python", "mod": "Virtual", "mes": "Diciembre", "gen": "Femenino", "prof": "Tecnóloga En Mecatrónica", "city": "Cali", "est": "Sin información", "egr": "Externo", "ecivil": "Sin informacion"}], "months": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]};
+var MONTHS = ["Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+var PAL = ["#DC142D","#F03C46","#961423","#c94050","#e85c6a","#b31028","#ff6b7a","#80101f","#f28090","#6b0c1a","#d94050","#ff8c96","#e03050","#70090e","#cc3040"];
+var charts = {};
+var filt = [];
+
+Chart.defaults.font.family = '"DM Sans", sans-serif';
+Chart.defaults.color = "#5A5A5A";
+
+// Count by key, return sorted obj top-N
+function cntBy(arr, key, n) {
+  var m = {};
+  arr.forEach(function(r){
+    var v = r[key];
+    if(v === undefined || v === null || v === "nan" || v === "undefined") v = "Sin info";
+    m[v] = (m[v]||0) + 1;
+  });
+  var pairs = Object.keys(m).map(function(k){ return [k, m[k]]; });
+  pairs.sort(function(a,b){ return b[1]-a[1]; });
+  if(n) pairs = pairs.slice(0,n);
+  var out = {};
+  pairs.forEach(function(p){ out[p[0]] = p[1]; });
+  return out;
+}
+
+// Unique values for a key
+function uniq(arr, key) {
+  var seen = {}, res = [];
+  arr.forEach(function(x){
+    var v = x[key];
+    if(v && v !== "nan" && v !== "undefined" && !seen[v]){ seen[v]=1; res.push(v); }
+  });
+  return res;
+}
+
+function gv(id){ return document.getElementById(id).value; }
+
+// FIX: value must be empty string "" for the "all" option
+function popSel(id, values, allLabel, doSort) {
+  var sel = document.getElementById(id);
+  var arr = values.slice();
+  if(doSort !== false) arr.sort();
+  sel.innerHTML = "";
+  var def = document.createElement("option");
+  def.value = "";
+  def.textContent = allLabel;
+  sel.appendChild(def);
+  arr.forEach(function(v){
+    if(v && v !== "undefined" && v !== "nan" && v !== "Sin info"){
+      var o = document.createElement("option");
+      o.value = v;
+      o.textContent = v;
+      sel.appendChild(o);
+    }
+  });
+  sel.onchange = applyF;
+}
+
+function initFilters() {
+  popSel("fd", uniq(RAW.records,"dip"), "Todos", true);
+  // Months: keep calendar order, no sort
+  var usedMonths = MONTHS.filter(function(m){
+    return RAW.records.some(function(r){ return r.mes === m; });
+  });
+  popSel("fm", usedMonths, "Todos", false);
+  popSel("fg2", uniq(RAW.records,"gen"), "Todos", true);
+  popSel("fmo", uniq(RAW.records,"mod"), "Todos", true);
+  popSel("fc", uniq(RAW.records,"city"), "Todas", true);
+  popSel("fp", uniq(RAW.records,"prof"), "Todas", true);
+  popSel("fe", uniq(RAW.records,"egr"), "Todos", true);
+}
+
+function applyF() {
+  var fd = gv("fd"), fm = gv("fm"), fg = gv("fg2"),
+      fmo = gv("fmo"), fc = gv("fc"), fp = gv("fp"), fe = gv("fe");
+  filt = RAW.records.filter(function(r){
+    if(fd  && r.dip  !== fd)  return false;
+    if(fm  && r.mes  !== fm)  return false;
+    if(fg  && r.gen  !== fg)  return false;
+    if(fmo && r.mod  !== fmo) return false;
+    if(fc  && r.city !== fc)  return false;
+    if(fp  && r.prof !== fp)  return false;
+    if(fe  && r.egr  !== fe)  return false;
+    return true;
+  });
+  document.getElementById("fcnt").textContent = filt.length + " registros";
+  updateAll();
+}
+
+function resetF() {
+  ["fd","fm","fg2","fmo","fc","fp","fe"].forEach(function(id){
+    document.getElementById(id).value = "";
+  });
+  applyF();
+}
+
+// Destroy chart helper
+function dc(k){ if(charts[k]){ try{ charts[k].destroy(); }catch(e){} delete charts[k]; } }
+
+// Generic horizontal bar
+function mkHBar(id, labels, values) {
+  dc(id);
+  var maxV = Math.max.apply(null, values) || 1;
+  charts[id] = new Chart(document.getElementById(id).getContext("2d"), {
+    type: "bar",
+    data: { labels: labels, datasets: [{
+      data: values,
+      backgroundColor: values.map(function(v,i){
+        if(i===0) return "#DC142D";
+        return "rgba(220,20,45," + (0.38+(v/maxV)*0.52).toFixed(2) + ")";
+      }),
+      borderRadius: 6, borderSkipped: false
+    }]},
+    options: {
+      indexAxis: "y", responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: function(c){ return " " + c.raw + " matriculados"; }}}
+      },
+      scales: {
+        x: { grid: { color: "rgba(0,0,0,0.04)" }, ticks: { font: { size: 10 } } },
+        y: { grid: { display: false }, ticks: { font: { size: 10, weight:"500" } } }
+      }
+    }
+  });
+}
+
+// Generic donut
+function mkDonut(id, labels, values, colors) {
+  dc(id);
+  var total = values.reduce(function(a,b){ return a+b; },0) || 1;
+  charts[id] = new Chart(document.getElementById(id).getContext("2d"), {
+    type: "doughnut",
+    data: { labels: labels, datasets: [{
+      data: values, backgroundColor: colors || PAL,
+      borderWidth: 3, borderColor: "#fff", hoverOffset: 7
+    }]},
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: "64%",
+      plugins: {
+        legend: { position: "bottom", labels: { font: { size: 10 }, padding: 9, boxWidth: 10 }},
+        tooltip: { callbacks: { label: function(c){
+          return " " + c.label + ": " + c.raw + " (" + (c.raw/total*100).toFixed(1) + "%)";
+        }}}
+      }
+    }
+  });
+}
+
+function upKPI() {
+  var n = filt.length;
+  document.getElementById("kv1").textContent = n;
+  document.getElementById("ks1").textContent = n === RAW.total ? "Total registros 2025" : "Filtrado de " + RAW.total;
+  var dips = {}; filt.forEach(function(r){ dips[r.dip]=1; });
+  document.getElementById("kv2").textContent = Object.keys(dips).length;
+  var profs = {}; filt.forEach(function(r){ if(r.prof&&r.prof!=="Sin informacion") profs[r.prof]=1; });
+  document.getElementById("kv3").textContent = Object.keys(profs).length;
+  var cities = {}; filt.forEach(function(r){ if(r.city&&r.city!=="Sin informacion") cities[r.city]=1; });
+  document.getElementById("kv4").textContent = Object.keys(cities).length;
+  var uao = filt.filter(function(r){ return r.egr==="Egresado UAO"; }).length;
+  document.getElementById("kv5").textContent = n > 0 ? Math.round(uao/n*100) + "%" : "0%";
+  document.getElementById("ks5").textContent = uao + " de " + n + " matriculados";
+}
+
+function upC1() {
+  var d = cntBy(filt, "prof", 13);
+  var labs = [], vals = [];
+  Object.keys(d).forEach(function(k){
+    if(k !== "Sin info") { labs.push(k); vals.push(d[k]); }
+  });
+  labs = labs.slice(0,12); vals = vals.slice(0,12);
+  mkHBar("c1", labs, vals);
+}
+
+function upRank() {
+  var d = cntBy(filt, "prof", 11);
+  var total = filt.length || 1;
+  var keys = Object.keys(d).filter(function(k){ return k !== "Sin info"; }).slice(0,10);
+  var max = keys.length > 0 ? d[keys[0]] : 1;
+  var html = "";
+  keys.forEach(function(name, i){
+    var cnt = d[name];
+    var pct = (cnt/total*100).toFixed(1);
+    var bw  = (cnt/max*100).toFixed(1);
+    html += "<tr><td class='rn'>#" + (i+1) + "</td>";
+    html += "<td style='padding:6px 7px;font-size:0.73rem;font-weight:600'>" + name + "</td>";
+    html += "<td style='padding:6px 3px;min-width:70px'><div class='rb'><div class='rbf' style='width:" + bw + "%'></div></div></td>";
+    html += "<td class='rc'>" + cnt + "</td><td class='rp'>" + pct + "%</td></tr>";
+  });
+  document.getElementById("t-rank").innerHTML = html;
+}
+
+function upC2() {
+  dc("c2");
+  var d = cntBy(filt, "prof", 10);
+  var total = filt.length || 1;
+  var labs = [], vals = [];
+  Object.keys(d).forEach(function(k){
+    if(k !== "Sin info" && labs.length < 8){ labs.push(k); vals.push(d[k]); }
+  });
+  var shown = vals.reduce(function(a,b){ return a+b; },0);
+  var others = total - shown - (d["Sin info"]||0);
+  if(others > 0){ labs.push("Otras"); vals.push(others); }
+  charts["c2"] = new Chart(document.getElementById("c2").getContext("2d"), {
+    type: "pie",
+    data: { labels: labs, datasets: [{ data: vals, backgroundColor: PAL, borderWidth: 2, borderColor: "#fff" }]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: "bottom", labels: { font: { size: 9 }, padding: 7, boxWidth: 9 }},
+        tooltip: { callbacks: { label: function(c){
+          return " " + c.label + ": " + c.raw + " (" + (c.raw/total*100).toFixed(1) + "%)";
+        }}}
+      }
+    }
+  });
+}
+
+function upC3() {
+  var d = cntBy(filt, "gen");
+  var labs = Object.keys(d), vals = labs.map(function(k){ return d[k]; });
+  mkDonut("c3", labs, vals, ["#DC142D","rgba(220,20,45,0.35)","#961423"]);
+}
+
+function upC4() {
+  var d = cntBy(filt, "mod");
+  var labs = Object.keys(d), vals = labs.map(function(k){ return d[k]; });
+  mkDonut("c4", labs, vals, ["#DC142D","#F03C46","#961423","rgba(220,20,45,0.45)"]);
+}
+
+function upC5() {
+  dc("c5");
+  var mdata = {};
+  MONTHS.forEach(function(m){ mdata[m] = 0; });
+  filt.forEach(function(r){ if(r.mes && mdata.hasOwnProperty(r.mes)) mdata[r.mes]++; });
+  var labs = [], vals = [];
+  MONTHS.forEach(function(m){ if(mdata[m] > 0){ labs.push(m); vals.push(mdata[m]); }});
+  var maxV = Math.max.apply(null, vals) || 1;
+  charts["c5"] = new Chart(document.getElementById("c5").getContext("2d"), {
+    type: "bar",
+    data: { labels: labs, datasets: [
+      { type: "line", label: "Tendencia", data: vals, borderColor: "#961423",
+        backgroundColor: "transparent", borderWidth: 2.5,
+        pointBackgroundColor: "#DC142D", pointRadius: 5, tension: 0.42, order: 1 },
+      { type: "bar", label: "Matriculados", data: vals,
+        backgroundColor: vals.map(function(v){
+          return "rgba(220,20,45," + (0.38+(v/maxV)*0.55).toFixed(2) + ")";
+        }),
+        borderRadius: 6, borderSkipped: false, order: 2 }
+    ]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: { legend: { position: "top", labels: { font: { size: 10 }, boxWidth: 10 }}},
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 }}},
+        y: { grid: { color: "rgba(0,0,0,0.04)" }, beginAtZero: true, ticks: { font: { size: 10 }}}
+      }
+    }
+  });
+}
+
+function upC6() {
+  dc("c6");
+  var d = cntBy(filt, "dip", 16);
+  var fullLabs = Object.keys(d);
+  var labs = fullLabs.map(function(l){ return l.length > 28 ? l.substring(0,28)+"..." : l; });
+  var vals = fullLabs.map(function(k){ return d[k]; });
+  var maxV = Math.max.apply(null, vals) || 1;
+  charts["c6"] = new Chart(document.getElementById("c6").getContext("2d"), {
+    type: "bar",
+    data: { labels: labs, datasets: [{ data: vals,
+      backgroundColor: vals.map(function(v,i){
+        if(i===0) return "#DC142D";
+        return "rgba(220,20,45," + (0.38+(v/maxV)*0.52).toFixed(2) + ")";
+      }),
+      borderRadius: 6, borderSkipped: false
+    }]},
+    options: {
+      indexAxis: "y", responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: {
+          title: function(ctx){ return fullLabs[ctx[0].dataIndex]; },
+          label: function(c){ return " " + c.raw + " matriculados"; }
+        }}
+      },
+      scales: {
+        x: { grid: { color: "rgba(0,0,0,0.04)" }, ticks: { font: { size: 10 }}},
+        y: { grid: { display: false }, ticks: { font: { size: 9, weight:"500" }}}
+      }
+    }
+  });
+}
+
+function upC7() {
+  var d = cntBy(filt, "city", 13);
+  var labs = [], vals = [];
+  Object.keys(d).forEach(function(k){
+    if(k !== "Sin info" && k !== "Sin informacion" && labs.length < 12){
+      labs.push(k); vals.push(d[k]);
+    }
+  });
+  mkHBar("c7", labs, vals);
+}
+
+function upHeat() {
+  var pd = cntBy(filt, "prof", 11);
+  var top = Object.keys(pd).filter(function(k){ return k !== "Sin info"; }).slice(0,10);
+  var dd = cntBy(filt, "dip", 15);
+  var alld = Object.keys(dd).slice(0,14);
+  if(top.length === 0 || alld.length === 0){
+    document.getElementById("t-heat").innerHTML = "<tr><td style='padding:20px;color:#999;text-align:center'>Sin datos para mostrar</td></tr>";
+    return;
+  }
+  var mat = {};
+  top.forEach(function(p){ mat[p] = {}; alld.forEach(function(d){ mat[p][d] = 0; }); });
+  filt.forEach(function(r){
+    if(mat[r.prof] && alld.indexOf(r.dip) >= 0){
+      mat[r.prof][r.dip] = (mat[r.prof][r.dip]||0) + 1;
+    }
+  });
+  var allv = [];
+  top.forEach(function(p){ alld.forEach(function(d){ allv.push(mat[p][d]); }); });
+  var maxv = Math.max.apply(null, allv) || 1;
+  var html = "<thead><tr><th>Profesion</th>";
+  alld.forEach(function(d){
+    var label = d.length > 16 ? d.substring(0,16)+"..." : d;
+    html += "<th title='" + d + "'>" + label + "</th>";
+  });
+  html += "</tr></thead><tbody>";
+  top.forEach(function(prof){
+    html += "<tr><td>" + prof + "</td>";
+    alld.forEach(function(d){
+      var v = mat[prof][d] || 0;
+      var a = v === 0 ? 0 : (0.12 + (v/maxv)*0.85);
+      var bg = v === 0 ? "#f8f5f0" : "rgba(220,20,45," + a.toFixed(2) + ")";
+      var tc = v > maxv*0.4 ? "#fff" : (v > 0 ? "#961423" : "#ccc");
+      var fw = v > 0 ? "700" : "400";
+      html += "<td style='background:" + bg + ";color:" + tc + ";font-weight:" + fw + "'>" + (v > 0 ? v : "&mdash;") + "</td>";
+    });
+    html += "</tr>";
+  });
+  html += "</tbody>";
+  document.getElementById("t-heat").innerHTML = html;
+}
+
+function upC8() {
+  var d = cntBy(filt, "egr");
+  var labs = Object.keys(d), vals = labs.map(function(k){ return d[k]; });
+  mkDonut("c8", labs, vals, ["#DC142D","rgba(220,20,45,0.22)"]);
+}
+
+function upC9() {
+  dc("c9");
+  var d = cntBy(filt, "est");
+  var labs = [], vals = [];
+  ["1","2","3","4","5","6"].forEach(function(k){
+    if(d[k]){ labs.push("Estrato " + k); vals.push(d[k]); }
+  });
+  if(labs.length === 0) return;
+  charts["c9"] = new Chart(document.getElementById("c9").getContext("2d"), {
+    type: "bar",
+    data: { labels: labs, datasets: [{ data: vals,
+      backgroundColor: vals.map(function(_,i){ return "rgba(220,20,45," + (0.38+i*0.11).toFixed(2) + ")"; }),
+      borderRadius: 8, borderSkipped: false
+    }]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }},
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 }}},
+        y: { grid: { color: "rgba(0,0,0,0.04)" }, beginAtZero: true, ticks: { font: { size: 10 }}}
+      }
+    }
+  });
+}
+
+function upAfin() {
+  var combos = {};
+  filt.forEach(function(r){
+    if(r.prof && r.prof !== "Sin info" && r.dip){
+      var k = r.prof + "||" + r.dip;
+      combos[k] = (combos[k]||0) + 1;
+    }
+  });
+  var pairs = Object.keys(combos).map(function(k){ return [k, combos[k]]; });
+  pairs.sort(function(a,b){ return b[1]-a[1]; });
+  var top = pairs.slice(0,12);
+  var html = "<thead><tr style='border-bottom:2px solid rgba(220,20,45,0.13)'>";
+  html += "<th style='padding:5px 7px;font-size:0.64rem;text-transform:uppercase;letter-spacing:.05em;color:#5A5A5A;text-align:left;font-weight:700'>Profesion - Diplomado</th>";
+  html += "<th style='padding:5px 4px;font-size:0.64rem;text-align:right;color:#5A5A5A;font-weight:700'>N</th></tr></thead><tbody>";
+  top.forEach(function(item){
+    var sp = item[0].indexOf("||");
+    var prof = item[0].substring(0, sp);
+    var dip  = item[0].substring(sp+2);
+    var cnt  = item[1];
+    var ds = dip.length > 32 ? dip.substring(0,32)+"..." : dip;
+    html += "<tr style='border-bottom:1px solid rgba(0,0,0,0.05)'>";
+    html += "<td style='padding:5px 7px;font-size:0.72rem'>";
+    html += "<span style='color:#DC142D;font-weight:600'>" + prof + "</span><br>";
+    html += "<span style='color:#5A5A5A;font-size:0.66rem'>" + ds + "</span></td>";
+    html += "<td style='padding:5px 4px;font-weight:700;color:#DC142D;text-align:right;font-size:0.78rem'>" + cnt + "</td></tr>";
+  });
+  html += "</tbody>";
+  document.getElementById("t-afin").innerHTML = html;
+}
+
+function updateAll() {
+  upKPI();
+  upC1(); upRank(); upC2(); upC3(); upC4();
+  upC5(); upC6(); upC7();
+  upHeat();
+  upC8(); upC9(); upAfin();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  filt = RAW.records.slice();
+  initFilters();
+  updateAll();
+});
+</script></body></html>
