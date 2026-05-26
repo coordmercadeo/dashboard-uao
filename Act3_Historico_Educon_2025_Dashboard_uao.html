@@ -417,16 +417,15 @@ tfoot .nr{font-family:'JetBrains Mono',monospace}
         <div class="cw" style="height:480px"><canvas id="pr_top20"></canvas></div>
       </div>
 
-      <!-- Ticket promedio top -->
-      <div class="row c2">
-        <div class="card">
-          <div class="ch"><div class="ct">Ticket promedio por matrícula — Top 12</div></div>
-          <div class="cw" style="height:280px"><canvas id="pr_ticket"></canvas></div>
+      <!-- Cohortes vs ventas -->
+      <div class="card mb">
+        <div class="ch"><div class="ct">Relación cohortes ejecutadas vs ventas generadas — por tipo de programa</div></div>
+        <div class="leg">
+          <span class="li"><span class="ld" style="background:#1e6fc2"></span>Diplomado</span>
+          <span class="li"><span class="ld" style="background:#0d9e78"></span>Curso</span>
+          <span class="li"><span class="ld" style="background:#c8860a"></span>Seminario</span>
         </div>
-        <div class="card">
-          <div class="ch"><div class="ct">Cohortes ejecutadas vs ventas generadas</div></div>
-          <div class="cw" style="height:280px"><canvas id="pr_cohortes"></canvas></div>
-        </div>
+        <div class="cw" style="height:280px"><canvas id="pr_cohortes"></canvas></div>
       </div>
 
       <!-- Tabla completa -->
@@ -451,7 +450,6 @@ tfoot .nr{font-family:'JetBrains Mono',monospace}
                 <th class="nr">% Total</th>
                 <th class="nr">Matriculados</th>
                 <th class="nr">Cohortes</th>
-                <th class="nr">Ticket prom.</th>
                 <th class="nr">Rendimiento</th>
               </tr>
             </thead>
@@ -717,8 +715,6 @@ const top20=PROGS.slice(0,20);
 new Chart('pr_top20',{type:'bar',data:{labels:top20.map(p=>{const n=p.nombre;return n.length>42?n.substring(0,42)+'…':n;}),datasets:[{data:top20.map(p=>p.ventas),backgroundColor:top20.map(p=>TIPO_COL[p.tipo]),borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${fM(c.raw)} · ${top20[c.dataIndex].mat} mat. · ${top20[c.dataIndex].cohortes} cohorte(s)`}}},scales:{x:{ticks:{callback:v=>fML(v),font:{size:10},color:tc},grid:{color:gc}},y:{ticks:{font:{size:10.5},color:tc},grid:{color:gc}}}}});
 
 /* Ticket promedio — top 12 con matriculados > 0 */
-const withMat=PROGS.filter(p=>p.mat>0).map(p=>({...p,ticket:Math.round(p.ventas/p.mat)})).sort((a,b)=>b.ticket-a.ticket).slice(0,12);
-new Chart('pr_ticket',{type:'bar',data:{labels:withMat.map(p=>{const n=p.nombre;return n.length>30?n.substring(0,30)+'…':n;}),datasets:[{data:withMat.map(p=>p.ticket),backgroundColor:withMat.map(p=>TIPO_COL[p.tipo]),borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Ticket: ${fM(c.raw)} · ${withMat[c.dataIndex].tipo}`}}},scales:{x:{ticks:{callback:v=>fML(v),font:{size:10},color:tc},grid:{color:gc}},y:{ticks:{font:{size:10},color:tc},grid:{color:gc}}}}});
 
 /* Cohortes vs ventas (scatter) */
 new Chart('pr_cohortes',{type:'scatter',data:{datasets:[{data:PROGS.map(p=>({x:p.cohortes,y:p.ventas/1e6,l:p.nombre.substring(0,28),t:p.tipo})),backgroundColor:PROGS.map(p=>TIPO_COL[p.tipo]),pointRadius:6,pointHoverRadius:9}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.l}… | ${c.raw.t} | ${c.raw.x} coh. | ${fM(c.raw.y*1e6)}`}}},scales:{x:{title:{display:true,text:'Número de cohortes',font:{size:10},color:tc},ticks:{font:{size:10.5},color:tc},grid:{color:gc}},y:{title:{display:true,text:'Ventas ($M)',font:{size:10},color:tc},ticks:{callback:v=>v+'M',font:{size:10.5},color:tc},grid:{color:gc}}}}});
@@ -730,7 +726,6 @@ function renderProgTable(filter){
   const data=filter==='Todos'?PROGS:PROGS.filter(p=>p.tipo===filter);
   tbody.innerHTML='';
   data.forEach((p,i)=>{
-    const ticket=p.mat>0?fM(Math.round(p.ventas/p.mat)):'—';
     const pct=(p.ventas/TOTAL_PROG*100).toFixed(1);
     const score=p.ventas>=100000000?'b-bl':p.ventas>=30000000?'b-tl':p.ventas>=10000000?'b-go':'b-rd';
     const scoreLabel=p.ventas>=100000000?'★★★ Alto':p.ventas>=30000000?'★★ Medio-Alto':p.ventas>=10000000?'★ Medio':'◦ Bajo';
@@ -748,7 +743,6 @@ function renderProgTable(filter){
       </td>
       <td class="nr">${p.mat>0?p.mat:'—'}</td>
       <td class="nr">${p.cohortes}</td>
-      <td class="nr">${ticket}</td>
       <td class="nr"><span class="bd ${score}" style="font-family:'Inter',sans-serif;font-size:10px">${scoreLabel}</span></td>
     </tr>`;
   });
