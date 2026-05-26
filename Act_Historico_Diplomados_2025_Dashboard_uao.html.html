@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tablero Educación Continua 2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0a1628;--blue:#1e6fc2;--blue-faint:#e8f2fd;
+  --teal:#0d9e78;--teal-faint:#e0f5ef;
+  --gold:#c8860a;--gold-faint:#fdf0db;
+  --red:#c0392b;--red-faint:#fdecea;
+  --bg:#f4f6fb;--surface:#fff;--surface2:#f9fafb;
+  --border:#e4e8f0;--txt:#111827;--txt2:#4b5563;--txt3:#9ca3af;
+  --r:10px;--r2:7px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);font-size:14px}
+.layout{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:var(--navy);color:#fff;flex-shrink:0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.sb-top{padding:20px 18px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-mark{width:36px;height:36px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;margin-bottom:8px}
+.sb-top h2{font-size:12.5px;font-weight:600;color:#e5e9f5;line-height:1.3}
+.sb-top p{font-size:10px;color:#6b7a9f;margin-top:2px}
+.sb-nav{padding:12px 8px;flex:1;overflow-y:auto}
+.sb-sec{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#4a5a80;padding:8px 10px 4px}
+.ni{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r2);cursor:pointer;color:#8ea0c4;font-size:12.5px;transition:all .15s;margin-bottom:2px}
+.ni:hover{background:rgba(255,255,255,.06);color:#c4d0e8}
+.ni.on{background:var(--blue);color:#fff;font-weight:500}
+.ni span{width:14px;text-align:center;font-size:12px}
+.sb-foot{padding:12px 16px;border-top:1px solid rgba(255,255,255,.07);font-size:10px;color:#4a5a80;line-height:1.6}
+
+/* MAIN */
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.tb-title{font-size:15px;font-weight:600}
+.tb-sub{font-size:12px;color:var(--txt3);margin-left:6px;font-weight:400}
+.tb-badge{background:var(--blue-faint);color:var(--blue);font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px}
+.scroll{flex:1;overflow-y:auto;padding:22px 26px}
+
+/* PANELS */
+.panel{display:none}.panel.on{display:block}
+
+/* KPIs */
+.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kbl::before{background:var(--blue)}.ktl::before{background:var(--teal)}
+.kgo::before{background:var(--gold)}.krd::before{background:var(--red)}
+.kl{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--txt3);margin-bottom:6px}
+.kv{font-size:24px;font-weight:300;letter-spacing:-.03em;line-height:1;margin-bottom:5px}
+.kbl .kv{color:var(--blue)}.ktl .kv{color:var(--teal)}.kgo .kv{color:var(--gold)}.krd .kv{color:var(--red)}
+.kd{font-size:11px;color:var(--txt3)}
+.up{color:#16a34a;font-weight:500}.dn{color:var(--red);font-weight:500}
+
+/* CARDS */
+.row{display:grid;gap:14px;margin-bottom:14px}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:2fr 1fr 1fr}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.card.mb{margin-bottom:14px}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ct{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--txt2)}
+.cw{position:relative;width:100%}
+.leg{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--txt2)}
+.ld{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+
+/* SUMMARY BOX */
+.sbox{background:var(--navy);border-radius:var(--r);padding:18px 22px;margin-bottom:14px;color:#e2e8f4}
+.sbox h3{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;color:#fff}
+.sr{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:12px}
+.sr:last-child{border-bottom:none}
+.sr b{font-family:'JetBrains Mono',monospace;font-weight:500;color:#fff}
+
+/* GAUGES */
+.grows{display:flex;gap:10px;margin-bottom:14px}
+.gi{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.gl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--txt3);margin-bottom:4px}
+.gv{font-size:24px;font-weight:300;letter-spacing:-.02em;margin:3px 0}
+.gs{font-size:10.5px;color:var(--txt3)}
+.gbar{height:4px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden}
+.gfill{height:100%;border-radius:2px}
+
+/* TABLE */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:900px}
+thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--txt3);background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap}
+tbody td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--txt);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#fafbff}
+.nr{text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px}
+tfoot td{background:var(--navy);color:#fff;font-weight:600;padding:10px 10px;font-size:11.5px}
+tfoot .nr{font-family:'JetBrains Mono',monospace}
+.camp-txt{font-size:11px;line-height:1.4;color:var(--txt2);font-style:italic}
+.no-camp{font-size:11px;color:var(--txt3);font-style:italic}
+.th-hist{background:#f0f4fa!important}
+.th-2025{background:#e8f2fd!important;color:var(--blue)!important}
+.td-hist{color:var(--txt2)!important}
+.td-2025{color:var(--blue)!important;font-weight:500!important}
+.camp-row{background:#f8fbff}
+
+/* BADGES */
+.bd{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:500;font-family:'JetBrains Mono',monospace}
+.b-bl{background:var(--blue-faint);color:var(--blue)}
+.b-tl{background:var(--teal-faint);color:var(--teal)}
+.b-go{background:var(--gold-faint);color:var(--gold)}
+.b-rd{background:var(--red-faint);color:var(--red)}
+
+/* ANALYSIS */
+.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.acard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.ahd{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.aico{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ahd h3{font-size:12.5px;font-weight:600}
+.aitems{padding:10px 16px}
+.aitem{padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--txt2);line-height:1.55}
+.aitem:last-child{border-bottom:none}
+.aitem strong{color:var(--txt);font-weight:500}
+.adot{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:7px;vertical-align:middle;margin-bottom:1px}
+
+@media(max-width:900px){.sidebar{display:none}.kgrid{grid-template-columns:1fr 1fr}.c2,.c3,.agrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sb-top">
+    <div class="sb-mark">EC</div>
+    <h2>Educación Continua</h2>
+    <p>Tablero de Control 2025</p>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Análisis</div>
+    <div class="ni on" onclick="go('resumen',this)"><span>◉</span>Resumen ejecutivo</div>
+    <div class="ni" onclick="go('ventas',this)"><span>↗</span>Ventas 2025</div>
+    <div class="ni" onclick="go('roas',this)"><span>⟳</span>ROAS &amp; Eficiencia</div>
+    <div class="ni" onclick="go('inversion',this)"><span>◎</span>Inversión</div>
+    <div class="sb-sec">Histórico</div>
+    <div class="ni" onclick="go('historico',this)"><span>≋</span>Comparativo anual</div>
+    <div class="ni" onclick="go('campanas',this)"><span>★</span>Campañas 2025</div>
+    <div class="sb-sec">Estrategia</div>
+    <div class="ni" onclick="go('estrategia',this)"><span>◆</span>Análisis estratégico</div>
+    <div class="sb-sec">Programas</div>
+    <div class="ni" onclick="go('programas',this)"><span>☰</span>Desempeño por programa</div>
+  </nav>
+  <div class="sb-foot">Fuente: Históricos Educon<br>Período: Ene–Dic 2025<br>Valores en pesos COP<br><br><span style="color:#8ea0c4;font-weight:500">Elaborado por:</span><br>Jose Joaquin González</div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="content">
+  <div class="topbar">
+    <div><span class="tb-title">Tablero Educación Continua</span><span class="tb-sub" id="pname">— Resumen ejecutivo</span></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:11px;color:var(--txt3)">Elaborado por <strong style="color:var(--txt2)">Jose Joaquin González</strong></span>
+      <div class="tb-badge">Año fiscal 2025</div>
+    </div>
+  </div>
+  <div class="scroll">
+
+    <!-- ── RESUMEN ── -->
+    <div id="p-resumen" class="panel on">
+      <div class="kgrid">
+        <div class="kpi kbl">
+          <div class="kl">Ventas totales 2025</div>
+          <div class="kv">$1.351.975M</div>
+          <div class="kd"><span class="up">+130.8%</span> vs 2024 ($585.645M)</div>
+        </div>
+        <div class="kpi ktl">
+          <div class="kl">Inversión ejecutada</div>
+          <div class="kv">$64.963M</div>
+          <div class="kd">de $102.150M presupuestado</div>
+        </div>
+        <div class="kpi kbl">
+          <div class="kl">ROAS global</div>
+          <div class="kv">20.81×</div>
+          <div class="kd">$20.81 por cada $1 invertido</div>
+        </div>
+        <div class="kpi kgo">
+          <div class="kl">Ejecución presupuestal</div>
+          <div class="kv">63.6%</div>
+          <div class="kd"><span class="dn">$37.187M</span> sin ejecutar</div>
+        </div>
+      </div>
+      <div class="sbox">
+        <h3>Indicadores clave de gestión 2025</h3>
+        <div class="sr"><span>Mejor mes en ventas</span><b>Septiembre — $299.761M</b></div>
+        <div class="sr"><span>ROAS más alto</span><b>Febrero — 48.45×</b></div>
+        <div class="sr"><span>ROAS campaña más efectiva</span><b>Septiembre (Amor y Amistad) — 45.75×</b></div>
+        <div class="sr"><span>Mayor ejecución presupuestal</span><b>Marzo — 99.2%</b></div>
+        <div class="sr"><span>Menor ejecución presupuestal</span><b>Octubre — 49.9%</b></div>
+        <div class="sr"><span>Mes de menor ROAS</span><b>Noviembre — 6.79×</b></div>
+        <div class="sr"><span>Campañas formales ejecutadas</span><b>6 meses (Jun – Nov)</b></div>
+        <div class="sr"><span>Crecimiento vs 2022 (mejor año anterior)</span><b>+24.0%</b></div>
+      </div>
+      <div class="row c2">
+        <div class="card"><div class="ch"><div class="ct">Ventas mensuales 2025</div></div><div class="cw" style="height:230px"><canvas id="r_v"></canvas></div></div>
+        <div class="card"><div class="ch"><div class="ct">ROAS por mes</div></div><div class="cw" style="height:230px"><canvas id="r_r"></canvas></div></div>
+      </div>
+      <div class="row c2">
+        <div class="card"><div class="ch"><div class="ct">Totales anuales 2022–2025</div></div><div class="cw" style="height:180px"><canvas id="r_a"></canvas></div></div>
+        <div class="card"><div class="ch"><div class="ct">Ejecución presupuestal mensual</div></div><div class="cw" style="height:180px"><canvas id="r_e"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ── VENTAS ── -->
+    <div id="p-ventas" class="panel">
+      <div class="kgrid">
+        <div class="kpi kbl"><div class="kl">Total ventas</div><div class="kv">$1.351.975M</div><div class="kd">12 meses 2025</div></div>
+        <div class="kpi ktl"><div class="kl">Promedio mensual</div><div class="kv">$112.665M</div><div class="kd">por mes</div></div>
+        <div class="kpi kbl"><div class="kl">Mes pico</div><div class="kv">$299.761M</div><div class="kd">Septiembre</div></div>
+        <div class="kpi kgo"><div class="kl">Mes valle</div><div class="kv">$18.650M</div><div class="kd">Enero</div></div>
+      </div>
+      <div class="card mb"><div class="ch"><div class="ct">Ventas mensuales 2025 (COP)</div></div><div class="cw" style="height:270px"><canvas id="v_b"></canvas></div></div>
+      <div class="row c2">
+        <div class="card"><div class="ch"><div class="ct">Distribución por mes</div></div><div class="cw" style="height:230px"><canvas id="v_d"></canvas></div></div>
+        <div class="card"><div class="ch"><div class="ct">Ventas acumuladas 2025</div></div><div class="cw" style="height:230px"><canvas id="v_a"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ── ROAS ── -->
+    <div id="p-roas" class="panel">
+      <div class="grows">
+        <div class="gi"><div class="gl">ROAS global</div><div class="gv" style="color:var(--blue)">20.81×</div><div class="gs">Promedio anual</div><div class="gbar"><div class="gfill" style="width:42%;background:var(--blue)"></div></div></div>
+        <div class="gi"><div class="gl">Mejor ROAS</div><div class="gv" style="color:var(--teal)">48.45×</div><div class="gs">Febrero</div><div class="gbar"><div class="gfill" style="width:97%;background:var(--teal)"></div></div></div>
+        <div class="gi"><div class="gl">ROAS sep. campaña</div><div class="gv" style="color:var(--blue)">45.75×</div><div class="gs">Amor y Amistad</div><div class="gbar"><div class="gfill" style="width:92%;background:var(--blue)"></div></div></div>
+        <div class="gi"><div class="gl">Menor ROAS</div><div class="gv" style="color:var(--red)">6.79×</div><div class="gs">Noviembre</div><div class="gbar"><div class="gfill" style="width:14%;background:var(--red)"></div></div></div>
+      </div>
+      <div class="card mb">
+        <div class="ch"><div class="ct">ROAS mensual 2025</div></div>
+        <div class="leg"><span class="li"><span class="ld" style="background:var(--blue)"></span>≥20× excelente</span><span class="li"><span class="ld" style="background:var(--teal)"></span>10–19× bueno</span><span class="li"><span class="ld" style="background:var(--gold)"></span>&lt;10× bajo</span></div>
+        <div class="cw" style="height:260px"><canvas id="ro_b"></canvas></div>
+      </div>
+      <div class="row c2">
+        <div class="card"><div class="ch"><div class="ct">Dispersión: inversión vs ventas</div></div><div class="cw" style="height:240px"><canvas id="ro_s"></canvas></div></div>
+        <div class="card"><div class="ch"><div class="ct">ROAS vs % ejecución (burbuja = ventas)</div></div><div class="cw" style="height:240px"><canvas id="ro_bu"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ── INVERSIÓN ── -->
+    <div id="p-inversion" class="panel">
+      <div class="kgrid">
+        <div class="kpi kbl"><div class="kl">Presupuesto total</div><div class="kv">$102.150M</div><div class="kd">Inversión planificada</div></div>
+        <div class="kpi ktl"><div class="kl">Ejecutado</div><div class="kv">$64.963M</div><div class="kd">63.6% del presupuesto</div></div>
+        <div class="kpi krd"><div class="kl">No ejecutado</div><div class="kv">$37.187M</div><div class="kd"><span class="dn">36.4%</span> subutilizado</div></div>
+        <div class="kpi kgo"><div class="kl">Mejor ejecución</div><div class="kv">99.2%</div><div class="kd">Marzo 2025</div></div>
+      </div>
+      <div class="card mb"><div class="ch"><div class="ct">Presupuestado vs ejecutado por mes</div></div><div class="leg"><span class="li"><span class="ld" style="background:#c8d4e8"></span>Presupuestado</span><span class="li"><span class="ld" style="background:var(--blue)"></span>Ejecutado</span></div><div class="cw" style="height:260px"><canvas id="inv_c"></canvas></div></div>
+      <div class="row c2">
+        <div class="card"><div class="ch"><div class="ct">% Ejecución mensual — meta 80%</div></div><div class="cw" style="height:210px"><canvas id="inv_p"></canvas></div></div>
+        <div class="card"><div class="ch"><div class="ct">Brecha no ejecutada por mes</div></div><div class="cw" style="height:210px"><canvas id="inv_br"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ── HISTÓRICO ── -->
+    <div id="p-historico" class="panel">
+      <div class="kgrid">
+        <div class="kpi kbl"><div class="kl">2022</div><div class="kv">$1.090.447M</div><div class="kd">Máx. histórico anterior</div></div>
+        <div class="kpi krd"><div class="kl">2023</div><div class="kv">$520.672M</div><div class="kd"><span class="dn">−52.3%</span> vs 2022</div></div>
+        <div class="kpi kgo"><div class="kl">2024</div><div class="kv">$585.645M</div><div class="kd"><span class="up">+12.5%</span> vs 2023</div></div>
+        <div class="kpi ktl"><div class="kl">2025</div><div class="kv">$1.351.975M</div><div class="kd"><span class="up">+130.8%</span> vs 2024</div></div>
+      </div>
+      <div class="card mb">
+        <div class="ch"><div class="ct">Ventas mensuales históricas 2022–2025</div></div>
+        <div class="leg"><span class="li"><span class="ld" style="background:#b0b8c8"></span>2022</span><span class="li"><span class="ld" style="background:#7ab0dc"></span>2023</span><span class="li"><span class="ld" style="background:#5DCAA5"></span>2024</span><span class="li"><span class="ld" style="background:var(--blue)"></span>2025</span></div>
+        <div class="cw" style="height:290px"><canvas id="h_l"></canvas></div>
+      </div>
+      <div class="row c2">
+        <div class="card"><div class="ch"><div class="ct">Totales anuales comparados</div></div><div class="cw" style="height:190px"><canvas id="h_a"></canvas></div></div>
+        <div class="card"><div class="ch"><div class="ct">Variación YoY por mes (2025 vs 2024)</div></div><div class="cw" style="height:190px"><canvas id="h_y"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ── CAMPAÑAS ── -->
+    <div id="p-campanas" class="panel">
+      <div class="card mb">
+        <div class="ch"><div class="ct">Detalle campañas 2025 con comparativo histórico <span style="color:var(--blue);font-weight:400">— ★ meses con campaña formal</span></div></div>
+        <div class="tw">
+          <table>
+            <thead>
+              <tr>
+                <th>Mes</th>
+                <th>Campaña 2025</th>
+                <th class="nr">Presupuestado</th>
+                <th class="nr">Ejecutado</th>
+                <th class="nr">% Ejec.</th>
+                <th class="nr th-hist">Ventas 2022</th>
+                <th class="nr th-hist">Ventas 2023</th>
+                <th class="nr th-hist">Ventas 2024</th>
+                <th class="nr th-2025">Ventas 2025</th>
+                <th class="nr">ROAS</th>
+              </tr>
+            </thead>
+            <tbody id="ctbody"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="2" style="color:#fff;font-weight:600">TOTAL 2025</td>
+                <td class="nr">$102.150.000</td>
+                <td class="nr">$64.963.218</td>
+                <td class="nr">63.6%</td>
+                <td class="nr th-hist" style="color:#adc8e0">$1.090.447M</td>
+                <td class="nr th-hist" style="color:#adc8e0">$520.672M</td>
+                <td class="nr th-hist" style="color:#adc8e0">$585.645M</td>
+                <td class="nr" style="color:#7ab8f5;font-weight:600">$1.351.975M</td>
+                <td class="nr"><span class="bd b-bl">20.81×</span></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- Gráfico comparativo histórico agrupado -->
+      <div class="card mb">
+        <div class="ch"><div class="ct">Comparativo ventas 2022–2025 por mes — ★ indica mes con campaña formal en 2025</div></div>
+        <div class="leg">
+          <span class="li"><span class="ld" style="background:#b0b8c8"></span>2022</span>
+          <span class="li"><span class="ld" style="background:#7ab0dc"></span>2023</span>
+          <span class="li"><span class="ld" style="background:#5DCAA5"></span>2024</span>
+          <span class="li"><span class="ld" style="background:var(--blue)"></span>2025 con campaña</span>
+          <span class="li"><span class="ld" style="background:rgba(30,111,194,0.45)"></span>2025 sin campaña</span>
+        </div>
+        <div class="cw" style="height:320px"><canvas id="c_hist4"></canvas></div>
+      </div>
+
+      <div class="row c2">
+        <div class="card"><div class="ch"><div class="ct">ROAS promedio — con vs sin campaña</div></div><div class="cw" style="height:210px"><canvas id="c_rcomp"></canvas></div></div>
+        <div class="card"><div class="ch"><div class="ct">Ventas 2025 — con vs sin campaña formal</div></div><div class="cw" style="height:210px"><canvas id="c_vcomp"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ── ESTRATEGIA ── -->
+    <div id="p-estrategia" class="panel">
+      <div class="agrid">
+        <div class="acard">
+          <div class="ahd"><div class="aico" style="background:var(--blue-faint);color:var(--blue)">◆</div><h3>Principales hallazgos</h3></div>
+          <div class="aitems">
+            <div class="aitem"><span class="adot" style="background:var(--blue)"></span><strong>Mejor año histórico:</strong> 2025 cerró con $1.351.975M, superando 2022 ($1.090.447M) y duplicando 2023–2024. Crecimiento YoY +130.8%.</div>
+            <div class="aitem"><span class="adot" style="background:var(--blue)"></span><strong>ROAS global 20.81×:</strong> Por cada peso invertido en publicidad se generaron $20.81 en ventas.</div>
+            <div class="aitem"><span class="adot" style="background:var(--teal)"></span><strong>Septiembre, mes estrella:</strong> $299.761M con $6.553M ejecutados → ROAS 45.75×. La campaña Amor y Amistad fue decisiva.</div>
+            <div class="aitem"><span class="adot" style="background:var(--teal)"></span><strong>Febrero, eficiencia máxima:</strong> ROAS 48.45× con solo $1.836M — demanda orgánica amplificada.</div>
+            <div class="aitem"><span class="adot" style="background:var(--gold)"></span><strong>Subejecución del 36.4%:</strong> $37.187M sin invertir señala cuellos de botella en activación de medios.</div>
+            <div class="aitem"><span class="adot" style="background:var(--red)"></span><strong>Cierre débil:</strong> Nov (6.79×) y Dic (8.49×) presentan los ROAS más bajos pese a tener campañas activas.</div>
+          </div>
+        </div>
+        <div class="acard">
+          <div class="ahd"><div class="aico" style="background:var(--gold-faint);color:var(--gold)">◈</div><h3>Oportunidades de mejora</h3></div>
+          <div class="aitems">
+            <div class="aitem"><span class="adot" style="background:var(--gold)"></span><strong>Redirigir los $37.187M subutilizados</strong> hacia septiembre, junio y marzo — meses con ROAS comprobadamente alto.</div>
+            <div class="aitem"><span class="adot" style="background:var(--gold)"></span><strong>Investigar la caída de ejecución ago–oct</strong> (99% → 50%): problema estructural en aprobación de medios.</div>
+            <div class="aitem"><span class="adot" style="background:var(--teal)"></span><strong>Ampliar temporada Amor y Amistad</strong> a agosto–septiembre con mayor presupuesto.</div>
+            <div class="aitem"><span class="adot" style="background:var(--teal)"></span><strong>Pauta desde enero:</strong> meses sin campaña formal también generaron ventas sólidas — demanda latente explotable.</div>
+            <div class="aitem"><span class="adot" style="background:var(--gold)"></span><strong>Revisar cierre de año:</strong> Nov–Dic decepcionaron vs historial 2022 ($134.831M en nov). Posible saturación de descuentos.</div>
+            <div class="aitem"><span class="adot" style="background:var(--blue)"></span><strong>Capitalizar el "efecto 2025":</strong> identificar qué cambió estructuralmente vs 2023–2024 y replicarlo.</div>
+          </div>
+        </div>
+        <div class="acard">
+          <div class="ahd"><div class="aico" style="background:var(--teal-faint);color:var(--teal)">▶</div><h3>Recomendaciones estratégicas</h3></div>
+          <div class="aitems">
+            <div class="aitem"><span class="adot" style="background:var(--teal)"></span><strong>Inversión dinámica basada en ROAS:</strong> asignar ≥15% del presupuesto a septiembre y reducir nov–dic.</div>
+            <div class="aitem"><span class="adot" style="background:var(--teal)"></span><strong>Campaña anticipada de cierre:</strong> lanzar "UAO, diciembre comienza ya" en 1ª semana de octubre con más inversión.</div>
+            <div class="aitem"><span class="adot" style="background:var(--blue)"></span><strong>Meta de ejecución mínima 80%:</strong> alertas en semana 2 si la ejecución cae por debajo del 60%.</div>
+            <div class="aitem"><span class="adot" style="background:var(--blue)"></span><strong>A/B testing de descuentos:</strong> evaluar si 20–25% con mayor frecuencia genera igual ROAS con menor pérdida de margen.</div>
+            <div class="aitem"><span class="adot" style="background:var(--teal)"></span><strong>Diversificar canales en picos:</strong> ROAS 45.75× en sep. sugiere demanda no atendida — ampliar a programática y search.</div>
+            <div class="aitem"><span class="adot" style="background:var(--blue)"></span><strong>Documentar el "efecto febrero":</strong> ROAS 48.45× sin campaña formal — identificar factores para sistematizarlos.</div>
+          </div>
+        </div>
+      </div>
+      <div class="row c2">
+        <div class="card"><div class="ch"><div class="ct">Ranking de meses por ROAS</div></div><div class="cw" style="height:280px"><canvas id="e_rank"></canvas></div></div>
+        <div class="card"><div class="ch"><div class="ct">Cuadrante: % ejecución vs ROAS</div></div><div class="cw" style="height:280px"><canvas id="e_quad"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ── PROGRAMAS ── -->
+    <div id="p-programas" class="panel">
+
+      <!-- KPIs tipo -->
+      <div class="kgrid">
+        <div class="kpi kbl"><div class="kl">Total Diplomados</div><div class="kv">$839.191M</div><div class="kd">62.1% del total · 15 programas</div></div>
+        <div class="kpi ktl"><div class="kl">Total Cursos</div><div class="kv">$380.577M</div><div class="kd">28.2% del total · 10 programas</div></div>
+        <div class="kpi kgo"><div class="kl">Total Seminarios</div><div class="kv">$132.207M</div><div class="kd">9.8% del total · 14 programas</div></div>
+        <div class="kpi kbl"><div class="kl">Total matriculados</div><div class="kv">1.572</div><div class="kd">Dipl: 410 · Curso: 681 · Sem: 481</div></div>
+      </div>
+
+      <!-- Fila: donut tipo + barras top10 -->
+      <div class="row c2">
+        <div class="card">
+          <div class="ch"><div class="ct">Participación en ventas por tipo de programa</div></div>
+          <div class="cw" style="height:260px"><canvas id="pr_dona"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="ch"><div class="ct">Ventas mensuales por tipo (apilado)</div></div>
+          <div class="leg">
+            <span class="li"><span class="ld" style="background:#1e6fc2"></span>Diplomado</span>
+            <span class="li"><span class="ld" style="background:#0d9e78"></span>Curso</span>
+            <span class="li"><span class="ld" style="background:#c8860a"></span>Seminario</span>
+          </div>
+          <div class="cw" style="height:220px"><canvas id="pr_stack"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Top 20 programas horizontal -->
+      <div class="card mb">
+        <div class="ch">
+          <div class="ct">Top 20 programas por ventas totales 2025</div>
+          <div style="display:flex;gap:8px;align-items:center;font-size:11px;color:var(--txt3)">
+            <span style="display:flex;align-items:center;gap:3px"><span style="display:inline-block;width:8px;height:8px;background:#1e6fc2;border-radius:2px"></span>Diplomado</span>
+            <span style="display:flex;align-items:center;gap:3px"><span style="display:inline-block;width:8px;height:8px;background:#0d9e78;border-radius:2px"></span>Curso</span>
+            <span style="display:flex;align-items:center;gap:3px"><span style="display:inline-block;width:8px;height:8px;background:#c8860a;border-radius:2px"></span>Seminario</span>
+          </div>
+        </div>
+        <div class="cw" style="height:480px"><canvas id="pr_top20"></canvas></div>
+      </div>
+
+      <!-- Ticket promedio top -->
+      <div class="row c2">
+        <div class="card">
+          <div class="ch"><div class="ct">Ticket promedio por matrícula — Top 12</div></div>
+          <div class="cw" style="height:280px"><canvas id="pr_ticket"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="ch"><div class="ct">Cohortes ejecutadas vs ventas generadas</div></div>
+          <div class="cw" style="height:280px"><canvas id="pr_cohortes"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Tabla completa -->
+      <div class="card mb">
+        <div class="ch">
+          <div class="ct">Listado completo de programas 2025</div>
+          <div style="display:flex;gap:6px">
+            <button onclick="filterProg('Todos')" id="fb-todos" style="padding:3px 10px;font-size:11px;border-radius:20px;border:1px solid var(--blue);background:var(--blue);color:#fff;cursor:pointer">Todos</button>
+            <button onclick="filterProg('Diplomado')" id="fb-diplomado" style="padding:3px 10px;font-size:11px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--txt2);cursor:pointer">Diplomado</button>
+            <button onclick="filterProg('Curso')" id="fb-curso" style="padding:3px 10px;font-size:11px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--txt2);cursor:pointer">Curso</button>
+            <button onclick="filterProg('Seminario')" id="fb-seminario" style="padding:3px 10px;font-size:11px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--txt2);cursor:pointer">Seminario</button>
+          </div>
+        </div>
+        <div class="tw">
+          <table id="prog-table">
+            <thead>
+              <tr>
+                <th style="width:34px">#</th>
+                <th>Tipo</th>
+                <th>Programa</th>
+                <th class="nr">Ventas totales</th>
+                <th class="nr">% Total</th>
+                <th class="nr">Matriculados</th>
+                <th class="nr">Cohortes</th>
+                <th class="nr">Ticket prom.</th>
+                <th class="nr">Rendimiento</th>
+              </tr>
+            </thead>
+            <tbody id="prog-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /p-programas -->
+
+  </div><!-- /scroll -->
+</div><!-- /content -->
+</div><!-- /layout -->
+
+<script>
+/* ═══════════ DATA ═══════════ */
+const M=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const MF=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const PRESUP=[1850000,2300000,7000000,8000000,10000000,10000000,10000000,10000000,12000000,12000000,12000000,7000000];
+const EJEC=[1681912,1836361,6945613,5794666,7490085,6434245,6507645,5195774,6552623,5993057,6783892,3747345];
+const VENTAS=[18650000,88968600,138646200,71080400,112811800,155177000,145983000,136484000,299761000,106513000,46070000,31830000];
+const PCT=[0.91,0.80,0.99,0.72,0.75,0.64,0.65,0.52,0.55,0.50,0.57,0.54];
+const ROAS=VENTAS.map((v,i)=>v/EJEC[i]);
+const H22=[7420000,40056000,35836001,32976000,66336700,110848100,175494800,236543680,53333000,196771500,134831000,0];
+const H23=[21748650,43794650,72838600,87486800,21506000,20350000,115776000,16945000,65025600,15950000,34851000,4400000];
+const H24=[20770000,98859800,69025000,78470000,17915000,20900000,65603800,64787800,21825000,63526400,35541000,28421000];
+const CAMPS=[null,null,null,null,null,
+  'Diplomados 30% dto. – Oferta de verano',
+  'Diplomados 30% dto. – Continuación verano',
+  'Diplomados nuevos 20% dto. – Lanzamiento',
+  'Diplomados 25% dto. – Amor y Amistad',
+  '30% dto. – UAO, diciembre comienza ya',
+  '30% dto. – Black Month en diplomados',
+  null];
+
+/* ═══════════ NAV ═══════════ */
+const PNAMES={resumen:'Resumen ejecutivo',ventas:'Ventas 2025',roas:'ROAS & Eficiencia',inversion:'Inversión',historico:'Comparativo anual',campanas:'Campañas 2025',estrategia:'Análisis estratégico',programas:'Desempeño por programa'};
+function go(id,el){
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('p-'+id).classList.add('on');
+  document.getElementById('pname').textContent='— '+PNAMES[id];
+}
+
+/* ═══════════ HELPERS ═══════════ */
+const fM=v=>'$'+(v/1e6).toFixed(1)+'M';
+const fML=v=>'$'+(v/1e6).toFixed(0)+'M';
+const fCOP=v=>new Intl.NumberFormat('es-CO').format(Math.round(v));
+const gc='rgba(0,0,0,0.06)',tc='#9ca3af';
+const bs=cb=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10.5},color:tc},grid:{color:gc}},y:{ticks:{callback:cb||null,font:{size:10.5},color:tc},grid:{color:gc}}}});
+
+/* ═══════════ CHARTS ═══════════ */
+/* RESUMEN */
+new Chart('r_v',{type:'bar',data:{labels:M,datasets:[{data:VENTAS,backgroundColor:VENTAS.map(v=>v===Math.max(...VENTAS)?'#1e6fc2':'#B5D4F4'),borderRadius:4}]},options:{...bs(v=>fML(v)),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fM(c.raw)}}}}});
+new Chart('r_r',{type:'bar',data:{labels:M,datasets:[{data:ROAS.map(r=>+r.toFixed(2)),backgroundColor:ROAS.map(r=>r>=20?'#1e6fc2':r>=10?'#0d9e78':'#c8860a'),borderRadius:4}]},options:{...bs(v=>v+'×'),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toFixed(1)+'×'}}}}});
+new Chart('r_a',{type:'bar',data:{labels:['2022','2023','2024','2025'],datasets:[{data:[1090446781,520672300,585644800,1351975000],backgroundColor:['#b0b8c8','#7ab0dc','#5DCAA5','#1e6fc2'],borderRadius:5}]},options:{...bs(v=>fML(v)),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fM(c.raw)}}}}});
+new Chart('r_e',{type:'line',data:{labels:M,datasets:[{data:PCT.map(p=>+(p*100).toFixed(1)),borderColor:'#1e6fc2',backgroundColor:'rgba(30,111,194,0.07)',fill:true,tension:0.3,pointRadius:4,pointBackgroundColor:PCT.map(p=>p>=0.8?'#0d9e78':p>=0.6?'#1e6fc2':'#c8860a'),borderWidth:2},{data:Array(12).fill(80),borderColor:'rgba(200,134,10,0.5)',borderDash:[5,4],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},scales:{x:{ticks:{font:{size:10.5},color:tc},grid:{color:gc}},y:{min:0,max:110,ticks:{callback:v=>v+'%',font:{size:10.5},color:tc},grid:{color:gc}}}}});
+
+/* VENTAS */
+new Chart('v_b',{type:'bar',data:{labels:M,datasets:[{data:VENTAS,backgroundColor:VENTAS.map(v=>v===Math.max(...VENTAS)?'#1e6fc2':'#B5D4F4'),borderRadius:5}]},options:{...bs(v=>fML(v)),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fM(c.raw)+' ('+(c.raw/1351975000*100).toFixed(1)+'%)'}}}}});
+new Chart('v_d',{type:'doughnut',data:{labels:M,datasets:[{data:VENTAS,backgroundColor:['#1e6fc2','#2d8cf0','#5aabff','#0d9e78','#5DCAA5','#9FE1CB','#c8860a','#EF9F27','#0f2044','#162a58','#7ab0dc','#b0b8c8'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${M[c.dataIndex]}: ${fM(c.raw)} (${(c.raw/1351975000*100).toFixed(1)}%)`}}}}});
+const acum=VENTAS.reduce((a,v,i)=>{a.push((a[i-1]||0)+v);return a;},[]);
+new Chart('v_a',{type:'line',data:{labels:M,datasets:[{data:acum,borderColor:'#1e6fc2',backgroundColor:'rgba(30,111,194,0.07)',fill:true,tension:0.35,pointRadius:3,borderWidth:2}]},options:{...bs(v=>fML(v)),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fM(c.raw)}}}}});
+
+/* ROAS */
+new Chart('ro_b',{type:'bar',data:{labels:M,datasets:[{data:ROAS.map(r=>+r.toFixed(2)),backgroundColor:ROAS.map(r=>r>=20?'#1e6fc2':r>=10?'#0d9e78':'#c8860a'),borderRadius:5}]},options:{...bs(v=>v+'×'),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toFixed(1)+'×'}}}}});
+new Chart('ro_s',{type:'scatter',data:{datasets:[{data:EJEC.map((e,i)=>({x:+(e/1e6).toFixed(2),y:+(VENTAS[i]/1e6).toFixed(1),l:M[i]})),backgroundColor:'#1e6fc2',pointRadius:7,pointHoverRadius:9}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.l} | Inv: $${c.parsed.x.toFixed(1)}M → Vtas: $${c.parsed.y.toFixed(0)}M`}}},scales:{x:{title:{display:true,text:'Inversión ejecutada ($M)',font:{size:10},color:tc},ticks:{font:{size:10.5},color:tc},grid:{color:gc}},y:{title:{display:true,text:'Ventas ($M)',font:{size:10},color:tc},ticks:{callback:v=>v+'M',font:{size:10.5},color:tc},grid:{color:gc}}}}});
+new Chart('ro_bu',{type:'bubble',data:{datasets:[{data:ROAS.map((r,i)=>({x:+(PCT[i]*100).toFixed(0),y:+r.toFixed(1),r:Math.sqrt(VENTAS[i]/1e6)*0.9,l:M[i]})),backgroundColor:ROAS.map(r=>r>=20?'rgba(30,111,194,0.7)':r>=10?'rgba(13,158,120,0.7)':'rgba(200,134,10,0.7)')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.l} | Ejec:${c.raw.x}% ROAS:${c.raw.y}×`}}},scales:{x:{title:{display:true,text:'% Ejecución',font:{size:10},color:tc},ticks:{callback:v=>v+'%',font:{size:10.5},color:tc},grid:{color:gc}},y:{title:{display:true,text:'ROAS',font:{size:10},color:tc},ticks:{callback:v=>v+'×',font:{size:10.5},color:tc},grid:{color:gc}}}}});
+
+/* INVERSIÓN */
+new Chart('inv_c',{type:'bar',data:{labels:M,datasets:[{label:'Presupuestado',data:PRESUP,backgroundColor:'rgba(176,184,200,0.4)',borderRadius:4},{label:'Ejecutado',data:EJEC,backgroundColor:'#1e6fc2',borderRadius:4}]},options:{...bs(v=>fML(v)),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fM(c.raw)}`}}}}});
+new Chart('inv_p',{type:'line',data:{labels:M,datasets:[{data:PCT.map(p=>+(p*100).toFixed(1)),borderColor:'#1e6fc2',backgroundColor:'rgba(30,111,194,0.07)',fill:true,tension:0.3,pointRadius:4,pointBackgroundColor:PCT.map(p=>p>=0.8?'#0d9e78':p>=0.6?'#1e6fc2':'#c8860a'),borderWidth:2},{data:Array(12).fill(80),borderColor:'rgba(200,134,10,0.6)',borderDash:[5,3],pointRadius:0,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},scales:{x:{ticks:{font:{size:10.5},color:tc},grid:{color:gc}},y:{min:0,max:110,ticks:{callback:v=>v+'%',font:{size:10.5},color:tc},grid:{color:gc}}}}});
+const brechas=PRESUP.map((p,i)=>p-EJEC[i]);
+new Chart('inv_br',{type:'bar',data:{labels:M,datasets:[{data:brechas,backgroundColor:'rgba(192,57,43,0.55)',borderRadius:4}]},options:{...bs(v=>fML(v)),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`No ejecutado: ${fM(c.raw)}`}}}}});
+
+/* HISTÓRICO */
+new Chart('h_l',{type:'line',data:{labels:M,datasets:[{label:'2022',data:H22,borderColor:'#b0b8c8',borderDash:[4,3],pointRadius:2.5,fill:false,tension:0.3,borderWidth:1.5},{label:'2023',data:H23,borderColor:'#7ab0dc',borderDash:[4,3],pointRadius:2.5,fill:false,tension:0.3,borderWidth:1.5},{label:'2024',data:H24,borderColor:'#5DCAA5',pointRadius:3,fill:false,tension:0.3,borderWidth:2},{label:'2025',data:VENTAS,borderColor:'#1e6fc2',pointRadius:4,fill:false,tension:0.3,borderWidth:2.5}]},options:{...bs(v=>fML(v)),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fM(c.raw)}`}}}}});
+new Chart('h_a',{type:'bar',data:{labels:['2022','2023','2024','2025'],datasets:[{data:[1090446781,520672300,585644800,1351975000],backgroundColor:['#b0b8c8','#7ab0dc','#5DCAA5','#1e6fc2'],borderRadius:5}]},options:{...bs(v=>fML(v)),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fM(c.raw)}}}}});
+const yoy=VENTAS.map((v,i)=>H24[i]>0?+((v-H24[i])/H24[i]*100).toFixed(1):null);
+new Chart('h_y',{type:'bar',data:{labels:M,datasets:[{data:yoy,backgroundColor:yoy.map(v=>v>=0?'rgba(13,158,120,0.65)':'rgba(192,57,43,0.55)'),borderRadius:4}]},options:{...bs(v=>v+'%'),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>=0?'+':'')+c.raw+'%'}}}}});
+
+/* CAMPAÑAS — gráfico 4 años agrupado */
+new Chart('c_hist4',{
+  type:'bar',
+  data:{
+    labels:M.map((m,i)=>CAMPS[i]?'★'+m:m),
+    datasets:[
+      {label:'2022',data:H22,backgroundColor:'rgba(176,184,200,0.85)',borderRadius:2,borderSkipped:false},
+      {label:'2023',data:H23,backgroundColor:'rgba(122,176,220,0.85)',borderRadius:2,borderSkipped:false},
+      {label:'2024',data:H24,backgroundColor:'rgba(93,202,165,0.85)',borderRadius:2,borderSkipped:false},
+      {label:'2025',data:VENTAS,backgroundColor:VENTAS.map((_,i)=>CAMPS[i]?'#1e6fc2':'rgba(30,111,194,0.45)'),borderRadius:2,borderSkipped:false}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:c=>`${c.dataset.label}: ${fM(c.raw)}`}}},scales:{x:{ticks:{font:{size:10},color:tc},grid:{color:gc}},y:{ticks:{callback:v=>fML(v),font:{size:10.5},color:tc},grid:{color:gc}}}}
+});
+
+/* CAMPAÑAS — ROAS con vs sin campaña */
+const hasCamp=CAMPS.map(c=>c!==null);
+const avgCon=ROAS.filter((_,i)=>hasCamp[i]).reduce((a,b)=>a+b,0)/ROAS.filter((_,i)=>hasCamp[i]).length;
+const avgSin=ROAS.filter((_,i)=>!hasCamp[i]).reduce((a,b)=>a+b,0)/ROAS.filter((_,i)=>!hasCamp[i]).length;
+new Chart('c_rcomp',{type:'bar',data:{labels:['Sin campaña (6 meses)','Con campaña (6 meses)'],datasets:[{data:[+avgSin.toFixed(2),+avgCon.toFixed(2)],backgroundColor:['#b0b8c8','#1e6fc2'],borderRadius:6,barThickness:55}]},options:{...bs(v=>v+'×'),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'ROAS prom: '+c.raw.toFixed(2)+'×'}}}}});
+const sumCon=VENTAS.filter((_,i)=>hasCamp[i]).reduce((a,b)=>a+b,0);
+const sumSin=VENTAS.filter((_,i)=>!hasCamp[i]).reduce((a,b)=>a+b,0);
+new Chart('c_vcomp',{type:'doughnut',data:{labels:['Sin campaña formal','Con campaña formal'],datasets:[{data:[sumSin,sumCon],backgroundColor:['#b0b8c8','#1e6fc2'],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{size:11},color:tc,boxWidth:10,padding:10}},tooltip:{callbacks:{label:c=>c.label+': '+fM(c.raw)+' ('+(c.raw/1351975000*100).toFixed(1)+'%)'}}}}});
+
+/* ESTRATEGIA */
+const sorted=[...ROAS.map((r,i)=>({m:M[i],r:+r.toFixed(2)}))].sort((a,b)=>b.r-a.r);
+new Chart('e_rank',{type:'bar',data:{labels:sorted.map(s=>s.m),datasets:[{data:sorted.map(s=>s.r),backgroundColor:sorted.map(s=>s.r>=20?'#1e6fc2':s.r>=10?'#0d9e78':'#c8860a'),borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toFixed(1)+'×'}}},scales:{x:{ticks:{callback:v=>v+'×',font:{size:10.5},color:tc},grid:{color:gc}},y:{ticks:{font:{size:10.5},color:tc},grid:{color:gc}}}}});
+new Chart('e_quad',{type:'scatter',data:{datasets:[{data:PCT.map((p,i)=>({x:+(p*100).toFixed(0),y:+ROAS[i].toFixed(2),l:M[i],v:VENTAS[i]})),backgroundColor:ROAS.map((r,i)=>(r>=20&&PCT[i]>=0.7)?'#1e6fc2':r>=20?'rgba(30,111,194,0.4)':PCT[i]>=0.7?'rgba(13,158,120,0.5)':'rgba(200,134,10,0.7)'),pointRadius:8,pointHoverRadius:11}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.l}: ROAS ${c.raw.y.toFixed(1)}× | Ejec. ${c.raw.x}% | Vtas ${fM(c.raw.v)}`}}},scales:{x:{title:{display:true,text:'% Ejecución presupuestal',font:{size:10},color:tc},min:40,max:110,ticks:{callback:v=>v+'%',font:{size:10.5},color:tc},grid:{color:gc}},y:{title:{display:true,text:'ROAS',font:{size:10},color:tc},ticks:{callback:v=>v+'×',font:{size:10.5},color:tc},grid:{color:gc}}}}});
+
+/* ═══════════ PROGRAMAS DATA ═══════════ */
+const PROGS=[
+  {tipo:'Curso',    nombre:'Curso Excel Básico, Intermedio y Avanzado',                 ventas:257493000, mat:477, cohortes:22},
+  {tipo:'Diplomado',nombre:'Diplomado Marketing Digital con Énfasis Ecommerce',          ventas:180201400, mat:97,  cohortes:5},
+  {tipo:'Diplomado',nombre:'Diplomado Máster Training UAO-RCN',                          ventas:176400000, mat:63,  cohortes:1},
+  {tipo:'Diplomado',nombre:'Diplomado Inteligencia de Negocios e IA',                    ventas:95864600,  mat:65,  cohortes:4},
+  {tipo:'Diplomado',nombre:'Diplomado Marketing Digital con IA',                         ventas:66000000,  mat:38,  cohortes:2},
+  {tipo:'Diplomado',nombre:'Diplomado IA para Automatizar Procesos y Reducir Costos',    ventas:64250000,  mat:44,  cohortes:2},
+  {tipo:'Curso',    nombre:'Curso Power BI Aplicado a Diseño de Informes con IA',        ventas:54360000,  mat:91,  cohortes:4},
+  {tipo:'Diplomado',nombre:'Diplomado Iluminación y Alumbrado Público (RETILAP)',         ventas:42750000,  mat:21,  cohortes:1},
+  {tipo:'Curso',    nombre:'Curso Analista de Datos y Herramientas IA con Excel',         ventas:32824000,  mat:59,  cohortes:3},
+  {tipo:'Diplomado',nombre:'Diplomado Finanzas y Analítica de Datos',                    ventas:32750000,  mat:19,  cohortes:1},
+  {tipo:'Diplomado',nombre:'Diplomado Pauta Digital con Inteligencia Artificial',        ventas:28750000,  mat:17,  cohortes:1},
+  {tipo:'Diplomado',nombre:'Diplomado Lean Six Sigma Green/Black Belts',                 ventas:27500000,  mat:17,  cohortes:1},
+  {tipo:'Seminario',nombre:'Seminario Pauta Publicitaria Facebook e Instagram',           ventas:26690000,  mat:92,  cohortes:3},
+  {tipo:'Diplomado',nombre:'Diplomado Automatización Contable y Financiera con IA',      ventas:25250000,  mat:5,   cohortes:1},
+  {tipo:'Diplomado',nombre:'Diplomado Big Data e Inteligencia de Negocios con Power BI', ventas:23250000,  mat:14,  cohortes:1},
+  {tipo:'Diplomado',nombre:'Diplomado Ciencia de Datos con Python',                      ventas:21750000,  mat:0,   cohortes:1},
+  {tipo:'Seminario',nombre:'Seminario Pauta Publicitaria Facebook, Instagram y WhatsApp',ventas:20670000,  mat:66,  cohortes:3},
+  {tipo:'Diplomado',nombre:'Diplomado Escuela de Liderazgo Empresarial',                 ventas:18450000,  mat:1,   cohortes:1},
+  {tipo:'Diplomado',nombre:'Diplomado Logística Integral',                               ventas:18400000,  mat:9,   cohortes:1},
+  {tipo:'Diplomado',nombre:'Diplomado Liderazgo Femenino Transformacional',              ventas:17625000,  mat:0,   cohortes:1},
+  {tipo:'Curso',    nombre:'Curso Marketing Digital en Acción',                           ventas:15640000,  mat:24,  cohortes:1},
+  {tipo:'Seminario',nombre:'Seminario CapCut y Creación de Contenido',                   ventas:14380000,  mat:58,  cohortes:3},
+  {tipo:'Seminario',nombre:'Seminario Habilidades para Hablar en Público',               ventas:13411000,  mat:63,  cohortes:3},
+  {tipo:'Seminario',nombre:'Seminario Persuasión y Presentaciones Orales Efectivas',     ventas:11095000,  mat:45,  cohortes:3},
+  {tipo:'Seminario',nombre:'Seminario Diseño de Interiores para el Hogar',               ventas:7524000,   mat:38,  cohortes:2},
+  {tipo:'Curso',    nombre:'Curso Preparación Examen Internacional TOEFL',               ventas:6920000,   mat:8,   cohortes:1},
+  {tipo:'Seminario',nombre:'Seminario Montaje Cinematográfico',                          ventas:6360000,   mat:12,  cohortes:1},
+  {tipo:'Seminario',nombre:'Seminario Estrategias de Redes Sociales para Marcas',       ventas:6192000,   mat:24,  cohortes:1},
+  {tipo:'Seminario',nombre:'Seminario Habilidades Gerenciales',                          ventas:5800000,   mat:10,  cohortes:1},
+  {tipo:'Seminario',nombre:'Seminario Chatbots y Email Marketing con IA',               ventas:5160000,   mat:20,  cohortes:1},
+  {tipo:'Curso',    nombre:'Curso Inglés General hasta Nivel Independent Plus',           ventas:5090000,   mat:9,   cohortes:1},
+  {tipo:'Seminario',nombre:'Seminario Edición de Video',                                 ventas:4930000,   mat:17,  cohortes:1},
+  {tipo:'Seminario',nombre:'Seminario Venta Consultiva y Cierre de Venta',               ventas:4900000,   mat:23,  cohortes:1},
+  {tipo:'Curso',    nombre:'Curso Alemán Basic A1',                                       ventas:3750000,   mat:6,   cohortes:1},
+  {tipo:'Curso',    nombre:'Curso Italiano Basic A1',                                     ventas:3000000,   mat:5,   cohortes:1},
+  {tipo:'Seminario',nombre:'Seminario WhatsApp Marketing',                               ventas:2695000,   mat:11,  cohortes:1},
+  {tipo:'Seminario',nombre:'Seminario Gestión Estratégica de Tesorería',                 ventas:2400000,   mat:2,   cohortes:1},
+  {tipo:'Curso',    nombre:'Curso Francés Basic A1',                                      ventas:1500000,   mat:2,   cohortes:1},
+];
+const TOTAL_PROG=1351975000;
+const TIPO_COL={Diplomado:'#1e6fc2',Curso:'#0d9e78',Seminario:'#c8860a'};
+const TIPO_FAINT={Diplomado:'rgba(30,111,194,0.12)',Curso:'rgba(13,158,120,0.12)',Seminario:'rgba(200,134,10,0.12)'};
+
+// Monthly by tipo
+const PR_MES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const PR_DIPL=[0,25471600,54579200,47608400,55681800,117250000,83500000,101500000,236025000,77375000,18450000,21750000];
+const PR_CURS=[13750000,41500000,68060000,13872000,57130000,21386000,62483000,20164000,42194000,23698000,16340000,0];
+const PR_SEM =[4900000,21997000,16007000,9600000,0,16541000,0,14820000,21542000,5440000,11280000,10080000];
+
+/* Dona tipo */
+new Chart('pr_dona',{type:'doughnut',data:{labels:['Diplomado','Curso','Seminario'],datasets:[{data:[839191000,380577000,132207000],backgroundColor:['#1e6fc2','#0d9e78','#c8860a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{font:{size:11.5},color:tc,boxWidth:11,padding:14}},tooltip:{callbacks:{label:c=>`${c.label}: ${fM(c.raw)} (${(c.raw/TOTAL_PROG*100).toFixed(1)}%)`}}}}});
+
+/* Stack mensual */
+new Chart('pr_stack',{type:'bar',data:{labels:PR_MES,datasets:[{label:'Diplomado',data:PR_DIPL,backgroundColor:'rgba(30,111,194,0.85)',borderRadius:2},{label:'Curso',data:PR_CURS,backgroundColor:'rgba(13,158,120,0.85)',borderRadius:2},{label:'Seminario',data:PR_SEM,backgroundColor:'rgba(200,134,10,0.85)',borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:c=>`${c.dataset.label}: ${fM(c.raw)}`}}},scales:{x:{stacked:true,ticks:{font:{size:10},color:tc},grid:{color:gc}},y:{stacked:true,ticks:{callback:v=>fML(v),font:{size:10},color:tc},grid:{color:gc}}}}});
+
+/* Top 20 horizontal */
+const top20=PROGS.slice(0,20);
+new Chart('pr_top20',{type:'bar',data:{labels:top20.map(p=>{const n=p.nombre;return n.length>42?n.substring(0,42)+'…':n;}),datasets:[{data:top20.map(p=>p.ventas),backgroundColor:top20.map(p=>TIPO_COL[p.tipo]),borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${fM(c.raw)} · ${top20[c.dataIndex].mat} mat. · ${top20[c.dataIndex].cohortes} cohorte(s)`}}},scales:{x:{ticks:{callback:v=>fML(v),font:{size:10},color:tc},grid:{color:gc}},y:{ticks:{font:{size:10.5},color:tc},grid:{color:gc}}}}});
+
+/* Ticket promedio — top 12 con matriculados > 0 */
+const withMat=PROGS.filter(p=>p.mat>0).map(p=>({...p,ticket:Math.round(p.ventas/p.mat)})).sort((a,b)=>b.ticket-a.ticket).slice(0,12);
+new Chart('pr_ticket',{type:'bar',data:{labels:withMat.map(p=>{const n=p.nombre;return n.length>30?n.substring(0,30)+'…':n;}),datasets:[{data:withMat.map(p=>p.ticket),backgroundColor:withMat.map(p=>TIPO_COL[p.tipo]),borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`Ticket: ${fM(c.raw)} · ${withMat[c.dataIndex].tipo}`}}},scales:{x:{ticks:{callback:v=>fML(v),font:{size:10},color:tc},grid:{color:gc}},y:{ticks:{font:{size:10},color:tc},grid:{color:gc}}}}});
+
+/* Cohortes vs ventas (scatter) */
+new Chart('pr_cohortes',{type:'scatter',data:{datasets:[{data:PROGS.map(p=>({x:p.cohortes,y:p.ventas/1e6,l:p.nombre.substring(0,28),t:p.tipo})),backgroundColor:PROGS.map(p=>TIPO_COL[p.tipo]),pointRadius:6,pointHoverRadius:9}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.l}… | ${c.raw.t} | ${c.raw.x} coh. | ${fM(c.raw.y*1e6)}`}}},scales:{x:{title:{display:true,text:'Número de cohortes',font:{size:10},color:tc},ticks:{font:{size:10.5},color:tc},grid:{color:gc}},y:{title:{display:true,text:'Ventas ($M)',font:{size:10},color:tc},ticks:{callback:v=>v+'M',font:{size:10.5},color:tc},grid:{color:gc}}}}});
+
+/* Tabla programas */
+let currentFilter='Todos';
+function renderProgTable(filter){
+  const tbody=document.getElementById('prog-tbody');
+  const data=filter==='Todos'?PROGS:PROGS.filter(p=>p.tipo===filter);
+  tbody.innerHTML='';
+  data.forEach((p,i)=>{
+    const ticket=p.mat>0?fM(Math.round(p.ventas/p.mat)):'—';
+    const pct=(p.ventas/TOTAL_PROG*100).toFixed(1);
+    const score=p.ventas>=100000000?'b-bl':p.ventas>=30000000?'b-tl':p.ventas>=10000000?'b-go':'b-rd';
+    const scoreLabel=p.ventas>=100000000?'★★★ Alto':p.ventas>=30000000?'★★ Medio-Alto':p.ventas>=10000000?'★ Medio':'◦ Bajo';
+    const tcolor=TIPO_COL[p.tipo];const tfaint=TIPO_FAINT[p.tipo];
+    tbody.innerHTML+=`<tr>
+      <td style="color:var(--txt3);font-size:11px;font-weight:500">${i+1}</td>
+      <td><span style="font-size:10.5px;font-weight:500;padding:2px 8px;border-radius:20px;background:${tfaint};color:${tcolor}">${p.tipo}</span></td>
+      <td style="max-width:280px;font-size:12px;line-height:1.4">${p.nombre}</td>
+      <td class="nr" style="font-weight:500;color:var(--txt)">$${fCOP(p.ventas)}</td>
+      <td class="nr">
+        <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
+          <div style="width:50px;height:5px;background:var(--border);border-radius:3px;overflow:hidden"><div style="width:${Math.min(100,parseFloat(pct)*5)}%;height:100%;background:${tcolor};border-radius:3px"></div></div>
+          <span style="font-size:11px">${pct}%</span>
+        </div>
+      </td>
+      <td class="nr">${p.mat>0?p.mat:'—'}</td>
+      <td class="nr">${p.cohortes}</td>
+      <td class="nr">${ticket}</td>
+      <td class="nr"><span class="bd ${score}" style="font-family:'Inter',sans-serif;font-size:10px">${scoreLabel}</span></td>
+    </tr>`;
+  });
+}
+renderProgTable('Todos');
+
+function filterProg(tipo){
+  currentFilter=tipo;
+  renderProgTable(tipo);
+  ['todos','diplomado','curso','seminario'].forEach(t=>{
+    const btn=document.getElementById('fb-'+t);
+    const isActive=(t==='todos'&&tipo==='Todos')||(t===tipo.toLowerCase());
+    btn.style.background=isActive?'var(--blue)':'none';
+    btn.style.color=isActive?'#fff':'var(--txt2)';
+    btn.style.borderColor=isActive?'var(--blue)':'var(--border)';
+  });
+}
+const tbody=document.getElementById('ctbody');
+const fV=v=>v>0?'$'+fCOP(v):'<span style="color:var(--txt3)">—</span>';
+const dlt=(v25,vp)=>{if(!vp)return'';const p=Math.round((v25-vp)/vp*100);return`<span style="font-size:9.5px;color:${p>=0?'#16a34a':'#c0392b'};margin-left:3px">${p>=0?'↑':'↓'}${Math.abs(p)}%</span>`;};
+MF.forEach((m,i)=>{
+  const r=ROAS[i];
+  const rb=r>=30?'b-bl':r>=15?'b-tl':r>=8?'b-go':'b-rd';
+  const pb=PCT[i]>=0.8?'b-tl':PCT[i]>=0.6?'b-go':'b-rd';
+  const camp=CAMPS[i]?`<span class="camp-txt">${CAMPS[i]}</span>`:`<span class="no-camp">Sin campaña formal registrada</span>`;
+  tbody.innerHTML+=`<tr class="${CAMPS[i]?'camp-row':''}">
+    <td><strong>${m}</strong>${CAMPS[i]?'<span style="color:var(--blue);font-size:10px;margin-left:3px">★</span>':''}</td>
+    <td style="max-width:210px">${camp}</td>
+    <td class="nr">$${fCOP(PRESUP[i])}</td>
+    <td class="nr">$${fCOP(EJEC[i])}</td>
+    <td class="nr"><span class="bd ${pb}">${(PCT[i]*100).toFixed(0)}%</span></td>
+    <td class="nr td-hist">${fV(H22[i])}</td>
+    <td class="nr td-hist">${fV(H23[i])}</td>
+    <td class="nr td-hist">${fV(H24[i])}</td>
+    <td class="nr td-2025">$${fCOP(VENTAS[i])}${dlt(VENTAS[i],H24[i])}</td>
+    <td class="nr"><span class="bd ${rb}">${r.toFixed(1)}×</span></td>
+  </tr>`;
+});
+</script>
+</body>
+</html>
