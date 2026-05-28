@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tablero Estratégico EduVida – UAO</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --cream:#ECE5DC;--red:#DC142D;--dark-red:#961423;--light-red:#F03C46;
+  --white:#FFFFFF;--text-dark:#1A1A2E;--text-mid:#3D3D5C;--text-light:#6B6B8A;
+  --border:#D8D0C6;--card-bg:#FDFAF7;
+  --shadow:0 2px 12px rgba(150,20,35,0.08);--shadow-h:0 8px 28px rgba(150,20,35,0.16);
+  --r:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);font-size:14px;line-height:1.6;}
+.header{background:#fff;border-bottom:3px solid var(--red);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.1);}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;gap:20px;flex-wrap:wrap;}
+.header-logo{display:flex;align-items:center;gap:16px;}
+.header-logo img{height:50px;width:auto;object-fit:contain;}
+.hdiv{width:2px;height:42px;background:var(--border);}
+.htitles .ht1{font-size:18px;font-weight:700;color:var(--dark-red);letter-spacing:-0.3px;}
+.htitles .ht2{font-size:11px;color:var(--text-light);letter-spacing:0.5px;text-transform:uppercase;}
+.hmeta{display:flex;align-items:center;gap:18px;}
+.hdate{font-size:11px;color:var(--text-light);font-weight:500;}
+.hbadge{background:var(--red);color:#fff;font-size:10px;font-weight:600;padding:4px 12px;border-radius:20px;letter-spacing:0.5px;text-transform:uppercase;}
+.nav{background:var(--dark-red);padding:0 32px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nbtn{background:transparent;border:none;color:rgba(255,255,255,0.7);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:10px 16px;cursor:pointer;transition:all .2s;white-space:nowrap;border-bottom:3px solid transparent;}
+.nbtn:hover{color:#fff;background:rgba(255,255,255,0.08);}
+.nbtn.active{color:#fff;border-bottom-color:var(--light-red);background:rgba(255,255,255,0.1);}
+.main{max-width:1400px;margin:0 auto;padding:28px 24px;}
+.sec{display:none;animation:fadein .3s ease;}
+.sec.active{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ptitle{margin-bottom:24px;}
+.ptitle h2{font-size:22px;font-weight:700;color:var(--dark-red);margin-bottom:3px;}
+.ptitle p{font-size:13px;color:var(--text-light);}
+/* KPI */
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:16px;margin-bottom:28px;}
+.kcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s;cursor:default;}
+.kcard:hover{box-shadow:var(--shadow-h);transform:translateY(-2px);}
+.kcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);}
+.kcard.g::before{background:#22a06b;}.kcard.o::before{background:#e07b00;}.kcard.b::before{background:#0969da;}
+.kicon{font-size:22px;margin-bottom:8px;}
+.kval{font-size:32px;font-weight:700;color:var(--dark-red);line-height:1;margin-bottom:4px;}
+.kcard.g .kval{color:#22a06b;}.kcard.o .kval{color:#e07b00;}.kcard.b .kval{color:#0969da;}
+.klabel{font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;}
+.ksub{font-size:11px;color:var(--text-light);margin-top:3px;}
+/* Grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:20px;}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:20px;}
+.g12{display:grid;grid-template-columns:1fr 2fr;gap:20px;margin-bottom:20px;}
+/* Card */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:22px;box-shadow:var(--shadow);margin-bottom:20px;}
+.card-last{margin-bottom:0;}
+.ch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:12px;}
+.ct{font-size:14px;font-weight:600;color:var(--text-dark);}
+.cs{font-size:11px;color:var(--text-light);margin-top:2px;}
+/* Filters */
+.fbar{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:22px;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;}
+.fg{display:flex;flex-direction:column;gap:4px;min-width:150px;}
+.fl{font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.6px;}
+.fsel,.fsrch{padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-dark);background:var(--card-bg);outline:none;transition:border-color .2s;}
+.fsel:focus,.fsrch:focus{border-color:var(--red);}
+.fclr{padding:7px 14px;background:transparent;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-light);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.fclr:hover{border-color:var(--red);color:var(--red);}
+/* Ranking */
+.rl{list-style:none;}
+.ri{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--cream);}
+.ri:last-child{border-bottom:none;}
+.rn{width:24px;height:24px;border-radius:50%;background:var(--cream);color:var(--dark-red);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rn.top{background:var(--red);color:#fff;}
+.rbw{flex:1;}
+.rname{font-size:12px;font-weight:500;color:var(--text-dark);margin-bottom:3px;}
+.rbar{height:6px;border-radius:3px;background:var(--cream);overflow:hidden;}
+.rfill{height:100%;border-radius:3px;background:var(--red);}
+.rcount{font-size:13px;font-weight:700;color:var(--dark-red);white-space:nowrap;}
+.rcat{font-size:10px;color:var(--text-light);}
+/* Word cloud */
+.wc{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:16px;min-height:200px;}
+.ww{font-weight:600;cursor:default;transition:all .2s;border-radius:4px;padding:3px 7px;}
+.ww:hover{background:rgba(220,20,45,0.08);}
+/* OPP cards */
+.ogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.ocard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px;border-left:4px solid var(--red);transition:all .2s;}
+.ocard:hover{box-shadow:var(--shadow-h);transform:translateY(-2px);}
+.ocard.med{border-left-color:#e07b00;}.ocard.low{border-left-color:#22a06b;}
+.otit{font-size:13px;font-weight:600;color:var(--text-dark);margin-bottom:6px;}
+.ometa{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:7px;}
+.otag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;}
+.ta{background:rgba(220,20,45,0.1);color:var(--red);}
+.tm{background:rgba(224,123,0,0.1);color:#e07b00;}
+.tl{background:rgba(34,160,107,0.1);color:#22a06b;}
+.tf{background:rgba(9,105,218,0.1);color:#0969da;}
+.odesc{font-size:11px;color:var(--text-light);line-height:1.5;}
+.odel{font-size:11px;font-weight:500;color:var(--text-dark);margin-top:6px;}
+.oresp{font-size:10px;color:var(--text-light);margin-top:3px;font-style:italic;}
+/* Routes */
+.rcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px;}
+.rtit{font-size:14px;font-weight:600;color:var(--dark-red);}
+.rflow{display:flex;align-items:center;gap:0;overflow-x:auto;padding:12px 0;scrollbar-width:thin;}
+.rstep{background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;min-width:140px;text-align:center;flex-shrink:0;}
+.rstep.hl{background:var(--red);border-color:var(--red);}
+.rstep.hl .rsl,.rstep.hl .rsn{color:#fff;}
+.rsl{font-size:9px;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-light);font-weight:600;}
+.rsn{font-size:11px;font-weight:600;color:var(--text-dark);margin-top:2px;}
+.rarr{font-size:18px;color:var(--red);padding:0 5px;flex-shrink:0;}
+.rmeta{display:flex;gap:18px;margin-top:10px;flex-wrap:wrap;}
+.rmitem{font-size:11px;color:var(--text-light);}
+.rmitem strong{color:var(--text-dark);}
+.rjust{font-size:11px;color:var(--text-light);margin-top:8px;padding-top:8px;border-top:1px solid var(--cream);line-height:1.5;}
+/* Spec */
+.scard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;}
+.shead{display:flex;justify-content:space-between;align-items:flex-start;cursor:pointer;margin-bottom:0;}
+.sname{font-size:13px;font-weight:600;color:var(--dark-red);}
+.sfac{font-size:11px;color:var(--text-light);margin-top:2px;}
+.stoggle{font-size:16px;color:var(--text-light);transition:transform .2s;flex-shrink:0;margin-top:2px;}
+.stoggle.open{transform:rotate(180deg);}
+.ssubjects{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:14px;}
+.sub{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:var(--cream);border:1px solid transparent;}
+.sub.pot{background:rgba(220,20,45,0.06);border-color:rgba(220,20,45,0.2);}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;}
+.sub.pot .sdot{background:var(--red);}
+.sn{font-size:11px;color:var(--text-dark);font-weight:500;flex:1;}
+.sbadge{font-size:9px;font-weight:600;padding:1px 6px;border-radius:8px;background:rgba(220,20,45,0.15);color:var(--red);white-space:nowrap;}
+/* Recs */
+.reccard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;display:flex;gap:16px;}
+.recnum{width:38px;height:38px;border-radius:50%;background:var(--red);color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.recbody{flex:1;}
+.rect{font-size:14px;font-weight:600;color:var(--text-dark);margin-bottom:6px;}
+.recmeta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:7px;}
+.recdesc{font-size:12px;color:var(--text-light);line-height:1.5;}
+.recfooter{display:flex;gap:18px;margin-top:10px;flex-wrap:wrap;}
+.recfi{font-size:11px;color:var(--text-light);}
+.recfi strong{color:var(--text-dark);}
+/* Tables */
+.twrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{background:var(--dark-red);color:#fff;padding:10px 14px;text-align:left;font-weight:600;font-size:11px;letter-spacing:0.3px;white-space:nowrap;}
+thead th:first-child{border-radius:6px 0 0 0;}thead th:last-child{border-radius:0 6px 0 0;}
+tbody tr{border-bottom:1px solid var(--cream);transition:background .15s;}
+tbody tr:hover{background:rgba(236,229,220,0.5);}
+tbody td{padding:9px 14px;color:var(--text-dark);vertical-align:top;line-height:1.4;}
+/* Pills */
+.pill{display:inline-flex;align-items:center;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:600;}
+.pr{background:rgba(220,20,45,0.12);color:var(--red);}
+.po{background:rgba(224,123,0,0.12);color:#e07b00;}
+.pg{background:rgba(34,160,107,0.12);color:#22a06b;}
+.pb{background:rgba(9,105,218,0.12);color:#0969da;}
+.pgy{background:rgba(107,107,138,0.12);color:var(--text-light);}
+/* Insight */
+.ilist{display:flex;flex-direction:column;gap:10px;}
+.iitem{display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--cream);border-radius:8px;}
+.iicon{font-size:18px;flex-shrink:0;}
+.itext{font-size:12px;color:var(--text-dark);line-height:1.5;}
+.itext strong{color:var(--dark-red);}
+/* Progress */
+.pr-row{display:flex;align-items:center;gap:12px;margin-bottom:7px;}
+.pr-label{font-size:11px;color:var(--text-dark);min-width:160px;flex-shrink:0;}
+.pr-bar{flex:1;height:8px;background:var(--cream);border-radius:4px;overflow:hidden;}
+.pr-fill{height:100%;border-radius:4px;background:var(--red);}
+.pr-val{font-size:11px;font-weight:700;color:var(--dark-red);min-width:28px;text-align:right;}
+/* Trend */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+.tcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:15px;}
+.tinst{font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;}
+.tname{font-size:13px;font-weight:600;color:var(--text-dark);margin-bottom:6px;}
+.ttags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
+.ttag{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--cream);color:var(--text-mid);}
+.topp{font-size:11px;color:var(--text-light);}
+.topp span{color:var(--red);font-weight:600;}
+/* Export btn */
+.ebtn{padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;display:inline-flex;align-items:center;gap:6px;}
+.ebtn:hover{background:var(--dark-red);}
+/* Footer */
+.footer{background:var(--dark-red);color:rgba(255,255,255,0.7);text-align:center;padding:16px;font-size:11px;margin-top:40px;}
+.footer strong{color:#fff;}
+/* Responsive */
+@media(max-width:900px){
+  .g2,.g21,.g12{grid-template-columns:1fr;}
+  .g3{grid-template-columns:1fr 1fr;}
+  .header-inner{padding:12px 16px;}
+  .nav{padding:0 16px;}
+  .main{padding:20px 16px;}
+}
+@media(max-width:600px){
+  .g3{grid-template-columns:1fr;}
+  .kgrid{grid-template-columns:1fr 1fr;}
+  .rflow{flex-direction:column;}
+  .rarr{transform:rotate(90deg);}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-logo">
+      <img src="data:image/png;base64,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" alt="Universidad Autónoma de Occidente – UAO">
+      <div class="hdiv"></div>
+      <div class="htitles">
+        <div class="ht1">Tablero Estratégico de Oportunidades EduVida</div>
+        <div class="ht2">Análisis de demanda estudiantil · Tendencias educativas · Especializaciones UAO · Rutas de homologación</div>
+      </div>
+    </div>
+    <div class="hmeta">
+      <div class="hdate">📅 Mayo 2025 · Datos reales Excel</div>
+      <div class="hbadge">Educación Continua</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nbtn active" onclick="showSec('resumen',this)">📊 Resumen Ejecutivo</button>
+  <button class="nbtn" onclick="showSec('eduvida',this)">🎓 Análisis EduVida</button>
+  <button class="nbtn" onclick="showSec('tendencias',this)">📈 Tendencias de Mercado</button>
+  <button class="nbtn" onclick="showSec('especializaciones',this)">🏛️ Especializaciones</button>
+  <button class="nbtn" onclick="showSec('homologacion',this)">🔗 Rutas de Homologación</button>
+  <button class="nbtn" onclick="showSec('recomendaciones',this)">💡 Recomendaciones</button>
+  <button class="nbtn" onclick="showSec('tablas',this)">📋 Datos Detallados</button>
+</nav>
+
+<main class="main">
+
+<!-- ══════════════════ RESUMEN ══════════════════ -->
+<section id="resumen" class="sec active">
+  <div class="ptitle">
+    <h2>Resumen Ejecutivo</h2>
+    <p>Hallazgos principales del análisis sobre 20 programas EduVida UAO · 151 respuestas reales de estudiantes · 38 especializaciones</p>
+  </div>
+  <div class="kgrid">
+    <div class="kcard"><div class="kicon">📚</div><div class="kval">20</div><div class="klabel">Programas EduVida</div><div class="ksub">Analizados del archivo Excel</div></div>
+    <div class="kcard"><div class="kicon">📝</div><div class="kval">151</div><div class="klabel">Respuestas Reales</div><div class="ksub">Intereses de continuidad</div></div>
+    <div class="kcard g"><div class="kicon">💡</div><div class="kval">12</div><div class="klabel">Oportunidades Detectadas</div><div class="ksub">Nuevos programas propuestos</div></div>
+    <div class="kcard o"><div class="kicon">🔗</div><div class="kval">8</div><div class="klabel">Rutas de Homologación</div><div class="ksub">EduVida → Especialización UAO</div></div>
+    <div class="kcard b"><div class="kicon">🏛️</div><div class="kval">38</div><div class="klabel">Especializaciones UAO</div><div class="ksub">4 facultades analizadas</div></div>
+    <div class="kcard"><div class="kicon">🎯</div><div class="kval">7</div><div class="klabel">Prioridad Alta</div><div class="ksub">Programas urgentes a lanzar</div></div>
+  </div>
+
+  <div class="g21">
+    <div class="card">
+      <div class="ch"><div><div class="ct">Ranking real de temas solicitados por los estudiantes</div><div class="cs">Basado en 151 respuestas del archivo Excel — 14 categorías temáticas identificadas</div></div></div>
+      <div style="height:340px"><canvas id="cTopCats"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct">Distribución porcentual</div></div>
+      <div style="height:280px"><canvas id="cDonut"></canvas></div>
+      <div style="margin-top:12px">
+        <div class="pr-row"><span class="pr-label" style="font-weight:600;color:var(--dark-red)">🥇 IA: 46 menciones (24%)</span></div>
+        <div class="pr-row"><span class="pr-label" style="font-weight:600;color:var(--dark-red)">🥈 Power BI / BI: 41 (21%)</span></div>
+        <div class="pr-row"><span class="pr-label" style="font-weight:600;color:var(--dark-red)">🥉 Excel/Programación: 17 (9%)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div><div class="ct">Respuestas de continuidad por programa EduVida</div><div class="cs">Número de estudiantes que señalaron temas de interés al finalizar cada programa</div></div></div>
+    <div style="height:280px"><canvas id="cProgs"></canvas></div>
+  </div>
+
+  <div class="g3">
+    <div class="card card-last">
+      <div class="ch"><div class="ct" style="color:var(--red)">🔴 7 programas Prioridad Alta</div></div>
+      <div class="ilist">
+        <div class="iitem"><div class="iicon">🤖</div><div class="itext"><strong>Diplomado IA Nivel 2</strong> — 46 menciones. El más demandado. Ya existe el básico; el mercado pide nivel avanzado.</div></div>
+        <div class="iitem"><div class="iicon">📊</div><div class="itext"><strong>Diplomado Power BI Profesional</strong> — 41 menciones. Siguiente paso natural para los 43 estudiantes del Curso Excel.</div></div>
+        <div class="iitem"><div class="iicon">🎬</div><div class="itext"><strong>Seminario CapCut Avanzado</strong> — 11 solicitudes directas de 1 solo programa. Demanda inmediata y captiva.</div></div>
+      </div>
+    </div>
+    <div class="card card-last">
+      <div class="ch"><div class="ct" style="color:#e07b00">🟠 3 programas Prioridad Media</div></div>
+      <div class="ilist">
+        <div class="iitem"><div class="iicon">💰</div><div class="itext"><strong>Certificado Finanzas para No Financieros</strong> — 10 menciones desde múltiples programas. Ruta a Especialización en Finanzas.</div></div>
+        <div class="iitem"><div class="iicon">📋</div><div class="itext"><strong>Seminario Excel Avanzado + Macros</strong> — 17 menciones. Escalón entre Excel básico y Power BI.</div></div>
+        <div class="iitem"><div class="iicon">⚖️</div><div class="itext"><strong>Seminario Derecho Laboral</strong> — Un estudiante pidió literalmente una "Especialización en derecho laboral para no abogados".</div></div>
+      </div>
+    </div>
+    <div class="card card-last">
+      <div class="ch"><div class="ct">🔍 Hallazgo clave del análisis</div></div>
+      <div class="ilist">
+        <div class="iitem"><div class="iicon">⚡</div><div class="itext"><strong>IA + Power BI = 87 menciones combinadas</strong> (46%). El 57% de todos los estudiantes del Curso Excel pidieron Power BI como continuidad.</div></div>
+        <div class="iitem"><div class="iicon">📱</div><div class="itext"><strong>CapCut tiene demanda inmediata y captiva.</strong> 11 solicitudes directas. No requiere crear demanda: ya existe.</div></div>
+        <div class="iitem"><div class="iicon">🏛️</div><div class="itext"><strong>38 especializaciones UAO</strong> con materias que pueden ser EduVida. 22 de ellas tienen alta conexión con los intereses estudiantiles detectados.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ EDUVIDA ══════════════════ -->
+<section id="eduvida" class="sec">
+  <div class="ptitle">
+    <h2>Análisis EduVida</h2>
+    <p>Intereses reales de 151 estudiantes de 20 programas EduVida UAO · Datos extraídos directamente del archivo Excel</p>
+  </div>
+  <div class="fbar">
+    <div class="fg"><div class="fl">Programa</div>
+      <select class="fsel" id="fp" onchange="applyF()" style="min-width:180px">
+        <option value="">Todos los programas</option>
+      </select>
+    </div>
+    <div class="fg"><div class="fl">Categoría Temática</div>
+      <select class="fsel" id="fc" onchange="applyF()">
+        <option value="">Todas las categorías</option>
+      </select>
+    </div>
+    <div class="fg"><div class="fl">Prioridad</div>
+      <select class="fsel" id="fpr" onchange="applyF()">
+        <option value="">Todas</option>
+        <option>Alta</option><option>Media</option><option>Baja</option>
+      </select>
+    </div>
+    <div class="fg" style="flex:1;min-width:200px"><div class="fl">Buscar</div>
+      <input type="text" class="fsrch" id="fq" placeholder="Buscar tema, categoría…" oninput="applyF()" style="width:100%">
+    </div>
+    <button class="fclr" onclick="clearF()">✕ Limpiar</button>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="ch">
+        <div><div class="ct">Ranking de categorías temáticas solicitadas</div><div class="cs">Datos reales extraídos del Excel — 195 menciones categorizadas</div></div>
+        <button class="ebtn" onclick="exportCSV('tbCats','categorias_temas')">⬇ CSV</button>
+      </div>
+      <ul class="rl" id="rankList"></ul>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct">Nube de palabras clave reales</div><div class="cs">Términos exactos mencionados por los estudiantes</div></div>
+      <div class="wc" id="wcloud"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><div><div class="ct">Distribución de categorías por programa (Top 10 programas)</div><div class="cs">Estimación de menciones temáticas por programa basada en respuestas del Excel</div></div></div>
+    <div style="height:300px"><canvas id="cStacked"></canvas></div>
+  </div>
+
+  <div class="card">
+    <div class="ch">
+      <div><div class="ct">Oportunidades de nuevos programas EduVida detectadas</div><div class="cs">12 programas propuestos basados en las respuestas reales de los estudiantes</div></div>
+      <span style="font-size:11px;background:rgba(220,20,45,0.08);color:var(--red);padding:4px 12px;border-radius:20px;font-weight:600">12 oportunidades</span>
+    </div>
+    <div class="ogrid" id="oppGrid"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ TENDENCIAS ══════════════════ -->
+<section id="tendencias" class="sec">
+  <div class="ptitle">
+    <h2>Tendencias de Mercado Educativo</h2>
+    <p>Comparativo con oferta en Cali, Colombia y plataformas de formación continua · Análisis de brechas y oportunidades UAO</p>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><div><div class="ct">Oferta UAO vs. demanda del mercado</div><div class="cs">Cobertura actual EduVida frente a demanda real en Cali — 2024-2025</div></div></div>
+      <div style="height:280px"><canvas id="cTend"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct">Brechas y oportunidades — Temas sin cobertura en Cali</div></div>
+      <div style="height:250px"><canvas id="cGap"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><div><div class="ct">Benchmarking con instituciones del mercado colombiano</div><div class="cs">Análisis competitivo vs. oferta educativa en Cali, Colombia y plataformas digitales</div></div></div>
+    <div class="tgrid" id="trendGrid"></div>
+  </div>
+  <div class="card">
+    <div class="ch"><div class="ct">Posicionamiento estratégico recomendado para UAO</div></div>
+    <div class="g2" style="margin-bottom:0">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--dark-red);margin-bottom:12px">Ventajas competitivas UAO para capitalizar</div>
+        <div class="ilist">
+          <div class="iitem"><div class="iicon">✅</div><div class="itext">Reconocimiento institucional en el Valle del Cauca como universidad de alta calidad y credibilidad</div></div>
+          <div class="iitem"><div class="iicon">✅</div><div class="itext">Base de egresados EduVida como mercado cautivo — 151 personas con demanda identificada y fidelizada</div></div>
+          <div class="iitem"><div class="iicon">✅</div><div class="itext">Conexión directa con 38 especializaciones para ofrecer rutas académicas escalables únicas en Cali</div></div>
+          <div class="iitem"><div class="iicon">✅</div><div class="itext">Infraestructura, docentes y modelo presencial/virtual que plataformas como Coursera y Platzi no pueden igualar</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--dark-red);margin-bottom:12px">Oportunidades de diferenciación inmediata</div>
+        <div class="ilist">
+          <div class="iitem"><div class="iicon">🚀</div><div class="itext"><strong>IA Nivel 2 para Profesionales:</strong> Ninguna institución en Cali tiene un programa presencial certificado de IA avanzada para profesionales no técnicos.</div></div>
+          <div class="iitem"><div class="iicon">🚀</div><div class="itext"><strong>Power BI con certificación UAO:</strong> Las empresas del Valle del Cauca necesitan profesionales que sepan trabajar con datos. UAO puede ser la referencia regional.</div></div>
+          <div class="iitem"><div class="iicon">🚀</div><div class="itext"><strong>Ruta EduVida → Especialización:</strong> Ninguna institución en Cali tiene este modelo escalonado con homologación formal. Es una innovación única en el mercado local.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ ESPECIALIZACIONES ══════════════════ -->
+<section id="especializaciones" class="sec">
+  <div class="ptitle">
+    <h2>Análisis de Especializaciones UAO</h2>
+    <p>38 especializaciones reales extraídas del Excel · 4 facultades · Materias con potencial EduVida identificadas</p>
+  </div>
+  <div class="kgrid" style="margin-bottom:24px">
+    <div class="kcard"><div class="kicon">🏛️</div><div class="kval">38</div><div class="klabel">Especializaciones</div><div class="ksub">4 facultades UAO</div></div>
+    <div class="kcard g"><div class="kicon">📖</div><div class="kval">22</div><div class="klabel">Especializaciones</div><div class="ksub">Con alta conexión a demanda EduVida</div></div>
+    <div class="kcard o"><div class="kicon">⭐</div><div class="kval">80+</div><div class="klabel">Materias con potencial</div><div class="ksub">Posibles cursos / seminarios</div></div>
+    <div class="kcard b"><div class="kicon">🔗</div><div class="kval">8</div><div class="klabel">Rutas de entrada</div><div class="ksub">EduVida → Posgrado UAO</div></div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><div><div class="ct">Materias con potencial EduVida por especialización</div><div class="cs">Materias que podrían convertirse en cursos, seminarios o diplomados autónomos (marcadas en rojo)</div></div></div>
+    <div style="height:320px"><canvas id="cMats"></canvas></div>
+  </div>
+  <div id="specCont"></div>
+</section>
+
+<!-- ══════════════════ HOMOLOGACIÓN ══════════════════ -->
+<section id="homologacion" class="sec">
+  <div class="ptitle">
+    <h2>Rutas de Formación y Homologación</h2>
+    <p>8 rutas académicas escalables que conectan programas EduVida con especializaciones UAO · Basadas en demanda real de los estudiantes</p>
+  </div>
+  <div class="kgrid" style="margin-bottom:24px">
+    <div class="kcard"><div class="kicon">🗺️</div><div class="kval">8</div><div class="klabel">Rutas identificadas</div></div>
+    <div class="kcard g"><div class="kicon">🎯</div><div class="kval">5</div><div class="klabel">Prioridad Alta</div></div>
+    <div class="kcard o"><div class="kicon">📌</div><div class="kval">3</div><div class="klabel">Prioridad Media</div></div>
+    <div class="kcard b"><div class="kicon">🎓</div><div class="kval">87</div><div class="klabel">Menciones que respaldan</div><div class="ksub">Solo la ruta IA + Power BI</div></div>
+  </div>
+  <div class="card" style="margin-bottom:16px;background:rgba(220,20,45,0.03);border-color:rgba(220,20,45,0.2)">
+    <div style="font-size:13px;font-weight:600;color:var(--dark-red);margin-bottom:8px">📌 Modelo de ruta — Cómo leer el diagrama</div>
+    <div style="font-size:12px;color:var(--text-light);line-height:1.6">
+      Cada ruta muestra la secuencia escalable recomendada. Los bloques grises son programas existentes o nuevos en EduVida. El bloque <strong style="color:#fff;background:var(--red);padding:0 6px;border-radius:4px">rojo</strong> es la Especialización UAO como destino final. Los estudiantes que completan la ruta pueden solicitar reconocimiento parcial de créditos en la especialización.
+    </div>
+  </div>
+  <div id="routesCont"></div>
+</section>
+
+<!-- ══════════════════ RECOMENDACIONES ══════════════════ -->
+<section id="recomendaciones" class="sec">
+  <div class="ptitle">
+    <h2>Recomendaciones Estratégicas</h2>
+    <p>9 programas recomendados para desarrollar · Ordenados por prioridad estratégica · Respaldados por demanda real de los estudiantes</p>
+  </div>
+  <div class="g2" style="margin-bottom:0">
+    <div class="card">
+      <div class="ch"><div class="ct">Distribución por formato recomendado</div></div>
+      <div style="height:220px"><canvas id="cFmts"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct">Distribución por área de conocimiento</div><div class="cs">Según menciones reales de los estudiantes</div></div>
+      <div style="height:220px"><canvas id="cAreas"></canvas></div>
+    </div>
+  </div>
+  <div style="margin-bottom:20px"></div>
+  <div id="recsCont"></div>
+</section>
+
+<!-- ══════════════════ TABLAS ══════════════════ -->
+<section id="tablas" class="sec">
+  <div class="ptitle">
+    <h2>Datos Detallados</h2>
+    <p>Tablas completas para revisión y exportación en CSV</p>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch">
+      <div><div class="ct">Categorías temáticas identificadas (datos reales)</div></div>
+      <button class="ebtn" onclick="exportCSV('tbCatsT','categorias_temas_eduvida')">⬇ CSV</button>
+    </div>
+    <div class="twrap"><table id="tbCatsT">
+      <thead><tr><th>Categoría Temática</th><th>Menciones</th><th>% del Total</th><th>Prioridad</th></tr></thead>
+      <tbody id="tbCats"></tbody>
+    </table></div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch">
+      <div><div class="ct">Programas EduVida analizados</div></div>
+      <button class="ebtn" onclick="exportCSV('tbProgsT','programas_eduvida')">⬇ CSV</button>
+    </div>
+    <div class="twrap"><table id="tbProgsT">
+      <thead><tr><th>ID</th><th>Nombre del Programa</th><th>Tipo</th><th>Respuestas de Continuidad</th></tr></thead>
+      <tbody id="tbProgs"></tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="ch">
+      <div><div class="ct">Oportunidades de nuevos programas detectadas</div></div>
+      <button class="ebtn" onclick="exportCSV('tbOppsT','oportunidades_nuevos_programas')">⬇ CSV</button>
+    </div>
+    <div class="twrap"><table id="tbOppsT">
+      <thead><tr><th>#</th><th>Nuevo Programa Propuesto</th><th>Área</th><th>Menciones</th><th>Prioridad</th><th>Formato</th><th>Público Objetivo</th></tr></thead>
+      <tbody id="tbOpps"></tbody>
+    </table></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <strong>Universidad Autónoma de Occidente</strong> · Dirección de Educación Continua · Tablero Estratégico EduVida · Mayo 2025<br>
+  <small>Datos reales extraídos del archivo Excel: 20 programas EduVida · 151 respuestas de estudiantes · 38 especializaciones · 4 facultades UAO</small>
+</footer>
+
+<script>
+
+const PROGRAMAS=[
+  {id:'P01',nombre:'Curso Excel Básico, Intermedio y Avanzado (Admin + Análisis de Datos)',tipo:'Curso',resp:43},
+  {id:'P02',nombre:'Seminario CapCut y Creación de Contenido',tipo:'Seminario',resp:11},
+  {id:'P03',nombre:'Diplomado Inteligencia de Negocios e IA (Microsoft + Power BI)',tipo:'Diplomado',resp:8},
+  {id:'P04',nombre:'Diplomado Liderazgo Femenino Transformacional',tipo:'Diplomado',resp:8},
+  {id:'P05',nombre:'Curso Analista de Datos con Excel, Power Query e IA',tipo:'Curso',resp:7},
+  {id:'P06',nombre:'Seminario Automatización de Procesos con N8N',tipo:'Seminario',resp:7},
+  {id:'P07',nombre:'Seminario Reforma Laboral y Reforma Pensional',tipo:'Seminario',resp:6},
+  {id:'P08',nombre:'Seminario Pauta Publicitaria – Meta Ads',tipo:'Seminario',resp:6},
+  {id:'P09',nombre:'Seminario Hablar en Público (Edición 2)',tipo:'Seminario',resp:6},
+  {id:'P10',nombre:'Diplomado Automatización Contable y Financiera con IA',tipo:'Diplomado',resp:6},
+  {id:'P11',nombre:'Diplomado Marketing Digital con Inteligencia Artificial',tipo:'Diplomado',resp:6},
+  {id:'P12',nombre:'Curso Power BI – Diseño de Informes y Análisis con IA',tipo:'Curso',resp:5},
+  {id:'P13',nombre:'Seminario Diseño de Interiores para el Hogar',tipo:'Seminario',resp:5},
+  {id:'P14',nombre:'Seminario Escuela Comercial',tipo:'Seminario',resp:5},
+  {id:'P15',nombre:'Seminario Retail 2030: Adaptarse o Desaparecer',tipo:'Seminario',resp:5},
+  {id:'P16',nombre:'Seminario Edición de Video',tipo:'Seminario',resp:5},
+  {id:'P17',nombre:'Diplomado IA para Automatizar Procesos, Reducir Costos e Innovar',tipo:'Diplomado',resp:4},
+  {id:'P18',nombre:'Diplomado Ciencia de Datos con Python',tipo:'Diplomado',resp:4},
+  {id:'P19',nombre:'Seminario Hablar en Público (Edición 1)',tipo:'Seminario',resp:2},
+  {id:'P20',nombre:'Seminario Liderazgo y Coaching con Propósito',tipo:'Seminario',resp:2},
+];
+
+const CATS=[
+  {cat:'Inteligencia Artificial',m:46,color:'#DC142D',pct:24},
+  {cat:'Power BI / Business Intelligence',m:41,color:'#961423',pct:21},
+  {cat:'Excel, Macros y Programación',m:17,color:'#F03C46',pct:9},
+  {cat:'Liderazgo y Habilidades Blandas',m:14,color:'#e07b00',pct:7},
+  {cat:'Creación de Contenido / Video',m:13,color:'#0969da',pct:7},
+  {cat:'Marketing Digital / Pauta',m:12,color:'#8b5cf6',pct:6},
+  {cat:'Automatización / N8N',m:11,color:'#22a06b',pct:6},
+  {cat:'Finanzas y Contabilidad',m:10,color:'#e8a000',pct:5},
+  {cat:'Diseño e Interiorismo',m:7,color:'#06b6d4',pct:4},
+  {cat:'Emprendimiento y Negocios',m:7,color:'#a855f7',pct:4},
+  {cat:'Derecho Laboral / Normatividad',m:5,color:'#64748b',pct:3},
+  {cat:'Retail / Comercio',m:5,color:'#f59e0b',pct:3},
+  {cat:'Gestión de Proyectos',m:4,color:'#10b981',pct:2},
+  {cat:'Ciencia de Datos / Cloud',m:3,color:'#3b82f6',pct:2},
+];
+
+const OPPS=[
+  {num:1,titulo:'Diplomado IA Aplicada para Profesionales (Nivel 2)',area:'IA y Automatización',m:46,prior:'Alta',fmt:'Diplomado',dur:'100h',pub:'Egresados de todos los diplomados IA existentes en UAO',
+   desc:'Tema MÁS mencionado (46 veces, 24% del total). El mercado pide un nivel 2 con N8N, APIs, automatización avanzada y gestión de proyectos con IA.',
+   homologa:'Esp. Virtual en IA / Esp. en IA (Ingeniería)',resp:'IA, inteligencia artificial, Liderazgo en tiempos de IA, ML/ETL/AI'},
+  {num:2,titulo:'Diplomado Power BI Profesional y Business Analytics',area:'Análisis de Datos',m:41,prior:'Alta',fmt:'Diplomado',dur:'80h',pub:'Egresados del Curso Excel y profesionales que manejan datos',
+   desc:'41 menciones (21% del total). Siguiente paso natural para los 43 estudiantes del Curso Excel. Sin este programa, UAO pierde a sus propios egresados.',
+   homologa:'Esp. Virtual en Inteligencia de Negocios con Big Data',resp:'Power bi (múltiples), Análisis de datos, DAX, Power query, Dashboard'},
+  {num:3,titulo:'Seminario CapCut Avanzado / Nivel 2',area:'Creación de Contenido',m:11,prior:'Alta',fmt:'Seminario',dur:'16h',pub:'Egresados del Seminario CapCut Básico (demanda inmediata)',
+   desc:'11 de 11 estudiantes de un mismo seminario pidieron la segunda parte. Programa de menor riesgo y mayor probabilidad de éxito inmediato.',
+   homologa:'Esp. en Diseño Publicitario en Contenidos Digitales',resp:'Capcut Pro, Capcut nivel dos, Segunda parte CapCut, Capcut avanzado'},
+  {num:4,titulo:'Diplomado Creación de Contenido y Producción Audiovisual',area:'Contenido Digital',m:13,prior:'Alta',fmt:'Diplomado',dur:'80h',pub:'Creadores de contenido, comunicadores, emprendedores digitales',
+   desc:'Cubre DaVinci Resolve, Adobe, CapCut avanzado y narrativas audiovisuales. Alta demanda en mercado laboral de comunicación digital en Cali.',
+   homologa:'Esp. en Diseño Publicitario / Esp. Comunicación y Periodismo Digital',resp:'DaVinci, Adobe por programa, Narrativas audiovisuales, Colorización'},
+  {num:5,titulo:'Diplomado Liderazgo, Coaching y Gestión de Equipos',area:'Liderazgo',m:14,prior:'Alta',fmt:'Diplomado',dur:'80h',pub:'Coordinadores, jefes de área, líderes empresariales',
+   desc:'14 menciones en 3 programas distintos. Mercado corporativo amplio. El Diplomado Liderazgo Femenino ya prueba que este público existe y paga.',
+   homologa:'Esp. en Gerencia del Talento Humano',resp:'Liderazgo avanzado, Coach, Comunicación efectiva, Persuasión, Liderazgo IA'},
+  {num:6,titulo:'Diplomado Automatización Avanzada con N8N + IA',area:'Automatización',m:11,prior:'Alta',fmt:'Diplomado',dur:'80h',pub:'Profesionales de operaciones, TI y administración',
+   desc:'11 menciones desde 3 programas distintos pidiendo N8N avanzado. El mercado de automatización está creciendo exponencialmente en Colombia.',
+   homologa:'Esp. Virtual en IA / Esp. Gerencia de Negocios Digitales',resp:'N8N avanzado, Automatización + IA, Plataformas Google, Lean Six Sigma'},
+  {num:7,titulo:'Certificado Marketing Digital Avanzado (Google Ads + TikTok)',area:'Marketing Digital',m:12,prior:'Alta',fmt:'Certificado',dur:'48h',pub:'Emprendedores, directores de marketing, community managers',
+   desc:'12 menciones. Los de Meta Ads quieren Google y TikTok. Mercado gigante de PYMES en Cali. El Diplomado de Marketing Digital IA ya valida este público.',
+   homologa:'Esp. en Mercadeo / Esp. Estrategia Publicitaria de Marca',resp:'Pauta TikTok, Google Ads, Content digital, E-commerce, Estrategia'},
+  {num:8,titulo:'Certificado Análisis Financiero y Finanzas para No Financieros',area:'Finanzas',m:10,prior:'Media',fmt:'Certificado',dur:'48h',pub:'Gerentes, emprendedores, profesionales sin formación financiera',
+   desc:'10 menciones en varios programas. Ruta hacia la Especialización en Finanzas UAO. Producto probado mundialmente en educación continua.',
+   homologa:'Esp. en Finanzas (múltiples modalidades)',resp:'Análisis financiero, Finanzas + IA, Tributario, Mercado de capitales'},
+  {num:9,titulo:'Seminario Excel Avanzado + Macros + Power Query',area:'Excel / Programación',m:17,prior:'Media',fmt:'Seminario',dur:'24h',pub:'Egresados del Curso Excel Básico/Intermedio',
+   desc:'17 menciones de estudiantes del Excel pidiendo profundización. Ruta de transición entre Excel básico y Power BI. Bajo costo, alta demanda.',
+   homologa:'Esp. Virtual en Inteligencia de Negocios con Big Data',resp:'Excel avanzado, Macros, Power query, Tablas dinámicas, Visual Basic'},
+  {num:10,titulo:'Seminario Derecho Laboral y Seguridad Social Empresarial',area:'Derecho / RRHH',m:5,prior:'Media',fmt:'Seminario',dur:'16h',pub:'Empresarios, gerentes de RRHH, directores administrativos',
+   desc:'Un estudiante pidió explícitamente una "Especialización en derecho laboral para no abogados". Con la Reforma Laboral activa en Colombia, la urgencia es máxima.',
+   homologa:'Esp. en Gerencia del Talento Humano',resp:'Derecho laboral, Contratación estatal, Derecho administrativo, Seguros'},
+  {num:11,titulo:'Certificado Gestión de Proyectos con SCRUM y Metodologías Ágiles',area:'Gestión',m:4,prior:'Media',fmt:'Certificado',dur:'40h',pub:'Coordinadores, ingenieros, gerentes de área',
+   desc:'Alta demanda corporativa. Preparación para PMP y certificaciones internacionales. Directo a la Especialización en Gerencia de Proyectos.',
+   homologa:'Esp. en Gerencia de Proyectos (Ingeniería)',resp:'Gestión de Proyectos, SCRUM, Metodologías ágiles'},
+  {num:12,titulo:'Diplomado Diseño de Interiores Avanzado + Paisajismo',area:'Diseño',m:7,prior:'Baja',fmt:'Diplomado',dur:'80h',pub:'Entusiastas del diseño, propietarios de vivienda',
+   desc:'5 estudiantes del seminario pidieron temas más profundos. Nicho específico pero cautivo. Baja competencia en Cali.',
+   homologa:'Parcialmente con Esp. en Diseño Publicitario',resp:'Diseño y arquitectura, Paisajismo, Psicología colores, Materiales'},
+];
+
+const ESPECIALIZACIONES=[
+  {nombre:'Esp. en Diseño Publicitario en Contenidos Digitales',fac:'Arquitectura, Urbanismo y Diseño',tipo:'Presencial',
+   materias:[
+    {s:'1S',n:'Cultura contemporánea y diseño (marcas y tendencias digitales)',p:true},
+    {s:'1S',n:'Taller de estética y creatividad en el diseño',p:true},
+    {s:'1S',n:'Taller de creación digital (gráfica, fotografía, audio y video)',p:true},
+    {s:'2S',n:'Diseño de estrategia publicitaria de marca digital',p:true},
+    {s:'2S',n:'Taller de producción contenido publicitario digital',p:true},
+    {s:'2S',n:'Taller de diseño publicitario para campañas digitales',p:true},
+    {s:'',n:'Electiva (x2)',p:false},
+   ]},
+  {nombre:'Esp. en Comercio Exterior',fac:'Ciencias Empresariales y Jurídicas',tipo:'Presencial',
+   materias:[
+    {s:'1S',n:'Factibilidad de los Negocios Internacionales',p:true},
+    {s:'1S',n:'Finanzas para el Comercio Internacional',p:true},
+    {s:'2S',n:'Desarrollo de Mercados Globales',p:true},
+    {s:'2S',n:'Cadenas de Suministro Globales',p:true},
+    {s:'1S',n:'Legislación y Normativa en el Comercio Exterior',p:false},
+    {s:'2S',n:'Reto Gerencial Aplicado II',p:false},
+   ]},
+  {nombre:'Esp. en Contratación Estatal y su Gestión',fac:'Ciencias Empresariales y Jurídicas',tipo:'Convenio U. Rosario',
+   materias:[
+    {s:'',n:'Fundamentos Contratación Privada y Marco Constitucional',p:true},
+    {s:'',n:'Hacienda Pública y Presupuesto Estatal',p:true},
+    {s:'',n:'TIC Aplicadas a la Contratación Pública',p:true},
+    {s:'',n:'Responsabilidad Penal en la Contratación Estatal',p:false},
+    {s:'',n:'Controversias Contractuales y Control Judicial',p:false},
+   ]},
+  {nombre:'Esp. en Estrategia Publicitaria de Marca en Entornos Digitales',fac:'Ciencias Empresariales y Jurídicas',tipo:'Presencial',
+   materias:[
+    {s:'1S',n:'Fundamentos de estrategia, comunicación y marca',p:true},
+    {s:'1S',n:'Entornos digitales y cibercultura',p:true},
+    {s:'1S',n:'Investigación aplicada al contexto digital',p:true},
+    {s:'1S',n:'Laboratorio de estrategia digital I',p:true},
+    {s:'2S',n:'Estrategia de medios digitales',p:true},
+    {s:'2S',n:'Entornos digitales en la organización',p:true},
+    {s:'2S',n:'Laboratorio de estrategia digital II',p:true},
+   ]},
+  {nombre:'Esp. en Finanzas (Presencial / Virtual / Convenios)',fac:'Ciencias Empresariales y Jurídicas',tipo:'3 modalidades',
+   materias:[
+    {s:'1S',n:'Gerencia estratégica de costos',p:true},
+    {s:'1S',n:'Gestión financiera estratégica',p:true},
+    {s:'1S',n:'Portafolio de inversiones',p:true},
+    {s:'1S',n:'Toma de decisiones y análisis de costos',p:true},
+    {s:'2S',n:'Valoración de empresas',p:true},
+    {s:'2S',n:'Evaluación financiera de proyectos',p:true},
+    {s:'2S',n:'Mercados y finanzas internacionales',p:true},
+    {s:'1S',n:'Entorno económico de los negocios',p:false},
+   ]},
+  {nombre:'Esp. Virtual en Gerencia de Negocios Digitales',fac:'Ciencias Empresariales y Jurídicas',tipo:'Virtual',
+   materias:[
+    {s:'1S',n:'Entornos Digitales',p:true},
+    {s:'1S',n:'Innovación y Gestión del Cambio',p:true},
+    {s:'1S',n:'Consumidor Digital',p:true},
+    {s:'1S',n:'Modelos de Negocios Digitales',p:true},
+    {s:'1S',n:'Cloud Computing para los Negocios',p:true},
+    {s:'2S',n:'Gestión de Proyectos Digitales',p:true},
+    {s:'2S',n:'Mercadeo y Comunicación Digital',p:true},
+    {s:'2S',n:'Finanzas para Negocios',p:true},
+    {s:'2S',n:'Gerencia de Operaciones Negocios Digitales',p:false},
+   ]},
+  {nombre:'Esp. en Gerencia del Talento Humano',fac:'Ciencias Empresariales y Jurídicas',tipo:'Presencial + Convenio Buga',
+   materias:[
+    {s:'1S',n:'Estrategias y tendencias en Talento Humano',p:true},
+    {s:'1S',n:'Entorno jurídico laboral de la Organización',p:true},
+    {s:'1S',n:'Gestión de la salud y la seguridad en la organización',p:true},
+    {s:'2S',n:'Gestión de la compensación, bienestar y desempeño',p:true},
+    {s:'2S',n:'Analítica de datos y métricas del Talento Humano',p:true},
+    {s:'1S',n:'Gestión estratégica de la organización',p:false},
+    {s:'1S',n:'Sostenibilidad empresarial',p:false},
+   ]},
+  {nombre:'Esp. Virtual en Gerencia Tributaria',fac:'Ciencias Empresariales y Jurídicas',tipo:'Virtual',
+   materias:[
+    {s:'1S',n:'Impuesto de Renta y Complementarios',p:true},
+    {s:'1S',n:'IVA e Impuesto Nacional al Consumo',p:true},
+    {s:'1S',n:'Retención en la Fuente',p:true},
+    {s:'1S',n:'Régimen Simple de Tributación',p:true},
+    {s:'2S',n:'Gerencia y Planeación Tributaria',p:true},
+    {s:'2S',n:'Procedimiento Tributario y Régimen Sancionatorio',p:true},
+    {s:'2S',n:'Impacto NIIF en la Tributación',p:false},
+   ]},
+  {nombre:'Esp. Virtual en Inteligencia de Negocios con Big Data',fac:'Ciencias Empresariales y Jurídicas',tipo:'Virtual',
+   materias:[
+    {s:'',n:'Fundamentos de la Inteligencia de Negocios',p:true},
+    {s:'',n:'Fundamentos de Analítica de Datos',p:true},
+    {s:'',n:'Sistemas de Información Gerencial',p:true},
+    {s:'',n:'Gestión de Bases de Datos',p:true},
+    {s:'',n:'Análisis Multidimensional de los Datos',p:true},
+    {s:'',n:'Big Data Aplicado a la Gestión de los Negocios',p:true},
+    {s:'',n:'Visualización de Datos y Reportes',p:true},
+    {s:'',n:'Gestión de Proyectos de Tecnología',p:true},
+    {s:'',n:'Infraestructura Tecnológica para la Gestión de la Información',p:false},
+   ]},
+  {nombre:'Esp. en Mercadeo (Presencial / Virtual / Convenios)',fac:'Ciencias Empresariales y Jurídicas',tipo:'3 modalidades',
+   materias:[
+    {s:'1S',n:'Fundamentos de Mercadeo / Marketing',p:true},
+    {s:'1S',n:'Investigación Integral del Consumidor',p:true},
+    {s:'1S',n:'Inteligencia de Mercados',p:true},
+    {s:'1S',n:'Comportamiento del consumidor',p:true},
+    {s:'2S',n:'Marketing Relacional',p:true},
+    {s:'2S',n:'Gestión Integral del Marketing',p:true},
+    {s:'2S',n:'Gerencia estratégica de la marca',p:true},
+    {s:'2S',n:'Gerencia de ventas',p:true},
+    {s:'1S',n:'Entorno Económico de los Negocios',p:false},
+   ]},
+  {nombre:'Esp. en Comunicación Estratégica',fac:'Comunicación Social, Humanidades y Artes',tipo:'Presencial',
+   materias:[
+    {s:'1S',n:'Comunicación estratégica',p:true},
+    {s:'1S',n:'Diagnóstico en comunicación estratégica',p:true},
+    {s:'2S',n:'Cultura narrativa y transmedia',p:true},
+    {s:'2S',n:'Plataformas y métricas para la comunicación estratégica',p:true},
+    {s:'2S',n:'Módulo profundización en modalidad seminario',p:true},
+    {s:'1S',n:'Pensamiento estratégico',p:false},
+    {s:'1S',n:'Entornos sostenibles y responsabilidad social',p:false},
+   ]},
+  {nombre:'Esp. en Comunicación y Periodismo Digital',fac:'Comunicación Social, Humanidades y Artes',tipo:'Presencial',
+   materias:[
+    {s:'1S',n:'Comunicación digital estratégica',p:true},
+    {s:'1S',n:'Producción de mensajes en entornos electrónicos',p:true},
+    {s:'1S',n:'Periodismo de análisis y precisión en Big Data',p:true},
+    {s:'2S',n:'Diseño y desarrollo de experiencias interactivas',p:true},
+    {s:'2S',n:'Economía de medios y emprendimiento digital',p:true},
+    {s:'1S',n:'Sociedad del conocimiento',p:false},
+    {s:'2S',n:'Ética periodística en la era digital',p:false},
+   ]},
+  {nombre:'Esp. en Analítica de Big Data',fac:'Ingeniería y Ciencias Básicas',tipo:'Presencial',
+   materias:[
+    {s:'1S',n:'Gestión y almacenamiento de datos',p:true},
+    {s:'1S',n:'Métodos estadísticos para análisis de datos',p:true},
+    {s:'1S',n:'Aprendizaje automático (Machine Learning)',p:true},
+    {s:'1S',n:'Seguridad y ética del manejo de datos',p:true},
+    {s:'2S',n:'Modelos de análisis de Big Data',p:true},
+    {s:'2S',n:'Gestión de proyectos para analítica',p:true},
+    {s:'2S',n:'Visualización de Información',p:true},
+    {s:'1S',n:'Arquitectura de soluciones analíticas',p:false},
+   ]},
+  {nombre:'Esp. Virtual en Ciberseguridad',fac:'Ingeniería y Ciencias Básicas',tipo:'Virtual',
+   materias:[
+    {s:'',n:'Principios de Ciberseguridad y Modelos de Gestión',p:true},
+    {s:'',n:'Hacking Ético',p:true},
+    {s:'',n:'Seguridad en Redes',p:true},
+    {s:'',n:'Seguridad en Datos',p:true},
+    {s:'',n:'Ética Profesional y Derecho Informático',p:true},
+    {s:'',n:'Criptografía',p:false},
+    {s:'',n:'Informática Forense',p:false},
+   ]},
+  {nombre:'Esp. en Gerencia de Proyectos',fac:'Ingeniería y Ciencias Básicas',tipo:'Presencial',
+   materias:[
+    {s:'1S',n:'Formulación y evaluación de proyectos (Marco Lógico)',p:true},
+    {s:'1S',n:'Fundamentación e inicio de proyectos',p:true},
+    {s:'1S',n:'Negociación y contrataciones en proyectos',p:true},
+    {s:'2S',n:'Gestión de costos y presupuesto',p:true},
+    {s:'2S',n:'SCRUM – Gestión ágil de proyectos',p:true},
+    {s:'2S',n:'Liderazgo y gestión de cambios',p:true},
+    {s:'1S',n:'Gestión estratégica en proyectos',p:false},
+   ]},
+  {nombre:'Esp. Virtual en Inteligencia Artificial',fac:'Ingeniería y Ciencias Básicas',tipo:'Virtual',
+   materias:[
+    {s:'1S',n:'Herramientas Matemáticas Computacionales para IA',p:true},
+    {s:'1S',n:'Aprendizaje Automático (Machine Learning)',p:true},
+    {s:'1S',n:'Computación en la Nube',p:true},
+    {s:'1S',n:'Seminario Ética e Inteligencia Artificial',p:true},
+    {s:'2S',n:'Visión Computacional con Deep Learning',p:true},
+    {s:'2S',n:'Desarrollo de Proyectos de IA',p:true},
+    {s:'2S',n:'Procesamiento de Datos Secuenciales con Deep Learning',p:false},
+   ]},
+  {nombre:'Esp. en Inteligencia Artificial (Presencial)',fac:'Ingeniería y Ciencias Básicas',tipo:'Presencial',
+   materias:[
+    {s:'1S',n:'Herramientas matemáticas y computacionales para IA',p:true},
+    {s:'1S',n:'Aprendizaje automático',p:true},
+    {s:'1S',n:'Visión computacional con Deep Learning',p:true},
+    {s:'1S',n:'Computación en la nube',p:true},
+    {s:'2S',n:'Desarrollo de proyectos de inteligencia artificial',p:true},
+    {s:'1S',n:'Seminario ética e inteligencia artificial',p:true},
+    {s:'2S',n:'Procesamiento de datos secuenciales con Deep Learning',p:false},
+   ]},
+  {nombre:'Esp. en Logística',fac:'Ingeniería y Ciencias Básicas',tipo:'Presencial + Convenio Buga',
+   materias:[
+    {s:'1S',n:'Gestión de marketing logístico y servicios',p:true},
+    {s:'1S',n:'Gestión de abastecimiento, compras y almacenes',p:true},
+    {s:'2S',n:'Logística y nuevas tecnologías (Industria 4.0)',p:true},
+    {s:'2S',n:'Indicadores logísticos empresariales (KPIs)',p:true},
+    {s:'2S',n:'Logística y distribución física internacional',p:true},
+    {s:'1S',n:'Gerencia, planeación y estrategia logística integral',p:false},
+    {s:'1S',n:'Gestión de transporte logístico',p:false},
+   ]},
+  {nombre:'Esp. en Seguridad y Salud en el Trabajo',fac:'Ingeniería y Ciencias Básicas',tipo:'Presencial + Convenio Buga',
+   materias:[
+    {s:'1S',n:'Sistema de gestión de la SST',p:true},
+    {s:'1S',n:'Higiene ocupacional y ambiental I',p:true},
+    {s:'2S',n:'Política y legislación en SST',p:true},
+    {s:'1S',n:'Factores de riesgo y seguridad industrial',p:false},
+    {s:'1S',n:'Control de emergencias',p:false},
+    {s:'2S',n:'Higiene ocupacional y ambiental II',p:false},
+   ]},
+  {nombre:'Esp. en Gerencia de Mantenimiento y Confiabilidad',fac:'Ingeniería y Ciencias Básicas',tipo:'Presencial',
+   materias:[
+    {s:'1S',n:'Formulación y Evaluación de Proyectos',p:true},
+    {s:'1S',n:'Desarrollo de Habilidades Gerenciales',p:true},
+    {s:'2S',n:'Gerencia de Mantenimiento',p:false},
+    {s:'2S',n:'Desarrollo del Talento Humano',p:true},
+    {s:'1S',n:'Técnicas del Mantenimiento',p:false},
+    {s:'2S',n:'Confiabilidad II',p:false},
+   ]},
+  {nombre:'Esp. en Energías Renovables',fac:'Ingeniería y Ciencias Básicas',tipo:'Presencial',
+   materias:[
+    {s:'1S',n:'Energía solar fotovoltaica',p:true},
+    {s:'2S',n:'Gerencia de proyectos de energías renovables',p:true},
+    {s:'2S',n:'Mercado de energéticos',p:true},
+    {s:'1S',n:'Energía hidráulica y eólica',p:false},
+    {s:'2S',n:'Recursos energía distribuidos',p:false},
+   ]},
+  {nombre:'Esp. Virtual en Economía Circular',fac:'Ingeniería y Ciencias Básicas',tipo:'Virtual',
+   materias:[
+    {s:'1S',n:'Principios y Prácticas de Economía Circular',p:true},
+    {s:'2S',n:'Modelos de Negocios en la Economía Circular',p:true},
+    {s:'2S',n:'Proyectos de Innovación en Economía Circular',p:true},
+    {s:'1S',n:'Comunicación para la Circularidad',p:true},
+    {s:'1S',n:'Políticas y Normativas para la Economía Circular',p:false},
+    {s:'2S',n:'Medición de la Circularidad',p:false},
+   ]},
+];
+
+const RUTAS=[
+  {titulo:'Ruta Datos e IA — La Más Demandada (87 menciones)',prior:'Alta',
+   pasos:[
+    {label:'EduVida Actual',nombre:'Curso Excel Avanzado'},
+    {label:'Nuevo EduVida',nombre:'Seminario Excel + Power Query'},
+    {label:'Nuevo EduVida',nombre:'Diplomado Power BI Profesional'},
+    {label:'Nuevo EduVida',nombre:'Diplomado IA Aplicada Nivel 2'},
+    {label:'Especialización UAO',nombre:'Esp. BI con Big Data / Esp. en IA'},
+   ],
+   materia:'Visualización de Datos + Aprendizaje Automático + Fundamentos de BI',
+   homologa:'Hasta 2 créditos reconocibles en la especialización',
+   just:'87 menciones combinadas (IA + Power BI). Es la ruta más demandada. Los 43 estudiantes del Excel ya señalan Power BI. Conecta con dos especializaciones de ingeniería y ciencias empresariales.'},
+  {titulo:'Ruta Creación de Contenido Digital (24 menciones)',prior:'Alta',
+   pasos:[
+    {label:'EduVida Actual',nombre:'Seminario CapCut Básico'},
+    {label:'Nuevo EduVida',nombre:'Seminario CapCut Avanzado / Nivel 2'},
+    {label:'Nuevo EduVida',nombre:'Diplomado Creación Contenido y Producción AV'},
+    {label:'Especialización UAO',nombre:'Esp. Diseño Publicitario Contenidos Digitales'},
+   ],
+   materia:'Taller de Creación Digital + Taller Producción Contenido Publicitario',
+   homologa:'1-2 materias reconocibles',
+   just:'11 solicitudes directas de CapCut nivel 2 + 5 de video. Ruta clara, docente disponible, demanda inmediata. Hay que capitalizar la base de estudiantes captivos.'},
+  {titulo:'Ruta Marketing Digital Integral (12 menciones)',prior:'Alta',
+   pasos:[
+    {label:'EduVida Actual',nombre:'Seminario Pauta Meta Ads'},
+    {label:'Nuevo EduVida',nombre:'Certificado Marketing Digital Avanzado'},
+    {label:'EduVida Actual',nombre:'Diplomado Marketing Digital con IA'},
+    {label:'Especialización UAO',nombre:'Esp. Mercadeo / Esp. Estrategia Publicitaria'},
+   ],
+   materia:'Estrategia de Medios Digitales + Inteligencia de Mercados + Laboratorio Digital',
+   homologa:'1-2 créditos reconocibles',
+   just:'12 menciones. El seminario Meta Ads lleva al Certificado Avanzado, que a su vez es escalón al Diplomado existente y finalmente a la Especialización en Mercadeo.'},
+  {titulo:'Ruta Automatización e IA Empresarial (11 menciones)',prior:'Alta',
+   pasos:[
+    {label:'EduVida Actual',nombre:'Seminario N8N Básico'},
+    {label:'Nuevo EduVida',nombre:'Diplomado Automatización Avanzada N8N + IA'},
+    {label:'EduVida Actual',nombre:'Diplomado IA para Procesos'},
+    {label:'Especialización UAO',nombre:'Esp. Virtual en IA / Esp. Negocios Digitales'},
+   ],
+   materia:'Computación en la Nube + Desarrollo de Proyectos de IA',
+   homologa:'1-2 créditos reconocibles',
+   just:'N8N avanzado pedido en 3 programas. Los dos diplomados existentes de IA también conectan aquí. La Esp. Virtual en IA cubre exactamente los contenidos avanzados buscados.'},
+  {titulo:'Ruta Liderazgo y Gestión del Talento (14 menciones)',prior:'Alta',
+   pasos:[
+    {label:'EduVida Actual',nombre:'Seminario Liderazgo y Coaching'},
+    {label:'Nuevo EduVida',nombre:'Diplomado Liderazgo, Coaching y Equipos'},
+    {label:'EduVida Actual',nombre:'Diplomado Liderazgo Femenino Transformacional'},
+    {label:'Especialización UAO',nombre:'Esp. en Gerencia del Talento Humano'},
+   ],
+   materia:'Estrategias y Tendencias en TH + Analítica de Datos y Métricas del TH',
+   homologa:'1 crédito reconocible',
+   just:'14 menciones en 3 programas. El Diplomado Liderazgo Femenino ya demuestra que este mercado existe y paga. La Esp. GTH ofrece la ruta de escalamiento natural.'},
+  {titulo:'Ruta Finanzas y Análisis Contable (10 menciones)',prior:'Media',
+   pasos:[
+    {label:'EduVida Actual',nombre:'Diplomado Automatización Contable con IA'},
+    {label:'Nuevo EduVida',nombre:'Certificado Análisis Financiero (No Financieros)'},
+    {label:'Especialización UAO',nombre:'Esp. en Finanzas (Pres. / Virtual / Convenios)'},
+   ],
+   materia:'Gestión Financiera Estratégica + Valoración de Empresas',
+   homologa:'1 crédito reconocible',
+   just:'10 menciones de finanzas y contabilidad. Hay un Diplomado de Automatización Contable que puede ser el puente. Las 3 modalidades de Finanzas amplían la cobertura geográfica.'},
+  {titulo:'Ruta Derecho Laboral y Normatividad (5 menciones)',prior:'Media',
+   pasos:[
+    {label:'EduVida Actual',nombre:'Seminario Reforma Laboral y Pensional'},
+    {label:'Nuevo EduVida',nombre:'Seminario Derecho Laboral para No Abogados'},
+    {label:'Especialización UAO',nombre:'Esp. en Gerencia del Talento Humano'},
+   ],
+   materia:'Entorno Jurídico Laboral de la Organización',
+   homologa:'Posible reconocimiento parcial de módulo',
+   just:'5 menciones con solicitud explícita de formación jurídica laboral. Con la Reforma Laboral 2024 activa, la urgencia de actualización es máxima en el sector empresarial.'},
+  {titulo:'Ruta Gestión de Proyectos Ágiles (4 menciones)',prior:'Media',
+   pasos:[
+    {label:'EduVida Actual',nombre:'Diplomado BI + IA (Microsoft)'},
+    {label:'Nuevo EduVida',nombre:'Certificado Gestión de Proyectos con SCRUM'},
+    {label:'Especialización UAO',nombre:'Esp. en Gerencia de Proyectos (Ingeniería)'},
+   ],
+   materia:'SCRUM – Gestión ágil de proyectos + Liderazgo y gestión de cambios',
+   homologa:'1-2 créditos reconocibles',
+   just:'4 menciones directas. Alta demanda corporativa en Cali. La Esp. Gerencia de Proyectos tiene SCRUM como materia específica. El certificado puede homologarse directamente.'},
+];
+
+const TENDENCIAS=[
+  {inst:'Pontificia U. Javeriana Cali',prog:'Diplomado Transformación Digital e IA',tags:['IA','Datos','Negocios'],opp:'UAO puede competir con enfoque más práctico y costo más accesible para PYMES'},
+  {inst:'Universidad ICESI',prog:'Certificado Analítica y Ciencia de Datos',tags:['Power BI','Python','Analytics'],opp:'Alta demanda no cubierta en Cali. UAO debe ingresar a este mercado con enfoque no técnico'},
+  {inst:'Universidad del Pacífico',prog:'Seminario Marketing Digital',tags:['Redes','SEO','Email'],opp:'Oferta básica. UAO puede ofrecer formación más profunda con IA integrada'},
+  {inst:'SENA Cali',prog:'Programas gratuitos TI y Automatización',tags:['N8N','Excel','Redes'],opp:'Gratuito vs. calidad UAO: diferenciador en certificación, red de contactos y profundidad'},
+  {inst:'Coursera / edX (Stanford, MIT)',prog:'AI for Business / Machine Learning',tags:['IA','ML','Negocios'],opp:'Virtual sin tutoría presencial. UAO ofrece acompañamiento, práctica y contexto colombiano'},
+  {inst:'Cámara de Comercio de Cali',prog:'Talleres Emprendimiento y Ventas',tags:['Startups','Ventas','PYMES'],opp:'Bajo nivel académico. UAO puede ofrecer rigor académico + certificación institucional'},
+  {inst:'Universidad EAN / Bogotá',prog:'Diplomado Gerencia de Proyectos PMP',tags:['PMP','Ágil','Riesgos'],opp:'Oferta solo en Bogotá. UAO es la opción natural en Cali para este segmento'},
+  {inst:'Plataforma Platzi',prog:'Cursos CapCut, Video y Contenido Digital',tags:['CapCut','Video','Diseño'],opp:'Online sin práctica guiada. UAO puede diferenciarse con clases presenciales y proyectos reales'},
+];
+
+const RECOMENDACIONES=[
+  {num:1,titulo:'Diplomado IA Aplicada para Profesionales – Nivel 2',area:'IA',prior:'Alta',fmt:'Diplomado',dur:'100h',m:46,
+   pub:'Egresados de los 4 diplomados de IA existentes en UAO',
+   arg:'Es el tema MÁS mencionado (46 veces, 24%). El mercado pide nivel 2 con N8N avanzado, APIs, automatización y gestión de proyectos con IA.',
+   hom:'Esp. Virtual en Inteligencia Artificial',precio:'$2.8M – $3.5M COP'},
+  {num:2,titulo:'Diplomado Power BI Profesional y Business Analytics',area:'Análisis de Datos',prior:'Alta',fmt:'Diplomado',dur:'80h',m:41,
+   pub:'Egresados del Curso Excel + profesionales que manejan datos en su trabajo',
+   arg:'41 menciones (21% del total). Es el "siguiente paso natural" para los 43 estudiantes del Curso Excel. Sin este programa UAO pierde su propio mercado.',
+   hom:'Esp. Virtual en Inteligencia de Negocios con Big Data',precio:'$2.2M – $2.8M COP'},
+  {num:3,titulo:'Seminario CapCut Avanzado – Nivel 2 (Lanzamiento Inmediato)',area:'Contenido Digital',prior:'Alta',fmt:'Seminario',dur:'16h',m:11,
+   pub:'Egresados del Seminario CapCut Básico — demanda 100% captiva',
+   arg:'11 de 11 estudiantes pidieron la segunda parte. El de menor riesgo y mayor probabilidad de éxito. Solo hay que organizar la demanda ya existente.',
+   hom:'Esp. en Diseño Publicitario en Contenidos Digitales',precio:'$350K – $500K COP'},
+  {num:4,titulo:'Diplomado Liderazgo, Coaching y Gestión de Equipos',area:'Liderazgo',prior:'Alta',fmt:'Diplomado',dur:'80h',m:14,
+   pub:'Coordinadores, jefes de área, líderes empresariales del Valle del Cauca',
+   arg:'14 menciones en 3 programas distintos. El Diplomado Liderazgo Femenino (8 respuestas) ya demostró que este público existe. Alta demanda corporativa.',
+   hom:'Esp. en Gerencia del Talento Humano',precio:'$2.0M – $2.5M COP'},
+  {num:5,titulo:'Diplomado Creación de Contenido y Producción Audiovisual',area:'Contenido Digital',prior:'Alta',fmt:'Diplomado',dur:'80h',m:13,
+   pub:'Creadores de contenido, comunicadores, emprendedores digitales',
+   arg:'13 menciones. DaVinci + Adobe + CapCut + Narrativas AV. Diferenciador frente a Platzi y YouTube: presencialidad, feedback y certificación UAO.',
+   hom:'Esp. Diseño Publicitario / Esp. Comunicación y Periodismo Digital',precio:'$1.8M – $2.5M COP'},
+  {num:6,titulo:'Diplomado Automatización Avanzada con N8N + IA (Nivel 2)',area:'Automatización',prior:'Alta',fmt:'Diplomado',dur:'80h',m:11,
+   pub:'Profesionales de operaciones, TI, contabilidad y administración',
+   arg:'11 menciones en 3 programas distintos pidiendo N8N avanzado. El mercado de automatización creció 300% en Colombia entre 2022 y 2024.',
+   hom:'Esp. Virtual en IA / Esp. Gerencia de Negocios Digitales',precio:'$1.8M – $2.5M COP'},
+  {num:7,titulo:'Certificado Marketing Digital Avanzado (Google + TikTok + Estrategia)',area:'Marketing Digital',prior:'Alta',fmt:'Certificado',dur:'48h',m:12,
+   pub:'Emprendedores, directores de marketing, community managers',
+   arg:'12 menciones directas. Los de Meta Ads piden Google y TikTok. El Diplomado de Marketing IA ya demuestra este mercado. Falta el eslabón intermedio.',
+   hom:'Esp. en Mercadeo / Esp. Estrategia Publicitaria de Marca en Entornos Digitales',precio:'$1.2M – $1.8M COP'},
+  {num:8,titulo:'Certificado Análisis Financiero y Finanzas para No Financieros',area:'Finanzas',prior:'Media',fmt:'Certificado',dur:'48h',m:10,
+   pub:'Gerentes, emprendedores, profesionales sin formación financiera base',
+   arg:'10 menciones. "Finanzas para no financieros" es uno de los programas más exitosos a nivel mundial. Ruta a la Esp. en Finanzas UAO (3 modalidades).',
+   hom:'Esp. en Finanzas (Presencial / Virtual / Convenios)',precio:'$1.2M – $1.8M COP'},
+  {num:9,titulo:'Seminario Derecho Laboral y Seguridad Social Empresarial',area:'Derecho / RRHH',prior:'Media',fmt:'Seminario',dur:'16h',m:5,
+   pub:'Empresarios, gerentes de RRHH, directores administrativos y de nómina',
+   arg:'Un estudiante pidió literalmente una "Especialización en derecho laboral para no abogados". Con la Reforma Laboral 2024 activa, la urgencia es máxima en el sector empresarial.',
+   hom:'Esp. en Gerencia del Talento Humano',precio:'$400K – $700K COP'},
+];
+
+
+// ─── NAVIGATION ───
+let chartsBuilt = {};
+function showSec(id,el){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo(0,0);
+  if(!chartsBuilt[id]){ buildCharts(id); chartsBuilt[id]=true; }
+}
+
+// ─── FILTERS ───
+let F={prog:'',cat:'',prior:'',q:''};
+function applyF(){
+  F.prog=document.getElementById('fp').value;
+  F.cat=document.getElementById('fc').value;
+  F.prior=document.getElementById('fpr').value;
+  F.q=document.getElementById('fq').value.toLowerCase();
+  renderRanking(); renderOpps();
+}
+function clearF(){
+  ['fp','fc','fpr','fq'].forEach(id=>document.getElementById(id).value='');
+  F={prog:'',cat:'',prior:'',q:''};
+  renderRanking(); renderOpps();
+}
+function populateFilters(){
+  const fp=document.getElementById('fp'), fc=document.getElementById('fc');
+  PROGRAMAS.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nombre.substring(0,45)+'...';fp.appendChild(o);});
+  CATS.forEach(c=>{const o=document.createElement('option');o.value=c.cat;o.textContent=c.cat;fc.appendChild(o);});
+}
+
+// ─── RENDER RANKING ───
+function renderRanking(){
+  let data=[...CATS];
+  if(F.cat) data=data.filter(d=>d.cat===F.cat);
+  if(F.prior){
+    const pmap={Alta:[40,999],Media:[8,39],Baja:[0,7]};
+    const [lo,hi]=pmap[F.prior]||[0,999];
+    data=data.filter(d=>d.m>=lo&&d.m<=hi);
+  }
+  if(F.q) data=data.filter(d=>d.cat.toLowerCase().includes(F.q));
+  const max=data.length?data[0].m:1;
+  document.getElementById('rankList').innerHTML=data.map((d,i)=>`
+    <li class="ri">
+      <div class="rn ${i<3?'top':''}">${i+1}</div>
+      <div class="rbw">
+        <div class="rname">${d.cat}</div>
+        <div class="rbar"><div class="rfill" style="width:${Math.round(d.m/max*100)}%;background:${d.color}"></div></div>
+        <div class="rcat">${d.pct}% del total · ${d.m} menciones</div>
+      </div>
+      <div class="rcount">${d.m}</div>
+    </li>`).join('');
+}
+
+// ─── RENDER WORD CLOUD ───
+function renderWC(){
+  const words=[
+    {t:'Power BI',s:28,c:'#DC142D'},{t:'Inteligencia Artificial',s:26,c:'#961423'},
+    {t:'IA',s:24,c:'#DC142D'},{t:'N8N',s:20,c:'#22a06b'},
+    {t:'Excel',s:20,c:'#961423'},{t:'Automatización',s:18,c:'#F03C46'},
+    {t:'CapCut Avanzado',s:18,c:'#0969da'},{t:'Marketing Digital',s:16,c:'#8b5cf6'},
+    {t:'Liderazgo',s:16,c:'#e07b00'},{t:'Análisis de Datos',s:15,c:'#DC142D'},
+    {t:'DAX',s:14,c:'#961423'},{t:'Power Query',s:14,c:'#22a06b'},
+    {t:'Pauta TikTok',s:13,c:'#8b5cf6'},{t:'Google Ads',s:13,c:'#0969da'},
+    {t:'DaVinci Resolve',s:13,c:'#0969da'},{t:'Coaching',s:12,c:'#e07b00'},
+    {t:'Machine Learning',s:12,c:'#DC142D'},{t:'Finanzas',s:12,c:'#e8a000'},
+    {t:'Macros',s:11,c:'#F03C46'},{t:'SQL',s:11,c:'#3b82f6'},
+    {t:'E-commerce',s:11,c:'#8b5cf6'},{t:'Persuasión',s:11,c:'#e07b00'},
+    {t:'Emprendimiento',s:10,c:'#a855f7'},{t:'Tributario',s:10,c:'#64748b'},
+    {t:'Dashboard',s:10,c:'#961423'},{t:'Oratoria',s:10,c:'#e07b00'},
+    {t:'Adobe',s:10,c:'#0969da'},{t:'Lean Six Sigma',s:10,c:'#22a06b'},
+    {t:'Cloud/AWS',s:10,c:'#3b82f6'},{t:'Retail KPIs',s:10,c:'#f59e0b'},
+  ];
+  document.getElementById('wcloud').innerHTML=words.map(w=>`
+    <span class="ww" style="font-size:${w.s}px;color:${w.c}">${w.t}</span>`).join('');
+}
+
+// ─── RENDER OPPS ───
+function renderOpps(){
+  let data=[...OPPS];
+  if(F.prior) data=data.filter(d=>d.prior===F.prior);
+  if(F.cat) data=data.filter(d=>d.area.toLowerCase().includes(F.cat.toLowerCase()));
+  if(F.q) data=data.filter(d=>d.titulo.toLowerCase().includes(F.q)||d.area.toLowerCase().includes(F.q));
+  document.getElementById('oppGrid').innerHTML=data.map(o=>`
+    <div class="ocard ${o.prior==='Media'?'med':o.prior==='Baja'?'low':''}">
+      <div class="otit">${o.titulo}</div>
+      <div class="ometa">
+        <span class="otag ${o.prior==='Alta'?'ta':o.prior==='Media'?'tm':'tl'}">● ${o.prior} prioridad</span>
+        <span class="otag tf">${o.fmt}</span>
+        <span class="otag" style="background:rgba(107,107,138,0.1);color:#64748b">${o.dur}</span>
+      </div>
+      <div class="odesc">${o.desc}</div>
+      <div class="odel" style="margin-top:7px">📊 <strong>${o.m}</strong> menciones · 👥 ${o.pub}</div>
+      <div class="odel">🔗 ${o.homologa}</div>
+      <div class="oresp">💬 "${o.resp.substring(0,90)}..."</div>
+    </div>`).join('');
+}
+
+// ─── RENDER SPECS ───
+function renderSpecs(){
+  document.getElementById('specCont').innerHTML=ESPECIALIZACIONES.map((e,i)=>{
+    const potCnt=e.materias.filter(m=>m.p).length;
+    return `<div class="scard">
+      <div class="shead" onclick="toggleSpec(${i})">
+        <div>
+          <div class="sname">${e.nombre}</div>
+          <div class="sfac">${e.fac} · Modalidad: ${e.tipo} · <strong style="color:var(--red)">${potCnt}</strong> materias con potencial EduVida</div>
+        </div>
+        <div class="stoggle" id="st${i}">▼</div>
+      </div>
+      <div class="ssubjects" id="ss${i}" style="display:none">
+        ${e.materias.map(m=>`
+          <div class="sub ${m.p?'pot':''}">
+            <div class="sdot"></div>
+            <div class="sn">${m.s?'<span style="font-size:9px;background:rgba(150,20,35,0.1);color:var(--dark-red);padding:1px 5px;border-radius:4px;margin-right:4px">${m.s}</span>':''}${m.n}</div>
+            ${m.p?'<span class="sbadge">EduVida ✓</span>':''}
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleSpec(i){
+  const el=document.getElementById('ss'+i), tg=document.getElementById('st'+i);
+  el.style.display=el.style.display==='none'?'grid':'none';
+  tg.classList.toggle('open');
+}
+
+// ─── RENDER ROUTES ───
+function renderRoutes(){
+  document.getElementById('routesCont').innerHTML=RUTAS.map(r=>`
+    <div class="rcard">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div class="rtit">${r.titulo}</div>
+        <span class="pill ${r.prior==='Alta'?'pr':r.prior==='Media'?'po':'pg'}">${r.prior} prioridad</span>
+      </div>
+      <div class="rflow">
+        ${r.pasos.map((p,i)=>`${i>0?'<div class="rarr">→</div>':''}<div class="rstep ${i===r.pasos.length-1?'hl':''}"><div class="rsl">${p.label}</div><div class="rsn">${p.nombre}</div></div>`).join('')}
+      </div>
+      <div class="rmeta">
+        <div class="rmitem">📖 <strong>Materia conexión:</strong> ${r.materia}</div>
+        <div class="rmitem">🎓 <strong>Homologación:</strong> ${r.homologa}</div>
+      </div>
+      <div class="rjust">💡 ${r.just}</div>
+    </div>`).join('');
+}
+
+// ─── RENDER RECS ───
+function renderRecs(){
+  document.getElementById('recsCont').innerHTML=RECOMENDACIONES.map(r=>`
+    <div class="reccard">
+      <div class="recnum">${r.num}</div>
+      <div class="recbody">
+        <div class="rect">${r.titulo}</div>
+        <div class="recmeta">
+          <span class="pill ${r.prior==='Alta'?'pr':r.prior==='Media'?'po':'pg'}">${r.prior}</span>
+          <span class="pill pb">${r.fmt}</span>
+          <span class="pill pgy">${r.area}</span>
+          <span class="pill pgy">${r.dur}</span>
+          <span class="pill pr" style="background:rgba(220,20,45,0.08)">📊 ${r.m} menciones</span>
+        </div>
+        <div class="recdesc">${r.arg}</div>
+        <div class="recfooter">
+          <div class="recfi">👥 <strong>Público:</strong> ${r.pub}</div>
+          <div class="recfi">🔗 <strong>Homologa:</strong> ${r.hom}</div>
+          <div class="recfi">💰 <strong>Precio ref.:</strong> ${r.precio}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ─── RENDER TABLES ───
+function renderTables(){
+  document.getElementById('tbCats').innerHTML=CATS.map(d=>`
+    <tr>
+      <td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${d.color};margin-right:6px"></span>${d.cat}</td>
+      <td><strong>${d.m}</strong></td>
+      <td>${d.pct}%</td>
+      <td><span class="pill ${d.m>=30?'pr':d.m>=15?'po':'pg'}">${d.m>=30?'Alta':d.m>=15?'Media':'Baja'}</span></td>
+    </tr>`).join('');
+  document.getElementById('tbProgs').innerHTML=PROGRAMAS.map(p=>`
+    <tr>
+      <td>${p.id}</td>
+      <td>${p.nombre}</td>
+      <td><span class="pill pgy">${p.tipo}</span></td>
+      <td><strong>${p.resp}</strong></td>
+    </tr>`).join('');
+  document.getElementById('tbOpps').innerHTML=OPPS.map(o=>`
+    <tr>
+      <td>${o.num}</td>
+      <td><strong>${o.titulo}</strong></td>
+      <td><span class="pill pgy">${o.area}</span></td>
+      <td><strong>${o.m}</strong></td>
+      <td><span class="pill ${o.prior==='Alta'?'pr':o.prior==='Media'?'po':'pg'}">${o.prior}</span></td>
+      <td>${o.fmt}</td>
+      <td><small>${o.pub}</small></td>
+    </tr>`).join('');
+}
+
+// ─── CSV EXPORT ───
+function exportCSV(tableId,fname){
+  const tbl=document.getElementById(tableId);
+  const rows=[...tbl.querySelectorAll('tr')];
+  const csv=rows.map(r=>[...r.querySelectorAll('th,td')].map(c=>'"'+c.innerText.replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  a.download=fname+'.csv'; a.click();
+}
+
+// ─── CHARTS ───
+const CI={};
+function dc(id){if(CI[id]){CI[id].destroy();delete CI[id];}}
+
+function buildCharts(sec){
+  if(sec==='resumen'){
+    // Bar: top categorías
+    dc('cTopCats');
+    CI['cTopCats']=new Chart(document.getElementById('cTopCats'),{
+      type:'bar',
+      data:{labels:CATS.map(d=>d.cat.length>22?d.cat.substr(0,22)+'…':d.cat),
+            datasets:[{label:'Menciones',data:CATS.map(d=>d.m),
+              backgroundColor:CATS.map(d=>d.color),borderRadius:6,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw} menciones`}}},
+        scales:{x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:'DM Sans',size:11}}},
+                y:{grid:{display:false},ticks:{font:{family:'DM Sans',size:11}}}}}
+    });
+    // Donut categorías
+    dc('cDonut');
+    CI['cDonut']=new Chart(document.getElementById('cDonut'),{
+      type:'doughnut',
+      data:{labels:CATS.map(d=>d.cat),
+            datasets:[{data:CATS.map(d=>d.m),backgroundColor:CATS.map(d=>d.color),borderWidth:2,borderColor:'#fff'}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+        plugins:{legend:{position:'right',labels:{font:{family:'DM Sans',size:10},boxWidth:10,padding:6}}}}
+    });
+    // Bar: respuestas por programa
+    dc('cProgs');
+    CI['cProgs']=new Chart(document.getElementById('cProgs'),{
+      type:'bar',
+      data:{labels:PROGRAMAS.map(p=>p.nombre.length>32?p.nombre.substr(0,32)+'…':p.nombre),
+            datasets:[{label:'Respuestas',data:PROGRAMAS.map(p=>p.resp),
+              backgroundColor:PROGRAMAS.map(p=>p.resp>=20?'#DC142D':p.resp>=6?'rgba(220,20,45,0.5)':'rgba(220,20,45,0.2)'),
+              borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{x:{grid:{display:false},ticks:{font:{family:'DM Sans',size:10},maxRotation:40}},
+                y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:'DM Sans',size:11}}}}}
+    });
+  }
+  if(sec==='eduvida'){
+    // Stacked top programs x categories
+    const topProgs=PROGRAMAS.slice(0,10);
+    const catSel=CATS.slice(0,6);
+    const catColors=['#DC142D','#961423','#F03C46','#e07b00','#0969da','#22a06b'];
+    // Approximate distribution per program based on context
+    const progCatDist={
+      'P01':[0,35,15,5,0,3],'P02':[0,0,0,0,10,0],'P03':[6,8,4,2,0,0],
+      'P04':[2,0,0,10,0,0],'P05':[0,7,4,0,0,0],'P06':[6,0,1,0,0,4],
+      'P07':[0,0,0,4,0,0],'P08':[0,0,0,0,0,6],'P09':[0,0,0,8,0,0],'P10':[4,4,4,0,0,1],
+    };
+    dc('cStacked');
+    CI['cStacked']=new Chart(document.getElementById('cStacked'),{
+      type:'bar',
+      data:{labels:topProgs.map(p=>p.id),
+            datasets:catSel.map((c,i)=>({
+              label:c.cat.length>20?c.cat.substr(0,20)+'…':c.cat,
+              data:topProgs.map(p=>progCatDist[p.id]?progCatDist[p.id][i]:0),
+              backgroundColor:catColors[i],borderRadius:3,stack:'s1'
+            }))},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'bottom',labels:{font:{family:'DM Sans',size:10},boxWidth:10}}},
+        scales:{x:{stacked:true,grid:{display:false},ticks:{font:{family:'DM Sans',size:11}}},
+                y:{stacked:true,grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:'DM Sans',size:11}}}}}
+    });
+  }
+  if(sec==='tendencias'){
+    const temas=['IA y Datos','Marketing Dig.','Gestión Proy.','UX/Contenido','Finanzas','Liderazgo'];
+    dc('cTend');
+    CI['cTend']=new Chart(document.getElementById('cTend'),{
+      type:'bar',
+      data:{labels:temas,
+        datasets:[
+          {label:'Oferta UAO EduVida (%)',data:[60,70,20,40,40,30],backgroundColor:'rgba(220,20,45,0.7)',borderRadius:4},
+          {label:'Demanda del mercado (%)',data:[90,75,65,70,60,55],backgroundColor:'rgba(9,105,218,0.15)',borderColor:'#0969da',borderWidth:2,borderRadius:4}
+        ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'bottom',labels:{font:{family:'DM Sans',size:11}}}},
+        scales:{x:{grid:{display:false},ticks:{font:{family:'DM Sans',size:11}}},
+                y:{max:100,grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:'DM Sans',size:11},callback:v=>v+'%'}}}}
+    });
+    // Gap chart
+    dc('cGap');
+    CI['cGap']=new Chart(document.getElementById('cGap'),{
+      type:'bar',
+      data:{labels:['IA Nivel 2','Power BI Prof.','CapCut Avanz.','N8N Avanzado','Liderazgo Corp.','Marketing Avanz.','Finanzas Bás.'],
+        datasets:[{label:'Brecha de cobertura (%)',data:[75,68,65,60,55,50,45],
+          backgroundColor:'rgba(220,20,45,0.12)',borderColor:'#DC142D',borderWidth:2,borderRadius:6}]},
+      options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+        plugins:{legend:{display:false}},
+        scales:{x:{max:100,grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:'DM Sans',size:11},callback:v=>v+'%'}},
+                y:{grid:{display:false},ticks:{font:{family:'DM Sans',size:11}}}}}
+    });
+    // Trend grid
+    document.getElementById('trendGrid').innerHTML=TENDENCIAS.map(t=>`
+      <div class="tcard">
+        <div class="tinst">${t.inst}</div>
+        <div class="tname">${t.prog}</div>
+        <div class="ttags">${t.tags.map(x=>`<span class="ttag">${x}</span>`).join('')}</div>
+        <div class="topp"><span>💡 Oportunidad UAO:</span> ${t.opp}</div>
+      </div>`).join('');
+  }
+  if(sec==='especializaciones'){
+    // Bar por especialización: materias con/sin potencial
+    const names=ESPECIALIZACIONES.map(e=>e.nombre.replace('Esp. ','').replace('Especialización ','').substr(0,22)+'…');
+    const pot=ESPECIALIZACIONES.map(e=>e.materias.filter(m=>m.p).length);
+    const noPot=ESPECIALIZACIONES.map(e=>e.materias.filter(m=>!m.p).length);
+    dc('cMats');
+    CI['cMats']=new Chart(document.getElementById('cMats'),{
+      type:'bar',
+      data:{labels:names,
+        datasets:[
+          {label:'Con potencial EduVida',data:pot,backgroundColor:'#DC142D',borderRadius:4},
+          {label:'Sin potencial directo',data:noPot,backgroundColor:'rgba(236,229,220,1)',borderRadius:4}
+        ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'bottom',labels:{font:{family:'DM Sans',size:10}}}},
+        scales:{x:{stacked:true,grid:{display:false},ticks:{font:{family:'DM Sans',size:9},maxRotation:40}},
+                y:{stacked:true,grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{family:'DM Sans',size:11},stepSize:2}}}}
+    });
+  }
+  if(sec==='recomendaciones'){
+    dc('cFmts');
+    CI['cFmts']=new Chart(document.getElementById('cFmts'),{
+      type:'doughnut',
+      data:{labels:['Diplomado','Certificado','Seminario'],
+        datasets:[{data:[6,3,3],backgroundColor:['#DC142D','#961423','#F03C46'],borderWidth:2,borderColor:'#fff'}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+        plugins:{legend:{position:'right',labels:{font:{family:'DM Sans',size:12},boxWidth:12}}}}
+    });
+    dc('cAreas');
+    CI['cAreas']=new Chart(document.getElementById('cAreas'),{
+      type:'polarArea',
+      data:{labels:['IA','Datos','Contenido','Liderazgo','Marketing','Automatización','Finanzas','Derecho'],
+        datasets:[{data:[46,41,13,14,12,11,10,5],
+          backgroundColor:['rgba(220,20,45,0.7)','rgba(150,20,35,0.7)','rgba(9,105,218,0.7)','rgba(224,123,0,0.7)','rgba(139,92,246,0.7)','rgba(34,160,107,0.7)','rgba(232,160,0,0.7)','rgba(100,116,139,0.7)']}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'right',labels:{font:{family:'DM Sans',size:10},boxWidth:10}}}}
+    });
+  }
+}
+
+// ─── INIT ───
+document.addEventListener('DOMContentLoaded',()=>{
+  populateFilters();
+  buildCharts('resumen'); chartsBuilt['resumen']=true;
+  renderRanking(); renderWC(); renderOpps();
+  renderSpecs(); renderRoutes(); renderRecs(); renderTables();
+});
+
+</script>
+</body>
+</html>
