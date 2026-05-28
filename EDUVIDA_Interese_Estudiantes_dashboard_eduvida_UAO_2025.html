@@ -298,6 +298,7 @@ tbody td{padding:9px 14px;color:var(--text-dark);vertical-align:top;line-height:
     <h2>Análisis EduVida</h2>
     <p>Intereses reales de 151 estudiantes de 20 programas EduVida UAO · Datos extraídos directamente del archivo Excel</p>
   </div>
+  <div id="progBanner" style="display:none;background:rgba(220,20,45,0.07);border:1.5px solid rgba(220,20,45,0.25);border-radius:10px;padding:10px 16px;margin-bottom:14px;font-size:12px;color:var(--dark-red);gap:8px;align-items:center;flex-wrap:wrap"></div>
   <div class="fbar">
     <div class="fg"><div class="fl">Programa</div>
       <select class="fsel" id="fp" onchange="applyF()" style="min-width:180px">
@@ -330,7 +331,7 @@ tbody td{padding:9px 14px;color:var(--text-dark);vertical-align:top;line-height:
       <ul class="rl" id="rankList"></ul>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Nube de palabras clave reales</div><div class="cs">Términos exactos mencionados por los estudiantes</div></div>
+      <div class="ch"><div class="ct" id="wcTitle">Nube de palabras clave reales</div><div class="cs" id="wcSub">Términos exactos mencionados por los estudiantes</div></div>
       <div class="wc" id="wcloud"></div>
     </div>
   </div>
@@ -946,18 +947,77 @@ function showSec(id,el){
 }
 
 // ─── FILTERS ───
+// Mapeo: programa → categorías temáticas principales que pidieron sus estudiantes
+const PROG_CATS = {
+  'P01':['Power BI / Business Intelligence','Inteligencia Artificial','Excel, Macros y Programación','Finanzas y Contabilidad','Emprendimiento y Negocios'],
+  'P02':['Creación de Contenido / Video','Marketing Digital / Pauta'],
+  'P03':['Power BI / Business Intelligence','Inteligencia Artificial','Gestión de Proyectos','Excel, Macros y Programación'],
+  'P04':['Liderazgo y Habilidades Blandas','Inteligencia Artificial','Emprendimiento y Negocios'],
+  'P05':['Power BI / Business Intelligence','Excel, Macros y Programación','Inteligencia Artificial'],
+  'P06':['Automatización / N8N','Inteligencia Artificial','Gestión de Proyectos'],
+  'P07':['Derecho Laboral / Normatividad','Finanzas y Contabilidad'],
+  'P08':['Marketing Digital / Pauta','Emprendimiento y Negocios'],
+  'P09':['Liderazgo y Habilidades Blandas'],
+  'P10':['Finanzas y Contabilidad','Automatización / N8N','Power BI / Business Intelligence'],
+  'P11':['Marketing Digital / Pauta','Automatización / N8N','Inteligencia Artificial'],
+  'P12':['Power BI / Business Intelligence','Inteligencia Artificial'],
+  'P13':['Diseño e Interiorismo'],
+  'P14':['Marketing Digital / Pauta','Liderazgo y Habilidades Blandas','Inteligencia Artificial'],
+  'P15':['Retail / Comercio','Inteligencia Artificial','Marketing Digital / Pauta'],
+  'P16':['Creación de Contenido / Video'],
+  'P17':['Inteligencia Artificial','Power BI / Business Intelligence','Automatización / N8N'],
+  'P18':['Ciencia de Datos / Cloud','Excel, Macros y Programación'],
+  'P19':['Liderazgo y Habilidades Blandas'],
+  'P20':['Liderazgo y Habilidades Blandas','Inteligencia Artificial'],
+};
+
+// Mapeo: programa → oportunidades más relevantes
+const PROG_OPPS = {
+  'P01':[2,9,1],   // Power BI, Excel Avanzado, IA
+  'P02':[3,4],     // CapCut, Diplomado Contenido
+  'P03':[1,2,11],  // IA, Power BI, Gestión Proyectos
+  'P04':[4,6],     // Liderazgo, Finanzas (emprendimiento)
+  'P05':[2,9,1],   // Power BI, Excel, IA
+  'P06':[6,1],     // N8N, IA
+  'P07':[10],      // Derecho Laboral
+  'P08':[7],       // Marketing Avanzado
+  'P09':[4],       // Liderazgo
+  'P10':[8,6,2],   // Finanzas, N8N, Power BI
+  'P11':[7,6,1],   // Marketing, N8N, IA
+  'P12':[2,1],     // Power BI, IA
+  'P13':[13],      // Diseño Interiores
+  'P14':[7,4,1],   // Marketing, Liderazgo, IA
+  'P15':[7,1,8],   // Marketing, IA, Finanzas
+  'P16':[4,3],     // Diplomado Contenido, CapCut
+  'P17':[1,6,2],   // IA, N8N, Power BI
+  'P18':[14,1],    // Ciencia Datos, IA
+  'P19':[4],       // Liderazgo
+  'P20':[4,1],     // Liderazgo, IA
+};
+
 let F={prog:'',cat:'',prior:'',q:''};
 function applyF(){
   F.prog=document.getElementById('fp').value;
   F.cat=document.getElementById('fc').value;
   F.prior=document.getElementById('fpr').value;
   F.q=document.getElementById('fq').value.toLowerCase();
-  renderRanking(); renderOpps();
+  renderRanking(); renderOpps(); renderWC(); updateProgBanner();
 }
 function clearF(){
   ['fp','fc','fpr','fq'].forEach(id=>document.getElementById(id).value='');
   F={prog:'',cat:'',prior:'',q:''};
-  renderRanking(); renderOpps();
+  renderRanking(); renderOpps(); renderWC(); updateProgBanner();
+}
+function updateProgBanner(){
+  const b=document.getElementById('progBanner');
+  if(!b) return;
+  if(F.prog){
+    const p=PROGRAMAS.find(x=>x.id===F.prog);
+    b.style.display='flex';
+    b.innerHTML=`<span>🎓 Filtrando por: <strong>${p.nombre.substring(0,60)}…</strong> · ${p.resp} estudiantes respondieron · mostrando temas y oportunidades relacionadas</span>`;
+  } else {
+    b.style.display='none';
+  }
 }
 function populateFilters(){
   const fp=document.getElementById('fp'), fc=document.getElementById('fc');
@@ -968,6 +1028,10 @@ function populateFilters(){
 // ─── RENDER RANKING ───
 function renderRanking(){
   let data=[...CATS];
+  if(F.prog){
+    const allowedCats=PROG_CATS[F.prog]||[];
+    data=data.filter(d=>allowedCats.includes(d.cat));
+  }
   if(F.cat) data=data.filter(d=>d.cat===F.cat);
   if(F.prior){
     const pmap={Alta:[40,999],Media:[8,39],Baja:[0,7]};
@@ -976,6 +1040,10 @@ function renderRanking(){
   }
   if(F.q) data=data.filter(d=>d.cat.toLowerCase().includes(F.q));
   const max=data.length?data[0].m:1;
+  if(data.length===0){
+    document.getElementById('rankList').innerHTML='<li style="padding:18px;color:var(--text-light);font-size:12px">No se encontraron categorías con los filtros actuales.</li>';
+    return;
+  }
   document.getElementById('rankList').innerHTML=data.map((d,i)=>`
     <li class="ri">
       <div class="rn ${i<3?'top':''}">${i+1}</div>
@@ -988,35 +1056,88 @@ function renderRanking(){
     </li>`).join('');
 }
 
+// ─── RESPUESTAS REALES POR PROGRAMA ───
+const PROG_RESPUESTAS = {
+  'P01':['Power BI','Análisis de datos','Análisis datos Power BI','Temas de IA','Análisis financiero','Base de datos','Excel avanzado','Macros bancarios','Inteligencia artificial','Habilidades blandas','Power BI + IA','Power query y Power BI','Tablas dinámicas','Mercadeo','Power query','Power BI y SAP/SIESA','IA y nuevas metodologías','Actualización tributaria','Análisis de datos y diseño asistido','Contabilidad','Dashboard','Programación en Visual Basic','Sobre la IA y Marketing','Curso de inteligencia artificial'],
+  'P02':['CapCut Pro','Segunda parte de CapCut','CapCut nivel 2','Pauta digital','Edición en CapCut avanzado','Cursos de Adobe por programa','Capcut avanzado','Edición CapCut'],
+  'P03':['Gestión de Proyectos','Excel avanzado','Inteligencia Artificial','Diplomado en herramientas Microsoft','Gestión de Proyectos','Excel','Inteligencia Artificial','Herramientas Microsoft'],
+  'P04':['Liderazgo avanzado','Organización y manejo del tiempo','Inteligencia Artificial','Emprendimiento','Liderazgo','Manejo del tiempo','IA','Sobre emprendimiento'],
+  'P05':['Analítica de datos y finanzas','SQL','Power BI','Power Automate','Power query y Power Pivot','Curso Power BI para análisis de datos','Macros en Excel'],
+  'P06':['Diligenciamiento de formatos','Lean Six Sigma','Profundizar en N8N','Automatización + IA','Herramientas N8N avanzado','N8N avanzado','Automatización e inteligencia artificial'],
+  'P07':['Seguros','Reforma pensional y contratación estatal','Temas tributarios y legales','Procesos disciplinarios','Especialización derecho laboral para no abogados','Derecho Laboral'],
+  'P08':['Content digital','Marketing digital + pauta Meta + TikTok + YouTube','E-commerce','Logística internacional y marketing digital','Pauta en Google','Pauta en TikTok'],
+  'P09':['Continuación del seminario de oratoria','Persuasión y vocabulario','Persuasión','Expresión corporal y comunicación','Segunda parte del seminario','Liderazgo + comunicación efectiva + técnicas de persuasión'],
+  'P10':['Enfoque en un tema específico (no mezclar)','Menos temas y más profundidad','Macros + IA + Power BI','Excel avanzado','Mayor enfoque en temas contables','Más tiempo en Power BI y N8N'],
+  'P11':['N8N + Presentación y uso de Avatares','Más sobre campañas','Temas más gerenciales','N8N y Avatares','Pauta avanzada','Aplicabilidad de la IA'],
+  'P12':['Segunda etapa Power BI','Avanzado de Power BI','DAX y Power Apps','KPIs','Ampliación Power BI'],
+  'P13':['Psicología de colores','Diseño y arquitectura','Decoración avanzada','Paisajismo','Materiales en construcción'],
+  'P14':['Neuromarketing','IA y Finanzas','Ejercicios prácticos comerciales','Continuar Escuela Comercial','Oratoria y coaching para formadores'],
+  'P15':['KPIs de marcas y centros comerciales','IA en retail','Marketing y ubicación en góndolas','Retail avanzado','Economía y financiero en retail'],
+  'P16':['Edición avanzada de video','DaVinci Resolve y transiciones','Premiere Pro avanzado con más prácticas','Edición en varias pantallas','DaVinci + colorización por nodos + narrativas audiovisuales'],
+  'P17':['Actualización IA + Power BI','N8N y Plataformas Google','Actualización IA + Power BI','Plataformas Google + N8N + proyectos'],
+  'P18':['ML, ETL, AI','Aplicaciones de ciencia de datos','Finanzas y negocios internacionales con IA','AWS, Cloud, APIs, Oracle, SQL'],
+  'P19':['Taller de oratoria (prácticas e improvisación)','Seguir la ruta de hablar en público'],
+  'P20':['Coach y coaching avanzado','Liderazgo en tiempos de IA'],
+};
+
 // ─── RENDER WORD CLOUD ───
 function renderWC(){
-  const words=[
-    {t:'Power BI',s:28,c:'#DC142D'},{t:'Inteligencia Artificial',s:26,c:'#961423'},
-    {t:'IA',s:24,c:'#DC142D'},{t:'N8N',s:20,c:'#22a06b'},
-    {t:'Excel',s:20,c:'#961423'},{t:'Automatización',s:18,c:'#F03C46'},
-    {t:'CapCut Avanzado',s:18,c:'#0969da'},{t:'Marketing Digital',s:16,c:'#8b5cf6'},
-    {t:'Liderazgo',s:16,c:'#e07b00'},{t:'Análisis de Datos',s:15,c:'#DC142D'},
-    {t:'DAX',s:14,c:'#961423'},{t:'Power Query',s:14,c:'#22a06b'},
-    {t:'Pauta TikTok',s:13,c:'#8b5cf6'},{t:'Google Ads',s:13,c:'#0969da'},
-    {t:'DaVinci Resolve',s:13,c:'#0969da'},{t:'Coaching',s:12,c:'#e07b00'},
-    {t:'Machine Learning',s:12,c:'#DC142D'},{t:'Finanzas',s:12,c:'#e8a000'},
-    {t:'Macros',s:11,c:'#F03C46'},{t:'SQL',s:11,c:'#3b82f6'},
-    {t:'E-commerce',s:11,c:'#8b5cf6'},{t:'Persuasión',s:11,c:'#e07b00'},
-    {t:'Emprendimiento',s:10,c:'#a855f7'},{t:'Tributario',s:10,c:'#64748b'},
-    {t:'Dashboard',s:10,c:'#961423'},{t:'Oratoria',s:10,c:'#e07b00'},
-    {t:'Adobe',s:10,c:'#0969da'},{t:'Lean Six Sigma',s:10,c:'#22a06b'},
-    {t:'Cloud/AWS',s:10,c:'#3b82f6'},{t:'Retail KPIs',s:10,c:'#f59e0b'},
-  ];
-  document.getElementById('wcloud').innerHTML=words.map(w=>`
-    <span class="ww" style="font-size:${w.s}px;color:${w.c}">${w.t}</span>`).join('');
+  const wc = document.getElementById('wcloud');
+  const title = document.getElementById('wcTitle');
+  const sub = document.getElementById('wcSub');
+
+  if(F.prog && PROG_RESPUESTAS[F.prog]){
+    const resps = PROG_RESPUESTAS[F.prog];
+    const prog = PROGRAMAS.find(p=>p.id===F.prog);
+    if(title) title.textContent = 'Respuestas reales de los estudiantes';
+    if(sub) sub.textContent = (prog ? prog.nombre.substring(0,60)+'…' : '') + ' · '+resps.length+' respuestas';
+
+    // Assign sizes based on position (first = more common/important)
+    const colors = ['#DC142D','#961423','#F03C46','#e07b00','#0969da','#22a06b','#8b5cf6','#e8a000','#06b6d4','#a855f7','#64748b','#f59e0b'];
+    const maxSize = 22, minSize = 12;
+    wc.innerHTML = resps.map((r,i)=>{
+      const size = Math.round(maxSize - (i / resps.length) * (maxSize - minSize));
+      const color = colors[i % colors.length];
+      return `<span class="ww resp-tag" style="font-size:${size}px;color:${color};background:rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.06);border-radius:20px;padding:4px 12px;cursor:default">${r}</span>`;
+    }).join('');
+  } else {
+    if(title) title.textContent = 'Nube de palabras clave reales';
+    if(sub) sub.textContent = 'Términos exactos mencionados por los estudiantes';
+    const words=[
+      {t:'Power BI',s:28,c:'#DC142D'},{t:'Inteligencia Artificial',s:26,c:'#961423'},
+      {t:'IA',s:24,c:'#DC142D'},{t:'N8N',s:20,c:'#22a06b'},
+      {t:'Excel',s:20,c:'#961423'},{t:'Automatización',s:18,c:'#F03C46'},
+      {t:'CapCut Avanzado',s:18,c:'#0969da'},{t:'Marketing Digital',s:16,c:'#8b5cf6'},
+      {t:'Liderazgo',s:16,c:'#e07b00'},{t:'Análisis de Datos',s:15,c:'#DC142D'},
+      {t:'DAX',s:14,c:'#961423'},{t:'Power Query',s:14,c:'#22a06b'},
+      {t:'Pauta TikTok',s:13,c:'#8b5cf6'},{t:'Google Ads',s:13,c:'#0969da'},
+      {t:'DaVinci Resolve',s:13,c:'#0969da'},{t:'Coaching',s:12,c:'#e07b00'},
+      {t:'Machine Learning',s:12,c:'#DC142D'},{t:'Finanzas',s:12,c:'#e8a000'},
+      {t:'Macros',s:11,c:'#F03C46'},{t:'SQL',s:11,c:'#3b82f6'},
+      {t:'E-commerce',s:11,c:'#8b5cf6'},{t:'Persuasión',s:11,c:'#e07b00'},
+      {t:'Emprendimiento',s:10,c:'#a855f7'},{t:'Tributario',s:10,c:'#64748b'},
+      {t:'Dashboard',s:10,c:'#961423'},{t:'Oratoria',s:10,c:'#e07b00'},
+      {t:'Adobe',s:10,c:'#0969da'},{t:'Lean Six Sigma',s:10,c:'#22a06b'},
+      {t:'Cloud/AWS',s:10,c:'#3b82f6'},{t:'Retail KPIs',s:10,c:'#f59e0b'},
+    ];
+    wc.innerHTML=words.map(w=>`<span class="ww" style="font-size:${w.s}px;color:${w.c}">${w.t}</span>`).join('');
+  }
 }
 
 // ─── RENDER OPPS ───
 function renderOpps(){
   let data=[...OPPS];
+  if(F.prog){
+    const allowedNums=PROG_OPPS[F.prog]||[];
+    data=data.filter(d=>allowedNums.includes(d.num));
+  }
   if(F.prior) data=data.filter(d=>d.prior===F.prior);
   if(F.cat) data=data.filter(d=>d.area.toLowerCase().includes(F.cat.toLowerCase()));
   if(F.q) data=data.filter(d=>d.titulo.toLowerCase().includes(F.q)||d.area.toLowerCase().includes(F.q));
+  if(data.length===0){
+    document.getElementById('oppGrid').innerHTML='<div style="padding:18px;color:var(--text-light);font-size:12px;grid-column:1/-1">No se encontraron oportunidades con los filtros actuales.</div>';
+    return;
+  }
   document.getElementById('oppGrid').innerHTML=data.map(o=>`
     <div class="ocard ${o.prior==='Media'?'med':o.prior==='Baja'?'low':''}">
       <div class="otit">${o.titulo}</div>
@@ -1048,7 +1169,7 @@ function renderSpecs(){
         ${e.materias.map(m=>`
           <div class="sub ${m.p?'pot':''}">
             <div class="sdot"></div>
-            <div class="sn">${m.s?'<span style="font-size:9px;background:rgba(150,20,35,0.1);color:var(--dark-red);padding:1px 5px;border-radius:4px;margin-right:4px">${m.s}</span>':''}${m.n}</div>
+            <div class="sn">${m.s ? '<span style="font-size:9px;background:rgba(150,20,35,0.1);color:var(--dark-red);padding:1px 5px;border-radius:4px;margin-right:4px">'+m.s+'</span>' : ''}${m.n}</div>
             ${m.p?'<span class="sbadge">EduVida ✓</span>':''}
           </div>`).join('')}
       </div>
@@ -1289,7 +1410,7 @@ function buildCharts(sec){
 document.addEventListener('DOMContentLoaded',()=>{
   populateFilters();
   buildCharts('resumen'); chartsBuilt['resumen']=true;
-  renderRanking(); renderWC(); renderOpps();
+  renderRanking(); renderWC(); renderOpps(); updateProgBanner();
   renderSpecs(); renderRoutes(); renderRecs(); renderTables();
 });
 
