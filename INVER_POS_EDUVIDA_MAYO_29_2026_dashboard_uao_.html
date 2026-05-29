@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dashboard UAO – Análisis Financiero y Comercial 2025–2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#ECE5DC;--card:#fff;--r1:#961423;--r2:#F03C46;--rp:#FAEAEC;--rd:#DC142D;
+--g1:#1a7a3a;--gp:#e6f7ee;--gl:#2ECC71;--b1:#2563EB;--bp:#EFF6FF;--a1:#D97706;--ap:#FEF3C7;
+--t1:#1A1A1A;--t2:#4A4A4A;--t3:#888;--br:rgba(150,20,35,.09);
+--sh:0 2px 10px rgba(0,0,0,.05);--shx:0 4px 22px rgba(0,0,0,.10);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh}
+.hdr{background:#111;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:300;box-shadow:0 2px 16px rgba(0,0,0,.45)}
+.hdr-logo{height:38px;object-fit:contain}
+.hdr-t{font-size:12px;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.08em;text-transform:uppercase}
+.hdr-b{background:var(--rd);color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:16px;letter-spacing:.07em}
+.tabs{background:#111;padding:0 28px;border-bottom:2px solid #1e1e1e;display:flex}
+.tb{background:transparent;border:none;color:rgba(255,255,255,.33);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:11px 20px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .18s}
+.tb:hover{color:rgba(255,255,255,.58)}.tb.on{color:var(--r2);border-bottom-color:var(--r2)}
+.main{padding:22px 28px 52px;max-width:1700px;margin:0 auto}
+.shdiv{display:flex;align-items:center;gap:11px;margin-bottom:16px}
+.shbar{width:4px;height:32px;background:var(--rd);border-radius:3px}
+.sht{font-size:18px;font-weight:800;line-height:1.2}.shs{font-size:11px;color:var(--t3);margin-top:2px}
+.al{border-radius:9px;padding:11px 14px;display:flex;align-items:flex-start;gap:9px;margin-bottom:16px;font-size:11.5px;font-weight:500;line-height:1.5}
+.al.red{background:linear-gradient(120deg,#7a1020,var(--rd));color:#fff}
+.al.grn{background:linear-gradient(120deg,#1a4d28,var(--g1));color:#fff}
+.al-i{font-size:15px;flex-shrink:0;margin-top:1px}
+.sumbar{background:#111;border-radius:10px;padding:13px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:20px;align-items:center}
+.sb-t{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.42);margin-bottom:3px}
+.sb-v{font-size:13px;font-weight:800;color:#fff;letter-spacing:-.01em}
+.sb-s{font-size:9.5px;color:rgba(255,255,255,.38);margin-top:1px}
+.sb-sep{width:1px;height:36px;background:rgba(255,255,255,.1)}
+.filt{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--card);padding:10px 14px;border-radius:9px;box-shadow:var(--sh);border:1px solid var(--br);margin-bottom:16px}
+.fl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);white-space:nowrap}
+.fs{appearance:none;background:var(--bg);border:1.5px solid var(--br);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;color:var(--t1);padding:5px 22px 5px 9px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6'%3E%3Cpath d='M1 1l3.5 3.5L8 1' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center}
+.fs:focus{outline:none;border-color:var(--rd)}
+.fsep{width:1px;height:19px;background:var(--br)}
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin-bottom:12px}
+.kpi{background:var(--card);border-radius:10px;padding:14px 13px;box-shadow:var(--sh);border:1px solid var(--br);position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--r1),var(--r2))}
+.kpi.g::before{background:linear-gradient(90deg,#1a5c2a,var(--g1))}.kpi.b::before{background:linear-gradient(90deg,#1e40af,var(--b1))}.kpi.a::before{background:linear-gradient(90deg,#92400e,var(--a1))}
+.kl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);margin-bottom:5px}
+.kv{font-size:16px;font-weight:800;line-height:1;letter-spacing:-.02em}.ks{font-size:10px;color:var(--t3);margin-top:4px}
+.dl{display:inline-flex;align-items:center;gap:2px;font-size:10px;font-weight:700;margin-top:5px;padding:2px 6px;border-radius:11px}
+.dl.up{background:var(--gp);color:var(--g1)}.dl.dn{background:var(--rp);color:var(--r1)}
+/* META */
+.metabox{background:var(--card);border-radius:10px;padding:16px 18px;box-shadow:var(--sh);border:1px solid var(--br);margin-bottom:14px}
+.meta-title{font-size:13px;font-weight:700;margin-bottom:2px}
+.meta-sub{font-size:10px;color:var(--t3);margin-bottom:12px}
+.metar{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:14px}
+.ms{background:var(--bg);border-radius:8px;padding:10px 12px}
+.msl{font-size:9px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--t3);margin-bottom:3px}
+.msv{font-size:13px;font-weight:800;letter-spacing:-.02em}
+.msv.r{color:var(--rd)}.msv.g{color:var(--g1)}.msv.b{color:var(--b1)}.msv.a{color:var(--a1)}
+.mtrack{}
+.mtl{display:flex;justify-content:space-between;font-size:10.5px;font-weight:600;margin-bottom:5px}
+.mbg{background:#e5e7eb;border-radius:7px;height:18px;overflow:hidden}
+.mfill{height:100%;border-radius:7px;background:linear-gradient(90deg,var(--r1),var(--r2));position:relative}
+.mbadge{position:absolute;right:5px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:800;color:#fff}
+.mleg{display:flex;gap:12px;margin-top:7px;flex-wrap:wrap}
+.mli{display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--t2)}
+.mld{width:11px;height:7px;border-radius:2px}
+/* GRID */
+.g1{display:grid;gap:13px;margin-bottom:13px;grid-template-columns:1fr}
+.g2{display:grid;gap:13px;margin-bottom:13px;grid-template-columns:1fr 1fr}
+.g3{display:grid;gap:13px;margin-bottom:13px;grid-template-columns:2fr 1fr}
+.g3r{display:grid;gap:13px;margin-bottom:13px;grid-template-columns:1fr 2fr}
+.card{background:var(--card);border-radius:10px;padding:17px;box-shadow:var(--sh);border:1px solid var(--br)}
+.card.cg{border-left:3px solid var(--g1)}.card.cb{border-left:3px solid var(--b1)}.card.ca{border-left:3px solid var(--a1)}
+.ch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:11px;gap:9px}
+.ct{font-size:12px;font-weight:700;line-height:1.3}.cs{font-size:10px;color:var(--t3);margin-top:2px}
+.leg{display:flex;gap:8px;flex-wrap:wrap}.li{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--t2)}.ld{width:8px;height:8px;border-radius:2px}
+.scr{display:flex;border-radius:6px;overflow:hidden;border:1px solid var(--br);margin-bottom:11px}
+.sb{flex:1;background:var(--bg);border:none;padding:7px 9px;font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--t2)}
+.sb.on{background:var(--rd);color:#fff}
+.tc{background:var(--card);border-radius:10px;padding:16px;box-shadow:var(--sh);border:1px solid var(--br);overflow-x:auto;margin-bottom:13px}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{background:#111;color:rgba(255,255,255,.8);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:8px 10px;text-align:right;white-space:nowrap}
+th:first-child{text-align:left;border-radius:4px 0 0 4px}th:last-child{border-radius:0 4px 4px 0}
+td{padding:7px 10px;border-bottom:1px solid #f0ebe5;text-align:right}
+td:first-child{text-align:left;font-weight:500}
+tr:nth-child(even) td{background:#fafaf8}
+.vu{color:var(--g1);font-weight:700}.vd{color:var(--r1);font-weight:700}
+tfoot td{font-weight:700;background:var(--rp)!important;color:var(--r1);border-top:2px solid var(--rd)}
+tfoot.tg td{background:var(--gp)!important;color:var(--g1);border-top-color:var(--g1)}
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:11px;margin-top:4px}
+.ins{background:var(--card);border-radius:9px;padding:13px 15px;border-left:3px solid var(--rd);box-shadow:var(--sh)}
+.ins.g{border-left-color:var(--g1)}.ins.b{border-left-color:var(--b1)}.ins.a{border-left-color:var(--a1)}
+.it{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--rd);margin-bottom:5px}
+.ins.g .it{color:var(--g1)}.ins.b .it{color:var(--b1)}.ins.a .it{color:var(--a1)}
+.ix{font-size:11.5px;color:var(--t2);line-height:1.6}
+.dlbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin:16px 0 11px;padding-bottom:6px;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:7px}
+.dlbl::before{content:'';width:3px;height:11px;background:var(--rd);border-radius:2px;flex-shrink:0}
+.dlbl.g::before{background:var(--g1)}.dlbl.b::before{background:var(--b1)}
+.chip{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:9px;text-transform:uppercase;letter-spacing:.05em}
+.chip.r{background:var(--r1);color:#fff}.chip.b{background:var(--b1);color:#fff}
+.tcw{display:none}.tcw.on{display:block}
+@media(max-width:860px){.main{padding:12px 11px 36px}.hdr,.tabs{padding-left:11px;padding-right:11px}.g2,.g3,.g3r{grid-template-columns:1fr}.kg{grid-template-columns:repeat(2,1fr)}.sumbar{gap:12px}.metar{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <img class="hdr-logo" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAIAAgADASIAAhEBAxEB/8QAHAABAQACAwEBAAAAAAAAAAAAAAcFBgEDBAII/8QARBABAAEDAgEGBw8DAwQDAAAAAAECAwQFEQYHEiExQbETNVFhcXOBFBUiIzI0NkJVcpGTocHRssLhFyRiM1KS8CVDY//EABwBAQACAwEBAQAAAAAAAAAAAAAFBgQHCAMCAf/EAD8RAQABAwIBCAUKBgEFAQAAAAABAgMEBREhBgcSMUFRcYFhkaGxwRMiMjM0NUJSctEVFyNTovAUJGKS0uHx/9oADAMBAAIRAxEAPwD8ZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsOn6Ho9eBj11abi1VTapmZm3HTO0MHNzqcSImqN91o5M8lr3KGu5Tarinobde/bv3eCPC0e8Oi/ZeJ+VB7w6L9l4n5UMD+PWvySt/wDKfO/v0+qUXG/8pOm4GHpNi5iYdixXN7aZooiJmNpaAlMTJjJt/KRGyha/olzRc2cS5VFUxETvHpAGShQFa0DRdJu6Lh3LunY1ddVmmaqptxvM7MLNzacSmKqo33WbkzyZvcoLtdq1XFM0xvx379uxJRaPeHRfsvE/Kg94dF+y8T8qEf8Ax61+SVx/lPnf36fVKLikcoGlabicPV3sbCsWbkXKY51FERPWm6Tw8qnKt9OmNlG5RaDd0LLjFu1xVO0TvHp37/AAZSBAbLw/wfqOpRTevx7kx56edXHwqo80PK9ft2aelcnaGfp2l5epXvkcS3NdXo7PGeqI8WtOyzYv3p2s2blyfJRTMqtpnCGi4URNWP7prj617p/TqZ2zat2aIotW6LdEdVNMbQhruu244W6d/Y2Vp/NTl3IirLvRR6IjpT6+Ee9GKNF1euN6dNyvyph1XtM1GzHOu4GTRHlm1Oy3jHjXq9+NEJirmmxej83Iq38IQaYmJ2mNpcLXqWj6ZqMT7rw7Vyqfr83ar8etp3EHAlVFFV/SLk17dM2a56fZP8s/H1mxdnav5s+z1qnrHNrqeDTNzHmLtMd3Cr/x/aZloo2XgTBt3eJpxM/Fpq5tuvnW7tHVMbdkqH7w6L9l4n5UPvL1SjGr6Exv2sXk/wAg8rW8Wcmi5FO0zTtMTvvG37ouLR7w6L9l4n5UE6Fo20//ABeJ+VDG/j1r8kpz+U+d/fp9UouOzJiKcm7TEbRFcxEe11pyJ3jdqqqno1TAA/XyD3aRpOfqt7wWFYqubfKq6qafTLeNI4CxLVFNepX6r9ztoo+DTHt65/Rh5OfYx+Fc8e7tWPReSmp6z87Gt/N/NPCn19vlunURMztD1WdN1C9G9rBya48sWp2WLA0rTsGI9yYVi1MfWiiOd+PW9qJua9x+ZR65bCxOaaejvk5PHupp+Mz8EVnRNXiN503K29XLzX8TKsf9fGvWvv0THeubiYiYmJjeJ64fFOvV9tEetlXeabGmP6eTVE+mmJ+MIMLHqHDejZ0TN3BtU1z9e3HNn9Gp65wHetUzd0u94amOnwVzoq9k9Us+xrGPdnar5s+n91Q1Xm31bBpm5aiLtMfl6/VPw3aQOzJsXsa9VZv26rdymdqqao2mHWlYmJjeFBqpqomaao2mAB+vkAAAAAAAAAAAAAAAAAAAAXLTPF2N6mj+mENXLTPF2N6mj+mFf1/6NHn8G3+aX6/K8KffL0AK03Y0/lV8S43r/wC2U1UrlV8S43r/AO2U1XDRvsseMucecn7+r/TT7gBKqELVw34hwfUU9yKrVw34hwfUU9yB176ujxbY5p/tuR+mPeyACsN5tZ5SvoxX62jvStVOUr6MV+to70rW3RPs3nPwc9c6H31H6KffUPq1RXduU27dM1V1TtTEdcy+VF5O+Hox7FOrZlv465HxNMx8iny+mWdmZVOLbmuryVfk7oN/XM2nGtcI66p7o7/Hujvd3CHCFrCoozNSopu5XXTbnppt/wAy28FLyMi5kV9OuXTOkaPiaRjxj4tO0ds9sz3zPbP+wAPBKAAAAPJVp2LVqdGo+DinJoomjnR9aJ8vlesH1NU1bbz1PO3Zt2pqmimI3nedu2e8cT1S5cT1S+XpKF5fzq79+rvdTty/nV379Xe6mxKeqHHF36yrxkbPwfwre1aqnLy+dawono7Krno83nefgvQatZ1DnXaZjEszE3av+6eymFYtW6LVqm1bpiiiiNqaYjoiELqmpTZ/pW/pdvo/+tl8hORVOp/9dmx/Sifmx+aY7/8Atj2y68HEx8LGpx8W1TatU9VNMO8FWmZmd5b5t26LdMUURtEdUQAPx9gAAAMVxBoWFrVjmZFHNu0xtRdp+VT/ADHmSvXtIy9HzJx8qjonporj5NceWFpY7X9Jx9Y0+vFvxtPXbr7aKvKlNP1GrGqimrjT7vBROWHIuxrNqb9iIpvx1T+b0T8J7PBFh6NRw7+Bm3cTJomm7bq2mP39DzrhExVG8Ocrluu1XNFcbTE7THdMAD9fAAAAAAAAAAAAAAAAAAAuWmeLsb1NH9MIauWmeLsb1NH9MK/r/wBGjz+Db/NL9fleFPvl6AFabsafyq+Jcb1/9spqpXKr4lxvX/2ymq4aN9ljxlzjzk/f1f6afcAJVQhauG/EOD6inuRVauG/EOD6inuQOvfV0eLbHNP9tyP0x72QAVhvNrPKV9GK/W0d6VqpylfRiv1tHela26J9m85+DnrnQ++o/RT76mY4P0r321u1Yqj4mj4y792Oz29Sw00xTTFNMRERG0RDT+S3B8DpN7Oqj4WRXtTP/Gno79/wbih9XyJu5E09lPD92yObvR6cDSab8x8+786fD8Merj5gCKX18X7tuxZrvXq6aLdEb1VVTtEQ0bX+PObVVY0i1E7dE3rkd0fyxXHvEFWpZtWFjXJjEsztO09FyqO30eRqyzafpNEUxcvRvM9n7tIcr+cLIqvVYmm1dGmnhNcdcz27d0enrnsZTK4h1nIqmbmo3+nspq5sfo6rWs6tbnejUcmJ9ZLwCaixaiNopj1NZVapm119Oq9VM9/Sn921aTxxquLciMuKMu12xVG1XsmG/wCh6xg6xj+GxLm8x8uiroqp9MIs9elahk6Zm0ZeLXNNdPXHZVHknzI7M0m1ep3tx0avYufJznBz9Ouxby6puWu3fjVHpieufCfYt48WiajZ1XTbWbY6Irj4VM9dNXbD2qlXTNFU01dcOhLF+3kWqbtqd6ao3ie+JHE9UuXE9Uvl6yheX86u/fq73zZt13r1Fq3TNVddUU0xHbMvrL+dXfv1d7YeTjBjL4hpvV070Y1E3Pb1R/75l+vXYs2ZuT2Q5J07T6tR1GjEp/HVt4RvxnyjiofDum0aTpNnDoiOdEb3JjtqnrlkQUSuua6pqq65dX42NbxbNNm1G1NMRER6IAaTyi8Q1Y0e9OHcmm7VG96umemmJ+r6ZeuNj15FyLdLA1zWcfRsOrKv9UdUdsz2RH+9XF6uI+NMTAqrx8CinKyKZ2mrf4FM/u0zN4q1zKqmas2u3E/VtxzYYQW7H02xYjhTvPfLnbWOWmrapcmars0U9lNM7R7OM+bI065rFM7xqWVv6yWV0zjXWMSuPD10ZdvtpuRtP4w1ke9eLZuRtVTHqROLr2p4lcV2b9UT4z7p4T5rHw9xBga1bn3PVNF6mN67Vfyo/mGXQvCyb+Hk0ZONcqt3aJ3pqiVf4W1i3rOl0ZMbU3afg3aI7Kv4lWdS03/jfPo+j7m8uRPLX+NxONlbReiN+HVVHfHpjtjzj0ZUBENhtL5TtJi9h0arZo+Ms/Bu7dtM9U+ye9OV0zbFGViXca5G9FyiaZ9qIZdmrHy72PXG1VuuaJ9MTstWiZE12ptz+H3NCc5+j04udRm242i7HH9UdvnG3ql1AJtq8AAAAAAAAAAAAAAAAAAXLTPF2N6mj+mENXLTPF2N6mj+mFf1/wCjR5/Bt/ml+vyvCn3y9ACtN2NP5VfEuN6/+2U1UrlV8S43r/7ZTVcNG+yx4y5x5yfv6v8ATT7gBKqELVw34hwfUU9yKrVw34hwfUU9yB176ujxbY5p/tuR+mPeyACsN5tZ5SvoxX62jvStVOUr6MV+to70sojeuInyrbon2bzn4Oe+c+N9ap/RT75WjhmxGNoGDZiNubZpmfTPTPeyLpwYiMKxEdUW6e53Krdq6VczPbLfWDaizjW7dPVTTEeqBh+Mc+dO4eyr9M7XKqfB0emro7t59jMNO5Va6o0bGojqqv7z7Il74NuLmRRTPVui+VGZXhaRkXqOuKZ28Z4b+W6bAL25SAAAAbvyV580ZeRp1U/Brp8JR5pjon9J/RQ0k5P66qOKcXaflc6J/wDGVbVDWrcUZO8dsbuiebPMryNF6Ff4Kppjw4T8RxPVLlxPVKJbClC8v51d+/V3qDyU40Uabl5W3wrl2KN/NTH+ZT7L+dXfv1d6ncmkbcM0z5b1c9y3axVMYm3fs535ubNNzlB0p/DFU/D4tnAVF0Q68m7TYx7l+vopt0TVV6IjdENQybmbnXsq7O9d2uapV3jCuaOGM+qmdp8DMfj0I2sug246Ndfb1NJc7GZXN/HxeyImrzmdvZtPrAFgahAAG1cmefONrvuSqr4vJomNv+UdMfu1VkeGa5t8QYFdPXF+jvY+Xbi5YrpnuTPJ7MrwtUx71HZVHqmdpjziVpAUJ1kJJygY0Y/FOTzY2puxTcj2x0/rEq2mXKlTEa/aqjrmxG/4ymNEqmMnbviWuedCzTc0aK566a4n1xMfFqQC2uegAAAAAAAAAAAAAAAAABctM8XY3qaP6YQ1cdM8W43qaP6YV/X/AKNHn8G3+aX6/K8KffL0gK03Y0/lV8S43r/7ZTVTuVC1Nzh+i5G/xd6Jn2xMJiuGjTvix4y5z5y6Jp12qZ7aafdsAJVQBauG/EOD6inuRVbtFtVWNIxLVXXTZpifwQOvT/Toj0ttc01Mzl5FXZ0Y9/8A8ewBWG8Ws8pX0Yr9bR3pZTO1USqfKV9GK/W0d6Vrbon2bzn4OeudD76j9FPvqXLTa4uadjVx9a1TP6PQwvBOVGXwzh1771UUeDq9NM7fwzSr36JouVUz2TLe+mZFOThWb1PVVTTPriBq3KbjVXuHfDUxv4C7TVPmiej94bS8+o4tvNwb+Jdjei7RNM+19Y135G9TX3S8dbwP4jp97FjrrpmI8ez2oaPRqOJewM67iX6ZpuWqppnz+d519pqiqN4cl3bddqubdcbTE7THdMAD9fAADZuTbHm9xLRc2nm2bdVcz5OyO9VGqcm2lVYWk1Zl6jm3craqN+uKI6vx6/wbWpmq34u5M7dUcHS3IDTK9P0WiLkbVVzNU+fV7IgcT1S5cT1SjV1lC8v51d+/V3qZyY1xVw3NMT00Xqon9JTPL+dXfv1d7eOSfLj/AHuDM9PwbtMfpP7Lhq1E1YkzHZtLnPm+yabHKGmmr8cVU/H4N9AU90Yx3E1irJ0DOs0/Kqs1bemI3/ZFl5mImNp6kc4r0yvStbv480zFuqefany0z/7ssWhXojpWp8Wm+dfTa6osZ1McI3pn0dsfFiQFjaYAAGW4Px6sniXBt0xvtdiufRT0z3MS3zkt0urnXtVu0TFO3g7W8dfln9vxYefeizj1VT3betYuSem16jq9izTHCKoqnwp4z+3jLfgFGdUiX8p9zncR00b/ACLFP6zKoI5xhlxmcSZt6md6Yucyn0U9H7JnQ6JnImruhrTnSyabek0Wu2uuPVETM/BiAFsc/gAAAAAAAAAAAAAAAAAC1cN3YvaBgXI7bFEfhEQiqpcmubGToHueZ+Hj1zTMeaemP3QuuW5qsRVHZLZ3NZmU2tTuWKp+nTw8Ynf3btoAVRv15NYwbepabfwrk7Rdp2ifJPZKM6lhZGn5tzEyaJouUTt5p88eZcXg1jR9P1az4PNsRXMfJrjoqp9EpTTtQ/4szTVG9MqLy05HRr9FN2zVFN2nhG/VMd093olFBRL3J9iTVvaz79NPkqpiXpwOA9LsXIryb17J2+rM82mfw6f1Ts6zixG+8+pqq3zb67Xc6E0REd81Rt7N59jVOB9CuarqVF67bn3HYqiquZjoqmOqn+VYdePYs49mmzYt027dMbRTTG0Q7FbzsyrLudKeER1Q3TyV5NWtAxPkaZ6VdXGqe+e6PRHZ5z2gDCWZrPKV9GK/W0d6VqpylfRiv1tHela26J9m85+DnrnQ++o/RT76m98lWoRTXk6bXV8r42iP0n9m/ofpWbd0/ULOZZnau1VE+mO2PbCz6ZmWc/Bs5liqKrd2nePN5YRmtY027vysdVXvXnmz1unKwJwa5+fa6vTTM/CeHqekBCtmNb4y4ao1m1F/HmLeZbjaJnqrjySl+bi5GHkVY+VZrtXKZ2mmqNl0eTUdOwdQt+Dzca3ep7OdHTHonrhL4Oq1Y8dCuN6fbDXnKrkDY1i5OTjVfJ3Z6/y1ePdPpj1IgKXlcA6XcrmqxkZNmJ+rvFUR+MOqjk+wIq3rz8mqPJFNMJmNZxZjfefU1nVzba9TV0Yopn09KNvbx9idREzO0dMtx4N4RvZNy3n6lbm3jxPOotVR8Kv0x2Q3DSeGtH02YqsYtNd2P/suTzqv4j2MwjszWprpmizG3pXXk5zZ0412nI1KqKpjjFMdW/pmevw228YcREREREbRHU5BANtDieqXLieqQlC8v51d+/V3snwfqMaZr+Pfrq5tqqfB3J/4z2sZl/Orv36u91NgV24uW5oq6phyFj5dzCzKci19KirePKV6ga1wBrVOpaVGNdr/AN1jRFNUTPTVT2S2VRL9mqzcm3V1w6u0vUrOp4lvKsz82qN/DvjxieAw/FOh2dbwPBVTFF+jptXNuqfJ6JZgfNu5Vaqiumdph65uFYzrFWPfp6VFUbTCIapp+XpuXVjZdmq3XTPRO3RVHlie2HkXLPwsTOszZzMe3eo8lUdX8NXzuAdNu1zXjZF/H3+r0VRH49KzY+t2qo2uxtPsaR1jmvzrNyasCqK6OyJnaqPhPjvHgmo3+nk8o53wtSq281vp72W0vgvR8OuLl2ivLrjpjws9EeyP3e9zWcamN4nfyRWJzba5frim5RFEd81R8N5aTwrw1lazfpuV01WcOmfh3Jj5Xmp8sqtiY9rFxrePYoii3bp5tNMdkPuiimiiKKKYppiNoiI2iH0rubnV5dW88IjqhuTkxyVxdAszFuelcq+lVPb6I7o/2QBgrSx/EWfRpujZOXVMRNNG1HnqnoiEWrqmqqaqp3mZ3lt/KTrVOZm06bj186zjz8ZMdU1+T2NPW/SMWbNnpVddXu7HOnOLrlOpal8hanei1w8avxT7o8gBLNfgAAAAAAAAAAAAAAAAADOcFav70azTXcqmMe7HMu+aOyfYwY87tqm7RNFXVLM0/OvYGTRk2Z2qoneP97p6pXmmqmqmKqZiqmY3iY7XKdcD8V04lNGm6lXPgN9rV2fqeafModuui5RFduumumqN4mJ3iVIy8S5jV9Grq7J73UPJ/lDi65ixesT878VPbTP7d09r6AYqeAAB15F+zj2ar1+7Rbt0xvVVVO0Q82j6jZ1TCjLsRMWqq6qad+2Inbd9xRVNPS24PCcm1TeixNUdOYmYjt2jrnw4vaA+Hu1nlK+jFfraO9K1U5SvoxX62jvStbdE+zec/Bz1zoffUfop99Q2bgfiL3oyZxsqZnDuz0//AJz5fR5WsiTv2aL9E0V9UqTpep5Gl5VOVjztVT7e+J9ErxbrouW6bluqK6Ko3pqid4mH0lHCnFOTo8xj34qv4cz8nfpo+7/CmaZqWFqWPF7DyKLtMx0xE9NPmmOxTczAuYtXHjHe6S5N8rcLXbUdCejcjrpnr8u+P9l6wGCtIAAD4u3Ldq3Vcu100UUxvNVU7RD9635MxTG89T7Gt6dxPa1PiWnT8GOdjU26pquTHy5jbq8zZHpds12ZiK42meLB0/U8bUaKrmNV0qaZmneOqZjbfbvjj1jieqXLieqXkz5QvL+dXfv1d7qduX86u/fq73U2JT1Q44u/WVeMvXpGoZGmZ9vMxqtq6J6YnqqjtiVe0HVsXWMGnJx6o36q6JnponySiz2aRqWXpeZTk4dyaK4647Ko8kwjtQ0+nKp3jhVC5cj+WF3Qbs27kdKzV1x2xPfHxjtW4a7w3xZgarTTau1RjZXbRXPRV92f2bEqN6zcs1dGuNpdD6dqeLqVmL+LXFVM93umOuJ9EgDyZwAAD4u3Ldq3Ny7cpoojrqqnaIfsRu/JqimN56n21XjjiWjTbFWDiVxVmXKdpmJ/6UT2+l4OKeNrdFNeJo88+vqqvzHRH3fL6WgXK67lyq5cqmquqd5qmd5mU9p2k1VTFy9HDu/dqXllzgWrVFWHptW9U8Jrjqj0U98+nqjs49XFUzVMzM7zPTMuAWZo8AAAAAAAAAAAAAAAAAAAAAAZbQ+IdT0idsa/zrXbar6af8exiR8XLdFyno1xvDJxMzIw7sXseuaao7YnZRdP5QMOuIpzsO7aq7are1UfszFni7h67G8ahFPmrt1R+yRCLuaLjVTvG8f76V6xOc3WrFPRudGvxjj/AIzHuV67xbw9bjedRpq81NFU/sw+o8f4dETTg4t29V/3XPgx/Kchb0XGpned5/30P3L5ztav09G30aPTEcf8pmPYymua7qOsXN8q9tbj5Nqjopj2drM8OcYRpGlW8GcKbvMmZ53P233nfyNSGdcw7NduLc08I7FWxOUWpYuXVmW7s/KVRtMzxnbz37m/f6h0/Zs/mf4P9Q6fs2fzP8NBGP8AwnE/L7ZTH8weUH9//Gn9m18TcXRrGl1YUYU2t64q53P36mqAy7GPbsU9G3G0K9qmrZeq3/l8urpVbbb7RHCPDYAeyNHdiZWRiXovY165ZuR1VUVbS6R+TETG0vqiuq3VFVE7THbDcNM49z7ERRm2LeTEfWj4NX8Ngw+O9FvREX4yMee3nUc6P037kvEdd0nGucdtvBdMDnB1zDiKflIriPzRv7eE+1X6OK+H6o3jUrcemmqP2fF/jDh+1E/7/wAJPkot1Tv+myRjHjQrG/0p9n7JirnV1aadotW4nwq/9lD1DlAxqYmnBwrlc9lV2Ypj8I3ahrWvalq1f+6vz4PstUdFMezt9rFjOx8CxYneinj3qrq3K3VtWpmjIuz0fyxwjz26/PdlOGNWjRtTjNmz4Xaiaebvt1tq/wBQ6fs2fzP8NBC/g2L9XTuU7y+dL5V6rpVj5DEu9GnffbaJ4z4xLfv9Q6fs2fzP8E8oVO3i2fzP8NBHl/CcT8vtlI/zA1/+/wD40/s+rtfPu117bc6qZfIJHqU2ZmZ3kAH4R0TvDOaPxVq+mxFFF/w9qPqXfhRHonrhgx53LVF2OjXG8MzC1DKwLnyuNcmirvidv/1Q8HlBxaoiM3Bu0T2zamKo/CdmXscY8P3YjfNm3M9ldqqP22SURtzRcarq3jwn912xOczW7EbVzTX+qn/1mFgninh+I3987X/jV/DyZXG2g2Ynwd69fnyW7U/3bJUPOnQ8eJ4zM+r9mVd51NXrp2ot0U+VU++pvWocoNcxNODgxT5KrtW/6Q1TVtY1HVK+dmZVdcdlEdFMeyHgEhYwrFjjRTxVLVOU+q6rHRyb0zT3Rwj1Rtv5gDKQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//Z" alt="UAO">
+  <span class="hdr-t">Análisis Financiero y Comercial</span>
+  <span class="hdr-b">2025 · 2026</span>
+</header>
+<nav class="tabs">
+  <button class="tb on" onclick="goTab('edu',this)">📚 Educación Continua</button>
+  <button class="tb" onclick="goTab('pos',this)">🎓 Posgrados</button>
+</nav>
+<div class="main">
+
+<!-- ═════════════ EDUCACIÓN CONTINUA ═════════════ -->
+<div id="t-edu" class="tcw on">
+  <div class="shdiv"><div class="shbar"></div><div>
+    <div class="sht">Educación Continua · Educación para la Vida</div>
+    <div class="shs">Análisis comparativo financiero y comercial 2025 vs 2026 · Datos actualizados al 29 de mayo de 2026</div>
+  </div></div>
+  <div class="al red"><span class="al-i">⚠️</span><span><strong>Nota metodológica:</strong> Datos 2026 actualizados al <strong>29/05/2026</strong>. Las comparaciones usan período equivalente <strong>Ene–May</strong>. La proyección Jun–Dic aplica la tasa de crecimiento promedio Ene–Abr 2026 (2.45× vs 2025).</span></div>
+
+  <div class="sumbar">
+    <div><div class="sb-t">Ventas Totales 2025</div><div class="sb-v">$1.351.975.000</div><div class="sb-s">Año completo</div></div>
+    <div class="sb-sep"></div>
+    <div><div class="sb-t">Ventas Ejecutadas 2026</div><div class="sb-v">$860.969.500</div><div class="sb-s">Ene–May · 53.8% de la meta</div></div>
+    <div class="sb-sep"></div>
+    <div><div class="sb-t">Inversión Total 2025</div><div class="sb-v">$67.827.435</div><div class="sb-s">Pauta + SMS/Email</div></div>
+    <div class="sb-sep"></div>
+    <div><div class="sb-t">Inversión Ejecutada 2026</div><div class="sb-v">$34.834.652</div><div class="sb-s">Pauta Ene–May</div></div>
+    <div class="sb-sep"></div>
+    <div><div class="sb-t">Aperturados 2025</div><div class="sb-v">83 prg.</div><div class="sb-s">Año completo</div></div>
+    <div class="sb-sep"></div>
+    <div><div class="sb-t">Aperturados 2026</div><div class="sb-v">49 prg.</div><div class="sb-s">Ene–May</div></div>
+    <div class="sb-sep"></div>
+    <div><div class="sb-t">Ejecutados 2025</div><div class="sb-v">241 prg.</div><div class="sb-s">Año completo</div></div>
+    <div class="sb-sep"></div>
+    <div><div class="sb-t">Ejecutados 2026</div><div class="sb-v">88 prg.</div><div class="sb-s">Ene–May</div></div>
+  </div>
+
+  <div class="filt">
+    <span class="fl">Período base 2025:</span>
+    <select class="fs" id="ef-per" onchange="eduRender()">
+      <option value="eq">Ene–May (equivalente a 2026)</option>
+      <option value="full">Año completo 2025</option>
+    </select>
+    <span class="fsep"></span>
+    <span class="fl">Mes:</span>
+    <select class="fs" id="ef-mes" onchange="eduRender()">
+      <option value="all">Todos</option>
+      <option value="0">Enero</option><option value="1">Febrero</option><option value="2">Marzo</option>
+      <option value="3">Abril</option><option value="4">Mayo</option><option value="5">Junio</option>
+      <option value="6">Julio</option><option value="7">Agosto</option><option value="8">Septiembre</option>
+      <option value="9">Octubre</option><option value="10">Noviembre</option><option value="11">Diciembre</option>
+    </select>
+  </div>
+
+  <div class="kg" id="e-k1"></div>
+  <div class="kg" id="e-k2"></div>
+
+  <!-- META PROGRESS -->
+  <div class="metabox">
+    <div class="meta-title">🎯 Progreso hacia Meta de Ventas 2026 – $1.600.000.000</div>
+    <div class="meta-sub">Ejecutado Ene–May 2026 · Datos actualizados al 29/05/2026 · Proyección tasa Ene–May 2026 (2.45× vs 2025)</div>
+    <div class="metar">
+      <div class="ms"><div class="msl">Ejecutado Ene–May 2026</div><div class="msv r">$860.969.500</div></div>
+      <div class="ms"><div class="msl">Proyección Año Completo 2026</div><div class="msv b">$3.119.661.856</div></div>
+      <div class="ms"><div class="msl">Meta Anual 2026</div><div class="msv">$1.600.000.000</div></div>
+      <div class="ms"><div class="msl">Superávit Proyectado</div><div class="msv g">$1.519.661.856</div></div>
+      <div class="ms"><div class="msl">Pendiente para Meta</div><div class="msv a">$739.030.500</div></div>
+      <div class="ms"><div class="msl">Meta Alcanzada en</div><div class="msv g">Agosto 2026</div></div>
+    </div>
+    <div class="mtrack">
+      <div class="mtl"><span>0%</span><span style="color:var(--rd);font-weight:800">53.8% ejecutado ($860.969.500)</span><span>100% = $1.600.000.000</span></div>
+      <div class="mbg"><div class="mfill" style="width:53.81%"><span class="mbadge">53.8%</span></div></div>
+      <div class="mleg">
+        <div class="mli"><div class="mld" style="background:linear-gradient(90deg,#961423,#F03C46)"></div>Ejecutado $860.969.500</div>
+        <div class="mli"><div class="mld" style="background:var(--a1)"></div>Pendiente para meta $739.030.500</div>
+        <div class="mli"><div class="mld" style="background:var(--b1)"></div>Proyección al ritmo actual: $3.119.661.856</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dlbl">📈 Ventas Mensuales</div>
+  <div class="g1"><div class="card">
+    <div class="ch">
+      <div><div class="ct">Ventas Mensuales 2025 vs 2026</div><div class="cs">Cifras en COP · Valores completos al pasar el cursor</div></div>
+      <div class="leg"><div class="li"><div class="ld" style="background:#961423"></div>2025</div><div class="li"><div class="ld" style="background:#F03C46"></div>2026</div></div>
+    </div>
+    <div style="position:relative;height:190px"><canvas id="c-ven"></canvas></div>
+  </div></div>
+
+  <div class="dlbl g">💹 Margen de Rentabilidad = (Ventas − Inversión Pauta) / Ventas × 100%</div>
+  <div class="g2">
+    <div class="card cg">
+      <div class="ch">
+        <div><div class="ct">Margen de Rentabilidad Mensual (%)</div><div class="cs">Mayor % = mayor eficiencia publicitaria</div></div>
+        <div class="leg"><div class="li"><div class="ld" style="background:#961423"></div>2025</div><div class="li"><div class="ld" style="background:#1a7a3a"></div>2026</div></div>
+      </div>
+      <div style="position:relative;height:220px"><canvas id="c-mrg"></canvas></div>
+    </div>
+    <div class="card cg">
+      <div class="ch">
+        <div><div class="ct">Margen Acumulado Ene–May</div><div class="cs">Evolución acumulada período comparable</div></div>
+        <div class="leg"><div class="li"><div class="ld" style="background:#961423"></div>2025</div><div class="li"><div class="ld" style="background:#1a7a3a"></div>2026</div></div>
+      </div>
+      <div style="position:relative;height:220px"><canvas id="c-mrga"></canvas></div>
+    </div>
+  </div>
+
+  <div class="dlbl">🎓 Programas: Aperturados vs Ejecutados</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch">
+        <div><div class="ct">Programas Aperturados por Mes</div><div class="cs">Abiertos para matrícula · Unidades · Total 2025: 83 · Total 2026 Ene–May: 49</div></div>
+        <div class="leg"><div class="li"><div class="ld" style="background:#961423"></div>2025</div><div class="li"><div class="ld" style="background:#F03C46"></div>2026</div></div>
+      </div>
+      <div style="position:relative;height:220px"><canvas id="c-apr"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch">
+        <div><div class="ct">Programas Ejecutados por Mes</div><div class="cs">Completados / en curso · Unidades · Total 2025: 241 · Total 2026 Ene–May: 88</div></div>
+        <div class="leg"><div class="li"><div class="ld" style="background:#961423"></div>2025</div><div class="li"><div class="ld" style="background:#F03C46"></div>2026</div></div>
+      </div>
+      <div style="position:relative;height:220px"><canvas id="c-ejc"></canvas></div>
+    </div>
+  </div>
+
+  <div class="dlbl">💰 Inversión Publicitaria</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch">
+        <div><div class="ct">Inversión Mensual – Pauta Digital</div><div class="cs">2025 vs 2026 · COP · Total 2025: $67.827.435 (pauta $64.963.218 + SMS/Email $2.864.217)</div></div>
+        <div class="leg"><div class="li"><div class="ld" style="background:#961423"></div>2025</div><div class="li"><div class="ld" style="background:#F03C46"></div>2026</div></div>
+      </div>
+      <div style="position:relative;height:220px"><canvas id="c-inv"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div><div class="ct">Distribución Inversión 2025</div><div class="cs">Pauta Digital $64.963.218 vs SMS &amp; Mailing $2.864.217</div></div></div>
+      <div style="position:relative;height:220px"><canvas id="c-dist"></canvas></div>
+    </div>
+  </div>
+
+  <div class="dlbl">📊 Acumulado Ene–May &amp; ROI</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><div><div class="ct">Ventas e Inversión Acumulada – Ene a May</div><div class="cs">Sólidas = Ventas · Punteadas = Inversión · COP</div></div></div>
+      <div style="position:relative;height:220px"><canvas id="c-acum"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch">
+        <div><div class="ct">ROI Mensual – Ventas ÷ Inversión Pauta</div><div class="cs">Veces · Por cada $1 invertido en pauta, pesos generados en ventas</div></div>
+        <div class="leg"><div class="li"><div class="ld" style="background:#961423"></div>2025</div><div class="li"><div class="ld" style="background:#F03C46"></div>2026</div></div>
+      </div>
+      <div style="position:relative;height:220px"><canvas id="c-roi"></canvas></div>
+    </div>
+  </div>
+
+  <div class="dlbl b">🔮 Proyección de Ventas 2026 &amp; Meta $1.600.000.000</div>
+  <div class="g2">
+    <div class="card cb">
+      <div class="ch"><div>
+        <div class="ct">Ventas 2026: Ejecutado (Ene–May) + Proyección (Jun–Dic)</div>
+        <div class="cs" style="margin-top:4px"><span class="chip r">Ene–May real</span>&nbsp;<span class="chip b">Jun–Dic proyectado</span>&nbsp;·&nbsp;Tasa: 2.45× vs 2025 (promedio Ene–May – mayo cerrado)</div>
+      </div></div>
+      <div style="position:relative;height:230px"><canvas id="c-proj"></canvas></div>
+    </div>
+    <div class="card cb">
+      <div class="ch"><div><div class="ct">Ventas Acumuladas 2025 vs 2026 + Meta $1.600.000.000</div><div class="cs">Meta superada en agosto 2026 · Proyección total: $3.119.661.856</div></div></div>
+      <div style="position:relative;height:230px"><canvas id="c-proja"></canvas></div>
+    </div>
+  </div>
+
+  <div class="dlbl g">📌 Inversión Recomendada Jun–Dic 2026 para Alcanzar Meta $1.600.000.000</div>
+  <div class="al grn"><span class="al-i">💡</span><span>Ejecutado Ene–May: <strong>$860.969.500</strong> (53.8%). Pendiente Jun–Dic: <strong>$739.030.500</strong>. Inversión mínima conservadora: <strong>$33.042.133</strong> (ROI 22.37× basado en 2H-2025) · Optimista: <strong>$26.630.811</strong> (ROI 27.75× basado en Ene–Abr 2026).</span></div>
+  <div class="g3r">
+    <div class="card cg">
+      <div class="ch"><div><div class="ct">Inversión Recomendada Jun–Dic 2026</div><div class="cs">Distribución mensual por estacionalidad 2H-2025</div></div></div>
+      <div class="scr"><button class="sb on" onclick="setEsc('cons',this)">Conservador (22.37×)</button><button class="sb" onclick="setEsc('opt',this)">Optimista (27.75×)</button></div>
+      <div style="position:relative;height:210px"><canvas id="c-rec"></canvas></div>
+    </div>
+    <div class="card cg">
+      <div class="ch"><div><div class="ct">Tabla de Inversión Recomendada Jun–Dic 2026</div><div class="cs">Distribución mensual según estacionalidad 2H-2025 · Ventas objetivo para cubrir $739.030.500 pendientes</div></div></div>
+      <table><thead><tr><th>Mes</th><th>Ref. Inv. 2025</th><th>Conservador</th><th>Optimista</th><th>Ventas objetivo</th></tr></thead>
+      <tbody id="tb-rec"></tbody><tfoot class="tg" id="tf-rec"></tfoot></table>
+    </div>
+  </div>
+
+  <div class="dlbl">📋 Tabla Comparativa Mensual</div>
+  <div class="tc">
+    <div style="margin-bottom:10px"><div class="ct">Detalle Mensual – Inversión, Ventas, Margen, Programas 2025 vs 2026</div></div>
+    <table><thead><tr>
+      <th>Mes</th><th>Inv.2025</th><th>Inv.2026</th><th>Δ Inv.</th>
+      <th>Ventas 2025</th><th>Ventas 2026</th><th>Δ Ventas</th>
+      <th>Mrg.2025</th><th>Mrg.2026</th>
+      <th>Apr.2025</th><th>Apr.2026</th><th>Ejc.2025</th><th>Ejc.2026</th>
+    </tr></thead><tbody id="e-tb"></tbody><tfoot id="e-tf"></tfoot></table>
+  </div>
+
+  <div class="dlbl">🔍 Análisis Ejecutivo</div>
+  <div class="ig" id="e-ins"></div>
+</div>
+
+<!-- ═════════════ POSGRADOS ═════════════ -->
+<div id="t-pos" class="tcw">
+  <div class="shdiv"><div class="shbar"></div><div>
+    <div class="sht">Posgrados</div>
+    <div class="shs">Análisis comparativo de inversión promocional 2025 vs 2026 · Datos actualizados al 29 de mayo de 2026</div>
+  </div></div>
+  <div class="al red"><span class="al-i">⚠️</span><span><strong>Nota metodológica:</strong> Datos 2026 actualizados al 29/05/2026. Comparación justa usa el período <strong>enero–mayo</strong> de ambos años. El total 2025 incluye todos los canales de promoción.</span></div>
+  <div class="sumbar">
+    <div><div class="sb-t">Pauta Ene–May 2025</div><div class="sb-v">$86.899.394</div><div class="sb-s">Período equivalente</div></div>
+    <div class="sb-sep"></div>
+    <div><div class="sb-t">Pauta Ene–May 2026</div><div class="sb-v">$80.185.372</div><div class="sb-s">−7.7% vs 2025</div></div>
+    <div class="sb-sep"></div>
+    <div><div class="sb-t">Total Inversión 2025</div><div class="sb-v">$231.876.963</div><div class="sb-s">Todos los canales</div></div>
+    <div class="sb-sep"></div>
+    <div><div class="sb-t">Pauta Anual 2025</div><div class="sb-v">$213.330.218</div><div class="sb-s">92% del total</div></div>
+  </div>
+  <div class="filt">
+    <span class="fl">Período base:</span>
+    <select class="fs" id="pf-per" onchange="posRender()">
+      <option value="eq">Ene–May (equivalente)</option><option value="full">Año completo 2025</option>
+    </select>
+    <span class="fsep"></span>
+    <span class="fl">Mes:</span>
+    <select class="fs" id="pf-mes" onchange="posRender()">
+      <option value="all">Todos</option>
+      <option value="0">Enero</option><option value="1">Febrero</option><option value="2">Marzo</option>
+      <option value="3">Abril</option><option value="4">Mayo</option><option value="5">Junio</option>
+      <option value="6">Julio</option><option value="7">Agosto</option><option value="8">Septiembre</option>
+      <option value="9">Octubre</option><option value="10">Noviembre</option><option value="11">Diciembre</option>
+    </select>
+  </div>
+  <div class="kg" id="p-k"></div>
+  <div class="dlbl">📣 Pauta Digital</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch">
+        <div><div class="ct">Gasto en Pauta Digital por Mes</div><div class="cs">2025 vs 2026 · COP</div></div>
+        <div class="leg"><div class="li"><div class="ld" style="background:#961423"></div>2025</div><div class="li"><div class="ld" style="background:#F03C46"></div>2026</div></div>
+      </div>
+      <div style="position:relative;height:230px"><canvas id="p-pauta"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div><div class="ct">Distribución por Canal 2025</div><div class="cs">Total $231.876.963</div></div></div>
+      <div style="position:relative;height:230px"><canvas id="p-dist"></canvas></div>
+    </div>
+  </div>
+  <div class="dlbl">📊 Tendencia y Variación</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch">
+        <div><div class="ct">Gasto Acumulado – Ene a May</div><div class="cs">COP</div></div>
+        <div class="leg"><div class="li"><div class="ld" style="background:#961423"></div>2025</div><div class="li"><div class="ld" style="background:#F03C46"></div>2026</div></div>
+      </div>
+      <div style="position:relative;height:220px"><canvas id="p-acum"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ch"><div><div class="ct">Variación % Mensual 2026 vs 2025</div><div class="cs">Verde = aumentó · Rojo = redujo vs mismo mes 2025</div></div></div>
+      <div style="position:relative;height:220px"><canvas id="p-var"></canvas></div>
+    </div>
+  </div>
+  <div class="dlbl">📅 Estacionalidad Anual 2025</div>
+  <div class="g1"><div class="card">
+    <div class="ch"><div><div class="ct">Participación Mensual en Pauta Digital 2025</div><div class="cs">% de cada mes · Meses con dato 2026 en color sólido</div></div></div>
+    <div style="position:relative;height:150px"><canvas id="p-est"></canvas></div>
+  </div></div>
+  <div class="dlbl">📋 Detalle de Inversión</div>
+  <div class="tc">
+    <table><thead><tr><th>Canal / Proveedor</th><th>Categoría</th><th>Gasto 2025 (COP)</th><th>% del Total</th></tr></thead>
+    <tbody>
+      <tr><td>Pauta Digital (12 meses)</td><td>Pauta Digital</td><td>$213.330.218</td><td>92.0%</td></tr>
+      <tr><td>Call FENALCO (×3 contratos)</td><td>Call Center</td><td>$9.947.176</td><td>4.3%</td></tr>
+      <tr><td>SIGMA MOVIL – SMS</td><td>SMS &amp; Mailing</td><td>$1.543.590</td><td>0.7%</td></tr>
+      <tr><td>SIGMA MOVIL – Email</td><td>SMS &amp; Mailing</td><td>$1.320.627</td><td>0.6%</td></tr>
+      <tr><td>PROCIVICA – Video</td><td>Video</td><td>$335.352</td><td>0.1%</td></tr>
+      <tr><td>IP MEDIA SAS – RRSS</td><td>Promo RRSS</td><td>$5.400.000</td><td>2.3%</td></tr>
+    </tbody>
+    <tfoot><tr><td><strong>TOTAL 2025</strong></td><td>—</td><td><strong>$231.876.963</strong></td><td><strong>100%</strong></td></tr></tfoot>
+    </table>
+  </div>
+  <div class="tc">
+    <div style="margin-bottom:10px"><div class="ct">Detalle Mensual – Pauta Digital 2025 vs 2026 (actualizado 29/05/2026)</div></div>
+    <table><thead><tr><th>Mes</th><th>Gasto 2025</th><th>Gasto 2026</th><th>Variación</th><th>Estado</th></tr></thead>
+    <tbody id="p-tb"></tbody><tfoot id="p-tf"></tfoot></table>
+  </div>
+  <div class="dlbl">🔍 Análisis Ejecutivo</div>
+  <div class="ig" id="p-ins"></div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ══════════════════════════════
+// DATOS (Python None → JSON null ✓)
+// ══════════════════════════════
+const D = {"i25": [1681912, 1836361, 6945613, 5794666, 7490085, 6434245, 6507645, 5195774, 6552623, 5993057, 6783892, 3747345], "i26": [5714683, 6674140, 6565579, 8483300, 7396950, null, null, null, null, null, null, null], "v25": [18650000, 88968600, 138646200, 71080400, 112811800, 155177000, 145983000, 136484000, 299761000, 106513000, 46070000, 31830000], "v26": [80262000, 229879000, 272379500, 178902000, 99547000, null, null, null, null, null, null, null], "p25": [7, 12, 19, 24, 26, 21, 21, 22, 26, 21, 26, 16], "p26": [12, 18, 21, 17, 20, null, null, null, null, null, null, null], "a25": [2, 8, 10, 4, 7, 9, 10, 8, 10, 6, 6, 3], "a26": [10, 11, 7, 10, 11, null, null, null, null, null, null, null], "m25": [90.98, 97.94, 94.99, 91.85, 93.36, 95.85, 95.54, 96.19, 97.81, 94.37, 85.27, 88.23], "m26": [92.88, 97.1, 97.59, 95.26, 92.57, null, null, null, null, null, null, null], "vproj": [380223758, 357696081, 334421076, 734491927, 260984380, 112883407, 77991727], "cons": [5158397, 5217243, 4165503, 5253302, 4804692, 5438713, 3004283], "opt": [4157489, 4204916, 3357251, 4233979, 3872415, 4383413, 2421348], "cum25": [18650000, 107618600, 246264800, 317345200, 430157000, 585334000, 731317000, 867801000, 1167562000, 1274075000, 1320145000, 1351975000], "cum26": [80262000, 310141000, 582520500, 761422500, 860969500, 1241193258, 1598889339, 1933310415, 2667802342, 2928786722, 3041670129, 3119661856], "sms": 2864217, "META": 1600000000, "ejecutado26": 860969500, "pendiente26": 739030500, "pctMeta": 53.81, "tproj": 3119661856, "superavit": 1519661856};
+const P = {"p25": [29998745, 1239439, 9132998, 20354520, 26173692, 24211787, 24461343, 2942064, 6702748, 17632302, 22977965, 27502615], "p26": [30654891, 9001010, 9747703, 15343668, 15438100, null, null, null, null, null, null, null], "call": 9947176, "sms": 2864217, "vid": 335352, "rrss": 5400000};
+
+const M  = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const MF = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+// ═══ HELPERS ═══
+const Sm  = a => a.reduce((s,v)=>s+(v||0), 0);
+const Cum = a => { const r=[]; let t=0; a.forEach(v=>{t+=(v||0);r.push(t);}); return r; };
+const pct = (a,b) => b===0?null : +((a-b)/b*100).toFixed(1);
+
+// Formato cifra completa COP (sin abreviaciones B/billones)
+const fCOP = v => {
+  if(v==null) return '—';
+  return '$' + Math.round(v).toLocaleString('es-CO');
+};
+// Formato para ejes de gráficas (usa M de millones, NUNCA B)
+const fAxis = v => {
+  if(Math.abs(v)>=1000000000) return '$'+(v/1000000000).toFixed(1)+' mil M';
+  if(Math.abs(v)>=1000000)    return '$'+(v/1000000).toFixed(0)+' M';
+  return '$'+Math.round(v).toLocaleString('es-CO');
+};
+// Tooltip cifra completa
+const fTip = v => v==null?'—' : '$' + Math.round(v).toLocaleString('es-CO');
+
+const dH = p => {
+  if(p===null) return '<span style="color:var(--t3);font-size:10px">N/D</span>';
+  return '<span class="'+(+p>=0?'vu':'vd')+'">'+(+p>=0?'▲':'▼')+' '+Math.abs(p)+'%</span>';
+};
+const dK = p => {
+  if(p===null) return '';
+  return '<div class="dl '+(+p>=0?'up':'dn')+'">'+(+p>=0?'▲':'▼')+' '+Math.abs(p)+'% vs 2025</div>';
+};
+
+// ═══ CHART FUNCTIONS ═══
+Chart.defaults.font.family = "'DM Sans',sans-serif";
+Chart.defaults.color = '#666';
+const R1='#961423',R2='#F03C46',R3='rgba(150,20,35,.1)',R4='rgba(240,60,70,.1)';
+const G1='#1a7a3a',G2='rgba(46,204,113,.1)';
+const B1='#2563EB',B2='rgba(37,99,235,.1)';
+
+function kill(id) {
+  const el=document.getElementById(id); if(!el) return null;
+  const c=Chart.getChart(el); if(c) c.destroy();
+  return el;
+}
+
+function mkBar(id, labels, datasets, yFmt) {
+  const el=kill(id); if(!el) return;
+  const fY = v => yFmt==='u' ? v+' prg' : yFmt==='p' ? v.toFixed(1)+'%' : fAxis(v);
+  const fT = c => {
+    if(c.raw===null||c.raw===undefined) return null;
+    if(yFmt==='u') return ' '+c.dataset.label+': '+Math.round(c.raw)+' programas';
+    if(yFmt==='p') return ' '+c.dataset.label+': '+c.raw.toFixed(1)+'%';
+    return ' '+c.dataset.label+': '+fTip(c.raw);
+  };
+  new Chart(el, {type:'bar',data:{labels,datasets},options:{
+    responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:fT}}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11},callback:fY}}}
+  }});
+}
+
+function mkLine(id, labels, datasets, yFmt) {
+  const el=kill(id); if(!el) return;
+  const fY = v => yFmt==='p' ? v.toFixed(1)+'%' : yFmt==='x' ? v+'x' : fAxis(v);
+  const fT = c => {
+    if(c.raw===null) return null;
+    if(yFmt==='p') return ' '+c.dataset.label+': '+c.raw.toFixed(1)+'%';
+    if(yFmt==='x') return ' '+c.dataset.label+': '+c.raw+'x';
+    return ' '+c.dataset.label+': '+fTip(c.raw);
+  };
+  new Chart(el, {type:'line',data:{labels,datasets},options:{
+    responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:fT}}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11},callback:fY}}}
+  }});
+}
+
+function mkDonut(id, labels, data, colors) {
+  const el=kill(id); if(!el) return;
+  const total=data.reduce((a,b)=>a+b,0);
+  new Chart(el, {type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:2,borderColor:'#fff',hoverOffset:6}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'54%',
+      plugins:{legend:{position:'bottom',labels:{font:{size:10.5},padding:8,boxWidth:10}},
+        tooltip:{callbacks:{label:c=>' '+c.label+': '+fTip(c.raw)+' ('+(c.raw/total*100).toFixed(1)+'%)'}}}
+    }
+  });
+}
+
+function mkMix(id, labels, datasets) {
+  const el=kill(id); if(!el) return;
+  new Chart(el, {type:'bar',data:{labels,datasets},options:{
+    responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:true,position:'bottom',labels:{font:{size:10.5},padding:8,boxWidth:10}},
+      tooltip:{callbacks:{label:c=>c.raw?(' '+c.dataset.label+': '+fTip(c.raw)):null}}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11},callback:v=>fAxis(v)}}}
+  }});
+}
+
+// ═══ SCENARIO ═══
+let ESC='cons';
+function setEsc(s,btn){
+  ESC=s;document.querySelectorAll('.sb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderRec();
+}
+function renderRec(){
+  const data=ESC==='cons'?D.cons:D.opt;
+  const ref=[6434245,6507645,5195774,6552623,5993057,6783892,3747345];
+  const ven2H=[155177000,145983000,136484000,299761000,106513000,46070000,31830000];
+  const sv=Sm(ven2H);
+  const vo=ven2H.map(v=>Math.round(v/sv*739030500));
+  mkBar('c-rec',M.slice(5,12),[{label:'Inversión recomendada',data,backgroundColor:ESC==='cons'?R1:G1,borderRadius:5}],'cop');
+  const tb=document.getElementById('tb-rec'),tf=document.getElementById('tf-rec');
+  if(!tb||!tf)return;
+  tb.innerHTML=M.slice(5,12).map((m,i)=>'<tr><td>'+MF[i+5]+'</td><td>'+fCOP(ref[i])+'</td><td><strong>'+fCOP(D.cons[i])+'</strong></td><td>'+fCOP(D.opt[i])+'</td><td>'+fCOP(vo[i])+'</td></tr>').join('');
+  tf.innerHTML='<tr><td>TOTAL Jun–Dic</td><td>'+fCOP(Sm(ref))+'</td><td><strong>'+fCOP(Sm(D.cons))+'</strong></td><td>'+fCOP(Sm(D.opt))+'</td><td><strong>$739.030.500</strong></td></tr>';
+}
+
+// ═══ EDU RENDER ═══
+function eduRender(){
+  const per=document.getElementById('ef-per').value;
+  const mf =document.getElementById('ef-mes').value;
+  let idx=per==='full'?Array.from({length:12},(_,i)=>i):Array.from({length:5},(_,i)=>i);
+  if(mf!=='all') idx=idx.filter(i=>i===+mf);
+  const lb=idx.map(i=>M[i]);
+  const i25=idx.map(i=>D.i25[i]),v25=idx.map(i=>D.v25[i]),p25=idx.map(i=>D.p25[i]),a25=idx.map(i=>D.a25[i]),m25=idx.map(i=>D.m25[i]);
+  const i26=idx.map(i=>D.i26[i]),v26=idx.map(i=>D.v26[i]),p26=idx.map(i=>D.p26[i]),a26=idx.map(i=>D.a26[i]),m26=idx.map(i=>D.m26[i]);
+  const ai=idx.filter(i=>D.v26[i]!==null);
+  const tv25=Sm(v25),ti25=Sm(i25),tp25=Sm(p25),ta25=Sm(a25);
+  const tv26=Sm(ai.map(i=>D.v26[i])),ti26=Sm(ai.map(i=>D.i26[i]));
+  const tp26=Sm(ai.map(i=>D.p26[i])),ta26=Sm(ai.map(i=>D.a26[i]));
+  const mg25=(tv25-ti25)/tv25*100,mg26=tv26>0?(tv26-ti26)/tv26*100:0;
+  const roi25=(ti25>0?tv25/ti25:0).toFixed(1),roi26=(ti26>0?tv26/ti26:0).toFixed(1);
+
+  // KPI 1
+  document.getElementById('e-k1').innerHTML=[
+    {l:'Ventas 2025',v:fCOP(tv25),s:'Período filtrado',d:null,c:''},
+    {l:'Ventas 2026',v:fCOP(tv26),s:'Ejecutado',d:pct(tv26,tv25),c:''},
+    {l:'Inversión 2025',v:fCOP(ti25),s:'Pauta Digital',d:null,c:''},
+    {l:'Inversión 2026',v:fCOP(ti26),s:'Pauta Digital',d:pct(ti26,ti25),c:''},
+    {l:'ROI 2025',v:roi25+'x',s:'Ventas÷Inv.Pauta',d:null,c:''},
+    {l:'ROI 2026',v:roi26+'x',s:'Ventas÷Inv.Pauta',d:pct(+roi26,+roi25),c:''},
+  ].map(k=>'<div class="kpi '+k.c+'"><div class="kl">'+k.l+'</div><div class="kv">'+k.v+'</div><div class="ks">'+k.s+'</div>'+dK(k.d)+'</div>').join('');
+
+  // KPI 2
+  document.getElementById('e-k2').innerHTML=[
+    {l:'Margen 2025',v:mg25.toFixed(1)+'%',s:'Período filtrado',d:null,c:'g'},
+    {l:'Margen 2026',v:mg26.toFixed(1)+'%',s:'Ejecutado',d:pct(mg26,mg25),c:'g'},
+    {l:'Apr. 2025',v:ta25+' prg.',s:'Aperturados período',d:null,c:''},
+    {l:'Apr. 2026',v:ta26+' prg.',s:'Aperturados período',d:pct(ta26,ta25),c:''},
+    {l:'Ejc. 2025',v:tp25+' prg.',s:'Ejecutados período',d:null,c:''},
+    {l:'Ejc. 2026',v:tp26+' prg.',s:'Ejecutados período',d:pct(tp26,tp25),c:''},
+    {l:'% Meta 2026',v:'53.8%',s:'$860M / $1.600M',d:null,c:'b'},
+    {l:'Pendiente Meta',v:'$739.030.500',s:'Jun–Dic 2026',d:null,c:'a'},
+  ].map(k=>'<div class="kpi '+k.c+'"><div class="kl">'+k.l+'</div><div class="kv" style="font-size:14px;letter-spacing:-.02em">'+k.v+'</div><div class="ks">'+k.s+'</div>'+dK(k.d)+'</div>').join('');
+
+  // CHARTS
+  mkBar('c-ven',lb,[{label:'Ventas 2025',data:v25,backgroundColor:R1,borderRadius:4},{label:'Ventas 2026',data:v26.map(v=>v||0),backgroundColor:R2,borderRadius:4}],'cop');
+  mkLine('c-mrg',lb,[{label:'Margen 2025',data:m25,borderColor:R1,fill:false,tension:.3,pointRadius:5,pointBackgroundColor:R1,borderWidth:2},{label:'Margen 2026',data:m26,borderColor:G1,fill:false,tension:.3,pointRadius:5,pointBackgroundColor:G1,borderWidth:2}],'p');
+  const la5=M.slice(0,5);
+  let sv5=0,si5=0;const cm25=[];
+  for(let i=0;i<5;i++){sv5+=D.v25[i];si5+=D.i25[i];cm25.push(+((sv5-si5)/sv5*100).toFixed(2));}
+  let sv6=0,si6=0;const cm26=[];
+  for(let i=0;i<5;i++){if(D.v26[i]!==null){sv6+=D.v26[i];si6+=D.i26[i];cm26.push(+((sv6-si6)/sv6*100).toFixed(2));}else cm26.push(null);}
+  mkLine('c-mrga',la5,[{label:'Margen Acum. 2025',data:cm25,borderColor:R1,backgroundColor:R3,fill:true,tension:.3,pointRadius:4,borderWidth:2},{label:'Margen Acum. 2026',data:cm26,borderColor:G1,backgroundColor:G2,fill:true,tension:.3,pointRadius:4,borderWidth:2}],'p');
+  mkBar('c-apr',lb,[{label:'Aperturados 2025',data:a25,backgroundColor:R1,borderRadius:4},{label:'Aperturados 2026',data:a26.map(v=>v||0),backgroundColor:R2,borderRadius:4}],'u');
+  mkBar('c-ejc',lb,[{label:'Ejecutados 2025',data:p25,backgroundColor:R1,borderRadius:4},{label:'Ejecutados 2026',data:p26.map(v=>v||0),backgroundColor:R2,borderRadius:4}],'u');
+  mkBar('c-inv',lb,[{label:'Inv. 2025',data:i25,backgroundColor:R1,borderRadius:4},{label:'Inv. 2026',data:i26.map(v=>v||0),backgroundColor:R2,borderRadius:4}],'cop');
+  mkDonut('c-dist',['Pauta Digital','SMS & Mailing'],[64963218,2864217],[R1,R2]);
+  mkLine('c-acum',la5,[
+    {label:'Ventas Acum. 2025',data:Cum(D.v25.slice(0,5)),borderColor:R1,fill:false,tension:.3,pointRadius:4,borderWidth:2},
+    {label:'Ventas Acum. 2026',data:Cum(D.v26.slice(0,5)),borderColor:R2,fill:false,tension:.3,pointRadius:4,borderWidth:2},
+    {label:'Inv. Acum. 2025',data:Cum(D.i25.slice(0,5)),borderColor:R1,borderDash:[5,4],fill:false,tension:.3,pointRadius:3,borderWidth:1.5},
+    {label:'Inv. Acum. 2026',data:Cum(D.i26.slice(0,5)),borderColor:R2,borderDash:[5,4],fill:false,tension:.3,pointRadius:3,borderWidth:1.5}
+  ],'cop');
+  mkLine('c-roi',lb,[
+    {label:'ROI 2025',data:i25.map((v,k)=>v>0?+(v25[k]/v).toFixed(1):null),borderColor:R1,fill:false,tension:.3,pointRadius:5,pointBackgroundColor:R1,borderWidth:2},
+    {label:'ROI 2026',data:i26.map((v,k)=>v!==null&&v>0?+(v26[k]/v).toFixed(1):null),borderColor:R2,fill:false,tension:.3,pointRadius:5,pointBackgroundColor:R2,borderWidth:2}
+  ],'x');
+  const vact=[...D.v26.slice(0,5).map(v=>v||0),...D.vproj];
+  const bgp=M.map((_,i)=>i<5?R1:B1+'aa');
+  mkMix('c-proj',M,[
+    {type:'bar',label:'2025 referencia',data:D.v25,backgroundColor:'rgba(0,0,0,.07)',borderRadius:3,order:2},
+    {type:'bar',label:'2026 real + proyectado',data:vact,backgroundColor:bgp,borderRadius:4,order:1}
+  ]);
+  mkLine('c-proja',M,[
+    {label:'Acum. 2025',data:D.cum25,borderColor:R1,backgroundColor:R3,fill:true,tension:.3,pointRadius:3,borderWidth:2},
+    {label:'Acum. 2026 (real+proy)',data:D.cum26,borderColor:B1,backgroundColor:B2,fill:true,tension:.3,pointRadius:3,borderWidth:2},
+    {label:'Meta $1.600.000.000',data:M.map(()=>D.META),borderColor:G1,borderDash:[8,4],borderWidth:2.5,pointRadius:0,fill:false}
+  ],'cop');
+
+  // Tabla
+  const tb=document.getElementById('e-tb'),tf=document.getElementById('e-tf');
+  if(!tb||!tf)return;
+  tb.innerHTML=idx.map(i=>{
+    const h=D.v26[i]!==null;
+    return '<tr><td>'+MF[i]+'</td>'+
+      '<td>'+fCOP(D.i25[i])+'</td><td>'+(h?fCOP(D.i26[i]):'—')+'</td><td>'+(h?dH(pct(D.i26[i],D.i25[i])):'—')+'</td>'+
+      '<td>'+fCOP(D.v25[i])+'</td><td>'+(h?fCOP(D.v26[i]):'—')+'</td><td>'+(h?dH(pct(D.v26[i],D.v25[i])):'—')+'</td>'+
+      '<td>'+D.m25[i]+'%</td><td>'+(D.m26[i]!==null?'<strong>'+D.m26[i]+'%</strong>':'—')+'</td>'+
+      '<td>'+D.a25[i]+'</td><td>'+(D.a26[i]!==null?D.a26[i]:'—')+'</td>'+
+      '<td>'+D.p25[i]+'</td><td>'+(D.p26[i]!==null?D.p26[i]:'—')+'</td></tr>';
+  }).join('');
+  tf.innerHTML='<tr><td>TOTAL PERÍODO</td>'+
+    '<td>'+fCOP(ti25)+'</td><td>'+fCOP(ti26)+'</td><td>'+dH(pct(ti26,ti25))+'</td>'+
+    '<td>'+fCOP(tv25)+'</td><td>'+fCOP(tv26)+'</td><td>'+dH(pct(tv26,tv25))+'</td>'+
+    '<td>'+mg25.toFixed(1)+'%</td><td>'+mg26.toFixed(1)+'%</td>'+
+    '<td>'+ta25+'</td><td>'+ta26+'</td><td>'+tp25+'</td><td>'+tp26+'</td></tr>';
+
+  document.getElementById('e-ins').innerHTML=
+    '<div class="ins g"><div class="it">💹 Margen de Rentabilidad</div><div class="ix">Margen Ene–May 2026: <strong>'+mg26.toFixed(1)+'%</strong> vs <strong>'+mg25.toFixed(1)+'%</strong> en 2025. Mejora de <strong>+'+(mg26-mg25).toFixed(2)+' pp</strong>. Por cada peso gastado en pauta, se retienen más pesos en ventas que en 2025. Margen anual 2025: <strong>94.98%</strong>.</div></div>'+
+    '<div class="ins"><div class="it">📈 Crecimiento en Ventas</div><div class="ix">Ventas Ene–May 2026: <strong>$860.969.500</strong> vs <strong>$430.157.000</strong> en el mismo período 2025. Crecimiento de <strong>+'+pct(860969500,430157000)+'%</strong>. Mayo 2026 (actualizado): <strong>$99.547.000</strong>.</div></div>'+
+    '<div class="ins b"><div class="it">🔮 Proyección 2026</div><div class="ix">Con la tasa Ene–Abr (2.45× vs 2025), la proyección anual 2026 es <strong>$3.119.661.856</strong>. La meta $1.600.000.000 se supera en <strong>agosto 2026</strong>, con un superávit proyectado de <strong>$1.519.661.856</strong>.</div></div>'+
+    '<div class="ins a"><div class="it">📌 Inversión Mínima para Meta</div><div class="ix">Para los $739.030.500 pendientes (Jun–Dic), la inversión mínima es: <strong>$33.042.133</strong> (conservador, ROI 22.37×) ó <strong>$26.630.811</strong> (optimista, ROI 27.75×). Distribución mensual en la tabla adjunta.</div></div>'+
+    '<div class="ins"><div class="it">🎓 Programas Aperturados vs Ejecutados</div><div class="ix">2025 año completo: <strong>83 aperturados</strong> y <strong>241 ejecutados</strong>. 2026 Ene–May: <strong>49 aperturados</strong> y <strong>88 ejecutados</strong>. Ratio ejecución/apertura 2026: 2.1× (vs 2.9× en 2025).</div></div>'+
+    '<div class="ins"><div class="it">💡 Mayo 2026 Actualizado</div><div class="ix">Con datos al 29/05/2026, mayo 2026 registra ventas de <strong>$99.547.000</strong> e inversión de <strong>$7.396.950</strong>. Margen de mayo: <strong>92.57%</strong>. Mejora significativa respecto al dato preliminar anterior.</div></div>';
+
+  renderRec();
+}
+
+// ═══ POS RENDER ═══
+function posRender(){
+  const per=document.getElementById('pf-per').value;
+  const mf =document.getElementById('pf-mes').value;
+  let idx=per==='full'?Array.from({length:12},(_,i)=>i):Array.from({length:5},(_,i)=>i);
+  if(mf!=='all') idx=idx.filter(i=>i===+mf);
+  const lb=idx.map(i=>M[i]);
+  const p25s=idx.map(i=>P.p25[i]),p26s=idx.map(i=>P.p26[i]||0);
+  const e25=Sm(P.p25.slice(0,5)),e26=Sm(P.p26.slice(0,5));
+  const tot25=Sm(P.p25)+P.call+P.sms+P.vid+P.rrss;
+  document.getElementById('p-k').innerHTML=[
+    {l:'Pauta Ene–May 2025',v:fCOP(e25),s:'Período comparable',d:null,c:''},
+    {l:'Pauta Ene–May 2026',v:fCOP(e26),s:'Ejecutado',d:pct(e26,e25),c:''},
+    {l:'Total Inv. 2025',v:fCOP(tot25),s:'Todos los canales',d:null,c:''},
+    {l:'Part. Pauta/Total',v:(Sm(P.p25)/tot25*100).toFixed(1)+'%',s:'Sobre total 2025',d:null,c:''},
+    {l:'Prom. Mensual 2025',v:fCOP(Sm(P.p25)/12),s:'Pauta digital',d:null,c:''},
+    {l:'Prom. Mensual 2026',v:fCOP(e26/5),s:'Pauta Ene–May',d:pct(e26/5,Sm(P.p25)/12),c:''},
+  ].map(k=>'<div class="kpi '+k.c+'"><div class="kl">'+k.l+'</div><div class="kv" style="font-size:13px;letter-spacing:-.02em">'+k.v+'</div><div class="ks">'+k.s+'</div>'+dK(k.d)+'</div>').join('');
+  mkBar('p-pauta',lb,[{label:'Pauta 2025',data:p25s,backgroundColor:R1,borderRadius:4},{label:'Pauta 2026',data:p26s,backgroundColor:R2,borderRadius:4}],'cop');
+  mkDonut('p-dist',['Pauta Digital','Call Center','SMS & Mailing','Video','Promo RRSS'],[213330218,9947176,2864217,335352,5400000],[R1,'#c4303f',R2,'#f7a8b0','#7b1020']);
+  mkLine('p-acum',M.slice(0,5),[
+    {label:'Acum. 2025',data:Cum(P.p25.slice(0,5)),borderColor:R1,backgroundColor:R3,fill:true,tension:.3,pointRadius:4,borderWidth:2},
+    {label:'Acum. 2026',data:Cum(P.p26.slice(0,5)),borderColor:R2,backgroundColor:R4,fill:true,tension:.3,pointRadius:4,borderWidth:2}
+  ],'cop');
+  const vp=P.p25.slice(0,5).map((v,i)=>v>0?+((P.p26[i]/v*100)-100).toFixed(1):null);
+  mkBar('p-var',M.slice(0,5),[{label:'Variación %',data:vp,backgroundColor:vp.map(v=>v>=0?'rgba(26,120,60,.75)':'rgba(220,20,45,.75)'),borderRadius:4}],'p');
+  const tot=Sm(P.p25);
+  mkBar('p-est',M,[{label:'% participación',data:P.p25.map((v,i)=>+(v/tot*100).toFixed(1)),backgroundColor:P.p25.map((_,i)=>i<5?R1:R1+'3a'),borderRadius:3}],'p');
+  const tb=document.getElementById('p-tb'),tf=document.getElementById('p-tf');
+  if(!tb||!tf)return;
+  tb.innerHTML=Array.from({length:5},(_,i)=>i).map(i=>{
+    const v25=P.p25[i],v26=P.p26[i],d=pct(v26,v25);
+    return '<tr><td>'+MF[i]+'</td><td>'+fCOP(v25)+'</td><td>'+fCOP(v26)+'</td><td>'+dH(d)+'</td><td>'+(+d>=10?'✅ Aumentó':+d<=-10?'🔴 Redujo':'🟡 Estable')+'</td></tr>';
+  }).join('');
+  const t25=Sm(P.p25.slice(0,5)),t26=Sm(P.p26.slice(0,5));
+  tf.innerHTML='<tr><td>TOTAL Ene–May</td><td>'+fCOP(t25)+'</td><td>'+fCOP(t26)+'</td><td>'+dH(pct(t26,t25))+'</td><td>—</td></tr>';
+  document.getElementById('p-ins').innerHTML=
+    '<div class="ins"><div class="it">📊 Comparativo Pauta</div><div class="ix">Gasto Ene–May 2026: <strong>$80.185.372</strong> vs <strong>$86.899.394</strong> en 2025 (−7.7%). Con los datos actualizados al 29/05/2026, mayo 2026 registra $15.438.100 (vs $6.734.719 en el dato anterior), reduciendo significativamente la brecha.</div></div>'+
+    '<div class="ins"><div class="it">💡 Mix de Inversión 2025</div><div class="ix">Pauta Digital: <strong>92.0%</strong> · Call Center: <strong>4.3%</strong> · SMS+Email: <strong>1.3%</strong> · Video: <strong>0.1%</strong> · RRSS: <strong>2.3%</strong> del total $231.876.963.</div></div>'+
+    '<div class="ins"><div class="it">📅 Estacionalidad 2025</div><div class="ix">Mayor inversión: <strong>Enero ($29.998.745)</strong> y <strong>Diciembre ($27.502.615)</strong>. Menor: <strong>Febrero ($1.239.439)</strong>. El 2H concentró <strong>$150.430.609</strong> (70.5% del total).</div></div>'+
+    '<div class="ins"><div class="it">⚠️ 2H 2026 Sin Ejecutar</div><div class="ix">Jun–Dic 2025 representó $150.430.609 en pauta (70.5% del año). Aún sin ejecución en 2026 para estos meses. Garantizar presupuesto 2H es crítico.</div></div>'+
+    '<div class="ins"><div class="it">🔄 Call Center Sin Activar</div><div class="ix">FENALCO representó $9.947.176 en 2025 (3 contratos) sin dato en 2026. Evaluar reactivación para captación directa de inscritos en programas de larga duración.</div></div>'+
+    '<div class="ins"><div class="it">🎯 Proyección Pauta 2026</div><div class="ix">Con promedio mensual Ene–May de <strong>$16.037.074</strong>, proyección anual = <strong>$192.444.886</strong>, un −9.8% vs pauta 2025 ($213.330.218). Revisar si hay presupuesto adicional para 2H.</div></div>';
+}
+
+// ═══ TABS ═══
+function goTab(tab,btn){
+  document.querySelectorAll('.tcw').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.tb').forEach(e=>e.classList.remove('on'));
+  document.getElementById('t-'+tab).classList.add('on');
+  btn.classList.add('on');
+  if(tab==='pos') posRender();
+}
+document.addEventListener('DOMContentLoaded',()=>eduRender());
+</script>
+</body>
+</html>
