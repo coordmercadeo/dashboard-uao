@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open House Online Posgrados UAO 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#ECE5DC;--red:#DC142D;--red-dark:#961423;--red-accent:#F03C46;--white:#fff;--dark:#1A0A0D;--gray:#6B6060;--gray-light:#D4CBC0;--border:rgba(220,20,45,.15);--shadow:0 4px 24px rgba(26,10,13,.08);--shadow-h:0 8px 40px rgba(220,20,45,.18)}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);line-height:1.6;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(26,10,13,.97);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:60px;border-bottom:2px solid var(--red)}
+.nav-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nav-logo img{height:34px;width:auto;object-fit:contain;background:#fff;border-radius:6px;padding:2px 6px}
+.nav-title{color:rgba(255,255,255,.8);font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.nav-sep{width:1px;height:20px;background:rgba(255,255,255,.2);margin:0 4px}
+
+/* TABS NAV */
+.tabs-nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1;margin-left:16px}
+.tabs-nav::-webkit-scrollbar{display:none}
+.tab-btn{background:none;border:none;color:rgba(255,255,255,.6);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:6px 11px;border-radius:7px;cursor:pointer;transition:all .2s;white-space:nowrap;border:1px solid transparent}
+.tab-btn:hover{color:#fff;background:rgba(220,20,45,.2)}
+.tab-btn.active{color:#fff;background:var(--red);border-color:var(--red)}
+
+/* PANELS */
+.panel{display:none;padding-top:60px;min-height:100vh}
+.panel.active{display:block}
+
+/* HERO */
+.hero{min-height:100vh;background:var(--dark);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:80px 32px 60px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 110%,rgba(220,20,45,.25) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 80% 15%,rgba(240,60,70,.07) 0%,transparent 50%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(220,20,45,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(220,20,45,.05) 1px,transparent 1px);background-size:56px 56px}
+.hero-content{position:relative;z-index:1;max-width:920px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(220,20,45,.15);border:1px solid rgba(220,20,45,.4);color:var(--red-accent);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 18px;border-radius:50px;margin-bottom:24px;animation:fadeD .8s ease both}
+.hero-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--red-accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+.hero h1{font-size:clamp(32px,5.5vw,66px);font-weight:800;color:#fff;line-height:1.1;margin-bottom:10px;animation:fadeD .8s .1s ease both}
+.hero h1 span{color:var(--red-accent)}
+.hero h2{font-size:clamp(15px,2.5vw,22px);font-weight:400;color:rgba(255,255,255,.55);margin-bottom:28px;animation:fadeD .8s .2s ease both}
+@keyframes fadeD{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeU{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO EVENT INFO */
+.hero-date{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px 28px;margin-bottom:36px;animation:fadeD .8s .3s ease both;flex-wrap:wrap;justify-content:center}
+.hdi{text-align:center}
+.hdi .n{display:block;font-size:28px;font-weight:800;color:#fff;line-height:1}
+.hdi .l{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em}
+.hd-sep{width:1px;height:44px;background:rgba(255,255,255,.15)}
+
+/* COUNTDOWN */
+.countdown-wrap{animation:fadeU .8s .4s ease both;margin-bottom:32px}
+.countdown-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px}
+.countdown{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cd-block{background:rgba(220,20,45,.18);border:1px solid rgba(220,20,45,.35);border-radius:14px;padding:16px 20px;min-width:80px;text-align:center;position:relative;overflow:hidden}
+.cd-block::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(220,20,45,.1),transparent);pointer-events:none}
+.cd-num{display:block;font-size:38px;font-weight:800;color:#fff;line-height:1;letter-spacing:-.02em}
+.cd-lbl{font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+.cd-sep{font-size:28px;font-weight:700;color:rgba(220,20,45,.6);display:flex;align-items:center;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* HERO STATS */
+.hero-stats{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;animation:fadeU .8s .5s ease both}
+.hs{text-align:center}.hs .n{display:block;font-size:26px;font-weight:800;color:var(--red-accent)}
+.hs .l{font-size:11px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em}
+
+/* SECTION */
+.sec{padding:64px 32px;max-width:1260px;margin:0 auto}
+.sec-head{text-align:center;margin-bottom:48px}
+.sec-label{display:inline-block;background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:4px 14px;border-radius:50px;margin-bottom:14px}
+.sec-head h2{font-size:clamp(24px,3.5vw,38px);font-weight:800;color:var(--dark);margin-bottom:10px}
+.sec-head p{font-size:16px;color:var(--gray);max-width:600px;margin:0 auto}
+.dark-bg{background:var(--dark);padding:64px 32px}
+.dark-bg .sec-head h2{color:#fff}
+.dark-bg .sec-head p{color:rgba(255,255,255,.55)}
+.white-bg{background:#fff;padding:64px 32px}
+
+/* TAGS */
+.tag-p{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:50px}
+.presencial{background:#FFF3E0;color:#E65100;border:1px solid #FFB74D}
+.hibrida{background:#E8EAF6;color:#283593;border:1px solid #7986CB}
+.virtual{background:#E0F2F1;color:#00695C;border:1px solid #4DB6AC}
+
+/* CARDS */
+.card{background:#fff;border-radius:16px;padding:22px;box-shadow:var(--shadow);border:1px solid rgba(236,229,220,.8);transition:all .25s}
+.card:hover{box-shadow:var(--shadow-h);border-color:rgba(220,20,45,.25);transform:translateY(-2px)}
+.card h4{font-size:14px;font-weight:600;line-height:1.5;color:var(--dark);margin-bottom:8px}
+
+/* GRID HELPERS */
+.g2{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.g3{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.g4{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+
+/* EXEC CARDS */
+.exec-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:28px;transition:all .3s}
+.exec-card:hover{border-color:rgba(220,20,45,.4);background:rgba(220,20,45,.06);transform:translateY(-4px)}
+.exec-icon{width:44px;height:44px;background:rgba(220,20,45,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+.exec-card h3{font-size:15px;font-weight:700;color:#fff;margin-bottom:7px}
+.exec-card p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.7}
+
+/* OBJ BOX */
+.obj-box{background:#fff;border-radius:24px;padding:40px;box-shadow:var(--shadow);border-left:6px solid var(--red)}
+.obj-box h3{font-size:20px;font-weight:800;margin-bottom:14px}
+.obj-box p{font-size:15px;color:var(--gray);line-height:1.8;margin-bottom:10px}
+.chip{display:inline-flex;align-items:center;gap:5px;background:rgba(220,20,45,.08);border:1px solid rgba(220,20,45,.2);border-radius:50px;padding:4px 12px;font-size:11.5px;color:var(--red-dark);font-weight:600}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+/* NIVEL SECTION */
+.nivel-sec{margin-bottom:40px}
+.nivel-sec h3{font-size:18px;font-weight:800;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.nivel-sec h3::after{content:'';flex:1;height:2px;background:var(--border)}
+
+/* CANAL CARD */
+.canal-card{background:var(--cream);border-radius:18px;padding:24px;border:1px solid var(--gray-light);transition:all .25s}
+.canal-card:hover{border-color:var(--red);box-shadow:var(--shadow-h)}
+.canal-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.canal-icon{width:42px;height:42px;background:var(--red);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.canal-card h4{font-size:14px;font-weight:700;color:var(--dark)}
+.frecuencia{font-size:10px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.canal-detail{display:flex;flex-direction:column;gap:5px}
+.cd-item{display:flex;gap:7px;font-size:12px;color:var(--gray)}
+.cd-item strong{color:var(--dark);min-width:58px}
+
+/* ESCENARIOS */
+.esc-card{background:#fff;border-radius:18px;padding:28px;box-shadow:var(--shadow);border:2px solid transparent;transition:all .3s;position:relative}
+.esc-card.rec{border-color:var(--red);box-shadow:0 8px 40px rgba(220,20,45,.2)}
+.rec-badge{position:absolute;top:-11px;right:18px;background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 14px;border-radius:50px}
+.esc-num{font-size:44px;font-weight:800;color:var(--red);opacity:.18;line-height:1;margin-bottom:6px}
+.esc-card h3{font-size:17px;font-weight:700;margin-bottom:10px}
+.esc-card p{font-size:13.5px;color:var(--gray);line-height:1.75;margin-bottom:10px}
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.pros h5,.cons h5{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.pros h5{color:#2E7D32}.cons h5{color:#C62828}
+.pros li,.cons li{list-style:none;color:var(--gray);margin-bottom:3px;padding-left:13px;position:relative;font-size:12px}
+.pros li::before{content:'✓';position:absolute;left:0;color:#4CAF50;font-weight:700}
+.cons li::before{content:'×';position:absolute;left:0;color:#EF5350;font-weight:700}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:36px}
+.timeline::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--red),var(--red-dark),transparent)}
+.tl-item{position:relative;margin-bottom:28px}
+.tl-dot{position:absolute;left:-28px;top:4px;width:13px;height:13px;border-radius:50%;background:var(--red);border:3px solid var(--cream);box-shadow:0 0 0 2px var(--red)}
+.tl-dot.live{background:#fff;box-shadow:0 0 0 3px var(--red),0 0 20px rgba(220,20,45,.4)}
+.tl-content{background:#fff;border-radius:14px;padding:18px 22px;box-shadow:var(--shadow);border-left:4px solid var(--red)}
+.tl-content.live-c{border-left-color:var(--red);background:rgba(220,20,45,.03)}
+.fase{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--red);margin-bottom:3px}
+.tl-content h4{font-size:15px;font-weight:700;margin-bottom:7px}
+.tl-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.tl-tag{background:var(--cream);border-radius:7px;padding:3px 9px;font-size:12px;color:var(--gray)}
+
+/* ROLES */
+.rol-card{background:#fff;border-radius:16px;padding:22px;box-shadow:var(--shadow);border-top:4px solid var(--red);transition:all .25s}
+.rol-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-h)}
+.rol-icon{font-size:26px;margin-bottom:10px}
+.rol-card h4{font-size:14px;font-weight:700;margin-bottom:7px}
+.rol-card ul{list-style:none;display:flex;flex-direction:column;gap:4px}
+.rol-card ul li{font-size:12.5px;color:var(--gray);padding-left:13px;position:relative}
+.rol-card ul li::before{content:'▸';position:absolute;left:0;color:var(--red);font-size:9px;top:2px}
+
+/* FLUJO */
+.flujo-steps{display:flex;flex-direction:column;gap:0}
+.f-step{display:grid;grid-template-columns:72px 1fr;align-items:start;gap:20px;position:relative}
+.f-step::after{content:'';position:absolute;left:35px;top:72px;bottom:-20px;width:2px;background:var(--border)}
+.f-step:last-child::after{display:none}
+.f-num{width:72px;height:72px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff;flex-shrink:0;margin-bottom:20px}
+.f-content{background:#fff;border-radius:14px;padding:22px;box-shadow:var(--shadow);margin-bottom:20px;flex:1}
+.f-content h4{font-size:16px;font-weight:700;margin-bottom:7px}
+.f-content p{font-size:13.5px;color:var(--gray);line-height:1.7}
+.f-tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.ftag{background:var(--cream);border:1px solid var(--gray-light);border-radius:50px;padding:3px 11px;font-size:11px;color:var(--gray);font-weight:500}
+
+/* CONTINGENCIA */
+.cont-card{background:#fff;border-radius:14px;padding:22px;box-shadow:var(--shadow);border-left:4px solid var(--red)}
+.cont-card .ai{font-size:22px;margin-bottom:10px}
+.cont-card h4{font-size:14px;font-weight:700;margin-bottom:9px}
+.cont-card ol{padding-left:16px}
+.cont-card ol li{font-size:12.5px;color:var(--gray);margin-bottom:5px;line-height:1.6}
+
+/* MENSAJES */
+.msg-card{background:#fff;border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+.c-badge{display:inline-block;background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 11px;border-radius:50px;margin-bottom:10px}
+.msg-card h4{font-size:14px;font-weight:700;margin-bottom:7px}
+.msg-text{background:var(--cream);border-radius:10px;padding:13px 14px;font-size:12.5px;color:var(--gray);line-height:1.7;border-left:3px solid var(--red);font-style:italic}
+
+/* KPI */
+.kpi-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:22px;text-align:center;transition:all .3s}
+.kpi-card:hover{border-color:var(--red);background:rgba(220,20,45,.08)}
+.kpi-icon{font-size:26px;margin-bottom:8px}
+.kpi-card .target{display:block;font-size:26px;font-weight:800;color:#fff;line-height:1}
+.kpi-card .metric{font-size:11px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;margin-top:5px}
+.kpi-card .desc{font-size:12px;color:rgba(255,255,255,.35);margin-top:3px}
+
+/* FUNNEL */
+.funnel-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:28px;margin-top:28px}
+.funnel-wrap h4{color:#fff;font-size:17px;font-weight:700;text-align:center;margin-bottom:28px}
+.funnel{display:flex;align-items:flex-end;gap:7px;height:180px;justify-content:center;padding:0 20px}
+.f-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1}
+.f-bar{width:100%;background:linear-gradient(to top,var(--red),var(--red-accent));border-radius:7px 7px 0 0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;position:relative}
+.f-bar:hover{filter:brightness(1.2)}
+.f-bar-val{font-size:14px;font-weight:800;color:#fff}
+.f-bar-lbl{font-size:10px;color:rgba(255,255,255,.5);text-align:center;margin-top:6px}
+
+/* POST EVENT */
+.post-card{background:#fff;border-radius:14px;padding:24px;box-shadow:var(--shadow);border-top:3px solid var(--red)}
+.post-card .step-n{font-size:32px;font-weight:800;color:var(--red);opacity:.2;margin-bottom:6px}
+.post-card h4{font-size:15px;font-weight:700;margin-bottom:8px}
+.post-card p{font-size:13px;color:var(--gray);line-height:1.7}
+
+/* RACI */
+.table-wrap{overflow-x:auto}
+table.raci{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.raci th{background:var(--dark);color:#fff;padding:13px 14px;font-size:11px;font-weight:700;text-align:center;letter-spacing:.04em;text-transform:uppercase}
+.raci th:first-child{text-align:left}
+.raci td{padding:12px 14px;font-size:12.5px;border-bottom:1px solid var(--cream);text-align:center;color:var(--gray)}
+.raci td:first-child{text-align:left;color:var(--dark);font-weight:500}
+.raci tr:last-child td{border-bottom:none}
+.raci tr:hover td{background:rgba(220,20,45,.025)}
+.rb{display:inline-block;padding:2px 9px;border-radius:50px;font-size:10px;font-weight:700}
+.R{background:rgba(220,20,45,.12);color:var(--red-dark)}
+.A{background:rgba(0,121,107,.12);color:#00796B}
+.C{background:rgba(40,53,147,.12);color:#283593}
+.I{background:rgba(106,106,106,.12);color:#424242}
+
+/* RECOMENDACIONES */
+.rec-card{background:#fff;border-radius:18px;padding:24px;box-shadow:var(--shadow);display:flex;gap:14px}
+.rec-num{width:38px;height:38px;background:var(--red);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
+.rec-card h4{font-size:14px;font-weight:700;margin-bottom:5px}
+.rec-card p{font-size:13px;color:var(--gray);line-height:1.7}
+
+/* CTA BOX */
+.cta-box{background:var(--dark);border-radius:22px;padding:36px 44px;display:flex;gap:28px;align-items:center;flex-wrap:wrap;margin-top:44px}
+.cta-box h3{font-size:22px;font-weight:800;color:#fff;margin-bottom:10px}
+.cta-box p{font-size:14px;color:rgba(255,255,255,.6);line-height:1.7}
+.cta-btn{display:inline-flex;align-items:center;gap:7px;background:var(--red);color:#fff;border:none;border-radius:11px;padding:13px 24px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;font-family:'DM Sans',sans-serif}
+.cta-btn:hover{background:var(--red-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(220,20,45,.3)}
+.cta-btn.out{background:transparent;border:2px solid rgba(255,255,255,.3);color:rgba(255,255,255,.8)}
+.cta-btn.out:hover{background:var(--red);border-color:var(--red);color:#fff}
+
+/* SCROLL TOP */
+#scrollTop{position:fixed;bottom:28px;right:28px;width:44px;height:44px;background:var(--red);color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:18px;box-shadow:0 4px 20px rgba(220,20,45,.4);display:none;align-items:center;justify-content:center;z-index:999;transition:all .2s}
+#scrollTop:hover{background:var(--red-dark);transform:translateY(-3px)}
+
+/* DIVIDER */
+hr{border:none;height:1px;background:var(--border);margin:0}
+
+/* REVEAL ANIM */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.reveal.vis{opacity:1;transform:translateY(0)}
+
+/* FOOTER */
+footer{background:var(--dark);color:rgba(255,255,255,.5);text-align:center;padding:36px 32px;font-size:12.5px;border-top:2px solid var(--red)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:0 12px}
+  .nav-title,.nav-sep{display:none}
+  .sec,.dark-bg,.white-bg{padding:48px 16px}
+  .f-step{grid-template-columns:52px 1fr}
+  .f-num{width:52px;height:52px;font-size:17px}
+  .f-step::after{left:25px}
+  .cd-block{padding:12px 14px;min-width:66px}
+  .cd-num{font-size:30px}
+  .tab-btn{font-size:10px;padding:5px 8px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="data:image/jpeg;base64,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" alt="Universidad Autónoma de Occidente" style="height:36px;width:auto;object-fit:contain;background:#fff;border-radius:7px;padding:3px 7px;display:block">
+    <div class="nav-sep"></div>
+    <div class="nav-title">Open House Online · Posgrados 2026</div>
+  </div>
+  <div class="tabs-nav" id="tabsNav">
+    <button class="tab-btn active" onclick="showTab('portada')">🏠 Inicio</button>
+    <button class="tab-btn" onclick="showTab('resumen')">📋 Resumen</button>
+    <button class="tab-btn" onclick="showTab('programas')">🎓 Programas</button>
+    <button class="tab-btn" onclick="showTab('captacion')">📣 Captación</button>
+    <button class="tab-btn" onclick="showTab('webex')">💻 Webex</button>
+    <button class="tab-btn" onclick="showTab('cronograma')">📅 Cronograma</button>
+    <button class="tab-btn" onclick="showTab('equipo')">👥 Equipo</button>
+    <button class="tab-btn" onclick="showTab('flujo')">🔄 Flujo</button>
+    <button class="tab-btn" onclick="showTab('contingencia')">🛡️ Contingencia</button>
+    <button class="tab-btn" onclick="showTab('indicadores')">📊 KPIs</button>
+    <button class="tab-btn" onclick="showTab('post')">🚀 Post-Evento</button>
+    <button class="tab-btn" onclick="showTab('raci')">📐 RACI</button>
+    <button class="tab-btn" onclick="showTab('mensajes')">💬 Mensajes</button>
+    <button class="tab-btn" onclick="showTab('recomendaciones')">⭐ Recomendaciones</button>
+  </div>
+</nav>
+</nav>
+
+<!-- ===================== PANEL: PORTADA ===================== -->
+<div id="panel-portada" class="panel active">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Plan Estratégico Completo · Documento Ejecutivo</div>
+      <h1>Open House Online<br><span>Posgrados UAO</span> 2026</h1>
+      <h2>Universidad Autónoma de Occidente · Cali, Colombia · vía Webex</h2>
+      <div class="hero-date">
+        <div class="hdi"><span class="n">Miér</span><span class="l">Día</span></div>
+        <div class="hd-sep"></div>
+        <div class="hdi"><span class="n">8</span><span class="l">Julio</span></div>
+        <div class="hd-sep"></div>
+        <div class="hdi"><span class="n">2026</span><span class="l">Año</span></div>
+        <div class="hd-sep"></div>
+        <div class="hdi"><span class="n" style="font-size:18px">6:30 PM</span><span class="l">Inicio</span></div>
+        <div class="hd-sep"></div>
+        <div class="hdi"><span class="n" style="font-size:18px;color:var(--red-accent)">Webex</span><span class="l">Plataforma</span></div>
+      </div>
+
+      <!-- COUNTDOWN -->
+      <div class="countdown-wrap">
+        <div class="countdown-label">⏳ Cuenta regresiva al evento</div>
+        <div class="countdown">
+          <div class="cd-block"><span class="cd-num" id="cd-dias">--</span><span class="cd-lbl">Días</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-block"><span class="cd-num" id="cd-horas">--</span><span class="cd-lbl">Horas</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-block"><span class="cd-num" id="cd-mins">--</span><span class="cd-lbl">Min</span></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-block"><span class="cd-num" id="cd-segs">--</span><span class="cd-lbl">Seg</span></div>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hs"><span class="n">40+</span><span class="l">Programas</span></div>
+        <div class="hs"><span class="n">3</span><span class="l">Niveles Académicos</span></div>
+        <div class="hs"><span class="n">10+</span><span class="l">Canales</span></div>
+        <div class="hs"><span class="n">500+</span><span class="l">Meta Registros</span></div>
+        <div class="hs"><span class="n">37</span><span class="l">Días Restantes</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navegación rápida en portada -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-label">Navegación del Proyecto</span>
+      <h2>¿Qué contiene este plan?</h2>
+      <p>Selecciona cualquier sección en el menú superior o en las tarjetas a continuación.</p>
+    </div>
+    <div class="g3">
+      <div class="card" style="cursor:pointer" onclick="showTab('resumen')">
+        <div style="font-size:28px;margin-bottom:8px">📋</div>
+        <h4>Resumen Ejecutivo</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">Visión general del proyecto en 6 dimensiones estratégicas.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showTab('programas')">
+        <div style="font-size:28px;margin-bottom:8px">🎓</div>
+        <h4>Portafolio Académico</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">40+ programas organizados por nivel y modalidad.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showTab('captacion')">
+        <div style="font-size:28px;margin-bottom:8px">📣</div>
+        <h4>Estrategia de Captación</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">Plan multicanal: email, WhatsApp, Meta, LinkedIn, medios.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showTab('webex')">
+        <div style="font-size:28px;margin-bottom:8px">💻</div>
+        <h4>Escenarios en Webex</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">3 modelos de ejecución + recomendación estratégica.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showTab('cronograma')">
+        <div style="font-size:28px;margin-bottom:8px">📅</div>
+        <h4>Cronograma</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">Semana -4 hasta post-evento del 8 de julio de 2026.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showTab('equipo')">
+        <div style="font-size:28px;margin-bottom:8px">👥</div>
+        <h4>Equipo y Roles</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">8 roles con responsabilidades claras para el día del evento.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showTab('flujo')">
+        <div style="font-size:28px;margin-bottom:8px">🔄</div>
+        <h4>Flujo del Usuario</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">Ruta del prospecto desde el primer impacto hasta la matrícula.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showTab('contingencia')">
+        <div style="font-size:28px;margin-bottom:8px">🛡️</div>
+        <h4>Plan de Contingencia</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">6 protocolos para fallas técnicas y escenarios críticos.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showTab('indicadores')">
+        <div style="font-size:28px;margin-bottom:8px">📊</div>
+        <h4>KPIs y Métricas</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">Dashboard con 12 indicadores clave y embudo de conversión.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showTab('post')">
+        <div style="font-size:28px;margin-bottom:8px">🚀</div>
+        <h4>Plan Post-Evento</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">8 acciones de seguimiento para convertir asistentes en matriculados.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showTab('raci')">
+        <div style="font-size:28px;margin-bottom:8px">📐</div>
+        <h4>Matriz RACI</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">Responsabilidades por actividad y rol del equipo.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showTab('mensajes')">
+        <div style="font-size:28px;margin-bottom:8px">💬</div>
+        <h4>Mensajes Clave</h4>
+        <p style="font-size:13px;color:var(--gray);margin-top:4px">8 plantillas de comunicación listas por canal.</p>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div style="margin-bottom:8px"><span style="font-size:20px;font-weight:900"><span style="color:#DC142D">u</span><span style="color:#fff">ao</span></span></div>
+    <p><strong style="color:#fff">Universidad Autónoma de Occidente</strong> · Posgrados UAO · Open House Online 2026</p>
+    <p style="margin-top:6px">Cali, Valle del Cauca · <a href="https://www.uao.edu.co" target="_blank" style="color:var(--red-accent);text-decoration:none">www.uao.edu.co</a> · Documento estratégico interno · Junio 2026</p>
+  </footer>
+</div>
+
+<!-- ===================== PANEL: RESUMEN ===================== -->
+<div id="panel-resumen" class="panel">
+  <div class="dark-bg">
+    <div style="max-width:1260px;margin:0 auto">
+      <div class="sec-head">
+        <span class="sec-label">Resumen Ejecutivo</span>
+        <h2>El proyecto en 6 dimensiones</h2>
+        <p>Un plan integral para posicionar a la UAO como la principal opción de posgrado en la región, captando prospectos calificados y convirtiéndolos en matriculados.</p>
+      </div>
+      <div class="g3">
+        <div class="exec-card reveal"><div class="exec-icon">🎯</div><h3>Objetivo Estratégico</h3><p>Captar mínimo 500 registros calificados, lograr 65% de tasa de asistencia y convertir al menos el 10% en solicitudes activas de admisión al programa correspondiente.</p></div>
+        <div class="exec-card reveal"><div class="exec-icon">📅</div><h3>Fecha del Evento</h3><p>Miércoles 8 de julio de 2026 vía Webex. Inicio 6:30 PM. Duración estimada: 4 horas. Estructura: sesión plenaria (20 min) + salas temáticas simultáneas hasta las 9:30 PM.</p></div>
+        <div class="exec-card reveal"><div class="exec-icon">🎓</div><h3>Portafolio Académico</h3><p>Más de 40 programas en tres niveles: especializaciones (presencial, híbrida y virtual), maestrías y doctorados en áreas de ingeniería, administración, comunicación, energía y salud.</p></div>
+        <div class="exec-card reveal"><div class="exec-icon">📣</div><h3>Estrategia de Captación</h3><p>Plan multicanal: email marketing segmentado, WhatsApp masivo, pauta en Meta Ads/LinkedIn/Google Ads, redes sociales, medios aliados (90 Minutos), egresados y bases históricas de leads.</p></div>
+        <div class="exec-card reveal"><div class="exec-icon">🛡️</div><h3>Ejecución Sin Fallas</h3><p>Plan operativo detallado con roles definidos, guiones de bienvenida y cierre comercial, pruebas técnicas previas en Webex, protocolos de contingencia y moderadores asignados por sala.</p></div>
+        <div class="exec-card reveal"><div class="exec-icon">📊</div><h3>Medición y Seguimiento</h3><p>Dashboard con 12 KPIs. Automatización de seguimiento post-evento con correos diferenciados para asistentes activos, asistentes pasivos y no asistentes. Meta: 50 solicitudes de admisión.</p></div>
+      </div>
+    </div>
+  </div>
+  <!-- OBJETIVO -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-label">Objetivo General</span><h2>¿Por qué realizamos este Open House?</h2></div>
+    <div class="obj-box reveal">
+      <h3>Objetivo General del Proyecto</h3>
+      <p>Diseñar, promocionar y ejecutar el <strong>Open House Online de Posgrados UAO 2026</strong> como un evento digital de alta calidad que permita a profesionales y egresados conocer la oferta de posgrado de la Universidad Autónoma de Occidente, resolver dudas con asesores especializados y ser guiados hacia el proceso de inscripción o admisión.</p>
+      <p>El evento debe posicionarse como <strong style="color:var(--red)">el punto de inflexión en el proceso de decisión</strong> del prospecto: el momento en que pasa de interesado a aspirante activo.</p>
+      <div class="chip-row">
+        <div class="chip">🎯 Captación de leads calificados</div>
+        <div class="chip">🤝 Orientación personalizada</div>
+        <div class="chip">📝 Inicio de inscripción</div>
+        <div class="chip">🏫 Posicionamiento institucional</div>
+        <div class="chip">📈 Conversión a matrícula</div>
+      </div>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · Open House Online Posgrados 2026 · Documento interno</p></footer>
+</div>
+
+<!-- ===================== PANEL: PROGRAMAS ===================== -->
+<div id="panel-programas" class="panel">
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-label">Programas Académicos</span>
+      <h2>Portafolio Completo de Posgrados UAO</h2>
+      <p>Organizados por nivel académico y modalidad para facilitar la orientación personalizada de cada prospecto.</p>
+    </div>
+
+    <!-- ESPECIALIZACIONES PRESENCIALES -->
+    <div class="nivel-sec">
+      <h3>🎓 Especializaciones <span class="tag-p presencial">Presencial</span></h3>
+      <div class="g2">
+        <div class="card reveal"><h4>Especialización en Derecho Aduanero y Comercio Exterior</h4><div class="tag-p presencial">Presencial</div></div>
+        <div class="card reveal"><h4>Especialización en Mercadeo</h4><div class="tag-p presencial">Presencial</div></div>
+        <div class="card reveal"><h4>Especialización en Gerencia del Talento Humano</h4><div class="tag-p presencial">Presencial</div></div>
+        <div class="card reveal"><h4>Especialización en Finanzas</h4><div class="tag-p presencial">Presencial</div></div>
+        <div class="card reveal"><h4>Especialización en Gerencia de Mantenimiento y Confiabilidad</h4><div class="tag-p presencial">Presencial</div></div>
+        <div class="card reveal"><h4>Especialización en Seguridad y Salud en el Trabajo</h4><div class="tag-p presencial">Presencial</div></div>
+      </div>
+    </div>
+
+    <!-- ESPECIALIZACIONES HÍBRIDAS -->
+    <div class="nivel-sec">
+      <h3>🎓 Especializaciones <span class="tag-p hibrida">Híbrida</span></h3>
+      <div class="g2">
+        <div class="card reveal"><h4>Especialización en Comunicación Estratégica</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Especialización en Estrategia Publicitaria de Marca en Entornos Digitales</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Especialización en Derechos Humanos y Territorios</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Especialización en Logística</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Especialización en Analítica de Big Data</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Especialización en Ingeniería Clínica</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Especialización en Inteligencia Artificial</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Especialización en Gerencia de Proyectos</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Especialización en Eficiencia Energética</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Especialización en Energías Renovables</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Especialización en Ciberseguridad</h4><div class="tag-p hibrida">Híbrida</div></div>
+      </div>
+    </div>
+
+    <!-- ESPECIALIZACIONES VIRTUALES -->
+    <div class="nivel-sec">
+      <h3>🎓 Especializaciones <span class="tag-p virtual">Virtual</span></h3>
+      <div class="g2">
+        <div class="card reveal"><h4>Especialización en Comercio Exterior</h4><div class="tag-p virtual">Virtual</div></div>
+        <div class="card reveal"><h4>Especialización en Finanzas</h4><div class="tag-p virtual">Virtual</div></div>
+        <div class="card reveal"><h4>Especialización en Diseño Publicitario en Contenidos Digitales</h4><div class="tag-p virtual">Virtual</div></div>
+        <div class="card reveal"><h4>Especialización en Interculturalidad y Estudios de Género</h4><div class="tag-p virtual">Virtual</div></div>
+        <div class="card reveal"><h4>Especialización en Comunicación y Periodismo Digital</h4><div class="tag-p virtual">Virtual</div></div>
+        <div class="card reveal"><h4>Especialización en Logística</h4><div class="tag-p virtual">Virtual</div></div>
+        <div class="card reveal"><h4>Especialización en Seguridad y Salud en el Trabajo</h4><div class="tag-p virtual">Virtual</div></div>
+      </div>
+    </div>
+
+    <!-- MAESTRÍAS -->
+    <div class="nivel-sec">
+      <h3>🏅 Maestrías</h3>
+      <div class="g2">
+        <div class="card reveal"><h4>Maestría en Comunicación Digital</h4><div class="tag-p virtual">Virtual</div></div>
+        <div class="card reveal"><h4>Maestría en Administración de Empresas (MBA)</h4><div class="tag-p presencial">Presencial</div></div>
+        <div class="card reveal"><h4>Maestría en Sistemas Energéticos</h4><div class="tag-p presencial">Presencial</div></div>
+        <div class="card reveal"><h4>Maestría en Gerencia de Ingeniería</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Maestría en Seguridad y Salud en el Trabajo</h4><div class="tag-p hibrida">Híbrida</div></div>
+        <div class="card reveal"><h4>Maestría en Inteligencia Artificial y Ciencia de Datos</h4><div class="tag-p hibrida">Híbrida</div></div>
+      </div>
+    </div>
+
+    <!-- DOCTORADOS -->
+    <div class="nivel-sec">
+      <h3>🔬 Doctorados</h3>
+      <div class="g2">
+        <div class="card reveal"><h4>Doctorado en Bioingeniería</h4><div class="tag-p presencial">Presencial</div></div>
+        <div class="card reveal"><h4>Doctorado en Ingeniería</h4><div class="tag-p presencial">Presencial</div></div>
+        <div class="card reveal"><h4>Doctorado en Sostenibilidad</h4><div class="tag-p presencial">Presencial</div></div>
+      </div>
+    </div>
+
+    <!-- RESUMEN POR MODALIDAD -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:32px">
+      <div style="background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:var(--shadow)">
+        <div style="font-size:32px;font-weight:800;color:#E65100">6</div>
+        <div style="font-size:12px;color:var(--gray)">Especializaciones Presenciales</div>
+        <div class="tag-p presencial" style="margin-top:8px">Presencial</div>
+      </div>
+      <div style="background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:var(--shadow)">
+        <div style="font-size:32px;font-weight:800;color:#283593">11</div>
+        <div style="font-size:12px;color:var(--gray)">Especializaciones Híbridas</div>
+        <div class="tag-p hibrida" style="margin-top:8px">Híbrida</div>
+      </div>
+      <div style="background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:var(--shadow)">
+        <div style="font-size:32px;font-weight:800;color:#00695C">7</div>
+        <div style="font-size:12px;color:var(--gray)">Especializaciones Virtuales</div>
+        <div class="tag-p virtual" style="margin-top:8px">Virtual</div>
+      </div>
+      <div style="background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:var(--shadow)">
+        <div style="font-size:32px;font-weight:800;color:var(--red)">6</div>
+        <div style="font-size:12px;color:var(--gray)">Maestrías</div>
+        <div style="font-size:11px;color:var(--gray);margin-top:4px">Presencial · Híbrida · Virtual</div>
+      </div>
+      <div style="background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:var(--shadow)">
+        <div style="font-size:32px;font-weight:800;color:var(--red-dark)">3</div>
+        <div style="font-size:12px;color:var(--gray)">Doctorados</div>
+        <div class="tag-p presencial" style="margin-top:8px">Presencial</div>
+      </div>
+      <div style="background:var(--dark);border-radius:14px;padding:20px;text-align:center;box-shadow:var(--shadow)">
+        <div style="font-size:32px;font-weight:800;color:var(--red-accent)">33</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6)">Total de Programas</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">Todos los niveles</div>
+      </div>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · Portafolio Posgrados 2026 · 33 programas activos</p></footer>
+</div>
+
+<!-- ===================== PANEL: CAPTACIÓN ===================== -->
+<div id="panel-captacion" class="panel">
+  <div class="white-bg">
+    <div style="max-width:1260px;margin:0 auto">
+      <div class="sec-head">
+        <span class="sec-label">Estrategia de Captación</span>
+        <h2>Plan Multicanal de Divulgación</h2>
+        <p>Cada canal tiene un rol específico: alcanzar, persuadir y convertir a los prospectos correctos en el momento adecuado.</p>
+      </div>
+      <div class="g3">
+        <div class="canal-card reveal">
+          <div class="canal-head"><div class="canal-icon">📧</div><div><h4>Email Marketing Segmentado</h4><div class="frecuencia">3 impactos · 3 semanas antes</div></div></div>
+          <div class="canal-detail">
+            <div class="cd-item"><strong>Audiencia:</strong> Egresados UAO, estudiantes últimos semestres, leads históricos, bases externas calificadas.</div>
+            <div class="cd-item"><strong>Mensaje:</strong> Personalizado por programa con nombre del prospecto, programa de interés y enlace de registro.</div>
+            <div class="cd-item"><strong>Frecuencia:</strong> Sem -3: Invitación. Sem -1: Recordatorio. Día -1: Último aviso + agenda personalizada.</div>
+            <div class="cd-item"><strong>KPI Meta:</strong> Apertura &gt;25%, CTR &gt;8%, conversión a registro &gt;4%.</div>
+          </div>
+        </div>
+        <div class="canal-card reveal">
+          <div class="canal-head"><div class="canal-icon">💬</div><div><h4>WhatsApp Masivo</h4><div class="frecuencia">4 impactos · Alta conversión</div></div></div>
+          <div class="canal-detail">
+            <div class="cd-item"><strong>Audiencia:</strong> Bases propias: egresados UAO, leads calientes de posgrados, interesados que ya consultaron.</div>
+            <div class="cd-item"><strong>Mensaje:</strong> Corto, directo, con link de registro. Urgencia y beneficio claro en máx. 160 caracteres.</div>
+            <div class="cd-item"><strong>Frecuencia:</strong> Sem -3, Sem -1, Día -1, Día del evento (1h antes del inicio).</div>
+            <div class="cd-item"><strong>KPI Meta:</strong> Tasa de respuesta 12-18%. Registros esperados: 25% del total.</div>
+          </div>
+        </div>
+        <div class="canal-card reveal">
+          <div class="canal-head"><div class="canal-icon">📱</div><div><h4>Meta Ads (Facebook + Instagram)</h4><div class="frecuencia">Pauta continua · Lead Forms</div></div></div>
+          <div class="canal-detail">
+            <div class="cd-item"><strong>Audiencia:</strong> 25-45 años, profesionales en Colombia, intereses: educación, MBA, ingeniería, tecnología.</div>
+            <div class="cd-item"><strong>Formatos:</strong> Lead Form Ads, Reels 15-30s, Carruseles por programa, Stories con CTA de swipe up.</div>
+            <div class="cd-item"><strong>Remarketing:</strong> Audiencias de interacciones previas con anuncios de posgrados UAO (últimos 180 días).</div>
+            <div class="cd-item"><strong>KPI Meta:</strong> CPL $15.000–$30.000 COP. 30% del total de leads.</div>
+          </div>
+        </div>
+        <div class="canal-card reveal">
+          <div class="canal-head"><div class="canal-icon">💼</div><div><h4>LinkedIn Ads</h4><div class="frecuencia">Pauta B2B · Profesionales senior</div></div></div>
+          <div class="canal-detail">
+            <div class="cd-item"><strong>Audiencia:</strong> Directivos, gerentes, ingenieros y comunicadores con 3+ años de experiencia en Colombia.</div>
+            <div class="cd-item"><strong>Formatos:</strong> Lead Gen Forms, Sponsored Content, Message Ads (InMail directo a bandeja).</div>
+            <div class="cd-item"><strong>Programas clave:</strong> MBA, Maestría IA, Gerencia de Proyectos, Ciberseguridad, Energías Renovables.</div>
+            <div class="cd-item"><strong>KPI Meta:</strong> CPL $80.000–$120.000 COP. Leads de alto perfil de conversión.</div>
+          </div>
+        </div>
+        <div class="canal-card reveal">
+          <div class="canal-head"><div class="canal-icon">🔍</div><div><h4>Google Ads</h4><div class="frecuencia">Búsqueda + Display + YouTube</div></div></div>
+          <div class="canal-detail">
+            <div class="cd-item"><strong>Palabras clave:</strong> "posgrados Cali 2026", "maestría en IA Colombia", "especialización online UAO", "Open House UAO".</div>
+            <div class="cd-item"><strong>Formatos:</strong> Búsqueda (alta intención de compra), Display remarketing, YouTube pre-roll institucional.</div>
+            <div class="cd-item"><strong>KPI Meta:</strong> CTR búsqueda &gt;4%. Captar demanda activa ya existente.</div>
+          </div>
+        </div>
+        <div class="canal-card reveal">
+          <div class="canal-head"><div class="canal-icon">📺</div><div><h4>90 Minutos + Medios Digitales</h4><div class="frecuencia">Alianza estratégica · TV + Web</div></div></div>
+          <div class="canal-detail">
+            <div class="cd-item"><strong>Canal:</strong> 90 Minutos TV regional + portal web + Instagram. Alto alcance en profesionales del Valle del Cauca.</div>
+            <div class="cd-item"><strong>Contenido:</strong> Nota editorial sobre el Open House + entrevista con directivo UAO + banner web + post patrocinado.</div>
+            <div class="cd-item"><strong>Objetivo:</strong> Branding institucional y generación de leads de audiencias nuevas no alcanzadas en digital.</div>
+          </div>
+        </div>
+        <div class="canal-card reveal">
+          <div class="canal-head"><div class="canal-icon">🌐</div><div><h4>Redes Sociales UAO</h4><div class="frecuencia">Orgánico + Pauta · Diario</div></div></div>
+          <div class="canal-detail">
+            <div class="cd-item"><strong>Canales:</strong> Instagram, Facebook, LinkedIn, TikTok y X de Posgrados UAO + cuenta principal UAO.</div>
+            <div class="cd-item"><strong>Contenido:</strong> Countdown diario, testimonios de egresados, reels de docentes, stories interactivos con encuestas.</div>
+            <div class="cd-item"><strong>Frecuencia:</strong> 1 post diario últimos 7 días antes del evento + stories diarias últimos 5 días.</div>
+          </div>
+        </div>
+        <div class="canal-card reveal">
+          <div class="canal-head"><div class="canal-icon">♻️</div><div><h4>Remarketing y Bases Propias</h4><div class="frecuencia">Alta conversión · Segmentado</div></div></div>
+          <div class="canal-detail">
+            <div class="cd-item"><strong>Segmentos:</strong> Leads de Open Houses anteriores, prospectos sin matrícula, visitantes de páginas de posgrado UAO.</div>
+            <div class="cd-item"><strong>Mensaje:</strong> Diferenciado según etapa del embudo: conocimiento, consideración o decisión activa.</div>
+            <div class="cd-item"><strong>KPI Meta:</strong> CPL 40% menor que audiencias frías. Mayor tasa de asistencia al evento.</div>
+          </div>
+        </div>
+        <div class="canal-card reveal">
+          <div class="canal-head"><div class="canal-icon">🏢</div><div><h4>Nota Web Institucional UAO</h4><div class="frecuencia">SEO + Institucional</div></div></div>
+          <div class="canal-detail">
+            <div class="cd-item"><strong>Publicación:</strong> Nota en uao.edu.co con descripción del evento, programas, agenda y botón de registro directo.</div>
+            <div class="cd-item"><strong>SEO:</strong> Optimizada para "posgrados UAO 2026", "open house universitario Cali", "especializaciones UAO".</div>
+            <div class="cd-item"><strong>Extra:</strong> Nota en medio nacional con alta presencia en Instagram para alcance nacional.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · Estrategia Multicanal · 9 canales activos · Inicio campañas: 10 de junio 2026</p></footer>
+</div>
+
+<!-- ===================== PANEL: WEBEX ===================== -->
+<div id="panel-webex" class="panel">
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-label">Experiencia en Webex</span>
+      <h2>Escenarios de Ejecución del Evento</h2>
+      <p>Tres modelos evaluados para garantizar la mejor experiencia para los asistentes el 8 de julio de 2026.</p>
+    </div>
+    <div class="g3" style="margin-bottom:32px">
+      <div class="esc-card reveal">
+        <div class="esc-num">01</div>
+        <h3>Evento Central + Salas por Programa</h3>
+        <p>Sala plenaria de bienvenida institucional (30 min) seguida de acceso libre a salas independientes por programa o facultad, donde los asesores atienden grupos pequeños de forma simultánea.</p>
+        <div class="pc">
+          <div class="pros"><h5>Ventajas</h5><ul><li>Coherencia institucional al inicio</li><li>Flexibilidad para el asistente</li><li>Atención focalizada</li></ul></div>
+          <div class="cons"><h5>Retos</h5><ul><li>Alta coordinación técnica</li><li>Riesgo salas vacías</li><li>Asistente puede perderse</li></ul></div>
+        </div>
+      </div>
+      <div class="esc-card reveal">
+        <div class="esc-num">02</div>
+        <h3>Evento por Franjas Académicas</h3>
+        <p>Bloques de 50 min por facultad o área del conocimiento. Los asistentes eligen la franja según la agenda publicada antes del evento y solo asisten al bloque de su interés.</p>
+        <div class="pc">
+          <div class="pros"><h5>Ventajas</h5><ul><li>Evita saturación simultánea</li><li>Agenda clara y predecible</li><li>Fácil de moderar</li></ul></div>
+          <div class="cons"><h5>Retos</h5><ul><li>Evento muy largo (+4h)</li><li>Menor interés cruzado</li><li>Mayor compromiso de tiempo</li></ul></div>
+        </div>
+      </div>
+      <div class="esc-card rec reveal">
+        <div class="rec-badge">⭐ Recomendado</div>
+        <div class="esc-num">03</div>
+        <h3>Landing + Acceso Personalizado por Programa</h3>
+        <p>Landing de registro donde el prospecto elige su programa. Al confirmar, recibe su enlace Webex específico, la agenda y el asesor asignado. El día del evento accede directo a la sala de su programa.</p>
+        <div class="pc">
+          <div class="pros"><h5>Ventajas</h5><ul><li>Experiencia 100% personalizada</li><li>Asesores preparados para su audiencia</li><li>Menor abandono</li><li>Data de interés real</li><li>Automatización post-evento</li></ul></div>
+          <div class="cons"><h5>Consideraciones</h5><ul><li>Mayor esfuerzo pre-producción</li><li>Landing funcional necesaria</li><li>Integración CRM requerida</li></ul></div>
+        </div>
+      </div>
+    </div>
+    <div class="obj-box reveal">
+      <h3>🏆 ¿Por qué el Escenario 3 es el más recomendado?</h3>
+      <p>El <strong>Escenario 3 (Landing + Acceso Personalizado)</strong> combina personalización de alto impacto con control operativo total. Al conocer de antemano qué programa le interesa a cada asistente, los asesores comerciales llegan preparados con argumentos específicos, el brochure correcto y la hoja de ruta de admisión lista. La experiencia es más cercana, más eficiente y más convertidora.</p>
+      <p>Además, permite automatizar el seguimiento post-evento por segmento, facilitando el trabajo del equipo comercial en las semanas siguientes. La tasa de conversión de registrado a admitido es significativamente mayor cuando el asistente siente que la UAO "ya lo conoce" desde el registro.</p>
+      <div class="chip-row">
+        <div class="chip">💡 Personalización real desde el registro</div>
+        <div class="chip">📊 Datos de interés por programa</div>
+        <div class="chip">🤖 Automatización post-evento</div>
+        <div class="chip">💼 Asesores preparados</div>
+        <div class="chip">📈 Mayor tasa de conversión</div>
+      </div>
+    </div>
+
+    <!-- AGENDA DEL DÍA -->
+    <div style="margin-top:40px">
+      <div class="sec-head"><span class="sec-label">Agenda del Día</span><h2>8 de julio de 2026 — Hora a hora</h2></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px">
+        <div class="card reveal" style="border-left:4px solid var(--red)"><div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">5:30 PM</div><h4>Apertura técnica de salas</h4><p style="font-size:13px;color:var(--gray)">Equipo técnico en línea. Verificación de todos los enlaces, moderadores y materiales.</p></div>
+        <div class="card reveal" style="border-left:4px solid var(--red)"><div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">6:30 PM</div><h4>Sesión plenaria de bienvenida</h4><p style="font-size:13px;color:var(--gray)">Bienvenida institucional con directivo UAO, presentación del evento y agenda del día. Duración: 20 min.</p></div>
+        <div class="card reveal" style="border-left:4px solid var(--red)"><div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">6:50 PM</div><h4>Apertura simultánea de salas</h4><p style="font-size:13px;color:var(--gray)">Cada asistente accede a la sala de su programa. Presentación del coordinador y docentes.</p></div>
+        <div class="card reveal" style="border-left:4px solid var(--red)"><div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">6:50 – 8:30 PM</div><h4>Sesiones por programa (Q&A)</h4><p style="font-size:13px;color:var(--gray)">Presentación del programa: pensum, perfil de egresado, docentes, costos y proceso de admisión.</p></div>
+        <div class="card reveal" style="border-left:4px solid var(--red)"><div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">8:30 – 9:30 PM</div><h4>Asesorías individuales (Breakout)</h4><p style="font-size:13px;color:var(--gray)">Salas privadas de 15 min por prospecto con el asesor asignado. Orientación de admisión.</p></div>
+        <div class="card reveal" style="border-left:4px solid var(--red);background:rgba(220,20,45,.04)"><div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">9:30 PM</div><h4>Cierre institucional + CTA</h4><p style="font-size:13px;color:var(--gray)">Mensaje de cierre, llamada a inscripción con condiciones especiales para quien se registre ese día.</p></div>
+      </div>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · Escenario Recomendado: Nro. 3 · Landing Personalizada + Webex por Programa</p></footer>
+</div>
+
+<!-- ===================== PANEL: CRONOGRAMA ===================== -->
+<div id="panel-cronograma" class="panel">
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-label">Cronograma</span>
+      <h2>Línea de Tiempo del Proyecto</h2>
+      <p>Desde el 10 de junio de 2026 (kick-off) hasta el 22 de julio de 2026 (cierre post-evento).</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="fase">Semana -4 · 10 al 16 de Junio 2026</div>
+          <h4>🚀 Kick-off y Pre-Producción</h4>
+          <div class="tl-tags">
+            <span class="tl-tag">Reunión de apertura del proyecto</span>
+            <span class="tl-tag">Definición de equipo y roles</span>
+            <span class="tl-tag">Diseño de landing page de registro</span>
+            <span class="tl-tag">Creación de piezas gráficas</span>
+            <span class="tl-tag">Configuración Webex (salas, roles, grabación)</span>
+            <span class="tl-tag">Activación Meta/LinkedIn/Google Ads</span>
+            <span class="tl-tag">Segmentación y carga de bases de datos</span>
+            <span class="tl-tag">Materiales descargables por programa</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="fase">Semana -3 · 17 al 23 de Junio 2026</div>
+          <h4>📣 Lanzamiento de la Campaña de Captación</h4>
+          <div class="tl-tags">
+            <span class="tl-tag">Primer email de invitación a bases propias</span>
+            <span class="tl-tag">Primer impacto WhatsApp masivo</span>
+            <span class="tl-tag">Posts orgánicos en redes UAO</span>
+            <span class="tl-tag">Contacto con 90 Minutos (alianza editorial)</span>
+            <span class="tl-tag">Publicación nota web uao.edu.co</span>
+            <span class="tl-tag">Activación remarketing campañas anteriores</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="fase">Semana -2 · 24 al 30 de Junio 2026</div>
+          <h4>🔥 Intensificación + Pruebas Técnicas</h4>
+          <div class="tl-tags">
+            <span class="tl-tag">Segundo email de recordatorio segmentado</span>
+            <span class="tl-tag">Segundo impacto WhatsApp masivo</span>
+            <span class="tl-tag">Publicación en 90 Minutos y medios aliados</span>
+            <span class="tl-tag">Prueba técnica general en Webex (todo el equipo)</span>
+            <span class="tl-tag">Validación de landing, formularios e integración CRM</span>
+            <span class="tl-tag">Revisión final de materiales descargables</span>
+            <span class="tl-tag">Ajuste de campañas pagadas según rendimiento</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="fase">Semana -1 · 1 al 7 de Julio 2026</div>
+          <h4>⚡ Semana Previa al Evento</h4>
+          <div class="tl-tags">
+            <span class="tl-tag">Tercer email: "Te esperamos mañana" + agenda personal</span>
+            <span class="tl-tag">Tercer WhatsApp: link directo de acceso por programa</span>
+            <span class="tl-tag">Contenido diario en redes: countdown, docentes, tips</span>
+            <span class="tl-tag">Ensayo general 7 de julio con todo el equipo</span>
+            <span class="tl-tag">Verificación final de todos los enlaces Webex</span>
+            <span class="tl-tag">Asignación formal de asesor a cada registrado en CRM</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot live"></div>
+        <div class="tl-content live-c">
+          <div class="fase" style="font-size:13px">🔴 EN VIVO · Miércoles 8 de Julio 2026</div>
+          <h4>🎯 Día del Open House Online</h4>
+          <div class="tl-tags">
+            <span class="tl-tag">5:30 PM · Apertura de salas Webex (equipo técnico online)</span>
+            <span class="tl-tag">6:30 PM · Plenaria de bienvenida institucional (20 min)</span>
+            <span class="tl-tag">6:50 PM · Apertura simultánea de salas por programa</span>
+            <span class="tl-tag">6:50 – 8:30 PM · Sesiones + Q&A por programa</span>
+            <span class="tl-tag">8:30 – 9:30 PM · Asesorías individuales Breakout</span>
+            <span class="tl-tag">9:30 PM · Cierre + CTA inscripción</span>
+            <span class="tl-tag">WhatsApp recordatorio 1h antes (5:30 PM)</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="fase">Post-Evento · 9 al 22 de Julio 2026</div>
+          <h4>📋 Seguimiento y Conversión</h4>
+          <div class="tl-tags">
+            <span class="tl-tag">Email post-evento a asistentes (material + link inscripción)</span>
+            <span class="tl-tag">Email a no asistentes (grabación + nueva oportunidad)</span>
+            <span class="tl-tag">Llamadas/WhatsApp a leads calientes en 24-48h</span>
+            <span class="tl-tag">Seguimiento CRM a solicitudes de información</span>
+            <span class="tl-tag">Informe ejecutivo de resultados</span>
+            <span class="tl-tag">Análisis de KPIs y lecciones aprendidas</span>
+            <span class="tl-tag">Inicio procesos de admisión confirmados</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · Cronograma: 10 Jun → 22 Jul 2026 · 6 semanas de proyecto</p></footer>
+</div>
+
+<!-- ===================== PANEL: EQUIPO ===================== -->
+<div id="panel-equipo" class="panel">
+  <div class="white-bg">
+    <div style="max-width:1260px;margin:0 auto">
+      <div class="sec-head">
+        <span class="sec-label">Equipo Organizador</span>
+        <h2>Roles y Responsabilidades</h2>
+        <p>Un equipo bien estructurado es la garantía de un evento sin errores técnicos, comerciales ni logísticos.</p>
+      </div>
+      <div class="g4">
+        <div class="rol-card reveal"><div class="rol-icon">👑</div><h4>Director del Evento</h4><ul><li>Coordinación general del proyecto</li><li>Toma de decisiones en tiempo real</li><li>Validación de cronograma y plan</li><li>Relación con directivos UAO</li><li>Aprobación de piezas y mensajes clave</li></ul></div>
+        <div class="rol-card reveal"><div class="rol-icon">💻</div><h4>Coordinador Técnico Webex</h4><ul><li>Configuración y administración de Webex</li><li>Gestión de salas y accesos</li><li>Soporte en tiempo real durante el evento</li><li>Grabación del evento completo</li><li>Pruebas técnicas previas con todo el equipo</li></ul></div>
+        <div class="rol-card reveal"><div class="rol-icon">🎙️</div><h4>Anfitrión / MC General</h4><ul><li>Conducción de la sesión plenaria</li><li>Presentación de directivos y docentes</li><li>Gestión del tiempo de cada bloque</li><li>Cierre institucional y CTA final</li><li>Manejo de energía del evento</li></ul></div>
+        <div class="rol-card reveal"><div class="rol-icon">📚</div><h4>Moderadores por Sala (×4)</h4><ul><li>Un moderador por facultad/área</li><li>Gestión del chat y preguntas en vivo</li><li>Presentación del docente o coordinador</li><li>Control del tiempo de sala</li><li>Recopilación de lista de asistencia</li></ul></div>
+        <div class="rol-card reveal"><div class="rol-icon">💼</div><h4>Asesores Comerciales (×8)</h4><ul><li>Asignados por programa específico</li><li>Presentación de beneficios y proceso</li><li>Atención en breakout rooms individuales</li><li>Registro de leads calientes en CRM</li><li>Seguimiento post-evento personalizado</li></ul></div>
+        <div class="rol-card reveal"><div class="rol-icon">📣</div><h4>Coordinador de Marketing</h4><ul><li>Supervisión de campañas digitales</li><li>Monitoreo de registros en tiempo real</li><li>Publicación en redes durante el evento</li><li>Reporte de métricas diarias</li><li>Análisis post-evento y optimización</li></ul></div>
+        <div class="rol-card reveal"><div class="rol-icon">🗃️</div><h4>Gestor CRM / Datos</h4><ul><li>Integración de formularios con CRM</li><li>Segmentación de leads por programa</li><li>Envío automatizado de comunicaciones</li><li>Generación de reportes de conversión</li><li>Dashboards en tiempo real</li></ul></div>
+        <div class="rol-card reveal"><div class="rol-icon">🎨</div><h4>Diseñador Digital</h4><ul><li>Landing page y piezas gráficas</li><li>Materiales descargables por programa</li><li>Plantillas email y WhatsApp</li><li>Fondos virtuales para Webex</li><li>Presentaciones del evento</li></ul></div>
+      </div>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · Equipo mínimo: 16 personas · Director, Técnico, MC, 4 Moderadores, 8 Asesores, Marketing, CRM, Diseño</p></footer>
+</div>
+
+<!-- ===================== PANEL: FLUJO ===================== -->
+<div id="panel-flujo" class="panel">
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-label">Experiencia del Usuario</span>
+      <h2>Ruta del Prospecto: Del Registro al Seguimiento</h2>
+      <p>Cada punto de contacto está diseñado para acercar al prospecto al proceso de inscripción en la UAO.</p>
+    </div>
+    <div class="flujo-steps">
+      <div class="f-step">
+        <div class="f-num">1</div>
+        <div class="f-content">
+          <h4>Descubrimiento e Impacto Inicial</h4>
+          <p>El prospecto descubre el Open House a través de un anuncio en Meta o LinkedIn, un email personalizado, un mensaje de WhatsApp, una publicación orgánica en redes de la UAO o una nota en 90 Minutos. El mensaje destaca el beneficio único: hablar directamente con el programa que le interesa, sin costo, desde cualquier lugar.</p>
+          <div class="f-tags"><span class="ftag">Meta Ads</span><span class="ftag">WhatsApp</span><span class="ftag">Email</span><span class="ftag">LinkedIn</span><span class="ftag">90 Minutos</span><span class="ftag">Redes UAO</span></div>
+        </div>
+      </div>
+      <div class="f-step">
+        <div class="f-num">2</div>
+        <div class="f-content">
+          <h4>Registro en Landing Page Personalizada</h4>
+          <p>Llega a la landing del Open House. Completa el formulario con: nombre completo, teléfono, email, nivel educativo actual y — el dato más importante — <strong>programa de interés seleccionado</strong>. Este campo activa toda la personalización posterior del evento.</p>
+          <div class="f-tags"><span class="ftag">Landing UAO</span><span class="ftag">Formulario con programa</span><span class="ftag">Integración CRM</span><span class="ftag">Confirmación automática</span></div>
+        </div>
+      </div>
+      <div class="f-step">
+        <div class="f-num">3</div>
+        <div class="f-content">
+          <h4>Confirmación Personalizada Inmediata</h4>
+          <p>En los 5 minutos siguientes al registro, el prospecto recibe un email de confirmación con: el nombre del programa seleccionado, el nombre y foto del asesor asignado, el enlace directo a su sala Webex, la agenda del día y el brochure descargable del programa. También recibe un WhatsApp de bienvenida.</p>
+          <div class="f-tags"><span class="ftag">Email automático</span><span class="ftag">Link Webex personal</span><span class="ftag">PDF del programa</span><span class="ftag">Nombre del asesor</span></div>
+        </div>
+      </div>
+      <div class="f-step">
+        <div class="f-num">4</div>
+        <div class="f-content">
+          <h4>Recordatorios Previos al Evento</h4>
+          <p>El prospecto recibe 3 recordatorios estratégicos: email -7 días (agenda detallada y qué esperar), WhatsApp -1 día ("mañana es tu Open House — programa X con el asesor Y"), y WhatsApp el 8 de julio a las 5:30 PM con el link directo de acceso. Cada comunicación refuerza el valor personalizado.</p>
+          <div class="f-tags"><span class="ftag">Email -7 días</span><span class="ftag">WhatsApp -1 día</span><span class="ftag">WhatsApp día del evento (5:30 PM)</span></div>
+        </div>
+      </div>
+      <div class="f-step">
+        <div class="f-num">5</div>
+        <div class="f-content">
+          <h4>Participación en el Open House — 8 de Julio</h4>
+          <p>El asistente ingresa al plenario de bienvenida (6:30 PM, 20 min) y luego accede a la sala de su programa (6:50 PM). Allí participa en la presentación del docente y coordinador, hace preguntas en chat o viva voz, solicita una asesoría privada en breakout room con su asesor asignado y al cierre recibe el CTA para iniciar su proceso de inscripción.</p>
+          <div class="f-tags"><span class="ftag">Plenario 6:30 PM</span><span class="ftag">Sala por programa 6:50 PM</span><span class="ftag">Q&A en vivo</span><span class="ftag">Breakout individual</span><span class="ftag">CTA inscripción</span></div>
+        </div>
+      </div>
+      <div class="f-step">
+        <div class="f-num">6</div>
+        <div class="f-content">
+          <h4>Seguimiento Post-Evento Automatizado</h4>
+          <p>Según su participación, el asistente entra en uno de tres flujos automáticos:<br>
+          <strong>Asistente activo (caliente):</strong> contacto en 24h con link de inscripción y oferta de asesoría adicional.<br>
+          <strong>Asistente pasivo:</strong> email con grabación + material + asesoría ofrecida.<br>
+          <strong>No asistente:</strong> email con grabación del evento y nuevo CTA para agendar asesoría personalizada.</p>
+          <div class="f-tags"><span class="ftag">3 flujos diferenciados</span><span class="ftag">Email automatizado</span><span class="ftag">CRM seguimiento</span><span class="ftag">Inscripción activa</span><span class="ftag">Seguimiento semanal</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · Flujo: 6 etapas · Del primer impacto digital a la matrícula confirmada</p></footer>
+</div>
+
+<!-- ===================== PANEL: CONTINGENCIA ===================== -->
+<div id="panel-contingencia" class="panel">
+  <div class="white-bg">
+    <div style="max-width:1260px;margin:0 auto">
+      <div class="sec-head">
+        <span class="sec-label">Plan de Contingencia</span>
+        <h2>Protocolos para Escenarios Críticos</h2>
+        <p>Todo lo que puede fallar está anticipado. Cada protocolo garantiza continuidad sin que el asistente lo note.</p>
+      </div>
+      <div class="g3">
+        <div class="cont-card reveal"><div class="ai">🔌</div><h4>Falla de Conexión del Presentador</h4><ol><li>El moderador toma inmediatamente la conducción de la sala.</li><li>Se activa la presentación de respaldo grabada previamente del programa.</li><li>El presentador intenta reconectarse desde dispositivo alterno en máx. 5 min.</li><li>Si no se recupera, se reagenda asesoría individual con los afectados.</li><li>El coordinador técnico notifica al director del evento en tiempo real por chat interno.</li></ol></div>
+        <div class="cont-card reveal"><div class="ai">💥</div><h4>Falla General de Webex</h4><ol><li>Se activa sala de respaldo en Google Meet o Zoom (link previamente distribuido a todos los registrados).</li><li>Moderadores notifican por WhatsApp a todos los registrados con el nuevo link de acceso.</li><li>Se publica mensaje en redes sociales UAO con el link alterno.</li><li>El director comunica la situación con tono calmado y solución inmediata lista.</li><li>Si la falla persiste +20 min, se reagenda el evento para la semana siguiente.</li></ol></div>
+        <div class="cont-card reveal"><div class="ai">⏰</div><h4>Asistentes que Llegan Tarde</h4><ol><li>Las salas permanecen abiertas durante toda la duración del evento (hasta 9:30 PM).</li><li>El moderador saluda individualmente a quien ingresa tarde sin interrumpir la sesión.</li><li>El PDF de la presentación está disponible en el chat desde el inicio de la sala.</li><li>El asistente recibe post-evento el link de grabación de su sala específica.</li><li>El asesor asignado lo contacta al finalizar el evento para asesoría directa.</li></ol></div>
+        <div class="cont-card reveal"><div class="ai">❓</div><h4>Preguntas Frecuentes en Sala</h4><ol><li>Cada asesor tiene un FAQ con las 15 preguntas más comunes del programa.</li><li>Preguntas sobre costos y financiación: asesor deriva a cita financiera privada post-evento.</li><li>Preguntas sobre proceso de admisión: asesor explica paso a paso con pantalla compartida.</li><li>Chat activo con asesor respondiendo en tiempo real durante la sesión.</li><li>Preguntas sin respuesta inmediata: gestionadas por email en las 24h siguientes.</li></ol></div>
+        <div class="cont-card reveal"><div class="ai">📉</div><h4>Baja Asistencia al Evento</h4><ol><li>WhatsApp de último momento a toda la base registrada 30 minutos antes del inicio.</li><li>Mensaje urgente en redes sociales con link de acceso directo.</li><li>Asesores contactan por teléfono a los 20 leads más calientes registrados.</li><li>Las sesiones continúan normalmente para quienes sí asistieron.</li><li>Campaña post-evento reforzada con grabación completa del evento.</li></ol></div>
+        <div class="cont-card reveal"><div class="ai">🔇</div><h4>Problemas de Audio/Video</h4><ol><li>Moderador silencia a todos los participantes excepto al presentador.</li><li>Los asistentes sin micrófono usan el chat para preguntas e interacciones.</li><li>Si el video falla, la sesión continúa en modo audio con slides compartidas.</li><li>Se habilita número de WhatsApp de soporte técnico visible en pantalla principal.</li><li>El coordinador técnico da soporte individual en sala de soporte dedicada.</li></ol></div>
+      </div>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · 6 protocolos de contingencia · Sala alternativa: Google Meet · Soporte: WhatsApp en vivo</p></footer>
+</div>
+
+<!-- ===================== PANEL: INDICADORES ===================== -->
+<div id="panel-indicadores" class="panel">
+  <div class="dark-bg">
+    <div style="max-width:1260px;margin:0 auto">
+      <div class="sec-head">
+        <span class="sec-label">Dashboard de Indicadores</span>
+        <h2>KPIs y Métricas Clave</h2>
+        <p>Mediciones para evaluar el éxito del Open House en cada etapa del embudo de conversión.</p>
+      </div>
+      <div class="g4">
+        <div class="kpi-card reveal"><div class="kpi-icon">📋</div><span class="target">500+</span><div class="metric">Registros Meta</div><div class="desc">Total de registrados al evento</div></div>
+        <div class="kpi-card reveal"><div class="kpi-icon">✅</div><span class="target">65%</span><div class="metric">Tasa de Asistencia</div><div class="desc">Registrados que asistieron</div></div>
+        <div class="kpi-card reveal"><div class="kpi-icon">💬</div><span class="target">300+</span><div class="metric">Interacciones WA</div><div class="desc">Respuestas a impactos de WhatsApp</div></div>
+        <div class="kpi-card reveal"><div class="kpi-icon">🔥</div><span class="target">80+</span><div class="metric">Leads Calientes</div><div class="desc">Asistentes con intención activa</div></div>
+        <div class="kpi-card reveal"><div class="kpi-icon">📝</div><span class="target">120+</span><div class="metric">Solicitudes de Info</div><div class="desc">Formularios + chats activos</div></div>
+        <div class="kpi-card reveal"><div class="kpi-icon">🎓</div><span class="target">50+</span><div class="metric">Admitidos Generados</div><div class="desc">Procesos de admisión iniciados</div></div>
+        <div class="kpi-card reveal"><div class="kpi-icon">💰</div><span class="target">&lt;$30K</span><div class="metric">CPL (COP)</div><div class="desc">Costo por lead en pauta pagada</div></div>
+        <div class="kpi-card reveal"><div class="kpi-icon">📈</div><span class="target">10%</span><div class="metric">Conversión a Admisión</div><div class="desc">Asistentes → proceso activo</div></div>
+        <div class="kpi-card reveal"><div class="kpi-icon">🏅</div><span class="target">20+</span><div class="metric">Matrículas Proyectadas</div><div class="desc">Conversión final en matrícula</div></div>
+        <div class="kpi-card reveal"><div class="kpi-icon">🌐</div><span class="target">40%</span><div class="metric">Leads via Meta Ads</div><div class="desc">Porcentaje captación digital</div></div>
+        <div class="kpi-card reveal"><div class="kpi-icon">📊</div><span class="target">Top 5</span><div class="metric">Programas Más Vistos</div><div class="desc">Ranking de interés por programa</div></div>
+        <div class="kpi-card reveal"><div class="kpi-icon">⭐</div><span class="target">4.2+</span><div class="metric">NPS del Evento</div><div class="desc">Satisfacción medida post-evento</div></div>
+      </div>
+      <!-- FUNNEL -->
+      <div class="funnel-wrap">
+        <h4>📊 Embudo de Conversión Proyectado — Open House UAO · 8 Julio 2026</h4>
+        <div class="funnel">
+          <div class="f-bar-wrap"><div class="f-bar" style="height:170px"><span class="f-bar-val">3,000</span></div><div class="f-bar-lbl">Alcance<br>Campañas</div></div>
+          <div class="f-bar-wrap"><div class="f-bar" style="height:120px"><span class="f-bar-val">500</span></div><div class="f-bar-lbl">Registros<br>Evento</div></div>
+          <div class="f-bar-wrap"><div class="f-bar" style="height:84px"><span class="f-bar-val">325</span></div><div class="f-bar-lbl">Asistentes<br>Reales</div></div>
+          <div class="f-bar-wrap"><div class="f-bar" style="height:56px"><span class="f-bar-val">80</span></div><div class="f-bar-lbl">Leads<br>Calientes</div></div>
+          <div class="f-bar-wrap"><div class="f-bar" style="height:36px;background:linear-gradient(to top,#961423,#F03C46)"><span class="f-bar-val">50</span></div><div class="f-bar-lbl">Solicitudes<br>Admisión</div></div>
+          <div class="f-bar-wrap"><div class="f-bar" style="height:20px;background:linear-gradient(to top,#961423,#DC142D)"><span class="f-bar-val" style="font-size:12px">20</span></div><div class="f-bar-lbl">Matriculados<br>Proyectados</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · Meta: 500 registros · 65% asistencia · 50 solicitudes admisión · 20 matriculados</p></footer>
+</div>
+
+<!-- ===================== PANEL: POST-EVENTO ===================== -->
+<div id="panel-post" class="panel">
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-label">Plan Post-Evento</span>
+      <h2>Acciones Clave Después del Open House</h2>
+      <p>El evento termina cuando el último matriculado confirma su cupo. El seguimiento es donde se genera el retorno de la inversión.</p>
+    </div>
+    <div class="g3">
+      <div class="post-card reveal"><div class="step-n">01</div><h4>Email a Asistentes (24h)</h4><p>Correo personalizado con agradecimiento, nombre del programa, material descargable, enlace de grabación de su sala y CTA directo al proceso de inscripción. Incluye datos de contacto del asesor asignado.</p></div>
+      <div class="post-card reveal"><div class="step-n">02</div><h4>Email a No Asistentes (48h)</h4><p>Correo con grabación completa del evento organizada por programa, brochure descargable, nuevo CTA y oferta de agendar asesoría gratuita. Mensaje de segunda oportunidad con urgencia moderada.</p></div>
+      <div class="post-card reveal"><div class="step-n">03</div><h4>Llamadas a Leads Calientes (48-72h)</h4><p>El asesor asignado contacta directamente a quienes solicitaron asesoría privada, quienes hicieron preguntas sobre costos o fechas, y quienes permanecieron más de 30 min en sala.</p></div>
+      <div class="post-card reveal"><div class="step-n">04</div><h4>Seguimiento CRM (Semana 1-3)</h4><p>Todos los registrados entran a un flujo CRM de 3 semanas con comunicaciones semanales diferenciadas por nivel de interés y programa. Los leads inactivos reciben contenido de valor para mantener el calentamiento.</p></div>
+      <div class="post-card reveal"><div class="step-n">05</div><h4>Informe Ejecutivo (Semana 1)</h4><p>Presentación a directivos con: total registrados, tasa de asistencia, programas con mayor interés, leads calientes por asesor, proyección de matrículas y recomendaciones para el próximo evento.</p></div>
+      <div class="post-card reveal"><div class="step-n">06</div><h4>Publicaciones Post-Evento (Redes)</h4><p>Posts en redes con cifras destacadas del evento, testimonios de asistentes (con permiso), capturas del evento y CTA para quienes aún están considerando un posgrado UAO.</p></div>
+      <div class="post-card reveal"><div class="step-n">07</div><h4>Remarketing Post-Evento (2 semanas)</h4><p>Campaña de pauta digital para: asistentes sin inscripción, no asistentes con registro y leads calientes identificados. Mensaje: "Ya conoces el programa, ¿qué esperas para inscribirte?"</p></div>
+      <div class="post-card reveal"><div class="step-n">08</div><h4>Análisis y Optimización</h4><p>Reunión de retrospectiva del equipo. Análisis de canales con mayor conversión, programas con más interés y definición de mejoras para el siguiente Open House del segundo semestre 2026.</p></div>
+    </div>
+    <div class="cta-box reveal">
+      <div style="flex:1;min-width:250px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red-accent);margin-bottom:10px">Próximos Pasos</div>
+        <h3>¿Listos para arrancar?</h3>
+        <p>El kick-off debe realizarse la primera semana de junio para garantizar 4 semanas completas de captación antes del 8 de julio de 2026.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <a href="https://www.uao.edu.co/inscripcion-online-posgrado/" target="_blank" class="cta-btn">📝 Inscripción Posgrados UAO</a>
+        <a href="https://www.uao.edu.co/oferta-academica/posgrados/" target="_blank" class="cta-btn out">🎓 Ver Oferta Académica</a>
+      </div>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · Seguimiento post-evento: 9 al 22 de julio 2026 · 8 acciones de conversión</p></footer>
+</div>
+
+<!-- ===================== PANEL: RACI ===================== -->
+<div id="panel-raci" class="panel">
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-label">Matriz RACI</span>
+      <h2>Responsabilidades por Actividad</h2>
+      <p><strong style="color:var(--red)">R</strong>esponsable · <strong style="color:#00796B">A</strong>probador · <strong style="color:#283593">C</strong>onsultado · <strong>I</strong>nformado</p>
+    </div>
+    <div class="table-wrap">
+      <table class="raci">
+        <thead>
+          <tr>
+            <th style="width:32%;text-align:left">Actividad</th>
+            <th>Director</th>
+            <th>Marketing</th>
+            <th>Técnico</th>
+            <th>Asesores</th>
+            <th>Moderadores</th>
+            <th>Diseñador</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Diseño de landing de registro</td><td><span class="rb A">A</span></td><td><span class="rb R">R</span></td><td><span class="rb C">C</span></td><td><span class="rb I">I</span></td><td><span class="rb I">I</span></td><td><span class="rb R">R</span></td></tr>
+          <tr><td>Configuración Webex (salas, accesos)</td><td><span class="rb A">A</span></td><td><span class="rb I">I</span></td><td><span class="rb R">R</span></td><td><span class="rb I">I</span></td><td><span class="rb C">C</span></td><td><span class="rb I">I</span></td></tr>
+          <tr><td>Gestión de campañas Meta / LinkedIn</td><td><span class="rb A">A</span></td><td><span class="rb R">R</span></td><td><span class="rb I">I</span></td><td><span class="rb I">I</span></td><td><span class="rb I">I</span></td><td><span class="rb R">R</span></td></tr>
+          <tr><td>Envío de emails y WhatsApp masivo</td><td><span class="rb A">A</span></td><td><span class="rb R">R</span></td><td><span class="rb I">I</span></td><td><span class="rb C">C</span></td><td><span class="rb I">I</span></td><td><span class="rb I">I</span></td></tr>
+          <tr><td>Pruebas técnicas Webex (ensayo general)</td><td><span class="rb A">A</span></td><td><span class="rb I">I</span></td><td><span class="rb R">R</span></td><td><span class="rb C">C</span></td><td><span class="rb C">C</span></td><td><span class="rb I">I</span></td></tr>
+          <tr><td>Materiales descargables por programa</td><td><span class="rb A">A</span></td><td><span class="rb C">C</span></td><td><span class="rb I">I</span></td><td><span class="rb R">R</span></td><td><span class="rb I">I</span></td><td><span class="rb R">R</span></td></tr>
+          <tr><td>Conducción plenaria de bienvenida</td><td><span class="rb R">R</span></td><td><span class="rb I">I</span></td><td><span class="rb C">C</span></td><td><span class="rb I">I</span></td><td><span class="rb I">I</span></td><td><span class="rb I">I</span></td></tr>
+          <tr><td>Moderación de salas por programa</td><td><span class="rb A">A</span></td><td><span class="rb I">I</span></td><td><span class="rb C">C</span></td><td><span class="rb C">C</span></td><td><span class="rb R">R</span></td><td><span class="rb I">I</span></td></tr>
+          <tr><td>Asesoría individual (Breakout rooms)</td><td><span class="rb A">A</span></td><td><span class="rb I">I</span></td><td><span class="rb I">I</span></td><td><span class="rb R">R</span></td><td><span class="rb C">C</span></td><td><span class="rb I">I</span></td></tr>
+          <tr><td>Soporte técnico en vivo</td><td><span class="rb A">A</span></td><td><span class="rb I">I</span></td><td><span class="rb R">R</span></td><td><span class="rb I">I</span></td><td><span class="rb I">I</span></td><td><span class="rb I">I</span></td></tr>
+          <tr><td>Seguimiento CRM post-evento</td><td><span class="rb A">A</span></td><td><span class="rb R">R</span></td><td><span class="rb I">I</span></td><td><span class="rb R">R</span></td><td><span class="rb I">I</span></td><td><span class="rb I">I</span></td></tr>
+          <tr><td>Informe ejecutivo de resultados</td><td><span class="rb R">R</span></td><td><span class="rb R">R</span></td><td><span class="rb C">C</span></td><td><span class="rb C">C</span></td><td><span class="rb I">I</span></td><td><span class="rb I">I</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · Matriz RACI · 12 actividades × 6 roles clave del proyecto</p></footer>
+</div>
+
+<!-- ===================== PANEL: MENSAJES ===================== -->
+<div id="panel-mensajes" class="panel">
+  <div class="white-bg">
+    <div style="max-width:1260px;margin:0 auto">
+      <div class="sec-head">
+        <span class="sec-label">Mensajes Clave</span>
+        <h2>Plantillas de Comunicación por Canal</h2>
+        <p>Mensajes adaptados a cada canal y momento del embudo. Listos para personalizar con nombre, programa y asesor.</p>
+      </div>
+      <div class="g3">
+        <div class="msg-card reveal"><div class="c-badge">📧 Email · Invitación (-3 semanas)</div><h4>Primer impacto — Bases propias</h4><div class="msg-text">"[Nombre], tu próximo paso profesional está a un clic. El 8 de julio, la UAO abre sus puertas digitales para que conozcas de primera mano los programas de posgrado que pueden transformar tu carrera. Regístrate gratis y habla directamente con el coordinador del programa que más te interesa."</div></div>
+        <div class="msg-card reveal"><div class="c-badge">💬 WhatsApp · Recordatorio (-1 día)</div><h4>Mensaje urgente — Víspera del evento</h4><div class="msg-text">"¡Hola [Nombre]! 🎓 Mañana 8 de julio es tu Open House Online UAO. Estás inscrito en el programa de [Programa]. Tu asesor [Asesor] ya te espera. Tu enlace de acceso: [link]. Si tienes dudas, responde este mensaje. ¡Hasta mañana!"</div></div>
+        <div class="msg-card reveal"><div class="c-badge">📱 Meta Ads · Awareness masivo</div><h4>Anuncio de alcance — 3 semanas antes</h4><div class="msg-text">"¿Estás pensando en un posgrado? La UAO tiene más de 33 especializaciones, maestrías y doctorados. Este 8 de julio, participa gratis en nuestro Open House Online y resuelve todas tus dudas en vivo con nuestros expertos. ¡Cupos limitados! Regístrate ya 👇"</div></div>
+        <div class="msg-card reveal"><div class="c-badge">💼 LinkedIn · Profesionales senior</div><h4>Tono ejecutivo — Directivos y gerentes</h4><div class="msg-text">"Llevas años acumulando experiencia. Ahora es el momento de formalizarla con un posgrado de alto nivel. La UAO invita a líderes y profesionales al Open House Online de Posgrados 2026. MBA, Maestría en IA, Gerencia de Proyectos y más de 30 programas. El 8 de julio, en vivo y gratis."</div></div>
+        <div class="msg-card reveal"><div class="c-badge">🌐 Redes Sociales · Countdown</div><h4>Post orgánico — 5 días antes del evento</h4><div class="msg-text">"⏳ Faltan 5 días para el Open House Online de Posgrados UAO. ¿Ya sabes cuál programa es el tuyo? El 8 de julio te contamos todo en vivo: costos, requisitos, becas y fechas de inicio. Regístrate gratis 👇 #PosgradosUAO #OpenHouseUAO2026 #UAO"</div></div>
+        <div class="msg-card reveal"><div class="c-badge">💬 WhatsApp · Día del evento (8 AM)</div><h4>Recordatorio de último momento</h4><div class="msg-text">"¡Buenos días [Nombre]! 🎓 Hoy es tu Open House UAO. El evento inicia en 1 hora (6:30 PM). Accede directamente a tu sala: [link del programa]. Tu asesor [Asesor] está listo para atenderte. ¡Te esperamos!"</div></div>
+        <div class="msg-card reveal"><div class="c-badge">📧 Email · Post-evento asistentes</div><h4>Follow-up a asistentes activos (24h)</h4><div class="msg-text">"[Nombre], fue un gusto tenerte hoy en el Open House UAO. Según lo que compartiste, el programa de [Programa] encaja muy bien con tu perfil. Adjunto el brochure y el proceso de inscripción. [Asesor] estará disponible esta semana para una asesoría personalizada. ¡El siguiente paso es tuyo!"</div></div>
+        <div class="msg-card reveal"><div class="c-badge">📧 Email · No asistentes (48h)</div><h4>Recuperación de no asistentes</h4><div class="msg-text">"Te perdiste el Open House, pero no la oportunidad. Mira la grabación completa del programa [Programa] aquí: [link]. Tienes hasta el 31 de julio para inscribirte con condiciones especiales de admisión. ¿Agendamos una asesoría privada esta semana? Responde este correo o llama a [teléfono]."</div></div>
+      </div>
+    </div>
+  </div>
+  <footer><p><strong style="color:#fff">UAO</strong> · 8 plantillas de mensajes · Personalizar con: [Nombre], [Programa], [Asesor], [Link]</p></footer>
+</div>
+
+<!-- ===================== PANEL: RECOMENDACIONES ===================== -->
+<div id="panel-recomendaciones" class="panel">
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-label">Recomendaciones Estratégicas</span>
+      <h2>Claves para el Éxito del Open House UAO 2026</h2>
+      <p>Recomendaciones del equipo consultor para maximizar el impacto, la asistencia y la conversión a matrícula.</p>
+    </div>
+    <div class="g3">
+      <div class="rec-card reveal"><div class="rec-num">1</div><div><h4>Implementar el Escenario 3 (Landing Personalizada)</h4><p>Es el modelo con mayor tasa de conversión comprobada en eventos educativos online. La personalización desde el registro genera mayor compromiso y facilita el trabajo del asesor comercial el día del evento.</p></div></div>
+      <div class="rec-card reveal"><div class="rec-num">2</div><div><h4>Iniciar campañas de pauta 4 semanas antes</h4><p>El algoritmo de Meta necesita al menos 2 semanas para optimizar. Iniciar el 10 de junio garantiza mayor volumen y menor costo por lead en las semanas más críticas de captación.</p></div></div>
+      <div class="rec-card reveal"><div class="rec-num">3</div><div><h4>Priorizar bases de egresados y leads históricos</h4><p>Son el segmento con mayor intención de conversión. Un egresado UAO que regresa a hacer posgrado tiene 3× más probabilidad de matricularse que un lead frío de pauta digital.</p></div></div>
+      <div class="rec-card reveal"><div class="rec-num">4</div><div><h4>Asignar asesor desde el momento del registro</h4><p>El prospecto debe recibir el nombre y foto de "su" asesor en el email de confirmación del registro. Esta conexión personal reduce el abandono antes del evento y mejora la tasa de asistencia.</p></div></div>
+      <div class="rec-card reveal"><div class="rec-num">5</div><div><h4>Ensayo general el 7 de julio (no opcional)</h4><p>Todos los moderadores, asesores y el coordinador técnico deben hacer un simulacro completo del evento el martes 7 de julio, incluyendo los protocolos de contingencia y prueba de todos los links.</p></div></div>
+      <div class="rec-card reveal"><div class="rec-num">6</div><div><h4>Activar el seguimiento en las primeras 24 horas</h4><p>El 70% de la intención de inscripción se pierde después de 72 horas sin contacto. El email y la llamada del asesor al día siguiente son los de mayor impacto en la conversión final.</p></div></div>
+      <div class="rec-card reveal"><div class="rec-num">7</div><div><h4>Monitorear asistencia en tiempo real</h4><p>El Coord. de Marketing debe monitorear la asistencia por sala cada 30 minutos y compartir el dashboard con el Director para activar acciones correctivas si alguna sala tiene participación baja.</p></div></div>
+      <div class="rec-card reveal"><div class="rec-num">8</div><div><h4>CTA irresistible en el cierre del evento</h4><p>El guion de cierre debe incluir una oferta de valor clara para quienes inicien su proceso ese mismo día: exoneración de derechos de inscripción, asesoría financiera gratuita o descuento en el primer semestre.</p></div></div>
+    </div>
+    <div class="cta-box reveal">
+      <div style="flex:1;min-width:250px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red-accent);margin-bottom:10px">Cierre del Plan Estratégico</div>
+        <h3>Open House Online Posgrados UAO · 8 de Julio 2026</h3>
+        <p>Este documento contiene el plan estratégico completo para la planificación, ejecución y seguimiento del evento. Todas las secciones están disponibles en el menú superior.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <a href="https://www.uao.edu.co/inscripcion-online-posgrado/" target="_blank" class="cta-btn">📝 Inscripción Posgrados UAO</a>
+        <a href="https://www.uao.edu.co/oferta-academica/posgrados/" target="_blank" class="cta-btn out">🎓 Oferta Académica UAO</a>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div style="margin-bottom:8px"><span style="font-size:20px;font-weight:900"><span style="color:#DC142D">u</span><span style="color:#fff">ao</span></span></div>
+    <p><strong style="color:#fff">Universidad Autónoma de Occidente</strong> · Open House Online Posgrados 2026</p>
+    <p style="margin-top:6px">Cali, Valle del Cauca · <a href="https://www.uao.edu.co" target="_blank" style="color:var(--red-accent);text-decoration:none">www.uao.edu.co</a></p>
+    <p style="margin-top:6px;font-size:11px;opacity:.45">Documento estratégico de uso interno · Equipo de Marketing y Comunicaciones Posgrados UAO · Junio 2026</p>
+  </footer>
+</div>
+
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Volver arriba" style="display:flex">↑</button>
+
+<script>
+// ===== TABS =====
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const panel=document.getElementById('panel-'+id);
+  if(panel){
+    panel.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  const btns=document.querySelectorAll('.tab-btn');
+  btns.forEach(b=>{
+    if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+id+"'")){
+      b.classList.add('active');
+    }
+  });
+  triggerReveal();
+}
+
+// ===== COUNTDOWN =====
+function updateCountdown(){
+  const now=new Date();
+  const event=new Date('2026-07-08T18:30:00-05:00');
+  const diff=event-now;
+  if(diff<=0){
+    document.getElementById('cd-dias').textContent='00';
+    document.getElementById('cd-horas').textContent='00';
+    document.getElementById('cd-mins').textContent='00';
+    document.getElementById('cd-segs').textContent='00';
+    return;
+  }
+  const d=Math.floor(diff/(1000*60*60*24));
+  const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+  const m=Math.floor((diff%(1000*60*60))/(1000*60));
+  const s=Math.floor((diff%(1000*60))/1000);
+  document.getElementById('cd-dias').textContent=String(d).padStart(2,'0');
+  document.getElementById('cd-horas').textContent=String(h).padStart(2,'0');
+  document.getElementById('cd-mins').textContent=String(m).padStart(2,'0');
+  document.getElementById('cd-segs').textContent=String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown,1000);
+
+// ===== SCROLL TOP =====
+window.addEventListener('scroll',()=>{
+  const btn=document.getElementById('scrollTop');
+  btn.style.display=window.scrollY>400?'flex':'none';
+});
+
+// ===== REVEAL =====
+const revealObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('vis')}
+  });
+},{threshold:0.08});
+
+function triggerReveal(){
+  setTimeout(()=>{
+    document.querySelectorAll('.panel.active .reveal').forEach(el=>{
+      revealObs.observe(el);
+    });
+  },100);
+}
+triggerReveal();
+</script>
+</body>
+</html>
