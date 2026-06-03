@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Posgrados UAO | 4 Mar – 2 Jun 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#ECE5DC;--red:#DC142D;--red-dark:#961423;--text:#231F20;--white:#FFF;--shadow:0 2px 16px rgba(35,31,32,.08);--radius:12px;--gray:#6B6868;--green:#1A9E5A;--yellow:#D49A00;--orange:#C85000;--blue:#1550A0;--purple:#6B35A0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+.brand-bar{background:#4a1070;padding:8px 24px;display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(255,255,255,.1)}
+.brand-bar img{height:30px;background:#fff;border-radius:5px;padding:2px 7px}
+.brand-bar-title{color:rgba(255,255,255,.9);font-size:13px;font-weight:600}
+.brand-bar-sub{color:rgba(255,255,255,.55);font-size:11px;margin-left:auto}
+.main-tabs{display:flex;background:#4a1070;overflow-x:auto;scrollbar-width:none;border-bottom:2px solid rgba(255,255,255,.1)}
+.main-tabs::-webkit-scrollbar{display:none}
+.main-tab-btn{flex-shrink:0;padding:12px 22px;color:rgba(255,255,255,.75);font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;font-family:inherit;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+.main-tab-btn:hover{color:#fff;background:rgba(255,255,255,.08)}
+.main-tab-btn.active{color:#fff;border-bottom-color:#fff;background:rgba(255,255,255,.12)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.alert-bar{background:linear-gradient(90deg,#4a1070,#6B35A0);color:#fff;padding:8px 24px;font-size:12px;display:flex;align-items:center;gap:10px}
+.container{max-width:1300px;margin:0 auto;padding:28px 24px}
+section{margin-bottom:48px}
+.section-title{font-size:21px;font-weight:700;color:#4a1070;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.section-title::before{content:'';display:inline-block;width:4px;height:22px;background:var(--purple);border-radius:2px;flex-shrink:0}
+.section-sub{font-size:13px;color:var(--gray);margin-bottom:20px;padding-left:14px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.kpi-card{background:#fff;border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);transition:transform .2s;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--purple)}
+.kpi-card:hover{transform:translateY(-3px)}
+.kpi-card.pur-card{background:linear-gradient(135deg,#4a1070,var(--purple));color:#fff}
+.kpi-card.pur-card::before{background:rgba(255,255,255,.3)}
+.kpi-card.green-card{background:linear-gradient(135deg,#0d6b3c,var(--green));color:#fff}
+.kpi-card.green-card::before{background:rgba(255,255,255,.3)}
+.kpi-icon{font-size:19px;margin-bottom:6px}
+.kpi-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);margin-bottom:2px}
+.kpi-card.pur-card .kpi-label,.kpi-card.pur-card .kpi-sub,.kpi-card.green-card .kpi-label,.kpi-card.green-card .kpi-sub{color:rgba(255,255,255,.8)}
+.kpi-value{font-size:24px;font-weight:700;line-height:1.1}
+.kpi-card.pur-card .kpi-value,.kpi-card.green-card .kpi-value{color:#fff}
+.kpi-sub{font-size:10.5px;color:var(--gray);margin-top:3px}
+.kpi-delta{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:600;margin-top:3px;padding:1px 7px;border-radius:10px}
+.kpi-delta.pos{background:#d4f5e3;color:#1A9E5A}.kpi-delta.neg{background:#fde0e3;color:var(--red)}
+.exec-box{background:#fff;border-radius:var(--radius);padding:24px 28px;box-shadow:var(--shadow);border-left:5px solid var(--purple)}
+.exec-box h3{font-size:15.5px;font-weight:700;margin-bottom:13px;color:#4a1070}
+.exec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.exec-item{display:flex;gap:8px;align-items:flex-start}
+.exec-dot{width:7px;height:7px;border-radius:50%;background:var(--purple);margin-top:7px;flex-shrink:0}
+.exec-item p{font-size:13px}.exec-item strong{color:#4a1070}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chart-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.chart-box{background:#fff;border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+.chart-box h4{font-size:13px;font-weight:700;margin-bottom:13px;color:var(--text)}
+canvas{max-height:280px}
+.table-wrap{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.table-wrap.scrollable{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead tr{background:#4a1070;color:#fff}
+thead th{padding:10px 13px;font-weight:600;text-align:left;font-size:11px;letter-spacing:.3px;white-space:nowrap}
+tbody tr{border-bottom:1px solid #f0ebe4;transition:background .15s}
+tbody tr:hover{background:#faf7f3}
+tbody td{padding:9px 13px;vertical-align:middle}
+tbody tr:last-child{border-bottom:none}
+.rank{font-weight:700;color:var(--gray);font-size:11px;text-align:center}
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:600;white-space:nowrap}
+.tag-green{background:#d4f5e3;color:#1A9E5A}.tag-yellow{background:#fff3cc;color:#9A6F00}
+.tag-red{background:#fde0e3;color:#961423}.tag-orange{background:#fde8d8;color:#A04010}
+.tag-blue{background:#ddeeff;color:#1550A0}.tag-gray{background:#eee;color:#555}
+.tag-purple{background:#ede8f7;color:#4a1070}
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:13px;margin-top:16px}
+.insight{background:#fff;border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);border-top:3px solid var(--purple)}
+.insight h5{font-size:12.5px;font-weight:700;margin-bottom:5px;color:#4a1070}
+.insight p{font-size:12.5px;color:var(--gray);line-height:1.55}
+.divider{height:1px;background:rgba(35,31,32,.08);margin:48px 0}
+.scenario-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px}
+.scenario-card{background:#fff;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);text-align:center}
+.scenario-card.conservador{border-top:4px solid #607D8B}
+.scenario-card.esperado{border-top:4px solid var(--purple)}
+.scenario-card.optimista{border-top:4px solid var(--green)}
+.sc-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.sc-conservador{color:#607D8B}.sc-esperado{color:var(--purple)}.sc-optimista{color:var(--green)}
+.sc-main-val{font-size:30px;font-weight:700;color:var(--text);line-height:1}
+.sc-main-label{font-size:11.5px;color:var(--gray);margin-top:3px;margin-bottom:12px}
+.sc-rows{text-align:left;border-top:1px solid #f0ebe4;padding-top:10px}
+.sc-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;gap:8px}
+.sc-row span:last-child{font-weight:600;text-align:right}
+.proj-header{background:linear-gradient(135deg,#2d0654,#4a1070,#6B35A0);color:#fff;padding:32px 36px;border-radius:16px;margin-bottom:28px}
+.proj-header h2{font-size:22px;font-weight:700;margin-bottom:6px}
+.next-header{background:linear-gradient(135deg,#1a3a2a,var(--green),#2ecc71);color:#fff;padding:32px 36px;border-radius:16px;margin-bottom:28px}
+.next-header h2{font-size:22px;font-weight:700;margin-bottom:6px}
+.campaign-header{background:linear-gradient(135deg,#2d0654,#4a1070,#6B35A0);padding:28px 32px;border-radius:16px;color:#fff;margin-bottom:24px}
+.campaign-header h2{font-size:22px;font-weight:700;margin-bottom:6px}
+.campaign-stats{display:flex;gap:16px;margin-top:14px;flex-wrap:wrap}
+.c-stat{background:rgba(255,255,255,.15);border-radius:10px;padding:9px 16px;text-align:center}
+.c-stat-val{font-size:22px;font-weight:700}.c-stat-lab{font-size:10px;opacity:.85}
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.rec-card{background:#fff;border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+.rec-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.rec-card h5{font-size:13px;font-weight:700;margin-bottom:7px}
+.rec-card ul{padding-left:14px}
+.rec-card li{font-size:12.5px;color:var(--gray);margin-bottom:3px;line-height:1.5}
+.rec-scale{border-top:3px solid var(--green)}.rec-scale .rec-type{color:var(--green)}
+.rec-pause{border-top:3px solid var(--red)}.rec-pause .rec-type{color:var(--red)}
+.rec-optimize{border-top:3px solid var(--yellow)}.rec-optimize .rec-type{color:var(--yellow)}
+.rec-creative{border-top:3px solid var(--orange)}.rec-creative .rec-type{color:var(--orange)}
+.rec-budget{border-top:3px solid var(--purple)}.rec-budget .rec-type{color:var(--purple)}
+.linea-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.linea-tab{padding:8px 20px;border-radius:20px;border:2px solid var(--purple);background:#fff;color:var(--purple);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.linea-tab.active,.linea-tab:hover{background:var(--purple);color:#fff}
+.linea-panel{display:none}.linea-panel.active{display:block}
+.tree-wrap{overflow-x:auto;padding:8px 0}
+.htree{display:flex;gap:0;align-items:stretch;min-width:1050px}
+.htree-col{display:flex;flex-direction:column;justify-content:center;gap:0}
+.node-campaign{color:#fff;padding:14px 18px;border-radius:12px;text-align:center;font-weight:700;font-size:14px;min-width:130px;box-shadow:0 4px 12px rgba(74,16,112,.3);align-self:center}
+.node-adset{padding:11px 14px;border-radius:10px;text-align:center;font-weight:600;font-size:11.5px;min-width:148px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.node-audience{color:#fff;padding:8px 12px;border-radius:8px;font-size:10px;text-align:center;min-width:155px;margin-top:3px}
+.node-creative{background:#fff;border:2px solid #e0dbd4;border-radius:8px;padding:8px 13px;font-size:11px;min-width:150px;box-shadow:0 1px 5px rgba(0,0,0,.07)}
+.node-creative-label{font-weight:700;font-size:11.5px;color:var(--text)}
+.node-creative-type{font-size:9.5px;color:var(--gray)}
+.funnel-tag{display:inline-block;padding:1px 7px;border-radius:10px;font-size:9.5px;font-weight:700;margin-top:3px}
+.tofu{background:#dbeafe;color:#1d4ed8}.mofu{background:#dcfce7;color:#15803d}.bofu{background:#fee2e2;color:#b91c1c}
+.format-tags{display:flex;gap:4px;flex-wrap:wrap}
+.fmt{background:#f4f0ea;border:1px solid #ddd;border-radius:5px;padding:2px 7px;font-size:9.5px;font-weight:600;color:#555}
+/* Shader Hero */
+.shader-hero{min-height:520px;padding:0;border-radius:24px;background:#0a0212;color:#fff;overflow:hidden;position:relative;isolation:isolate;border:1px solid rgba(255,255,255,.12);box-shadow:0 22px 80px rgba(74,16,112,.28),inset 0 0 0 1px rgba(255,255,255,.05)}
+.shader-hero::before{content:none}
+#heroShaderCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block;background:radial-gradient(circle at 35% 25%,#6B35A0 0%,#0a0212 50%,#050108 100%)}
+.shader-noise{position:absolute;inset:0;z-index:1;opacity:.16;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.7) .45px,transparent .45px);background-size:4px 4px;mix-blend-mode:overlay}
+.shader-hero::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(6,1,12,.82) 0%,rgba(6,1,12,.42) 48%,rgba(6,1,12,.78) 100%),radial-gradient(circle at 75% 20%,rgba(180,130,255,.22),transparent 34%),radial-gradient(circle at 20% 95%,rgba(107,53,160,.28),transparent 38%)}
+.shader-orb{position:absolute;border-radius:999px;z-index:1;filter:blur(8px);opacity:.6;pointer-events:none;animation:floatOrb 7s ease-in-out infinite alternate}
+.orb-one{width:240px;height:240px;right:8%;top:9%;background:radial-gradient(circle,rgba(200,160,255,.34),transparent 64%)}
+.orb-two{width:300px;height:300px;left:-90px;bottom:-120px;background:radial-gradient(circle,rgba(107,53,160,.42),transparent 68%);animation-delay:1.8s}
+.shader-content{position:relative;z-index:3;display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center;min-height:520px;padding:48px 52px}
+.shader-left{max-width:640px}
+.shader-left .hero-logo{height:54px;margin-bottom:18px;background:#fff;border-radius:10px;padding:4px 12px;box-shadow:0 14px 40px rgba(0,0,0,.22)}
+.shader-trust{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(12px);font-size:12px;font-weight:700;color:#e8d8ff;margin-bottom:18px;box-shadow:0 8px 24px rgba(0,0,0,.16)}.shader-trust span{color:#c9a4ff}
+.shader-title{font-size:clamp(34px,5.2vw,70px);line-height:.98;margin:0 0 18px;font-weight:800;letter-spacing:-2px}
+.shader-title span{display:block;color:#fff}
+.shader-title strong{display:block;background:linear-gradient(90deg,#f0e0ff 0%,#c9a4ff 28%,#9d68ff 58%,#6B35A0 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.shader-subtitle{font-size:clamp(14px,1.6vw,18px);line-height:1.62;color:rgba(240,224,255,.86);max-width:620px;margin-bottom:26px}
+.shader-actions{display:flex;gap:12px;flex-wrap:wrap}
+.shader-actions button{font-family:inherit;border:none;cursor:pointer;border-radius:999px;padding:12px 18px;font-size:13px;font-weight:800;transition:transform .22s,box-shadow .22s}
+.shader-actions button:first-child{background:linear-gradient(90deg,#c9a4ff,#9d68ff,#6B35A0);color:#0a0212;box-shadow:0 12px 30px rgba(107,53,160,.4)}
+.shader-actions button:last-child{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(12px)}
+.shader-actions button:hover{transform:translateY(-2px)}
+.shader-right{display:flex;flex-direction:column;gap:14px}
+.shader-date-card,.shader-kpi,.shader-lineas{background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.07));border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(16px);box-shadow:0 18px 50px rgba(0,0,0,.22)}
+.shader-date-card{border-radius:18px;padding:18px 20px;text-align:right}
+.shader-date-card span,.shader-kpi span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.9px;color:rgba(230,210,255,.66);font-weight:800}
+.shader-date-card strong{display:block;font-size:30px;letter-spacing:-1px;margin-top:3px;color:#fff}
+.shader-date-card small,.shader-kpi small{display:block;color:rgba(230,210,255,.66);font-size:11px;margin-top:3px}
+.shader-kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.shader-kpi{border-radius:16px;padding:16px}
+.shader-kpi strong{display:block;font-size:25px;line-height:1.05;margin-top:6px;color:#fff}
+.shader-kpi:nth-child(2) strong{color:#c9a4ff}
+.shader-kpi:nth-child(3) strong{color:#ff8a73}
+.shader-kpi:nth-child(4) strong{color:#a8ffc8}
+.shader-lineas{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-radius:18px;padding:12px}
+.shader-lineas div{background:rgba(0,0,0,.16);border-radius:13px;padding:11px;text-align:center}
+.shader-lineas b{display:block;font-size:17px;color:#c9a4ff}
+.shader-lineas span{font-size:10.5px;color:rgba(240,224,255,.72)}
+@keyframes floatOrb{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(18px,-18px,0) scale(1.08)}}
+@media(max-width:960px){.chart-grid,.chart-grid-3,.scenario-grid{grid-template-columns:1fr}.exec-grid{grid-template-columns:1fr}.shader-content{grid-template-columns:1fr;padding:34px 24px}.shader-kpi-grid{grid-template-columns:1fr 1fr}.shader-hero{min-height:auto}.shader-title{letter-spacing:-1px}}
+@media(max-width:640px){.kpi-grid{grid-template-columns:1fr 1fr}.container{padding:16px 14px}.shader-kpi-grid,.shader-lineas{grid-template-columns:1fr}.shader-actions button{width:100%}.shader-content{padding:28px 18px}}
+footer{background:#2d0654;color:rgba(255,255,255,.7);text-align:center;padding:16px;font-size:11.5px}
+footer strong{color:#fff}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px}
+</style>
+</head>
+<body>
+
+<div class="brand-bar">
+  <img src="data:image/jpeg;base64,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" alt="UAO">
+  <div class="brand-bar-title">Universidad Autónoma de Occidente · Posgrados UAO</div>
+  <div class="brand-bar-sub">4 Mar – 2 Jun 2026</div>
+</div>
+
+<div class="main-tabs">
+  <button class="main-tab-btn active" onclick="switchTab('tab-dashboard',this)">📊 Dashboard Posgrados</button>
+  <button class="main-tab-btn" onclick="switchTab('tab-programas',this)">🎓 Por Programa</button>
+  <button class="main-tab-btn" onclick="switchTab('tab-anuncios',this)">📋 Top Anuncios</button>
+  <button class="main-tab-btn" onclick="switchTab('tab-estructura',this)">🗂️ Estructura Campaña</button>
+  <button class="main-tab-btn" onclick="switchTab('tab-proyeccion',this)">📈 Proyección 2026-2S</button>
+  <button class="main-tab-btn" onclick="switchTab('tab-cohorte',this)">🚀 Próxima Cohorte 2027-1</button>
+</div>
+
+<!-- ==================== TAB 1: DASHBOARD ==================== -->
+<div class="tab-panel active" id="tab-dashboard">
+<div class="alert-bar">
+  <span>🎓</span>
+  <span><strong>Posgrados UAO — Datos desde:</strong>&nbsp; <strong>4 de marzo de 2026</strong> · Corte: <strong>2 Jun 2026</strong> · 376 anuncios analizados · Meta Ads (Facebook + Instagram)</span>
+</div>
+<div class="container">
+
+<!-- HERO -->
+<section id="portada">
+<div class="shader-hero" id="animatedShaderHero">
+  <canvas id="heroShaderCanvas" aria-hidden="true"></canvas>
+  <div class="shader-noise"></div>
+  <div class="shader-orb orb-one"></div>
+  <div class="shader-orb orb-two"></div>
+  <div class="shader-content">
+    <div class="shader-left">
+      <img src="data:image/jpeg;base64,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" class="hero-logo" alt="UAO">
+      <div class="shader-trust"><span>✦</span> Dashboard Posgrados UAO · 2026</div>
+      <h1 class="shader-title">
+        <span>Pauta Digital</span>
+        <strong>Posgrados UAO</strong>
+      </h1>
+      <p class="shader-subtitle">Análisis completo de inversión, leads y eficiencia para Posgrados UAO. Periodo: 4 de marzo al 2 de junio de 2026. 376 anuncios activos en Meta Ads.</p>
+      <div class="shader-actions">
+        <button type="button" onclick="document.getElementById('resumen').scrollIntoView({behavior:'smooth'})">Ver resumen ejecutivo</button>
+        <button type="button" onclick="switchTab('tab-proyeccion',document.querySelectorAll('.main-tab-btn')[4])">Ver proyecciones</button>
+      </div>
+    </div>
+    <div class="shader-right">
+      <div class="shader-date-card">
+        <span>Fecha de corte</span>
+        <strong>2 JUN 2026</strong>
+        <small>Meta Ads · Facebook + Instagram</small>
+      </div>
+      <div class="shader-kpi-grid">
+        <div class="shader-kpi"><span>Inversión Total</span><strong>$42,9M</strong><small>COP · 376 anuncios</small></div>
+        <div class="shader-kpi"><span>Leads Totales</span><strong>5.593</strong><small>Registros generados</small></div>
+        <div class="shader-kpi"><span>CPR Promedio</span><strong>$7.664</strong><small>Costo por resultado</small></div>
+        <div class="shader-kpi"><span>Alcance Total</span><strong>2,4M</strong><small>Personas únicas</small></div>
+      </div>
+      <div class="shader-lineas">
+        <div><b>121</b><span>Anuncios activos</span></div>
+        <div><b>0,53%</b><span>CTR promedio</span></div>
+        <div><b>$4.604</b><span>CPM prom. COP</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- RESUMEN EJECUTIVO -->
+<section id="resumen">
+  <div class="section-title">Resumen Ejecutivo</div>
+  <div class="section-sub">Principales hallazgos del periodo 4 Mar – 2 Jun 2026 · Posgrados UAO</div>
+  <div class="exec-box">
+    <h3>📊 Resultados Generales — Posgrados UAO (4 Mar – 2 Jun 2026)</h3>
+    <div class="exec-grid">
+      <div class="exec-item"><div class="exec-dot"></div><p>Se analizan <strong>376 anuncios</strong> con inversión total de <strong>$42.867.352 COP</strong> desde el 4 de marzo. El 72% de la inversión ($31M) corresponde a <strong>Especializaciones</strong> y el 23% ($9,8M) a <strong>Maestrías</strong>.</p></div>
+      <div class="exec-item"><div class="exec-dot"></div><p>Se generaron <strong>5.593 leads</strong> con CPR promedio de <strong>$7.664 COP</strong>. El CPR de Especializaciones ($7.199) es más eficiente que el de Maestrías ($11.100), confirmando mayor demanda activa en especializaciones.</p></div>
+      <div class="exec-item"><div class="exec-dot"></div><p><strong>Esp. Logística Virtual</strong> (CPR $3.634) y <strong>Esp. DDHH y Territorios</strong> (CPR $2.919) son los programas más eficientes con más de 450 leads cada uno. Candidatos ideales para escalar inversión.</p></div>
+      <div class="exec-item"><div class="exec-dot"></div><p><strong>121 anuncios activos</strong> (32%) concentran $36,3M con 4.691 leads. El CPR de activos ($7.729) es similar al promedio, indicando que la selección de campañas activas es representativa.</p></div>
+      <div class="exec-item"><div class="exec-dot"></div><p><strong>Gerencia &amp; Administración</strong> (CPR $21.967) y <strong>Finanzas</strong> (CPR $13.945) son las áreas con mayor oportunidad de optimización. Maestría en Administración de Empresas tiene CPR de $33.424 — revisar urgente.</p></div>
+      <div class="exec-item"><div class="exec-dot"></div><p><strong>IA &amp; Datos</strong> lidera inversión ($13M) con CPR de $7.878. La Maestría en IA y Ciencia de Datos es el anuncio de mayor gasto individual ($1,88M) con 236 leads. Alta demanda pero CPR mejorable.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- KPIs -->
+<section id="kpis">
+  <div class="section-title">KPIs Principales</div>
+  <div class="section-sub">Métricas globales del periodo · 376 anuncios · 4 Mar – 2 Jun 2026</div>
+  <div class="kpi-grid">
+    <div class="kpi-card pur-card"><div class="kpi-icon">💰</div><div class="kpi-label">Inversión Total</div><div class="kpi-value">$42,9M</div><div class="kpi-sub">COP · 3 meses</div></div>
+    <div class="kpi-card"><div class="kpi-icon">🎯</div><div class="kpi-label">Leads Totales</div><div class="kpi-value">5.593</div><div class="kpi-sub">Registros / Conversiones</div></div>
+    <div class="kpi-card"><div class="kpi-icon">💵</div><div class="kpi-label">CPR Promedio</div><div class="kpi-value">$7.664</div><div class="kpi-sub">Costo por resultado (COP)</div><span class="kpi-delta neg">⚠️ Oportunidad mejora</span></div>
+    <div class="kpi-card"><div class="kpi-icon">👆</div><div class="kpi-label">CTR Promedio</div><div class="kpi-value">0,53%</div><div class="kpi-sub">Tasa de clics en enlace</div></div>
+    <div class="kpi-card"><div class="kpi-icon">🖱️</div><div class="kpi-label">Clics Totales</div><div class="kpi-value">35.863</div><div class="kpi-sub">Clics en enlace</div></div>
+    <div class="kpi-card"><div class="kpi-icon">👁️</div><div class="kpi-label">Impresiones</div><div class="kpi-value">6,7M</div><div class="kpi-sub">CPM prom.: $4.604 COP</div></div>
+    <div class="kpi-card"><div class="kpi-icon">📡</div><div class="kpi-label">Alcance</div><div class="kpi-value">2,4M</div><div class="kpi-sub">Personas únicas</div></div>
+    <div class="kpi-card"><div class="kpi-icon">📐</div><div class="kpi-label">Frecuencia</div><div class="kpi-value">1,07</div><div class="kpi-sub">Promedio exposiciones</div><span class="kpi-delta pos">✅ Rango saludable</span></div>
+    <div class="kpi-card"><div class="kpi-icon">📢</div><div class="kpi-label">Anuncios</div><div class="kpi-value">376</div><div class="kpi-sub">121 activos · 165 inactivos · 90 pausados</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CHARTS OVERVIEW -->
+<section id="charts-overview">
+  <div class="section-title">Distribución por Área Temática</div>
+  <div class="section-sub">Inversión y leads por área de conocimiento · 4 Mar – 2 Jun 2026</div>
+  <div class="chart-grid">
+    <div class="chart-box"><h4>Inversión por Área Temática (COP)</h4><canvas id="chartAreaInv"></canvas></div>
+    <div class="chart-box"><h4>Leads por Área Temática</h4><canvas id="chartAreaLeads"></canvas></div>
+    <div class="chart-box"><h4>CPR por Área (COP) — menor es mejor</h4><canvas id="chartAreaCPR"></canvas></div>
+    <div class="chart-box"><h4>Estado de Anuncios (por inversión)</h4><canvas id="chartEstado"></canvas></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INSIGHTS -->
+<section id="insights">
+  <div class="section-title">Insights Estratégicos</div>
+  <div class="section-sub">Hallazgos clave y oportunidades de optimización</div>
+  <div class="insight-grid">
+    <div class="insight"><h5>🏆 Logística: el área más eficiente</h5><p>Esp. Logística Virtual y Esp. Logística Híbrida combinan 774 leads con CPR promedio de $3.247. Alta demanda del mercado en este perfil. Incrementar inversión de inmediato.</p></div>
+    <div class="insight"><h5>📊 DDHH &amp; Territorios: sorpresa positiva</h5><p>Con 494 leads a CPR de $2.919, es el anuncio individual más eficiente del portafolio. Indica demanda real y audiencia receptiva. Escalar creatividades similares.</p></div>
+    <div class="insight"><h5>🤖 IA &amp; Datos: volumen alto, CPR mejorable</h5><p>Lidera inversión ($13M) pero CPR de $7.878. La Maestría IA y Ciencia de Datos gasta $1,88M para 236 leads. Revisar creatividades y landing pages para reducir CPR a menos de $6.000.</p></div>
+    <div class="insight"><h5>⚠️ Maestrías: CPR elevado ($11.100)</h5><p>Maestría Administración ($33.424), Maestría Sistemas Energéticos ($22.052) y Maestría Com. Digital ($13.749) tienen CPR crítico. Evaluar si el público está en Meta Ads o requiere Google/LinkedIn.</p></div>
+    <div class="insight"><h5>🎯 Webinar gratuito: palanca subutilizada</h5><p>Con solo 1 webinar activo ($64k, 16 leads, CPR $4.015), esta táctica está infrautilizada. Conferencias similares logran CPR de $1.374–$1.759. Ampliar catálogo de activaciones gratuitas.</p></div>
+    <div class="insight"><h5>📐 Frecuencia baja (1,07)</h5><p>La frecuencia promedio de 1,07 indica que el mensaje llega pocas veces por persona. Para programas de alto valor como maestrías (CPR alto), aumentar frecuencia puede mejorar la decisión de inscripción.</p></div>
+  </div>
+</section>
+
+</div>
+</div><!-- /tab-dashboard -->
+
+<!-- ==================== TAB 2: POR PROGRAMA ==================== -->
+<div class="tab-panel" id="tab-programas">
+<div class="alert-bar"><span>🎓</span><span>Análisis por tipo de programa · Especializaciones vs Maestrías · Posgrados UAO</span></div>
+<div class="container">
+<section>
+  <div class="section-title">Desempeño por Tipo de Programa</div>
+  <div class="section-sub">Comparativo entre Especializaciones, Maestrías y otros formatos</div>
+  <div class="chart-grid-3" style="margin-bottom:18px">
+    <div class="chart-box"><h4>Inversión por Tipo de Programa</h4><canvas id="chartProgInv"></canvas></div>
+    <div class="chart-box"><h4>Leads por Tipo de Programa</h4><canvas id="chartProgLeads"></canvas></div>
+    <div class="chart-box"><h4>CPR por Tipo (COP) — menor es mejor</h4><canvas id="chartProgCPR"></canvas></div>
+  </div>
+  <div class="table-wrap scrollable" style="margin-bottom:18px">
+    <table>
+      <thead><tr><th>Tipo de Programa</th><th>Inversión COP</th><th>% Inv.</th><th>Leads</th><th>% Leads</th><th>CPR COP</th><th>CTR %</th><th>Evaluación</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Especializaciones</strong></td><td>$31.007.721</td><td>72,3%</td><td>4.307</td><td>77,0%</td><td><strong style="color:var(--green)">$7.199</strong></td><td>0,52%</td><td><span class="tag tag-green">✅ Motor principal</span></td></tr>
+        <tr><td><strong>Maestrías</strong></td><td>$9.779.223</td><td>22,8%</td><td>881</td><td>15,8%</td><td><strong style="color:var(--red)">$11.100</strong></td><td>0,51%</td><td><span class="tag tag-red">⚠️ CPR alto, optimizar</span></td></tr>
+        <tr><td><strong>Otros Posgrados</strong></td><td>$2.016.166</td><td>4,7%</td><td>389</td><td>7,0%</td><td>$5.183</td><td>0,75%</td><td><span class="tag tag-yellow">🔶 Moderado</span></td></tr>
+        <tr><td><strong>Webinars Gratuitos</strong></td><td>$64.242</td><td>0,1%</td><td>16</td><td>0,3%</td><td>$4.015</td><td>0,41%</td><td><span class="tag tag-blue">ℹ️ Infrautilizado</span></td></tr>
+        <tr style="font-weight:700;background:#f8f4ee"><td><strong>TOTAL</strong></td><td><strong>$42.867.352</strong></td><td>100%</td><td><strong>5.593</strong></td><td>100%</td><td><strong>$7.664</strong></td><td>0,53%</td><td><span class="tag tag-purple">📊 General</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title" style="margin-top:32px">Top 10 Conjuntos de Anuncios</div>
+  <div class="section-sub" style="margin-bottom:14px">Mayor inversión por conjunto de anuncios</div>
+  <div class="table-wrap scrollable">
+    <table>
+      <thead><tr><th>#</th><th>Conjunto de Anuncios</th><th>Inversión COP</th><th>Leads</th><th>CPR COP</th><th>Evaluación</th></tr></thead>
+      <tbody>
+        <tr><td class="rank">1</td><td>Maestría en IA y Ciencia de Datos 2026-2S</td><td>$1.917.207</td><td>239</td><td>$8.022</td><td><span class="tag tag-yellow">🔶 CPR alto para volumen</span></td></tr>
+        <tr><td class="rank">2</td><td>Esp. Logística Virtual - Colombia</td><td>$1.903.972</td><td>524</td><td><strong style="color:var(--green)">$3.634</strong></td><td><span class="tag tag-green">🌟 Más eficiente</span></td></tr>
+        <tr><td class="rank">3</td><td>Maestría en Administración de Empresas</td><td>$1.671.225</td><td>50</td><td><strong style="color:var(--red)">$33.424</strong></td><td><span class="tag tag-red">🚨 Revisar urgente</span></td></tr>
+        <tr><td class="rank">4</td><td>Esp. SST Virtual - Colombia</td><td>$1.603.320</td><td>290</td><td>$5.529</td><td><span class="tag tag-yellow">🔶 Moderado</span></td></tr>
+        <tr><td class="rank">5</td><td>Esp. Gerencia del Talento Humano</td><td>$1.479.016</td><td>138</td><td>$10.718</td><td><span class="tag tag-red">⚠️ CPR alto</span></td></tr>
+        <tr><td class="rank">6</td><td>Esp. Gerencia de Mantenimiento y Confiabilidad</td><td>$1.470.342</td><td>145</td><td>$10.140</td><td><span class="tag tag-red">⚠️ CPR alto</span></td></tr>
+        <tr><td class="rank">7</td><td>Esp. Analítica de Big Data - Colombia</td><td>$1.456.771</td><td>162</td><td>$8.992</td><td><span class="tag tag-yellow">🔶 Moderado</span></td></tr>
+        <tr><td class="rank">8</td><td>Esp. Estrategia Publicitaria - Entornos Digitales</td><td>$1.439.117</td><td>159</td><td>$9.051</td><td><span class="tag tag-yellow">🔶 Moderado</span></td></tr>
+        <tr><td class="rank">9</td><td>Maestría en Sistemas Energéticos</td><td>$1.411.328</td><td>64</td><td>$22.052</td><td><span class="tag tag-red">🚨 Revisar urgente</span></td></tr>
+        <tr><td class="rank">10</td><td>Esp. Finanzas - MIX Virtual - Ciudades</td><td>$1.378.655</td><td>111</td><td>$12.420</td><td><span class="tag tag-red">⚠️ CPR alto</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</div>
+</div>
+
+<!-- ==================== TAB 3: TOP ANUNCIOS ==================== -->
+<div class="tab-panel" id="tab-anuncios">
+<div class="alert-bar"><span>📋</span><span>Ranking de anuncios por inversión y leads · 376 anuncios totales · Posgrados UAO</span></div>
+<div class="container">
+<section>
+  <div class="section-title">Top 15 Anuncios por Inversión</div>
+  <div class="section-sub">Anuncios con mayor gasto acumulado en el periodo</div>
+  <div class="chart-grid" style="margin-bottom:18px">
+    <div class="chart-box"><h4>Top 10 por Inversión (COP)</h4><canvas id="chartTopInv"></canvas></div>
+    <div class="chart-box"><h4>Top 10 por Leads Generados</h4><canvas id="chartTopLeads"></canvas></div>
+  </div>
+  <div class="table-wrap scrollable">
+    <table>
+      <thead><tr><th>#</th><th>Anuncio</th><th>Tipo</th><th>Inversión COP</th><th>Leads</th><th>CPR COP</th><th>CTR %</th><th>Evaluación</th></tr></thead>
+      <tbody>
+        <tr><td class="rank">1</td><td>Maestría en IA y Ciencia de Datos 2026-2S</td><td><span class="tag tag-purple">Maestría</span></td><td>$1.879.366</td><td>236</td><td>$7.963</td><td>0,60%</td><td><span class="tag tag-yellow">🔶 Moderado</span></td></tr>
+        <tr><td class="rank">2</td><td>#3 Esp. Logística Virtual 2026-2S</td><td><span class="tag tag-blue">Esp.</span></td><td>$1.696.526</td><td>462</td><td><strong style="color:var(--green)">$3.672</strong></td><td>0,62%</td><td><span class="tag tag-green">🏆 Alto desempeño</span></td></tr>
+        <tr><td class="rank">3</td><td>#1 Esp. DDHH y Territorios 2026-2S</td><td><span class="tag tag-blue">Esp.</span></td><td>$1.441.775</td><td>494</td><td><strong style="color:var(--green)">$2.919</strong></td><td>0,71%</td><td><span class="tag tag-green">🌟 CPR más bajo</span></td></tr>
+        <tr><td class="rank">4</td><td>#1 Esp. Estrategia Publicitaria de Marca Digital</td><td><span class="tag tag-blue">Esp.</span></td><td>$1.392.517</td><td>155</td><td>$8.984</td><td>0,53%</td><td><span class="tag tag-yellow">🔶 Moderado</span></td></tr>
+        <tr><td class="rank">5</td><td>#6 Esp. Finanzas 2026-2S MIX Virtual</td><td><span class="tag tag-blue">Esp.</span></td><td>$1.370.416</td><td>110</td><td>$12.458</td><td>0,40%</td><td><span class="tag tag-red">⚠️ CPR alto</span></td></tr>
+        <tr><td class="rank">6</td><td>Esp. SST Virtual 2026-2S</td><td><span class="tag tag-blue">Esp.</span></td><td>$1.348.338</td><td>243</td><td>$5.549</td><td>0,62%</td><td><span class="tag tag-yellow">🔶 Moderado</span></td></tr>
+        <tr><td class="rank">7</td><td>#1 Maestría en SST 2026-2S</td><td><span class="tag tag-purple">Maestría</span></td><td>$1.322.901</td><td>116</td><td>$11.404</td><td>0,46%</td><td><span class="tag tag-red">⚠️ CPR alto</span></td></tr>
+        <tr><td class="rank">8</td><td>#7 Esp. Gerencia del Talento Humano 2026-2S</td><td><span class="tag tag-blue">Esp.</span></td><td>$1.249.010</td><td>117</td><td>$10.675</td><td>0,36%</td><td><span class="tag tag-red">⚠️ CPR alto</span></td></tr>
+        <tr><td class="rank">9</td><td>6# Esp. Interculturalidad y Estudios de Género</td><td><span class="tag tag-blue">Esp.</span></td><td>$1.228.481</td><td>132</td><td>$9.307</td><td>0,49%</td><td><span class="tag tag-yellow">🔶 Moderado</span></td></tr>
+        <tr><td class="rank">10</td><td>#2 Esp. Diseño Publicitario Contenidos Digitales</td><td><span class="tag tag-blue">Esp.</span></td><td>$1.172.624</td><td>145</td><td>$8.087</td><td>0,39%</td><td><span class="tag tag-yellow">🔶 Moderado</span></td></tr>
+        <tr><td class="rank">11</td><td>Maestría Comunicación Digital - Beneficio especial</td><td><span class="tag tag-purple">Maestría</span></td><td>$1.127.380</td><td>82</td><td>$13.749</td><td>0,32%</td><td><span class="tag tag-red">⚠️ CPR alto</span></td></tr>
+        <tr><td class="rank">12</td><td>Maestría en Gerencia de Ingeniería 2026-2S</td><td><span class="tag tag-purple">Maestría</span></td><td>$1.095.185</td><td>107</td><td>$10.235</td><td>0,38%</td><td><span class="tag tag-red">⚠️ CPR alto</span></td></tr>
+        <tr><td class="rank">13</td><td>#7 Esp. Comunicación y Periodismo Digital</td><td><span class="tag tag-blue">Esp.</span></td><td>$1.074.046</td><td>115</td><td>$9.340</td><td>0,47%</td><td><span class="tag tag-yellow">🔶 Moderado</span></td></tr>
+        <tr><td class="rank">14</td><td>#5 Esp. Inteligencia Artificial 2026-2S</td><td><span class="tag tag-blue">Esp.</span></td><td>$956.961</td><td>168</td><td>$5.696</td><td>0,75%</td><td><span class="tag tag-yellow">🔶 Moderado</span></td></tr>
+        <tr><td class="rank">15</td><td>#1 Esp. Ingeniería Clínica 2026-2S</td><td><span class="tag tag-blue">Esp.</span></td><td>$907.204</td><td>78</td><td>$11.631</td><td>0,38%</td><td><span class="tag tag-red">⚠️ CPR alto</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:24px">
+    <div class="section-title">Top 10 Anuncios Más Eficientes (mín. 20 leads)</div>
+    <div class="section-sub" style="margin-bottom:14px">Menor CPR con volumen significativo de leads</div>
+    <div class="table-wrap scrollable">
+      <table>
+        <thead><tr><th>#</th><th>Anuncio</th><th>Leads</th><th>Inversión COP</th><th>CPR COP</th><th>Evaluación</th></tr></thead>
+        <tbody>
+          <tr><td class="rank">1</td><td>Conferencia - Inmigración Latinoamericana en EEUU</td><td>56</td><td>$76.940</td><td><strong style="color:var(--green)">$1.374</strong></td><td><span class="tag tag-green">🌟 CPR más bajo</span></td></tr>
+          <tr><td class="rank">2</td><td>Becas para el Cambio - Maestrías</td><td>149</td><td>$244.956</td><td>$1.644</td><td><span class="tag tag-green">✅ Muy eficiente</span></td></tr>
+          <tr><td class="rank">3</td><td>Lanzamiento Esp. Energías Renovables - Copia</td><td>20</td><td>$33.900</td><td>$1.695</td><td><span class="tag tag-green">✅ Muy eficiente</span></td></tr>
+          <tr><td class="rank">4</td><td>#2 Conferencia - Defensores DDHH en Brasil</td><td>54</td><td>$95.014</td><td>$1.759</td><td><span class="tag tag-green">✅ Muy eficiente</span></td></tr>
+          <tr><td class="rank">5</td><td>#1 WhatsApp Posgrados Convenios 2026-1S</td><td>88</td><td>$215.215</td><td>$2.445</td><td><span class="tag tag-green">✅ Eficiente</span></td></tr>
+          <tr><td class="rank">6</td><td>#3 Esp. Logística Híbrida 2026-2S</td><td>312</td><td>$809.283</td><td>$2.594</td><td><span class="tag tag-green">✅ Escalar</span></td></tr>
+          <tr><td class="rank">7</td><td>#1 Esp. DDHH y Territorios 2026-2S</td><td>494</td><td>$1.441.775</td><td>$2.919</td><td><span class="tag tag-green">🏆 Mayor volumen eficiente</span></td></tr>
+          <tr><td class="rank">8</td><td>Lanzamiento Esp. Energías Renovables</td><td>20</td><td>$62.759</td><td>$3.138</td><td><span class="tag tag-green">✅ Eficiente</span></td></tr>
+          <tr><td class="rank">9</td><td>#1 WhatsApp Posgrados General 2026-2S</td><td>28</td><td>$88.805</td><td>$3.172</td><td><span class="tag tag-green">✅ Eficiente</span></td></tr>
+          <tr><td class="rank">10</td><td>#3 Esp. Logística Virtual 2026-2S</td><td>462</td><td>$1.696.526</td><td>$3.672</td><td><span class="tag tag-green">✅ Escalar</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+</div>
+</div>
+
+<!-- ==================== TAB 4: ESTRUCTURA ==================== -->
+<div class="tab-panel" id="tab-estructura">
+<div class="container">
+<div class="campaign-header">
+  <h2>🗂️ Estructura Estratégica de Campaña — Posgrados UAO</h2>
+  <p>Arquitectura de campaña, conjuntos de anuncios, creativos y funnel para Posgrados UAO en Meta Ads</p>
+  <div class="campaign-stats">
+    <div class="c-stat"><div class="c-stat-val">3</div><div class="c-stat-lab">CdA por Campaña</div></div>
+    <div class="c-stat"><div class="c-stat-val">9</div><div class="c-stat-lab">Creativos por Campaña</div></div>
+    <div class="c-stat"><div class="c-stat-val">36</div><div class="c-stat-lab">Variaciones de Formato</div></div>
+    <div class="c-stat"><div class="c-stat-val">4</div><div class="c-stat-lab">Formatos por Creativo</div></div>
+    <div class="c-stat"><div class="c-stat-val">TOFU·MOFU·BOFU</div><div class="c-stat-lab">Etapas del Funnel</div></div>
+  </div>
+</div>
+
+<!-- ÁRBOL DE CAMPAÑA -->
+<div style="background:#fff;border-radius:16px;padding:22px;box-shadow:var(--shadow);margin-bottom:18px">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+    <div style="background:var(--purple);color:#fff;padding:7px 16px;border-radius:8px;font-weight:700;font-size:13px">CAMPAÑA POSGRADOS</div>
+    <div style="font-size:12.5px;color:var(--gray)">Meta Ads · Posgrados UAO · Desde 4 Mar 2026 · 3 CdA · 9 Creativos · 36 Piezas</div>
+  </div>
+  <div class="tree-wrap">
+    <div class="htree">
+      <div class="htree-col" style="flex-shrink:0">
+        <div class="node-campaign" style="min-width:130px;background:linear-gradient(135deg,#2d0654,#6B35A0)">CAMPAÑA<br><span style="font-size:10px;opacity:.8;font-weight:400">Posgrados UAO</span></div>
+      </div>
+      <div style="width:28px;height:2px;background:#bbb;align-self:center;flex-shrink:0"></div>
+      <div class="htree-col" style="gap:14px;flex-shrink:0">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div class="node-adset" style="background:linear-gradient(135deg,#2d0654,#6B35A0);color:#fff">Público 1<br><span style="font-size:10px;font-weight:400">Retargeting personalizado</span></div>
+          <div class="node-audience" style="background:#1a0330">👥 Visitas web + interacciones<br>previas con contenido UAO</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div class="node-adset" style="background:linear-gradient(135deg,#6B35A0,#9d68ff);color:#fff">Segmentación #2<br><span style="font-size:10px;font-weight:400">Profesionales activos<br>25–45 años</span></div>
+          <div class="node-audience" style="background:#1a0330">📊 Profesionales con intereses<br>en educación avanzada</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div class="node-adset" style="background:linear-gradient(135deg,#4a1070,#6B35A0);color:#fff">Segmentación #3<br><span style="font-size:10px;font-weight:400">Lookalike de leads<br>históricos</span></div>
+          <div class="node-audience" style="background:#1a0330">🔄 Lookalike 1–5%<br>basado en leads históricos</div>
+        </div>
+      </div>
+      <div style="width:20px;border-top:2px solid #bbb;align-self:flex-start;margin-top:26px;flex-shrink:0"></div>
+      <div style="display:flex;flex-direction:column;justify-content:space-around;align-self:stretch;width:2px;background:#bbb;flex-shrink:0"></div>
+      <div class="htree-col" style="gap:7px;padding:8px 0;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:18px;height:2px;background:#bbb;flex-shrink:0"></div><div class="node-creative" style="min-width:155px"><div class="node-creative-label">Creativo 1 · Estática<br><span class="node-creative-type">1080×1080</span></div><span class="funnel-tag tofu">TOFU</span></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:18px;height:2px;background:#bbb;flex-shrink:0"></div><div class="node-creative" style="min-width:155px"><div class="node-creative-label">Creativo 2 · Video<br><span class="node-creative-type">1080×1080</span></div><span class="funnel-tag mofu">MOFU</span></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:18px;height:2px;background:#bbb;flex-shrink:0"></div><div class="node-creative" style="min-width:155px"><div class="node-creative-label">Creativo 3 · Animada<br><span class="node-creative-type">1080×1080</span></div><span class="funnel-tag bofu">BOFU</span></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:18px;height:2px;background:#bbb;flex-shrink:0"></div><div class="node-creative" style="min-width:155px"><div class="node-creative-label">Creativo 4 · Estática<br><span class="node-creative-type">1080×1080</span></div><span class="funnel-tag tofu">TOFU</span></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:18px;height:2px;background:#bbb;flex-shrink:0"></div><div class="node-creative" style="min-width:155px"><div class="node-creative-label">Creativo 5 · Video<br><span class="node-creative-type">1080×1080</span></div><span class="funnel-tag mofu">MOFU</span></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:18px;height:2px;background:#bbb;flex-shrink:0"></div><div class="node-creative" style="min-width:155px"><div class="node-creative-label">Creativo 6 · Animada<br><span class="node-creative-type">1080×1080</span></div><span class="funnel-tag bofu">BOFU</span></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:18px;height:2px;background:#bbb;flex-shrink:0"></div><div class="node-creative" style="min-width:155px"><div class="node-creative-label">Creativo 7 · Estática<br><span class="node-creative-type">1080×1080</span></div><span class="funnel-tag tofu">TOFU</span></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:18px;height:2px;background:#bbb;flex-shrink:0"></div><div class="node-creative" style="min-width:155px"><div class="node-creative-label">Creativo 8 · Video<br><span class="node-creative-type">1080×1080</span></div><span class="funnel-tag mofu">MOFU</span></div></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:18px;height:2px;background:#bbb;flex-shrink:0"></div><div class="node-creative" style="min-width:155px"><div class="node-creative-label">Creativo 9 · Animada<br><span class="node-creative-type">1080×1080</span></div><span class="funnel-tag bofu">BOFU</span></div></div>
+      </div>
+      <div style="width:16px;border-top:2px solid #bbb;align-self:flex-start;margin-top:22px;flex-shrink:0"></div>
+      <div style="display:flex;flex-direction:column;justify-content:space-around;align-self:stretch;width:2px;background:#bbb;flex-shrink:0"></div>
+      <div class="htree-col" style="gap:7px;padding:8px 0;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:4px"><div style="width:16px;height:2px;background:#bbb;flex-shrink:0"></div><div class="format-tags"><span class="fmt">1080×607</span><span class="fmt">1080×1920</span><span class="fmt">1080×1350</span></div></div>
+        <div style="display:flex;align-items:center;gap:4px"><div style="width:16px;height:2px;background:#bbb;flex-shrink:0"></div><div class="format-tags"><span class="fmt">1080×607</span><span class="fmt">1080×1920</span><span class="fmt">1080×1350</span></div></div>
+        <div style="display:flex;align-items:center;gap:4px"><div style="width:16px;height:2px;background:#bbb;flex-shrink:0"></div><div class="format-tags"><span class="fmt">1080×607</span><span class="fmt">1080×1920</span><span class="fmt">1080×1350</span></div></div>
+        <div style="display:flex;align-items:center;gap:4px"><div style="width:16px;height:2px;background:#bbb;flex-shrink:0"></div><div class="format-tags"><span class="fmt">1080×607</span><span class="fmt">1080×1920</span><span class="fmt">1080×1350</span></div></div>
+        <div style="display:flex;align-items:center;gap:4px"><div style="width:16px;height:2px;background:#bbb;flex-shrink:0"></div><div class="format-tags"><span class="fmt">1080×607</span><span class="fmt">1080×1920</span><span class="fmt">1080×1350</span></div></div>
+        <div style="display:flex;align-items:center;gap:4px"><div style="width:16px;height:2px;background:#bbb;flex-shrink:0"></div><div class="format-tags"><span class="fmt">1080×607</span><span class="fmt">1080×1920</span><span class="fmt">1080×1350</span></div></div>
+        <div style="display:flex;align-items:center;gap:4px"><div style="width:16px;height:2px;background:#bbb;flex-shrink:0"></div><div class="format-tags"><span class="fmt">1080×607</span><span class="fmt">1080×1920</span><span class="fmt">1080×1350</span></div></div>
+        <div style="display:flex;align-items:center;gap:4px"><div style="width:16px;height:2px;background:#bbb;flex-shrink:0"></div><div class="format-tags"><span class="fmt">1080×607</span><span class="fmt">1080×1920</span><span class="fmt">1080×1350</span></div></div>
+        <div style="display:flex;align-items:center;gap:4px"><div style="width:16px;height:2px;background:#bbb;flex-shrink:0"></div><div class="format-tags"><span class="fmt">1080×607</span><span class="fmt">1080×1920</span><span class="fmt">1080×1350</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KPIs estructura -->
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px">
+  <div style="background:#fff;border-radius:10px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);text-align:center;border-top:3px solid var(--purple)"><div style="font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:3px">Inversión</div><div style="font-size:20px;font-weight:700">$42,9M</div><div style="font-size:10px;color:var(--gray)">COP</div></div>
+  <div style="background:#fff;border-radius:10px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);text-align:center;border-top:3px solid var(--purple)"><div style="font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:3px">Leads</div><div style="font-size:20px;font-weight:700">5.593</div><div style="font-size:10px;color:var(--gray)">Conversiones</div></div>
+  <div style="background:#fff;border-radius:10px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);text-align:center;border-top:3px solid var(--purple)"><div style="font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:3px">CPR</div><div style="font-size:20px;font-weight:700">$7.664</div><div style="font-size:10px;color:var(--gray)">COP por lead</div></div>
+  <div style="background:#fff;border-radius:10px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);text-align:center;border-top:3px solid var(--purple)"><div style="font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:3px">CTR</div><div style="font-size:20px;font-weight:700">0,53%</div><div style="font-size:10px;color:var(--gray)">Tasa de clics</div></div>
+  <div style="background:#fff;border-radius:10px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);text-align:center;border-top:3px solid var(--purple)"><div style="font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:3px">Periodo</div><div style="font-size:13px;font-weight:700">4 Mar – 2 Jun</div><div style="font-size:10px;color:var(--gray)">2026</div></div>
+</div>
+
+<!-- FUNNEL -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px">
+  <div style="background:#dbeafe;border-radius:10px;padding:14px;border-left:4px solid #1d4ed8"><div style="font-size:12px;font-weight:700;color:#1d4ed8;margin-bottom:5px">🔵 TOFU — Creativos 1, 4, 7</div><div style="font-size:12px;color:#333">Awareness del programa. Audiencias frías de profesionales 25–45 con intereses en formación avanzada, crecimiento profesional e IA.</div></div>
+  <div style="background:#dcfce7;border-radius:10px;padding:14px;border-left:4px solid #15803d"><div style="font-size:12px;font-weight:700;color:#15803d;margin-bottom:5px">🟢 MOFU — Creativos 2, 5, 8</div><div style="font-size:12px;color:#333">Diferenciadores del programa: webinars gratuitos, testimonios de egresados, casos de éxito y propuesta de valor concreta.</div></div>
+  <div style="background:#fee2e2;border-radius:10px;padding:14px;border-left:4px solid #b91c1c"><div style="font-size:12px;font-weight:700;color:#b91c1c;margin-bottom:5px">🔴 BOFU — Creativos 3, 6, 9</div><div style="font-size:12px;color:#333">CTA de inscripción con urgencia: cupos limitados, fechas de cierre, becas disponibles. Retargeting de visitantes de landing.</div></div>
+</div>
+
+<!-- FORMATOS -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+  <div style="background:#fff;border-radius:10px;padding:14px;box-shadow:var(--shadow);text-align:center"><div style="font-size:22px;margin-bottom:6px">⬛</div><div style="font-weight:700;font-size:13px">1080×1080</div><div style="font-size:11px;color:var(--gray)">Feed cuadrado · FB e IG</div></div>
+  <div style="background:#fff;border-radius:10px;padding:14px;box-shadow:var(--shadow);text-align:center"><div style="font-size:22px;margin-bottom:6px">▬</div><div style="font-weight:700;font-size:13px">1080×607</div><div style="font-size:11px;color:var(--gray)">Landscape · Facebook Feed</div></div>
+  <div style="background:#fff;border-radius:10px;padding:14px;box-shadow:var(--shadow);text-align:center"><div style="font-size:22px;margin-bottom:6px">▮</div><div style="font-weight:700;font-size:13px">1080×1920</div><div style="font-size:11px;color:var(--gray)">Vertical · Stories y Reels</div></div>
+  <div style="background:#fff;border-radius:10px;padding:14px;box-shadow:var(--shadow);text-align:center"><div style="font-size:22px;margin-bottom:6px">◼</div><div style="font-weight:700;font-size:13px">1080×1350</div><div style="font-size:11px;color:var(--gray)">Retrato 4:5 · Feed Instagram</div></div>
+</div>
+</div>
+</div>
+
+<!-- ==================== TAB 5: PROYECCIÓN 2026-2S ==================== -->
+<div class="tab-panel" id="tab-proyeccion">
+<div class="container">
+<div class="proj-header">
+  <h2>📈 Proyección de Cierre — Posgrados UAO 2026-2S</h2>
+  <p>Estimación de inversión y leads hasta agosto 2026 · Corte: 2 de junio de 2026</p>
+  <div style="display:flex;gap:14px;margin-top:14px;flex-wrap:wrap">
+    <div style="background:rgba(255,255,255,.15);border-radius:8px;padding:7px 14px;font-size:12px"><strong>📅 Periodo proyectado:</strong> Junio – Agosto 2026</div>
+    <div style="background:rgba(255,255,255,.15);border-radius:8px;padding:7px 14px;font-size:12px"><strong>📊 Acumulado a corte:</strong> $42,9M COP · 5.593 leads</div>
+    <div style="background:rgba(255,255,255,.15);border-radius:8px;padding:7px 14px;font-size:12px"><strong>💰 Inversión adicional base:</strong> $51,67M COP</div>
+  </div>
+</div>
+<section>
+  <div class="section-title">Supuestos Presupuestales</div>
+  <div class="section-sub">Inversión mensual proyectada Jun–Ago 2026 con base en histórico</div>
+  <div class="table-wrap scrollable" style="margin-bottom:20px"><table>
+    <thead><tr><th>Línea</th><th>Junio 2026</th><th>Julio 2026</th><th>Agosto 2026</th><th>Inversión adicional</th><th>CPR base</th><th>Leads adicionales</th></tr></thead>
+    <tbody>
+      <tr style="background:#ede8f7"><td><strong>🎓 Posgrados UAO</strong></td><td>$20.700.000</td><td>$25.470.197</td><td>$5.500.000</td><td><strong>$51.670.197</strong></td><td><strong>$7.664</strong></td><td><strong style="color:var(--purple)">6.741</strong></td></tr>
+    </tbody>
+  </table></div>
+  <div class="exec-box" style="border-left-color:var(--purple)"><h3>📌 Lectura ejecutiva</h3><p style="font-size:13px;color:var(--gray)">Con $51,67M adicionales entre junio y agosto y manteniendo el CPR observado de $7.664, Posgrados UAO puede sumar aproximadamente 6.741 leads al cierre del semestre. El escenario optimista requiere reducir CPR a $6.897 mediante optimización de los programas con mayor ineficiencia actual.</p></div>
+</section>
+<section>
+  <div class="section-title">Escenarios de Cierre — Posgrados UAO</div>
+  <div class="scenario-grid">
+    <div class="scenario-card conservador">
+      <div class="sc-label sc-conservador">📉 Conservador</div>
+      <div class="sc-main-val">11.444</div><div class="sc-main-label">Leads al cierre</div>
+      <div class="sc-rows">
+        <div class="sc-row"><span>Leads a corte</span><span>5.593</span></div>
+        <div class="sc-row"><span>Inv. adicional</span><span>$51,67M</span></div>
+        <div class="sc-row"><span>CPR conservador</span><span>$8.827</span></div>
+        <div class="sc-row"><span>Leads adicionales</span><span>+5.851</span></div>
+      </div>
+    </div>
+    <div class="scenario-card esperado" style="border-top-color:var(--purple)">
+      <div class="sc-label sc-esperado">📊 Esperado</div>
+      <div class="sc-main-val" style="color:var(--purple)">12.334</div><div class="sc-main-label">Leads al cierre</div>
+      <div class="sc-rows">
+        <div class="sc-row"><span>Leads a corte</span><span>5.593</span></div>
+        <div class="sc-row"><span>Inv. adicional</span><span>$51,67M</span></div>
+        <div class="sc-row"><span>CPR base</span><span>$7.664</span></div>
+        <div class="sc-row"><span>Leads adicionales</span><span>+6.741</span></div>
+      </div>
+    </div>
+    <div class="scenario-card optimista">
+      <div class="sc-label sc-optimista">📈 Optimista</div>
+      <div class="sc-main-val">13.082</div><div class="sc-main-label">Leads al cierre</div>
+      <div class="sc-rows">
+        <div class="sc-row"><span>Leads a corte</span><span>5.593</span></div>
+        <div class="sc-row"><span>Inv. adicional</span><span>$51,67M</span></div>
+        <div class="sc-row"><span>CPR optimista</span><span>$6.897</span></div>
+        <div class="sc-row"><span>Leads adicionales</span><span>+7.489</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="chart-grid" style="margin-bottom:20px">
+    <div class="chart-box"><h4>Leads Acumulados — Real + Proyección Posgrados</h4><canvas id="chartProjTimeline"></canvas></div>
+    <div class="chart-box"><h4>CPR por Escenario (COP)</h4><canvas id="chartProjCPR"></canvas></div>
+  </div>
+</section>
+<section>
+  <div class="section-title">Recomendaciones para el Cierre</div>
+  <div class="insight-grid">
+    <div class="insight"><h5>🚀 Escalar: Logística + DDHH</h5><p>Esp. Logística Virtual ($3.634 CPR) y DDHH Territorios ($2.919) son los únicos con CPR eficiente y alto volumen. Doblar presupuesto en estos dos antes de junio 30.</p></div>
+    <div class="insight"><h5>⚠️ Pausar: MBA y Sistemas Energéticos</h5><p>Maestría Administración ($33.424 CPR) y Maestría Sistemas Energéticos ($22.052) consumen $3,1M con apenas 114 leads. Pausar y redirigir presupuesto a programas eficientes.</p></div>
+    <div class="insight"><h5>🎯 Webinars gratuitos como TOFU</h5><p>Conferencias logran CPR de $1.374–$1.759. Ampliar a 5–8 webinars temáticos en julio–agosto para calentar audiencias antes del cierre de inscripciones 2026-2S.</p></div>
+    <div class="insight"><h5>🔄 Becas como acelerador</h5><p>"Becas para el Cambio" (CPR $1.644, 149 leads) demuestra que los incentivos económicos multiplican la conversión. Replicar en agosto con enfoque en maestrías de bajo desempeño.</p></div>
+  </div>
+</section>
+</div>
+</div>
+
+<!-- ==================== TAB 6: PRÓXIMA COHORTE ==================== -->
+<div class="tab-panel" id="tab-cohorte">
+<div class="container">
+<div class="next-header">
+  <h2>🚀 Proyección Estratégica — Posgrados UAO Cohorte Ago 2026 – Feb 2027</h2>
+  <p>Periodo: mediados agosto 2026 – mediados febrero 2027 · Base: comportamiento observado al 2 de junio</p>
+  <div style="display:flex;gap:14px;margin-top:14px;flex-wrap:wrap">
+    <div style="background:rgba(255,255,255,.15);border-radius:8px;padding:7px 14px;font-size:12px"><strong>🎓 PG base histórico:</strong> $113.593.344</div>
+    <div style="background:rgba(255,255,255,.15);border-radius:8px;padding:7px 14px;font-size:12px"><strong>🎯 CPR base:</strong> $7.664 COP</div>
+    <div style="background:rgba(255,255,255,.15);border-radius:8px;padding:7px 14px;font-size:12px"><strong>📊 Leads esperados base:</strong> 14.820</div>
+  </div>
+</div>
+<section>
+  <div class="section-title">Base Presupuestal — Próxima Cohorte</div>
+  <div class="table-wrap scrollable" style="margin-bottom:20px"><table>
+    <thead><tr><th>Línea</th><th>Base presupuestal</th><th>CPR base</th><th>Leads esperados</th><th>Nota metodológica</th></tr></thead>
+    <tbody>
+      <tr style="background:#ede8f7"><td><strong>🎓 Posgrados UAO</strong></td><td><strong>$113.593.344</strong></td><td>$7.664</td><td><strong>14.820</strong></td><td>Inversión histórica suministrada para el periodo mediados agosto 2026 a febrero 2027. Incluye apertura y cierre de cohorte 2027-1S.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+<section>
+  <div class="section-title">Escenarios — Próxima Cohorte Posgrados</div>
+  <div class="scenario-grid">
+    <div class="scenario-card conservador">
+      <div class="sc-label sc-conservador">📉 Conservador</div>
+      <div class="sc-main-val">13.507</div><div class="sc-main-label">Leads proyectados</div>
+      <div class="sc-rows">
+        <div class="sc-row"><span>Inversión total</span><span>$96,6M COP</span></div>
+        <div class="sc-row"><span>CPR conservador</span><span>$8.827</span></div>
+        <div class="sc-row"><span>Inv. mensual prom.</span><span>$16,1M</span></div>
+        <div class="sc-row"><span>vs esperado</span><span>-8,9%</span></div>
+      </div>
+    </div>
+    <div class="scenario-card esperado" style="border-top-color:var(--purple)">
+      <div class="sc-label sc-esperado">📊 Esperado Base</div>
+      <div class="sc-main-val" style="color:var(--purple)">14.820</div><div class="sc-main-label">Leads proyectados</div>
+      <div class="sc-rows">
+        <div class="sc-row"><span>Inversión total</span><span>$113,6M COP</span></div>
+        <div class="sc-row"><span>CPR base</span><span>$7.664</span></div>
+        <div class="sc-row"><span>Inv. mensual prom.</span><span>$18,9M</span></div>
+        <div class="sc-row"><span>Meses proyectados</span><span>6 meses</span></div>
+      </div>
+    </div>
+    <div class="scenario-card optimista">
+      <div class="sc-label sc-optimista">📈 Optimista</div>
+      <div class="sc-main-val">20.398</div><div class="sc-main-label">Leads proyectados</div>
+      <div class="sc-rows">
+        <div class="sc-row"><span>Inversión total</span><span>$130,6M COP</span></div>
+        <div class="sc-row"><span>CPR optimista</span><span>$6.400</span></div>
+        <div class="sc-row"><span>Inv. mensual prom.</span><span>$21,8M</span></div>
+        <div class="sc-row"><span>vs esperado</span><span>+37,6%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="chart-grid" style="margin-bottom:20px">
+    <div class="chart-box"><h4>Leads Mensuales por Escenario</h4><canvas id="chartCohorteMonthly"></canvas></div>
+    <div class="chart-box"><h4>Comparativo: Histórico 2026 vs Proyección 2027-1</h4><canvas id="chartCohorteComp"></canvas></div>
+  </div>
+</section>
+<section>
+  <div class="section-title">Recomendaciones Estratégicas — 2027-1</div>
+  <div class="rec-grid">
+    <div class="rec-card rec-scale"><div class="rec-type">🚀 Escalar</div><h5>Programas con eficiencia probada</h5><ul><li>Logística Virtual e Híbrida: duplicar inversión en el siguiente ciclo.</li><li>DDHH y Territorios: ampliar a más variantes creativas.</li><li>SST Virtual: mantener y optimizar segmentación.</li><li>Conferencias y webinars: escalar de 1 a 8 activaciones por semestre.</li></ul></div>
+    <div class="rec-card rec-budget"><div class="rec-type">💡 Presupuesto</div><h5>Distribución mensual recomendada</h5><ul><li>Agosto–Octubre: 55% del presupuesto (pico de inscripción).</li><li>Noviembre–Diciembre: 25% (sostenimiento y retargeting).</li><li>Enero–Feb 2027: 20% (cierre de cohorte y captación temprana).</li><li>No concentrar más del 30% en un solo mes.</li></ul></div>
+    <div class="rec-card rec-optimize"><div class="rec-type">📊 Reducir CPR</div><h5>Objetivo: CPR global por debajo de $6.500</h5><ul><li>Pausar MBA y Maestría Sistemas Energéticos sin revisión de audiencias.</li><li>Usar Google Search para programas de alto valor (maestrías).</li><li>Separar campañas de Especializaciones y Maestrías en cuentas o estructuras diferentes.</li><li>A/B test de landing pages en programas con CTR alto pero CPR elevado.</li></ul></div>
+    <div class="rec-card rec-creative"><div class="rec-type">🎨 Creatividad</div><h5>Nuevos formatos 2027-1</h5><ul><li>Video-testimonio de egresados en formato Reel (15–30 seg).</li><li>Carruseles por objeción: precio, tiempo, modalidad, financiación.</li><li>Countdown ads para cierre de inscripciones con urgencia real.</li><li>Creatividades por ciudad para ampliar cobertura nacional.</li></ul></div>
+    <div class="rec-card rec-pause"><div class="rec-type">⛔ No repetir</div><h5>Errores identificados</h5><ul><li>No sostener MBA y Maestría Sistemas Energéticos con CPR +$20k sin intervención.</li><li>No subir presupuesto en Finanzas y Gerencia sin optimizar primero.</li><li>No ignorar Conferencias y Webinars gratuitos — son los mejores TOFU disponibles.</li></ul></div>
+    <div class="rec-card" style="border-top:3px solid var(--blue)"><div class="rec-type" style="color:var(--blue)">🔮 Nuevos canales</div><h5>Expandir más allá de Meta</h5><ul><li>LinkedIn Ads para ejecutivos interesados en MBA y maestrías (audiencia más calificada).</li><li>Google Search para captura de demanda activa ("especialización en X UAO").</li><li>Email remarketing a leads no convertidos del ciclo 2026-1S.</li></ul></div>
+  </div>
+</section>
+<section>
+  <div class="section-title">Comparativo Histórico vs Proyección</div>
+  <div class="table-wrap" style="margin-bottom:20px"><table>
+    <thead><tr><th>Métrica</th><th>Histórico 2026-1S (a corte)</th><th>Conservador 2027-1</th><th>Esperado 2027-1</th><th>Optimista 2027-1</th></tr></thead>
+    <tbody>
+      <tr><td>Inversión</td><td>$42,9M (3 meses)</td><td>$96,6M</td><td><strong>$113,6M</strong></td><td>$130,6M</td></tr>
+      <tr><td>Total leads</td><td>5.593</td><td>13.507</td><td><strong>14.820</strong></td><td>20.398</td></tr>
+      <tr><td>CPR global</td><td>$7.664</td><td>$8.827</td><td><strong>$7.664</strong></td><td>$6.400</td></tr>
+      <tr><td>Mejor CPR individual</td><td>$1.374 (Conferencia)</td><td colspan="3">Mantener Logística + DDHH + Conferencias como motor</td></tr>
+      <tr><td>Leads/mes promedio</td><td>~1.864</td><td>~2.251</td><td><strong>~2.470</strong></td><td>~3.400</td></tr>
+    </tbody>
+  </table></div>
+</section>
+</div>
+</div>
+
+<footer>
+  <strong>Universidad Autónoma de Occidente</strong> · Dashboard Posgrados UAO | 4 Mar – 2 Jun 2026<br>
+  Meta Ads (Facebook + Instagram) · 376 anuncios analizados · Desde 4 de marzo 2026 · Dirección de Mercadeo UAO
+</footer>
+
+<script>
+// ===== Animated Shader Hero (vanilla WebGL2) =====
+(function initAnimatedShaderHero(){
+  const canvas=document.getElementById('heroShaderCanvas');
+  const hero=document.getElementById('animatedShaderHero');
+  if(!canvas||!hero) return;
+  const gl=canvas.getContext('webgl2',{antialias:true,alpha:false});
+  if(!gl){ hero.classList.add('shader-fallback'); return; }
+  const vertex=`#version 300 es
+  precision highp float;
+  in vec2 position;
+  void main(){gl_Position=vec4(position,0.0,1.0);}`;
+  const fragment=`#version 300 es
+  precision highp float;
+  out vec4 O;
+  uniform vec2 resolution;
+  uniform float time;
+  uniform vec2 touch;
+  #define FC gl_FragCoord.xy
+  #define T time
+  #define R resolution
+  #define MN min(R.x,R.y)
+  float rnd(vec2 p){p=fract(p*vec2(12.9898,78.233));p+=dot(p,p+34.56);return fract(p.x*p.y);}
+  float noise(in vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);float a=rnd(i),b=rnd(i+vec2(1,0)),c=rnd(i+vec2(0,1)),d=rnd(i+1.);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
+  float fbm(vec2 p){float t=.0,a=.55;mat2 m=mat2(1.,-.45,.32,1.22);for(int i=0;i<6;i++){t+=a*noise(p);p*=2.05*m;a*=.52;}return t;}
+  float clouds(vec2 p){float d=1.,t=.0;for(float i=.0;i<4.;i++){float a=d*fbm(i*9.+p.x*.22+.18*(1.+i)*p.y+d+i*i+p);t=mix(t,d,a);d=a;p*=1.65/(i+1.);}return t;}
+  void main(){
+    vec2 uv=(FC-.5*R)/MN;
+    vec2 st=uv*vec2(2.15,1.08);
+    vec2 mt=(touch-.5*R)/MN;
+    float pulse=sin(T*.22)*.5+.5;
+    float bg=clouds(vec2(st.x+T*.18+mt.x*.18,-st.y+mt.y*.12));
+    vec3 deep=vec3(.028,.004,.010);
+    vec3 red=vec3(.86,.055,.12);
+    vec3 wine=vec3(.38,.035,.075);
+    vec3 gold=vec3(1.0,.68,.20);
+    vec3 amber=vec3(1.0,.28,.16);
+    vec3 col=mix(deep,wine,bg*.65);
+    uv*=1.-.2*pulse;
+    for(float i=1.;i<13.;i++){
+      uv+=.08*cos(i*vec2(.12+.011*i,.78)+i*i+T*.32+.12*uv.x+mt.x);
+      vec2 p=uv+mt*.09;
+      float d=length(p)+.012;
+      float b=noise(i+p+bg*1.731);
+      vec3 glow=mix(red,gold,sin(i*.7+T*.4)*.5+.5);
+      col+=.0065*glow/d*(.25+.75*b);
+      col=mix(col,mix(wine,red,bg),smoothstep(.85,.05,d)*.16);
+    }
+    float vign=smoothstep(1.35,.15,length((FC-.5*R)/MN));
+    col=mix(deep,col,vign);
+    col+=gold*pow(max(0.,1.-length(uv-vec2(.48,.16))*1.4),3.0)*.38;
+    col+=amber*pow(max(0.,1.-length(uv+vec2(.62,.28))*1.2),3.0)*.22;
+    O=vec4(pow(col,vec3(.82)),1.0);
+  }`;
+  function compile(type,src){const sh=gl.createShader(type);gl.shaderSource(sh,src);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(sh));return null;}return sh;}
+  const vs=compile(gl.VERTEX_SHADER,vertex),fs=compile(gl.FRAGMENT_SHADER,fragment);if(!vs||!fs)return;
+  const prog=gl.createProgram();gl.attachShader(prog,vs);gl.attachShader(prog,fs);gl.linkProgram(prog);
+  if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){console.error(gl.getProgramInfoLog(prog));return;}
+  const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,1,-1,-1,1,1,1,-1]),gl.STATIC_DRAW);
+  const pos=gl.getAttribLocation(prog,'position');gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);
+  const uRes=gl.getUniformLocation(prog,'resolution'),uTime=gl.getUniformLocation(prog,'time'),uTouch=gl.getUniformLocation(prog,'touch');
+  let mouse=[0,0];
+  hero.addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect();mouse=[(e.clientX-r.left)*devicePixelRatio,(r.height-(e.clientY-r.top))*devicePixelRatio];});
+  function resize(){const r=hero.getBoundingClientRect();const dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));canvas.width=Math.max(1,Math.floor(r.width*dpr));canvas.height=Math.max(1,Math.floor(r.height*dpr));canvas.style.width=r.width+'px';canvas.style.height=r.height+'px';gl.viewport(0,0,canvas.width,canvas.height);if(mouse[0]===0&&mouse[1]===0)mouse=[canvas.width*.72,canvas.height*.62];}
+  function render(t){gl.useProgram(prog);gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.uniform2f(uRes,canvas.width,canvas.height);gl.uniform1f(uTime,t*.001);gl.uniform2f(uTouch,mouse[0],mouse[1]);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);requestAnimationFrame(render);}
+  resize();window.addEventListener('resize',resize,{passive:true});requestAnimationFrame(render);
+})();
+
+// ===== COLORES Y CONFIG =====
+Chart.defaults.font.family = "'DM Sans',sans-serif";
+Chart.defaults.color = '#6B6868';
+const RED='#DC142D', RD='#961423', RL='#F03C46', GRN='#1A9E5A', YLW='#D49A00', BLU='#1550A0', PUR='#6B35A0', ORG='#C85000';
+const AREA_COLORS = [PUR,RED,BLU,ORG,YLW,GRN,'#20B2AA','#708090','#8B4513','#C71585','#2E8B57','#4682B4'];
+const areaLabels = ['IA & Datos','Marketing & Comuni.','Salud & Ciencias','Otros PG','Talento Humano','Logística','Finanzas','Gerencia & Admin','DDHH & Género','Derecho','Ingeniería','Activaciones'];
+
+// ===== TABS =====
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id === 'tab-proyeccion') initProj();
+  if(id === 'tab-cohorte') initCohorte();
+}
+function switchLinea(id, btn) {
+  document.querySelectorAll('.linea-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.linea-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+// ===== TAB 1: OVERVIEW =====
+new Chart(document.getElementById('chartAreaInv'),{type:'bar',data:{labels:areaLabels,datasets:[{data:[13005963,7308646,5574986,4053376,3059088,2730829,2705314,2240597,1471713,464416,188182,64242],backgroundColor:AREA_COLORS,borderRadius:6}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>'$'+v/1000000+'M'}}}}});
+new Chart(document.getElementById('chartAreaLeads'),{type:'bar',data:{labels:areaLabels,datasets:[{data:[1651,569,734,456,703,841,194,102,159,102,66,16],backgroundColor:AREA_COLORS,borderRadius:6}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v.toLocaleString('es')}}}}});
+new Chart(document.getElementById('chartAreaCPR'),{type:'bar',data:{labels:['Ingeniería','Logística','Talento H.','Activaciones','Derecho','Salud','IA & Datos','Otros PG','DDHH','Marketing','Finanzas','Gerencia'],datasets:[{data:[2851,3247,4351,4015,4553,7595,7878,8889,9256,12845,13945,21967],backgroundColor:[GRN,GRN,GRN,YLW,YLW,YLW,YLW,ORG,ORG,RED,RED,RED],borderRadius:6}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>'$'+v.toLocaleString('es')}}}}});
+new Chart(document.getElementById('chartEstado'),{type:'doughnut',data:{labels:['active ($36,3M · 121)','inactive ($5,8M · 165)','not_delivering ($0,8M · 90)'],datasets:[{data:[36257776,5752386,857190],backgroundColor:[GRN,YLW,ORG],borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:10}}}}});
+
+// ===== TAB 2: PROGRAMA =====
+new Chart(document.getElementById('chartProgInv'),{type:'doughnut',data:{labels:['Especializaciones ($31M · 72%)','Maestrías ($9,8M · 23%)','Otros ($2M · 5%)'],datasets:[{data:[31007721,9779223,2080408],backgroundColor:[PUR,BLU,YLW],borderWidth:2,borderColor:'#fff'}]},options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:8,font:{size:11}}}}}});
+new Chart(document.getElementById('chartProgLeads'),{type:'doughnut',data:{labels:['Especializaciones (4.307 · 77%)','Maestrías (881 · 16%)','Otros (405 · 7%)'],datasets:[{data:[4307,881,405],backgroundColor:[PUR,BLU,YLW],borderWidth:2,borderColor:'#fff'}]},options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:8,font:{size:11}}}}}});
+new Chart(document.getElementById('chartProgCPR'),{type:'bar',data:{labels:['Activaciones','Especializaciones','Otros PG','Webinars','Maestrías'],datasets:[{data:[4015,7199,5183,4015,11100],backgroundColor:[YLW,PUR,ORG,BLU,RED],borderRadius:7}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString('es')}}}}});
+
+// ===== TAB 3: TOP ANUNCIOS =====
+new Chart(document.getElementById('chartTopInv'),{type:'bar',data:{labels:['Maestría IA y Ciencia Datos','Esp. Logística Virtual #3','Esp. DDHH Territorios #1','Esp. Estrategia Publicitaria #1','Esp. Finanzas #6','Esp. SST Virtual','Maestría SST #1','Esp. Talento Humano #7','Esp. Interculturalidad 6#','Esp. Diseño Publicitario #2'],datasets:[{data:[1879366,1696526,1441775,1392517,1370416,1348338,1322901,1249010,1228481,1172624],backgroundColor:[PUR,GRN,GRN,RED,RED,YLW,PUR,RED,RED,RED],borderRadius:5}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>'$'+v/1000+'k'}}}}});
+new Chart(document.getElementById('chartTopLeads'),{type:'bar',data:{labels:['Esp. DDHH Territorios #1','Esp. Logística Virtual #3','Esp. Logística Híbrida #3','Esp. SST Virtual','Maestría IA Datos','Esp. IA #5','Esp. Estrategia Publicitaria','Becas para el Cambio','Esp. Diseño Publicitario #2','Esp. Interculturalidad'],datasets:[{data:[494,462,312,243,236,168,155,149,145,132],backgroundColor:[GRN,GRN,GRN,YLW,PUR,BLU,RED,YLW,RED,RED],borderRadius:5}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v.toLocaleString('es')}}}}});
+
+// ===== TABS 6 & 7: LAZY INIT =====
+let pInit = false, cInit = false;
+
+function initProj() {
+  if(pInit) return;
+  pInit = true;
+  new Chart(document.getElementById('chartProjTimeline'),{type:'line',data:{labels:['Mar','Abr','May','Jun','Jul','Ago'],datasets:[{label:'Real acumulado',data:[5593,null,null,null,null,null],borderColor:PUR,backgroundColor:'rgba(107,53,160,.08)',fill:true,tension:0.3,pointBackgroundColor:PUR,pointRadius:5},{label:'Esperado',data:[null,null,null,5593,9205,12817],borderColor:GRN,borderDash:[6,4],tension:0.3,fill:false,pointRadius:5,pointBackgroundColor:GRN},{label:'Conservador',data:[null,null,null,5593,8800,12007],borderColor:'#607D8B',borderDash:[3,3],tension:0.3,fill:false,pointRadius:3},{label:'Optimista',data:[null,null,null,5593,9800,14007],borderColor:BLU,borderDash:[3,3],tension:0.3,fill:false,pointRadius:3}]},options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:8}}},scales:{y:{ticks:{callback:v=>v.toLocaleString('es')}}}}});
+  new Chart(document.getElementById('chartProjCPR'),{type:'bar',data:{labels:['CPR Conservador','CPR Esperado','CPR Optimista'],datasets:[{data:[8827,7664,6897],backgroundColor:['#607D8B',PUR,BLU],borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString('es')}}}}});
+}
+
+function initCohorte() {
+  if(cInit) return;
+  cInit = true;
+  const mesesCohorte = ['Mid-Ago','Sep','Oct','Nov','Dic','Ene 27','Mid-Feb'];
+  new Chart(document.getElementById('chartCohorteMonthly'),{type:'bar',data:{labels:mesesCohorte,datasets:[{label:'Conservador',data:[1228,2456,2701,2456,982,2456,1228],backgroundColor:'rgba(96,125,139,.5)',borderRadius:4},{label:'Esperado',data:[1457,2914,3205,2914,1166,2914,1457],backgroundColor:PUR,borderRadius:4},{label:'Optimista',data:[1763,3527,3880,3527,1411,3527,1763],backgroundColor:'rgba(107,53,160,.4)',borderRadius:4}]},options:{plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:8}}},scales:{y:{ticks:{callback:v=>v.toLocaleString('es')}}}}});
+  new Chart(document.getElementById('chartCohorteComp'),{type:'bar',data:{labels:['PG 2026-1S','Conserv. 2027-1','Esperado 2027-1','Optimista 2027-1'],datasets:[{label:'Leads',data:[5593,13507,16027,20398],backgroundColor:[PUR,'rgba(96,125,139,.7)',GRN,'rgba(107,53,160,.6)'],borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>v.toLocaleString('es')}}}}});
+}
+
+</script>
+</body>
+</html>
