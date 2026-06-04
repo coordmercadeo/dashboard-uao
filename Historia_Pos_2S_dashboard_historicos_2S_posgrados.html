@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Históricos Posgrados UAO | Segundas Cohortes 2023–2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ECE5DC;--red:#DC142D;--red-dark:#961423;--red-light:#F03C46;
+  --text:#231F20;--white:#fff;--shadow:0 2px 16px rgba(35,31,32,.08);
+  --radius:12px;--gray:#6B6868;--green:#1A9E5A;--yellow:#D49A00;
+  --orange:#C85000;--blue:#1550A0;--purple:#6B35A0;--amber:#B86800;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.55}
+
+/* BRAND BAR */
+.brand-bar{background:var(--red-dark);padding:10px 24px;display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(255,255,255,.1);position:sticky;top:0;z-index:20}
+.uao-logo{background:#fff;color:var(--red-dark);font-weight:800;border-radius:8px;padding:5px 12px;letter-spacing:.5px}
+.brand-bar-title{color:rgba(255,255,255,.92);font-size:13px;font-weight:700}
+.brand-bar-sub{color:rgba(255,255,255,.62);font-size:11px;margin-left:auto}
+
+/* MAIN TABS */
+.main-tabs{display:flex;background:#7a1020;overflow-x:auto;scrollbar-width:none;border-bottom:2px solid rgba(255,255,255,.1);position:sticky;top:48px;z-index:19}
+.main-tabs::-webkit-scrollbar{display:none}
+.main-tab-btn{flex-shrink:0;padding:12px 22px;color:rgba(255,255,255,.75);font-size:13px;font-weight:700;cursor:pointer;border:none;background:transparent;font-family:inherit;border-bottom:3px solid transparent;transition:.2s;white-space:nowrap}
+.main-tab-btn:hover,.main-tab-btn.active{color:#fff;background:rgba(255,255,255,.12);border-bottom-color:#fff}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* ALERT / NOTICE */
+.alert-bar{background:linear-gradient(90deg,var(--red-dark),#B01020);color:#fff;padding:9px 24px;font-size:12px;display:flex;align-items:center;gap:10px}
+.alert-warning{background:linear-gradient(90deg,#7a4800,#A06000);color:#fff;padding:9px 24px;font-size:12px;display:flex;align-items:center;gap:10px}
+
+/* LAYOUT */
+.container{max-width:1300px;margin:0 auto;padding:28px 24px}
+section{margin-bottom:48px}
+.section-title{font-size:21px;font-weight:800;color:var(--red-dark);margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.section-title::before{content:'';width:4px;height:22px;background:var(--red);border-radius:2px;flex-shrink:0}
+.section-sub{font-size:13px;color:var(--gray);margin-bottom:20px;padding-left:14px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#7a1020 0%,var(--red-dark) 36%,var(--red) 78%);padding:40px;border-radius:22px;color:#fff;display:grid;grid-template-columns:1.1fr .9fr;gap:28px;overflow:hidden;position:relative;box-shadow:0 22px 70px rgba(150,20,35,.22)}
+.hero::before{content:'';position:absolute;right:-80px;top:-80px;width:360px;height:360px;background:rgba(255,255,255,.08);border-radius:50%}
+.hero h1{font-size:clamp(28px,4vw,56px);line-height:.98;font-weight:800;letter-spacing:-1.8px;margin-bottom:16px;position:relative;z-index:1}
+.hero h1 span{display:block;color:#ffcf66}
+.hero p{font-size:14px;color:rgba(255,255,255,.85);max-width:670px;position:relative;z-index:1}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px;position:relative;z-index:1}
+.badge{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:5px 12px;font-size:11px;font-weight:700}
+.hero-kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;position:relative;z-index:1}
+.hero-card{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(12px);border-radius:16px;padding:16px}
+.hero-card span{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,241,224,.72);font-weight:800}
+.hero-card strong{display:block;font-size:28px;color:#fff;line-height:1.1;margin-top:5px}
+.hero-card small{display:block;font-size:11px;color:rgba(255,241,224,.7);margin-top:3px}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.kpi-card{background:#fff;border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform .2s}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red)}
+.kpi-card:hover{transform:translateY(-2px)}
+.kpi-card.green-card::before{background:var(--green)}
+.kpi-card.blue-card::before{background:var(--blue)}
+.kpi-card.orange-card::before{background:var(--orange)}
+.kpi-card.amber-card::before{background:var(--amber)}
+.kpi-card.red-card{background:linear-gradient(135deg,var(--red-dark),var(--red));color:#fff}
+.kpi-icon{font-size:19px;margin-bottom:6px}
+.kpi-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);margin-bottom:2px}
+.red-card .kpi-label,.red-card .kpi-sub{color:rgba(255,255,255,.78)}
+.kpi-value{font-size:24px;font-weight:800;line-height:1.1}
+.kpi-sub{font-size:10.5px;color:var(--gray);margin-top:3px}
+
+/* EXEC BOX */
+.exec-box{background:#fff;border-radius:var(--radius);padding:24px 28px;box-shadow:var(--shadow);border-left:5px solid var(--red)}
+.exec-box h3{font-size:15.5px;font-weight:800;margin-bottom:13px;color:var(--red-dark)}
+.exec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.exec-item{display:flex;gap:8px;align-items:flex-start}
+.exec-dot{width:7px;height:7px;border-radius:50%;background:var(--red);margin-top:8px;flex-shrink:0}
+.exec-item p{font-size:13px}
+.exec-item strong{color:var(--red-dark)}
+
+/* WARNING BOX */
+.warning-box{background:#fffbf0;border-radius:var(--radius);padding:22px 26px;box-shadow:var(--shadow);border-left:5px solid var(--amber);margin-bottom:24px}
+.warning-box h3{font-size:15px;font-weight:800;margin-bottom:10px;color:var(--amber);display:flex;align-items:center;gap:8px}
+.warning-box p{font-size:13px;color:#5a4a00;line-height:1.65;margin-bottom:8px}
+.warning-box p:last-child{margin-bottom:0}
+.warning-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px}
+.wcard{background:#fff;border-radius:10px;padding:16px;border:1px solid #ffe8a0;text-align:center}
+.wcard .wval{font-size:30px;font-weight:800;color:var(--amber);line-height:1}
+.wcard .wlabel{font-size:11px;color:var(--gray);margin-top:4px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.wcard .wsub{font-size:11px;color:#c07800;margin-top:4px}
+
+/* CHARTS */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chart-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.chart-box{background:#fff;border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+.chart-box h4{font-size:13px;font-weight:800;margin-bottom:13px;color:var(--text)}
+canvas{max-height:290px}
+
+/* TABLE */
+.table-wrap{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.scrollable{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead tr{background:var(--red-dark);color:#fff}
+thead th{padding:10px 13px;font-weight:700;text-align:left;font-size:11px;letter-spacing:.3px;white-space:nowrap}
+tbody tr{border-bottom:1px solid #f0ebe4;transition:background .15s}
+tbody tr:hover{background:#faf7f3}
+tbody td{padding:9px 13px;vertical-align:middle}
+tbody tr:last-child{border-bottom:none}
+.rank{font-weight:800;color:var(--gray);font-size:11px;text-align:center}
+
+/* TAGS */
+.tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:800;white-space:nowrap}
+.tag-green{background:#d4f5e3;color:#1A9E5A}
+.tag-yellow{background:#fff3cc;color:#9A6F00}
+.tag-red{background:#fde0e3;color:var(--red-dark)}
+.tag-orange{background:#fde8d8;color:#A04010}
+.tag-blue{background:#ddeeff;color:#1550A0}
+.tag-gray{background:#eee;color:#555}
+.tag-amber{background:#fff0cc;color:#7a4800}
+
+/* COHORT COMPARISON */
+.cohort-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.cohort-card{background:#fff;border-radius:14px;padding:20px;box-shadow:var(--shadow);border-top:4px solid var(--red);position:relative;overflow:hidden}
+.cohort-card.c2023{border-top-color:#607D8B}
+.cohort-card.c2024{border-top-color:var(--blue)}
+.cohort-card.c2025{border-top-color:var(--green)}
+.cohort-card.c2026{border-top-color:var(--amber)}
+.cohort-year{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);margin-bottom:10px}
+.cohort-main{font-size:34px;font-weight:800;line-height:1;margin-bottom:4px}
+.cohort-label{font-size:11.5px;color:var(--gray)}
+.cohort-rows{margin-top:14px;border-top:1px solid #f0ebe4;padding-top:12px}
+.cohort-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;gap:6px}
+.cohort-row span:last-child{font-weight:700}
+
+/* TREND */
+.trend-up{color:var(--green)}
+.trend-down{color:var(--red)}
+.trend-flat{color:var(--gray)}
+
+/* INSIGHT */
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:13px;margin-top:16px}
+.insight{background:#fff;border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);border-top:3px solid var(--red)}
+.insight h5{font-size:12.5px;font-weight:800;margin-bottom:5px;color:var(--red-dark)}
+.insight p{font-size:12.5px;color:var(--gray);line-height:1.55}
+
+/* DIVIDER */
+.divider{height:1px;background:rgba(35,31,32,.08);margin:48px 0}
+
+/* FUNNEL */
+.funnel-wrap{display:grid;grid-template-columns:1fr;gap:0;margin-top:8px}
+.funnel-stage{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.funnel-label{font-size:12px;font-weight:700;width:130px;flex-shrink:0;color:var(--text)}
+.funnel-bar-wrap{flex:1;background:#f0ebe4;border-radius:4px;height:32px;position:relative;overflow:hidden}
+.funnel-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;font-size:12px;font-weight:800;color:#fff;transition:width .8s ease}
+.funnel-val{font-size:12px;font-weight:800;width:60px;text-align:right;flex-shrink:0}
+
+/* FOOTER */
+footer{background:var(--red-dark);color:rgba(255,255,255,.7);text-align:center;padding:16px;font-size:11.5px}
+footer strong{color:#fff}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .hero,.chart-grid,.chart-grid-3,.cohort-grid,.warning-grid{grid-template-columns:1fr}
+  .exec-grid{grid-template-columns:1fr}
+  .main-tabs{top:50px}
+}
+@media(max-width:640px){
+  .container{padding:16px 14px}
+  .brand-bar{padding:9px 14px;gap:8px}
+  .brand-bar-sub{display:none}
+  .main-tabs{top:45px}
+  .kpi-grid,.hero-kpis{grid-template-columns:1fr 1fr}
+  .hero{padding:24px 18px}
+  .table-wrap{overflow-x:auto}table{min-width:600px}
+  .cohort-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="brand-bar">
+  <div class="uao-logo">UAO</div>
+  <div class="brand-bar-title">Universidad Autónoma de Occidente · Histórico Posgrados 2S</div>
+  <div class="brand-bar-sub">Cohortes 2023-2S a 2026-2S</div>
+</div>
+
+<div class="main-tabs">
+  <button class="main-tab-btn active" onclick="switchTab('tab-resumen',this)">📊 Resumen Histórico</button>
+  <button class="main-tab-btn" onclick="switchTab('tab-funnel',this)">🔻 Embudo por Cohorte</button>
+  <button class="main-tab-btn" onclick="switchTab('tab-inscripcion',this)">⚠️ Inscripción Sin Costo</button>
+  <button class="main-tab-btn" onclick="switchTab('tab-tabla',this)">📋 Datos Completos</button>
+</div>
+
+<!-- =================== TAB 1: RESUMEN HISTÓRICO =================== -->
+<div class="tab-panel active" id="tab-resumen">
+<div class="alert-bar">
+  <span>📅</span>
+  <span><strong>Corte:</strong> Junio 2026 · Historico de segundas cohortes del año (2S) desde 2023-2S hasta 2026-2S · Fuente: Tabla Históricos - Posgrados UAO</span>
+</div>
+
+<div class="container">
+
+  <section id="hero-section">
+    <div class="hero">
+      <div>
+        <h1>Histórico Posgrados <span>Segundas Cohortes</span></h1>
+        <p>Comparativo de las cohortes 2S desde 2023 hasta 2026. Análisis de leads, matriculados, admitidos e indicadores de conversión a lo largo de cuatro periodos académicos.</p>
+        <div class="hero-badges">
+          <span class="badge">2023-2S</span>
+          <span class="badge">2024-2S</span>
+          <span class="badge">2025-2S</span>
+          <span class="badge">2026-2S</span>
+          <span class="badge">Salesforce + Pauta Digital</span>
+        </div>
+      </div>
+      <div class="hero-kpis">
+        <div class="hero-card">
+          <span>Mejor año en matriculados</span>
+          <strong>489</strong>
+          <small>2025-2S · +24,7% vs 2024</small>
+        </div>
+        <div class="hero-card">
+          <span>Mayor volumen de leads</span>
+          <strong>9.371</strong>
+          <small>2025-2S · Máximo histórico</small>
+        </div>
+        <div class="hero-card">
+          <span>Crecimiento leads 23→25</span>
+          <strong>+21,3%</strong>
+          <small>De 7.726 a 9.371</small>
+        </div>
+        <div class="hero-card">
+          <span>Mejor tasa egresados/matr.</span>
+          <strong>58%</strong>
+          <small>2023-2S · Base histórica</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">KPIs Globales — Todas las Cohortes 2S</div>
+    <div class="section-sub">Métricas consolidadas del histórico 2023-2S a 2026-2S</div>
+    <div class="kpi-grid">
+      <div class="kpi-card red-card">
+        <div class="kpi-icon">👥</div>
+        <div class="kpi-label">Total Leads (4 cohortes)</div>
+        <div class="kpi-value">30.281</div>
+        <div class="kpi-sub">Suma 2023 a 2026-2S</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">🎓</div>
+        <div class="kpi-label">Total Matriculados</div>
+        <div class="kpi-value">1.199</div>
+        <div class="kpi-sub">2023+2024+2025 (2026 en curso)</div>
+      </div>
+      <div class="kpi-card green-card">
+        <div class="kpi-icon">📈</div>
+        <div class="kpi-label">Crecimiento matr. 23→25</div>
+        <div class="kpi-value">+53,8%</div>
+        <div class="kpi-sub">De 318 a 489 matriculados</div>
+      </div>
+      <div class="kpi-card blue-card">
+        <div class="kpi-icon">✅</div>
+        <div class="kpi-label">Total Admitidos</div>
+        <div class="kpi-value">147</div>
+        <div class="kpi-sub">23+24+25 (2026: 125 pendientes)</div>
+      </div>
+      <div class="kpi-card amber-card">
+        <div class="kpi-icon">📝</div>
+        <div class="kpi-label">Total Inscritos</div>
+        <div class="kpi-value">88</div>
+        <div class="kpi-sub">2023: 81 · 2024: 7 · 2025: 0</div>
+      </div>
+      <div class="kpi-card orange-card">
+        <div class="kpi-icon">🎯</div>
+        <div class="kpi-label">Conv. Leads→Matr. (2025)</div>
+        <div class="kpi-value">5,2%</div>
+        <div class="kpi-sub">489 / 9.371 leads</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">Comparativo por Cohorte 2S</div>
+    <div class="section-sub">Vista rápida de los indicadores clave de cada período</div>
+    <div class="cohort-grid">
+      <div class="cohort-card c2023">
+        <div class="cohort-year">Cohorte 2023-2S</div>
+        <div class="cohort-main" style="color:#607D8B">318</div>
+        <div class="cohort-label">Matriculados</div>
+        <div class="cohort-rows">
+          <div class="cohort-row"><span>Total leads</span><span>7.726</span></div>
+          <div class="cohort-row"><span>Interesados</span><span>5</span></div>
+          <div class="cohort-row"><span>Inscritos</span><span>81</span></div>
+          <div class="cohort-row"><span>Admitidos</span><span>19</span></div>
+          <div class="cohort-row"><span>No admitidos</span><span>5</span></div>
+          <div class="cohort-row"><span>Total pipeline</span><span>428</span></div>
+          <div class="cohort-row"><span>Egresados/Matr.</span><span style="color:#607D8B">58,0%</span></div>
+        </div>
+      </div>
+      <div class="cohort-card c2024">
+        <div class="cohort-year">Cohorte 2024-2S</div>
+        <div class="cohort-main" style="color:var(--blue)">392</div>
+        <div class="cohort-label">Matriculados</div>
+        <div class="cohort-rows">
+          <div class="cohort-row"><span>Total leads</span><span>7.850</span></div>
+          <div class="cohort-row"><span>Interesados</span><span>0</span></div>
+          <div class="cohort-row"><span>Inscritos</span><span>7</span></div>
+          <div class="cohort-row"><span>Admitidos</span><span>1</span></div>
+          <div class="cohort-row"><span>No admitidos</span><span>0</span></div>
+          <div class="cohort-row"><span>Total pipeline</span><span>400</span></div>
+          <div class="cohort-row"><span>Egresados/Matr.</span><span style="color:var(--blue)">26,5%</span></div>
+        </div>
+      </div>
+      <div class="cohort-card c2025">
+        <div class="cohort-year">Cohorte 2025-2S</div>
+        <div class="cohort-main" style="color:var(--green)">489</div>
+        <div class="cohort-label">Matriculados</div>
+        <div class="cohort-rows">
+          <div class="cohort-row"><span>Total leads</span><span>9.371</span></div>
+          <div class="cohort-row"><span>Interesados</span><span>1</span></div>
+          <div class="cohort-row"><span>Inscritos</span><span>0</span></div>
+          <div class="cohort-row"><span>Admitidos</span><span>2</span></div>
+          <div class="cohort-row"><span>No admitidos</span><span>0</span></div>
+          <div class="cohort-row"><span>Total pipeline</span><span>492</span></div>
+          <div class="cohort-row"><span>Egresados/Matr.</span><span style="color:var(--green)">30,5%</span></div>
+        </div>
+      </div>
+      <div class="cohort-card c2026">
+        <div class="cohort-year">Cohorte 2026-2S <span class="tag tag-amber" style="font-size:10px;margin-left:4px">En curso</span></div>
+        <div class="cohort-main" style="color:var(--amber)">0</div>
+        <div class="cohort-label">Matriculados (proceso abierto)</div>
+        <div class="cohort-rows">
+          <div class="cohort-row"><span>Total leads</span><span>5.334</span></div>
+          <div class="cohort-row"><span>Interesados</span><span>67</span></div>
+          <div class="cohort-row"><span>Inscritos</span><span>0</span></div>
+          <div class="cohort-row"><span>Admitidos</span><span>125</span></div>
+          <div class="cohort-row"><span>No admitidos</span><span>0</span></div>
+          <div class="cohort-row"><span>Total pipeline</span><span>192</span></div>
+          <div class="cohort-row"><span>Egresados/Matr.</span><span style="color:var(--amber)">—</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">Evolución Histórica</div>
+    <div class="section-sub">Tendencias clave entre 2023-2S y 2026-2S</div>
+    <div class="chart-grid">
+      <div class="chart-box">
+        <h4>📊 Leads totales por cohorte 2S</h4>
+        <canvas id="chartLeads"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>🎓 Matriculados por cohorte 2S</h4>
+        <canvas id="chartMatriculados"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>🔁 Pipeline completo por cohorte</h4>
+        <canvas id="chartPipeline"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>📐 Tasa Egresados / Matriculados (%)</h4>
+        <canvas id="chartTasa"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">Insights del Histórico</div>
+    <div class="section-sub">Lecturas clave derivadas del comparativo entre cohortes</div>
+    <div class="insight-grid">
+      <div class="insight">
+        <h5>📈 Crecimiento sostenido en matriculados</h5>
+        <p>Los matriculados pasaron de <strong>318 en 2023-2S</strong> a <strong>489 en 2025-2S</strong>, lo que representa un incremento del <strong>+53,8%</strong> en dos años. La tendencia es positiva y sostenida.</p>
+      </div>
+      <div class="insight">
+        <h5>🎯 Mayor volumen de leads en 2025</h5>
+        <p>El 2025-2S registró el mayor número de leads con <strong>9.371</strong>, superando el pico de 2024 (<strong>7.850</strong>). Este aumento de leads se tradujo en más matriculados, indicando buena calidad de captación.</p>
+      </div>
+      <div class="insight">
+        <h5>⚠️ Caída fuerte en inscritos 2024–2025</h5>
+        <p>Los inscritos cayeron de <strong>81 en 2023</strong> a <strong>7 en 2024</strong> y <strong>0 en 2025</strong>. Esto puede reflejar un cambio en la metodología de registro o en el proceso de admisión, más que un problema real de captación.</p>
+      </div>
+      <div class="insight">
+        <h5>📊 2026-2S muestra señales tempranas positivas</h5>
+        <p>Con <strong>125 admitidos</strong> y <strong>67 interesados</strong> aún en proceso, la cohorte 2026-2S tiene buen potencial de cierre, aunque los leads acumulados (<strong>5.334</strong>) son los menores del histórico en esta etapa.</p>
+      </div>
+      <div class="insight">
+        <h5>🔻 Tasa egresados/matriculados a revisar</h5>
+        <p>La tasa bajó de <strong>58% en 2023</strong> a <strong>26,5% en 2024</strong>, recuperándose a <strong>30,5% en 2025</strong>. Esto sugiere que la base de egresados que se reincorporan como matriculados es variable y merece seguimiento.</p>
+      </div>
+      <div class="insight">
+        <h5>🔬 Conversión leads→matriculados estable</h5>
+        <p>La tasa de conversión de leads a matriculados se mantiene en el rango del <strong>4,1% al 5,2%</strong> entre 2023 y 2025, lo cual es una referencia útil para proyectar el cierre de 2026-2S.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+
+<!-- =================== TAB 2: EMBUDO =================== -->
+<div class="tab-panel" id="tab-funnel">
+<div class="alert-bar">
+  <span>🔻</span>
+  <span><strong>Embudo de conversión</strong> por cohorte — De leads a matriculados en cada período 2S</span>
+</div>
+
+<div class="container">
+  <section>
+    <div class="section-title">Embudo de Conversión por Cohorte</div>
+    <div class="section-sub">Recorrido desde el lead inicial hasta el matriculado final en cada cohorte 2S</div>
+
+    <!-- 2023 -->
+    <div class="exec-box" style="margin-bottom:20px">
+      <h3 style="color:#607D8B">🎓 2023-2S — Embudo de Conversión</h3>
+      <div class="funnel-wrap">
+        <div class="funnel-stage">
+          <div class="funnel-label">Total Leads</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:100%;background:#607D8B">7.726</div>
+          </div>
+          <div class="funnel-val">7.726</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Interesados</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:0.06%;background:#607D8B;min-width:40px">5</div>
+          </div>
+          <div class="funnel-val">5</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Inscritos</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:1.05%;background:#607D8B;min-width:60px">81</div>
+          </div>
+          <div class="funnel-val">81</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Admitidos</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:0.25%;background:#607D8B;min-width:50px">19</div>
+          </div>
+          <div class="funnel-val">19</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Matriculados</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:4.1%;background:#607D8B;min-width:80px">318</div>
+          </div>
+          <div class="funnel-val"><strong>318</strong></div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--gray);margin-top:12px">Tasa leads → matriculados: <strong>4,12%</strong> · Tasa egresados/matr.: <strong>58,0%</strong></p>
+    </div>
+
+    <!-- 2024 -->
+    <div class="exec-box" style="margin-bottom:20px;border-left-color:var(--blue)">
+      <h3 style="color:var(--blue)">🎓 2024-2S — Embudo de Conversión</h3>
+      <div class="funnel-wrap">
+        <div class="funnel-stage">
+          <div class="funnel-label">Total Leads</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:100%;background:var(--blue)">7.850</div>
+          </div>
+          <div class="funnel-val">7.850</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Interesados</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:0%;background:var(--blue);min-width:40px">0</div>
+          </div>
+          <div class="funnel-val">0</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Inscritos</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:0.09%;background:var(--blue);min-width:40px">7</div>
+          </div>
+          <div class="funnel-val">7</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Admitidos</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:0.01%;background:var(--blue);min-width:30px">1</div>
+          </div>
+          <div class="funnel-val">1</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Matriculados</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:4.99%;background:var(--blue);min-width:80px">392</div>
+          </div>
+          <div class="funnel-val"><strong>392</strong></div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--gray);margin-top:12px">Tasa leads → matriculados: <strong>4,99%</strong> · Tasa egresados/matr.: <strong>26,5%</strong> · ⚠️ Caída notable en inscritos y admitidos dentro del pipeline CRM</p>
+    </div>
+
+    <!-- 2025 -->
+    <div class="exec-box" style="margin-bottom:20px;border-left-color:var(--green)">
+      <h3 style="color:var(--green)">🎓 2025-2S — Embudo de Conversión</h3>
+      <div class="funnel-wrap">
+        <div class="funnel-stage">
+          <div class="funnel-label">Total Leads</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:100%;background:var(--green)">9.371</div>
+          </div>
+          <div class="funnel-val">9.371</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Interesados</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:0.01%;background:var(--green);min-width:30px">1</div>
+          </div>
+          <div class="funnel-val">1</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Inscritos</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:0%;background:var(--green);min-width:30px">0</div>
+          </div>
+          <div class="funnel-val">0</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Admitidos</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:0.02%;background:var(--green);min-width:30px">2</div>
+          </div>
+          <div class="funnel-val">2</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Matriculados</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:5.22%;background:var(--green);min-width:80px">489</div>
+          </div>
+          <div class="funnel-val"><strong>489</strong></div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--gray);margin-top:12px">Tasa leads → matriculados: <strong>5,22%</strong> · Tasa egresados/matr.: <strong>30,5%</strong> · 🏆 Mayor número de matriculados del histórico</p>
+    </div>
+
+    <!-- 2026 -->
+    <div class="exec-box" style="margin-bottom:20px;border-left-color:var(--amber)">
+      <h3 style="color:var(--amber)">🎓 2026-2S — En curso <span class="tag tag-amber" style="font-size:11px">Datos parciales</span></h3>
+      <div class="funnel-wrap">
+        <div class="funnel-stage">
+          <div class="funnel-label">Total Leads</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:100%;background:var(--amber)">5.334</div>
+          </div>
+          <div class="funnel-val">5.334</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Interesados</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:1.26%;background:var(--amber);min-width:50px">67</div>
+          </div>
+          <div class="funnel-val">67</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Inscritos</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:0%;background:var(--amber);min-width:30px">0</div>
+          </div>
+          <div class="funnel-val">0</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Admitidos</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:2.34%;background:var(--amber);min-width:60px">125</div>
+          </div>
+          <div class="funnel-val">125</div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-label">Matriculados</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:0%;background:#ccc;min-width:60px;color:#888">Pendiente</div>
+          </div>
+          <div class="funnel-val">—</div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--gray);margin-top:12px">Proceso abierto · Con <strong>125 admitidos</strong> y la tasa histórica del 4–5%, se proyectan entre <strong>270 y 490 matriculados</strong> al cierre del proceso</p>
+    </div>
+
+  </section>
+
+  <section>
+    <div class="section-title">Comparativo Visual del Embudo</div>
+    <div class="section-sub">Gráfico comparativo entre las etapas del embudo por cohorte</div>
+    <div class="chart-grid">
+      <div class="chart-box">
+        <h4>Volumen por etapa del embudo (2023–2025)</h4>
+        <canvas id="chartFunnel"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>Tasa de conversión leads → matriculados (%)</h4>
+        <canvas id="chartConvRate"></canvas>
+      </div>
+    </div>
+  </section>
+</div>
+</div>
+
+<!-- =================== TAB 3: INSCRIPCIÓN SIN COSTO =================== -->
+<div class="tab-panel" id="tab-inscripcion">
+<div class="alert-warning">
+  <span>⚠️</span>
+  <span><strong>Limitación de medición:</strong> La gestión de Inscripción Sin Costo era administrada por la líder del call center en un archivo aparte que no está disponible a la fecha. El mapeo en Salesforce es parcial.</span>
+</div>
+
+<div class="container">
+
+  <section>
+    <div class="section-title">Inscripción Sin Costo — Contexto y Limitaciones</div>
+    <div class="section-sub">Estado actual del rastreo de esta estrategia de captación</div>
+
+    <div class="warning-box">
+      <h3>⚠️ Problema de medición identificado</h3>
+      <p>La gestión de <strong>Inscripción Sin Costo</strong> fue liderada históricamente por la <strong>líder del call center</strong>, quien administraba esta información en un <strong>archivo independiente</strong> que <strong>no está disponible a la fecha</strong>.</p>
+      <p>Como medida de contingencia, se realizó un <strong>barrido en Salesforce</strong> para mapear lo que fuera posible. Sin embargo, este barrido solo <strong>captura la campaña general de inscripción sin costo</strong>, dejando por fuera otras fuentes de conversión dentro de esta misma categoría.</p>
+      <p><strong>El dato mapeado es una aproximación mínima</strong> — la realidad fue mayor en todas las cohortes. Los números presentados deben interpretarse como un piso, no como el total real.</p>
+    </div>
+
+    <div class="warning-grid">
+      <div class="wcard">
+        <div class="wval">52</div>
+        <div class="wlabel">Inscr. sin costo</div>
+        <div class="wsub">2023-2S · Mapeadas en SF</div>
+      </div>
+      <div class="wcard">
+        <div class="wval">6</div>
+        <div class="wlabel">Inscr. sin costo</div>
+        <div class="wsub">2024-2S · Mapeadas en SF</div>
+      </div>
+      <div class="wcard">
+        <div class="wval">140</div>
+        <div class="wlabel">Inscr. sin costo</div>
+        <div class="wsub">2025-2S · Mapeadas en SF</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">Análisis del Dato Disponible</div>
+    <div class="section-sub">Interpretación de los números mapeados vs. la realidad esperada</div>
+
+    <div class="chart-grid" style="margin-bottom:24px">
+      <div class="chart-box">
+        <h4>📊 Inscripciones sin costo mapeadas en Salesforce</h4>
+        <canvas id="chartSinCosto"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>📐 Inscr. sin costo como % del total matriculados</h4>
+        <canvas id="chartSinCostoPct"></canvas>
+      </div>
+    </div>
+
+    <div class="exec-box" style="border-left-color:var(--amber)">
+      <h3 style="color:var(--amber)">⚠️ Lectura correcta de los datos mapeados</h3>
+      <div class="exec-grid">
+        <div class="exec-item">
+          <div class="exec-dot" style="background:var(--amber)"></div>
+          <p>En <strong>2023-2S</strong>, se mapearon <strong>52 inscripciones sin costo</strong>, equivalentes al <strong>16,4% de los 318 matriculados</strong> de ese período. Pero el número real fue mayor.</p>
+        </div>
+        <div class="exec-item">
+          <div class="exec-dot" style="background:var(--amber)"></div>
+          <p>En <strong>2024-2S</strong>, solo se lograron mapear <strong>6 inscripciones</strong> (<strong>1,5% de 392 matr.</strong>). Este dato es claramente incompleto y puede explicarse por brechas en el registro de Salesforce.</p>
+        </div>
+        <div class="exec-item">
+          <div class="exec-dot" style="background:var(--amber)"></div>
+          <p>En <strong>2025-2S</strong>, el mapeo arrojó <strong>140 inscripciones sin costo</strong> (<strong>28,6% de 489 matr.</strong>), el mayor registro histórico en SF. Aun así, <strong>la cifra real fue superior</strong>.</p>
+        </div>
+        <div class="exec-item">
+          <div class="exec-dot" style="background:var(--amber)"></div>
+          <p>El salto de <strong>6 en 2024</strong> a <strong>140 en 2025</strong> no representa necesariamente una mejora real del programa, sino posiblemente una <strong>mejora en el registro y trazabilidad</strong> dentro de Salesforce.</p>
+        </div>
+        <div class="exec-item">
+          <div class="exec-dot" style="background:var(--amber)"></div>
+          <p>Se recomienda <strong>recuperar o reconstruir</strong> el archivo de la líder del call center para completar los históricos. Si no es posible, establecer un protocolo unificado de registro en SF desde 2026-2S.</p>
+        </div>
+        <div class="exec-item">
+          <div class="exec-dot" style="background:var(--amber)"></div>
+          <p>El barrido actual en SF <strong>solo capta la campaña general</strong>. Para medir correctamente, se necesitan también los registros de conversión por asesor, convenio, pauta directa y otras fuentes de inscripción sin costo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">Impacto Estimado en el Resultado</div>
+    <div class="section-sub">Contextualización del peso de la inscripción sin costo en la matrícula total</div>
+    <div class="kpi-grid">
+      <div class="kpi-card amber-card">
+        <div class="kpi-icon">📋</div>
+        <div class="kpi-label">Total mapeado SF (3 cohortes)</div>
+        <div class="kpi-value" style="color:var(--amber)">198</div>
+        <div class="kpi-sub">52 + 6 + 140 inscr. sin costo</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">📊</div>
+        <div class="kpi-label">% promedio sobre matr. (mapeo)</div>
+        <div class="kpi-value">15,3%</div>
+        <div class="kpi-sub">198 / 1.199 matr. totales</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">🔍</div>
+        <div class="kpi-label">Cohorte con mayor registro</div>
+        <div class="kpi-value">2025-2S</div>
+        <div class="kpi-sub">140 inscr. · 28,6% del total</div>
+      </div>
+      <div class="kpi-card red-card">
+        <div class="kpi-icon">⚠️</div>
+        <div class="kpi-label">Cobertura estimada del dato</div>
+        <div class="kpi-value">Parcial</div>
+        <div class="kpi-sub">Dato incompleto en todas las cohortes</div>
+      </div>
+    </div>
+
+    <div class="insight-grid" style="margin-top:20px">
+      <div class="insight" style="border-top-color:var(--amber)">
+        <h5 style="color:var(--amber)">📌 Brecha de datos en 2024-2S</h5>
+        <p>Solo 6 registros mapeados de 392 matriculados es estadísticamente incoherente con los años anteriores y posteriores. Este dato requiere revisión urgente o aclaración metodológica.</p>
+      </div>
+      <div class="insight" style="border-top-color:var(--amber)">
+        <h5 style="color:var(--amber)">🗂️ Archivo de call center: prioridad</h5>
+        <p>La recuperación del archivo histórico de la líder del call center debe ser una prioridad para cerrar esta brecha. De no existir, documentar el proceso para 2026-2S desde el inicio.</p>
+      </div>
+      <div class="insight" style="border-top-color:var(--amber)">
+        <h5 style="color:var(--amber)">🔧 Recomendación para 2026-2S</h5>
+        <p>Establecer en Salesforce un campo o campaña diferenciada para <strong>cada fuente de inscripción sin costo</strong>: asesor, pauta, convenio, call center, etc. Solo así se puede medir el total real.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+
+<!-- =================== TAB 4: TABLA COMPLETA =================== -->
+<div class="tab-panel" id="tab-tabla">
+<div class="alert-bar">
+  <span>📋</span>
+  <span><strong>Datos completos</strong> — Tabla original del histórico de posgrados 2S · Fuente: Salesforce + Pauta Digital</span>
+</div>
+
+<div class="container">
+  <section>
+    <div class="section-title">Tabla Histórica Completa</div>
+    <div class="section-sub">Todas las métricas por cohorte — Segundas cohortes 2023 a 2026</div>
+
+    <div class="table-wrap scrollable" style="margin-bottom:28px">
+      <table>
+        <thead>
+          <tr>
+            <th>Métrica</th>
+            <th>2023-2S</th>
+            <th>2024-2S</th>
+            <th>2025-2S</th>
+            <th>2026-2S *</th>
+            <th>Var. 23→24</th>
+            <th>Var. 24→25</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Total Leads</strong></td>
+            <td>7.726</td>
+            <td>7.850</td>
+            <td>9.371</td>
+            <td>5.334</td>
+            <td><span class="tag tag-green">+1,6%</span></td>
+            <td><span class="tag tag-green">+19,4%</span></td>
+          </tr>
+          <tr>
+            <td><strong>Interesados</strong></td>
+            <td>5</td>
+            <td>0</td>
+            <td>1</td>
+            <td>67</td>
+            <td><span class="tag tag-red">−100%</span></td>
+            <td><span class="tag tag-gray">—</span></td>
+          </tr>
+          <tr>
+            <td><strong>Inscritos</strong></td>
+            <td>81</td>
+            <td>7</td>
+            <td>0</td>
+            <td>0</td>
+            <td><span class="tag tag-red">−91,4%</span></td>
+            <td><span class="tag tag-red">−100%</span></td>
+          </tr>
+          <tr>
+            <td><strong>Admitidos</strong></td>
+            <td>19</td>
+            <td>1</td>
+            <td>2</td>
+            <td>125</td>
+            <td><span class="tag tag-red">−94,7%</span></td>
+            <td><span class="tag tag-green">+100%</span></td>
+          </tr>
+          <tr>
+            <td><strong>No Admitidos</strong></td>
+            <td>5</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td><span class="tag tag-green">−100%</span></td>
+            <td><span class="tag tag-gray">—</span></td>
+          </tr>
+          <tr style="background:#f9f5f0">
+            <td><strong>Matriculados</strong></td>
+            <td><strong>318</strong></td>
+            <td><strong>392</strong></td>
+            <td><strong>489</strong></td>
+            <td>—</td>
+            <td><span class="tag tag-green">+23,3%</span></td>
+            <td><span class="tag tag-green">+24,7%</span></td>
+          </tr>
+          <tr>
+            <td><strong>Total pipeline</strong></td>
+            <td>428</td>
+            <td>400</td>
+            <td>492</td>
+            <td>192</td>
+            <td><span class="tag tag-red">−6,5%</span></td>
+            <td><span class="tag tag-green">+23,0%</span></td>
+          </tr>
+          <tr>
+            <td><strong>Egresados / Matr.</strong></td>
+            <td>58,0%</td>
+            <td>26,5%</td>
+            <td>30,5%</td>
+            <td>—</td>
+            <td><span class="tag tag-red">−31,5pp</span></td>
+            <td><span class="tag tag-green">+4pp</span></td>
+          </tr>
+          <tr style="background:#fffbf0">
+            <td><strong>⚠️ Inscr. sin costo (SF)</strong></td>
+            <td><em>52 *</em></td>
+            <td><em>6 *</em></td>
+            <td><em>140 *</em></td>
+            <td>—</td>
+            <td><span class="tag tag-amber">Dato incompleto</span></td>
+            <td><span class="tag tag-amber">Dato incompleto</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:12px;color:var(--gray);margin-bottom:30px">* <strong>2026-2S:</strong> Proceso activo, datos parciales. · * <strong>Inscr. sin costo:</strong> Mapeo parcial desde Salesforce. El archivo histórico completo del call center no está disponible a la fecha.</p>
+
+    <div class="chart-grid-3">
+      <div class="chart-box">
+        <h4>📊 Total leads vs matriculados</h4>
+        <canvas id="chartCombo"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>🔻 Detalle pipeline interno</h4>
+        <canvas id="chartPipeDetail"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>⚠️ Inscr. sin costo mapeadas</h4>
+        <canvas id="chartSinCosto2"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">Notas Metodológicas</div>
+    <div class="section-sub">Consideraciones importantes para interpretar correctamente los datos</div>
+    <div class="insight-grid">
+      <div class="insight" style="border-top-color:#607D8B">
+        <h5 style="color:#607D8B">📌 Sobre los inscritos (caída 2024-2025)</h5>
+        <p>La caída en "inscritos" no necesariamente refleja un problema real. Puede ser producto de un cambio en la etapa del CRM donde se registra esta acción, o que el proceso de inscripción pasó a ser parte de admisiones directamente.</p>
+      </div>
+      <div class="insight" style="border-top-color:var(--amber)">
+        <h5 style="color:var(--amber)">⚠️ Sobre inscripción sin costo</h5>
+        <p>El dato de Salesforce captura solo la campaña general. El total real incluye conversiones gestionadas por asesores, convenios y el call center. Estos datos no están disponibles en el sistema actualmente.</p>
+      </div>
+      <div class="insight" style="border-top-color:var(--blue)">
+        <h5 style="color:var(--blue)">📊 Sobre el 2026-2S</h5>
+        <p>Los datos de 2026-2S son de proceso activo. Los leads (5.334) pueden estar incompletos si la campaña no ha cerrado. Los 125 admitidos ya dan una señal positiva de cara al cierre de matrículas.</p>
+      </div>
+      <div class="insight" style="border-top-color:var(--green)">
+        <h5 style="color:var(--green)">✅ Sobre los matriculados</h5>
+        <p>Los matriculados son la métrica más confiable y consistente del histórico. Muestran una tendencia claramente positiva: <strong>+23,3%</strong> de 2023 a 2024 y <strong>+24,7%</strong> de 2024 a 2025.</p>
+      </div>
+    </div>
+  </section>
+</div>
+</div>
+
+<footer>
+  <strong>Universidad Autónoma de Occidente — Posgrados</strong> · Histórico Segundas Cohortes 2023–2026 · Generado: junio 2026
+</footer>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const COHORTS = ['2023-2S','2024-2S','2025-2S','2026-2S'];
+const COLORS = {
+  '2023-2S': '#607D8B',
+  '2024-2S': '#1550A0',
+  '2025-2S': '#1A9E5A',
+  '2026-2S': '#B86800'
+};
+
+const defaults = {
+  responsive: true,
+  plugins: { legend: { labels: { font: { family: 'DM Sans', size: 12 } } } },
+  scales: {
+    x: { ticks: { font: { family: 'DM Sans', size: 11 } } },
+    y: { ticks: { font: { family: 'DM Sans', size: 11 } } }
+  }
+};
+
+// Tab 1: Leads
+new Chart(document.getElementById('chartLeads'), {
+  type: 'bar',
+  data: {
+    labels: COHORTS,
+    datasets: [{
+      label: 'Total Leads',
+      data: [7726, 7850, 9371, 5334],
+      backgroundColor: Object.values(COLORS),
+      borderRadius: 8
+    }]
+  },
+  options: { ...defaults, plugins: { ...defaults.plugins, legend: { display: false } } }
+});
+
+// Tab 1: Matriculados
+new Chart(document.getElementById('chartMatriculados'), {
+  type: 'bar',
+  data: {
+    labels: ['2023-2S','2024-2S','2025-2S'],
+    datasets: [{
+      label: 'Matriculados',
+      data: [318, 392, 489],
+      backgroundColor: ['#607D8B','#1550A0','#1A9E5A'],
+      borderRadius: 8
+    }]
+  },
+  options: { ...defaults, plugins: { ...defaults.plugins, legend: { display: false } } }
+});
+
+// Tab 1: Pipeline
+new Chart(document.getElementById('chartPipeline'), {
+  type: 'bar',
+  data: {
+    labels: COHORTS,
+    datasets: [
+      { label: 'Matriculados', data: [318, 392, 489, 0], backgroundColor: '#1A9E5A', borderRadius: 4 },
+      { label: 'Admitidos', data: [19, 1, 2, 125], backgroundColor: '#1550A0', borderRadius: 4 },
+      { label: 'Inscritos', data: [81, 7, 0, 0], backgroundColor: '#DC142D', borderRadius: 4 },
+      { label: 'Interesados', data: [5, 0, 1, 67], backgroundColor: '#B86800', borderRadius: 4 }
+    ]
+  },
+  options: {
+    ...defaults,
+    scales: {
+      x: { stacked: true, ticks: { font: { family: 'DM Sans', size: 11 } } },
+      y: { stacked: true, ticks: { font: { family: 'DM Sans', size: 11 } } }
+    }
+  }
+});
+
+// Tab 1: Tasa egresados
+new Chart(document.getElementById('chartTasa'), {
+  type: 'line',
+  data: {
+    labels: ['2023-2S','2024-2S','2025-2S'],
+    datasets: [{
+      label: 'Tasa Egresados/Matriculados (%)',
+      data: [58.0, 26.5, 30.5],
+      borderColor: '#DC142D',
+      backgroundColor: 'rgba(220,20,45,0.12)',
+      fill: true,
+      tension: 0.4,
+      pointRadius: 6,
+      pointBackgroundColor: '#DC142D'
+    }]
+  },
+  options: defaults
+});
+
+// Tab 2: Funnel comparativo
+new Chart(document.getElementById('chartFunnel'), {
+  type: 'bar',
+  data: {
+    labels: ['Leads (÷100)', 'Inscritos', 'Admitidos', 'Matriculados'],
+    datasets: [
+      { label: '2023-2S', data: [77.26, 81, 19, 318], backgroundColor: '#607D8B', borderRadius: 4 },
+      { label: '2024-2S', data: [78.50, 7, 1, 392], backgroundColor: '#1550A0', borderRadius: 4 },
+      { label: '2025-2S', data: [93.71, 0, 2, 489], backgroundColor: '#1A9E5A', borderRadius: 4 }
+    ]
+  },
+  options: defaults
+});
+
+// Tab 2: Tasa conversión
+new Chart(document.getElementById('chartConvRate'), {
+  type: 'bar',
+  data: {
+    labels: ['2023-2S','2024-2S','2025-2S'],
+    datasets: [{
+      label: 'Tasa leads → matriculados (%)',
+      data: [4.12, 4.99, 5.22],
+      backgroundColor: ['#607D8B','#1550A0','#1A9E5A'],
+      borderRadius: 8
+    }]
+  },
+  options: {
+    ...defaults,
+    plugins: { ...defaults.plugins, legend: { display: false } },
+    scales: {
+      x: { ticks: { font: { family: 'DM Sans', size: 11 } } },
+      y: { ticks: { font: { family: 'DM Sans', size: 11 }, callback: v => v + '%' }, beginAtZero: true, max: 7 }
+    }
+  }
+});
+
+// Tab 3: Inscripción sin costo
+new Chart(document.getElementById('chartSinCosto'), {
+  type: 'bar',
+  data: {
+    labels: ['2023-2S','2024-2S','2025-2S'],
+    datasets: [{
+      label: 'Inscr. sin costo mapeadas en SF',
+      data: [52, 6, 140],
+      backgroundColor: ['rgba(184,104,0,0.8)','rgba(184,104,0,0.4)','rgba(184,104,0,0.95)'],
+      borderColor: '#B86800',
+      borderWidth: 2,
+      borderRadius: 8
+    }]
+  },
+  options: {
+    ...defaults,
+    plugins: {
+      ...defaults.plugins,
+      legend: { display: false },
+      tooltip: { callbacks: { footer: () => '⚠️ Dato parcial — realidad fue mayor' } }
+    }
+  }
+});
+
+// Tab 3: % sobre matriculados
+new Chart(document.getElementById('chartSinCostoPct'), {
+  type: 'bar',
+  data: {
+    labels: ['2023-2S','2024-2S','2025-2S'],
+    datasets: [
+      { label: 'Matr. no sin-costo (mínimo)', data: [266, 386, 349], backgroundColor: '#e0dbd3', borderRadius: 4 },
+      { label: 'Inscr. sin costo mapeadas', data: [52, 6, 140], backgroundColor: '#B86800', borderRadius: 4 }
+    ]
+  },
+  options: {
+    ...defaults,
+    scales: {
+      x: { stacked: true, ticks: { font: { family: 'DM Sans', size: 11 } } },
+      y: { stacked: true, ticks: { font: { family: 'DM Sans', size: 11 } } }
+    }
+  }
+});
+
+// Tab 4: Combo leads + matriculados
+new Chart(document.getElementById('chartCombo'), {
+  type: 'bar',
+  data: {
+    labels: ['2023-2S','2024-2S','2025-2S'],
+    datasets: [
+      { label: 'Leads (÷10)', data: [772.6, 785, 937.1], backgroundColor: 'rgba(21,80,160,0.3)', borderRadius: 4, yAxisID: 'y' },
+      { label: 'Matriculados', data: [318, 392, 489], backgroundColor: '#1A9E5A', borderRadius: 4, yAxisID: 'y' }
+    ]
+  },
+  options: defaults
+});
+
+// Tab 4: Pipeline detalle
+new Chart(document.getElementById('chartPipeDetail'), {
+  type: 'radar',
+  data: {
+    labels: ['Interesados', 'Inscritos', 'Admitidos', 'Matriculados'],
+    datasets: [
+      { label: '2023-2S', data: [5, 81, 19, 318], borderColor: '#607D8B', backgroundColor: 'rgba(96,125,139,0.15)', pointRadius: 4 },
+      { label: '2024-2S', data: [0, 7, 1, 392], borderColor: '#1550A0', backgroundColor: 'rgba(21,80,160,0.1)', pointRadius: 4 },
+      { label: '2025-2S', data: [1, 0, 2, 489], borderColor: '#1A9E5A', backgroundColor: 'rgba(26,158,90,0.1)', pointRadius: 4 }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { labels: { font: { family: 'DM Sans', size: 12 } } } } }
+});
+
+// Tab 4: Sin costo duplicado
+new Chart(document.getElementById('chartSinCosto2'), {
+  type: 'doughnut',
+  data: {
+    labels: ['2023-2S (52)', '2024-2S (6)', '2025-2S (140)'],
+    datasets: [{
+      data: [52, 6, 140],
+      backgroundColor: ['rgba(184,104,0,0.6)','rgba(184,104,0,0.25)','rgba(184,104,0,1)'],
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { font: { family: 'DM Sans', size: 12 } } },
+      tooltip: { callbacks: { footer: () => '⚠️ Datos incompletos' } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
