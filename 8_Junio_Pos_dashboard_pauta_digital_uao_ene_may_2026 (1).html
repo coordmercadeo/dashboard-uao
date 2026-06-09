@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Pauta Digital UAO | Posgrados Mar–Jun 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#ECE5DC; --red:#DC142D; --red-dark:#961423; --red-accent:#F03C46;
+  --text:#231F20; --white:#FFFFFF; --shadow:0 2px 16px rgba(35,31,32,.08);
+  --r:12px; --r-sm:8px; --nav:64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--text);height:var(--nav);
+  display:flex;align-items:center;padding:0 24px;gap:0;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.nav-brand{display:flex;align-items:center;gap:12px;margin-right:20px;flex-shrink:0}
+.nav-logo-wrap{background:#fff;border-radius:6px;padding:4px 8px;display:flex;align-items:center;height:40px}
+.nav-logo-wrap img{height:32px;width:auto;display:block}
+.nav-brand-text{color:rgba(255,255,255,.8);font-size:12px;font-weight:500;line-height:1.3;display:none}
+.nav-links{display:flex;align-items:center;gap:2px;flex-wrap:nowrap;overflow-x:auto}
+.nav-links a{color:rgba(255,255,255,.65);text-decoration:none;font-size:11.5px;font-weight:500;
+  padding:5px 9px;border-radius:5px;white-space:nowrap;transition:all .15s;letter-spacing:.01em}
+.nav-links a:hover,.nav-links a.act{background:var(--red);color:#fff}
+/* PROGRESS */
+#prog{position:fixed;top:var(--nav);left:0;right:0;height:3px;background:var(--red-accent);
+  transform-origin:left;transform:scaleX(0);z-index:201;transition:transform .1s}
+/* LAYOUT */
+.page{padding-top:var(--nav)}
+.sec{padding:52px 36px;max-width:1180px;margin:0 auto}
+.hr{border:none;border-top:1px solid rgba(35,31,32,.1);margin:0 36px}
+/* COVER */
+#cover{background:linear-gradient(135deg,#6b0e1a 0%,var(--red-dark) 30%,var(--red) 65%,var(--red-accent) 100%);padding-top:var(--nav)}
+.cover-in{max-width:1180px;margin:0 auto;padding:56px 36px 52px;display:grid;grid-template-columns:1fr auto;gap:36px;align-items:center}
+.cover-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);color:#fff;
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:5px 14px;
+  border-radius:20px;margin-bottom:16px;border:1px solid rgba(255,255,255,.25)}
+.cover-title{font-size:clamp(24px,3.2vw,40px);font-weight:700;color:#fff;line-height:1.2;margin-bottom:12px}
+.cover-sub{font-size:14px;color:rgba(255,255,255,.75);max-width:500px;line-height:1.7;margin-top:8px}
+.cover-meta{display:flex;gap:24px;flex-wrap:wrap;margin-top:18px}
+.cm-item .cm-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.1em}
+.cm-item .cm-val{font-size:13.5px;font-weight:500;color:#fff}
+.cover-logo-box{background:#fff;border-radius:14px;padding:20px 28px;display:flex;align-items:center;
+  justify-content:center;box-shadow:0 8px 32px rgba(0,0,0,.2);min-width:150px}
+.cover-logo-box img{height:60px;width:auto;display:block}
+/* SECTION HEADER */
+.sh{margin-bottom:28px}
+.sh-eye{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);
+  margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.sh-eye::before{content:'';display:block;width:18px;height:2px;background:var(--red);flex-shrink:0}
+.sh-title{font-size:clamp(19px,2.4vw,27px);font-weight:700;color:var(--text);line-height:1.25}
+.sh-desc{font-size:13.5px;color:#6b6566;margin-top:6px;max-width:620px}
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px}
+.kpi{background:var(--white);border-radius:var(--r);padding:20px 18px 16px;box-shadow:var(--shadow);
+  position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(35,31,32,.12)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red)}
+.kpi.hi::before{background:linear-gradient(90deg,var(--red-dark),var(--red-accent))}
+.kpi-ico{font-size:20px;margin-bottom:10px}
+.kpi-lbl{font-size:10.5px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.09em;margin-bottom:5px}
+.kpi-val{font-size:clamp(18px,1.8vw,24px);font-weight:700;color:var(--text);line-height:1}
+.kpi-sub{font-size:11.5px;color:#888;margin-top:5px}
+.kpi-tag{font-size:11px;font-weight:600;margin-top:7px;display:inline-flex;align-items:center;gap:3px;
+  padding:2px 8px;border-radius:10px}
+.tag-g{background:#e8f5e9;color:#2e7d32} .tag-r{background:#fce4e4;color:#961423}
+.tag-y{background:#fff8e1;color:#f57f17} .tag-b{background:#e3f2fd;color:#1565c0}
+.tag-grey{background:#f3f4f6;color:#555}
+/* CHARTS */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.chart-card{background:var(--white);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.cc-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.cc-sub{font-size:11.5px;color:#888;margin-bottom:16px}
+/* BAR CHART */
+.bc{display:flex;flex-direction:column;gap:8px}
+.bc-row{display:flex;align-items:center;gap:8px}
+.bc-lbl{font-size:11px;color:var(--text);width:180px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.bc-track{flex:1;background:#f0ece8;border-radius:4px;height:26px;overflow:hidden}
+.bc-fill{height:100%;border-radius:4px;background:var(--red);display:flex;align-items:center;padding-left:8px;min-width:30px}
+.bc-fill span{font-size:10.5px;font-weight:600;color:#fff;white-space:nowrap}
+.bc-fill.alt{background:var(--red-dark)} .bc-fill.ok{background:#43a047} .bc-fill.amber{background:#f9a825}
+.bc-num{font-size:11.5px;font-weight:700;color:var(--text);width:80px;text-align:right;flex-shrink:0}
+/* TABLES */
+.tbl-wrap{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:600px}
+thead tr{background:var(--text)}
+th{color:#fff;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;padding:11px 14px;text-align:left;white-space:nowrap}
+tbody tr{border-bottom:1px solid #f0ece8;transition:background .12s}
+tbody tr:hover{background:#faf8f5}
+tbody tr:last-child{border-bottom:none}
+td{padding:11px 14px;font-size:12.5px;color:var(--text)}
+td.num{font-weight:600;text-align:right;font-variant-numeric:tabular-nums;font-size:12.5px}
+td.nm{font-weight:500;max-width:260px;font-size:12px}
+/* TRAFFIC LIGHT */
+.sem{display:flex;align-items:center;gap:7px;font-size:13px} 
+.sem-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.s-g .sem-dot{background:#43a047} .s-y .sem-dot{background:#fdd835} .s-r .sem-dot{background:var(--red)}
+/* INSIGHT */
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.ic{background:var(--white);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);border-left:4px solid var(--red)}
+.ic.ok{border-left-color:#43a047} .ic.warn{border-left-color:#f9a825} .ic.alt{border-left-color:var(--red-dark)}
+.ic-ico{font-size:18px;margin-bottom:8px} .ic-t{font-size:13px;font-weight:700;margin-bottom:5px}
+.ic-b{font-size:12.5px;color:#555;line-height:1.6}
+/* RECO */
+.rl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.ri{background:var(--white);border-radius:var(--r-sm);padding:16px 18px;box-shadow:var(--shadow);display:flex;gap:12px}
+.rn{width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.rt{font-size:13px;font-weight:700;margin-bottom:4px} .rb{font-size:12.5px;color:#555;line-height:1.55}
+/* CALLOUT */
+.callout{background:linear-gradient(135deg,var(--red-dark),var(--red));border-radius:var(--r);
+  padding:26px 30px;color:#fff;margin-bottom:22px}
+.callout .ct{font-size:15px;font-weight:700;margin-bottom:7px}
+.callout .cb{font-size:13.5px;line-height:1.7;opacity:.88}
+/* ALERT */
+.al{border-radius:var(--r-sm);padding:13px 16px;font-size:13px;display:flex;gap:10px;margin-bottom:18px}
+.al.info{background:#e3f2fd;border-left:4px solid #1976d2;color:#0d47a1}
+.al.warn{background:#fff8e1;border-left:4px solid #f9a825;color:#e65100}
+.al.danger{background:#fce4e4;border-left:4px solid var(--red);color:var(--red-dark)}
+.al.ok{background:#e8f5e9;border-left:4px solid #43a047;color:#1b5e20}
+/* SUMMARY BOX */
+.sbox{background:var(--text);color:#fff;border-radius:var(--r);padding:32px 36px;margin-bottom:28px}
+.sbox h3{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px}
+.sbox p{font-size:14.5px;line-height:1.8;color:rgba(255,255,255,.82)}
+.sbox p strong{color:#fff}
+.sh-hl{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;margin-top:26px}
+.sh-it{border-left:3px solid var(--red);padding-left:12px}
+.sh-it .sl{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.09em;font-weight:700}
+.sh-it .sv{font-size:22px;font-weight:700;color:#fff;margin-top:2px}
+.sh-it .ss{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px}
+/* SCROLL TOP */
+#scrollTop{position:fixed;bottom:24px;right:24px;z-index:300;width:42px;height:42px;border-radius:50%;
+  background:var(--red);color:#fff;border:none;cursor:pointer;font-size:17px;display:none;
+  align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(220,20,45,.4)}
+/* FOOTER */
+footer{background:var(--text);color:rgba(255,255,255,.45);text-align:center;padding:24px 20px;font-size:11.5px;margin-top:40px}
+footer strong{color:rgba(255,255,255,.75)}
+/* RESPONSIVE */
+@media(max-width:900px){
+  .chart-row{grid-template-columns:1fr} nav{padding:0 12px} .sec{padding:36px 16px} .cover-in{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)} .sbox{padding:22px 18px} .cover-logo-box{display:none}
+}
+@media(max-width:560px){.bc-lbl{width:120px;font-size:10px} .nav-links a{font-size:10px;padding:4px 6px}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo-wrap">
+      <img src="data:image/png;base64,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" alt="UAO">
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#cover">Inicio</a>
+    <a href="#resumen">Resumen</a>
+    <a href="#kpis">KPIs</a>
+    <a href="#campanas">Campañas</a>
+    <a href="#conversiones">Conversiones</a>
+    <a href="#cpa">Top CPA</a>
+    <a href="#ctr">Top CTR</a>
+    <a href="#programas">Programas</a>
+    <a href="#sin-conv">Sin Conv.</a>
+    <a href="#recomendaciones">Recomendaciones</a>
+  </div>
+</nav>
+
+<!-- ═══ COVER ═══ -->
+<div id="cover" style="background:linear-gradient(135deg,#6b0e1a 0%,#961423 30%,#DC142D 65%,#F03C46 100%);padding-top:64px">
+  <div class="cover-in">
+    <div>
+      <div class="cover-badge">📊 Informe Ejecutivo · Pauta Digital</div>
+      <h1 class="cover-title">Análisis de Pauta Digital UAO<br><span style="font-weight:400;opacity:.8">Posgrados · Marzo 4 – Junio 8, 2026</span></h1>
+      <p class="cover-sub">Dashboard ejecutivo de desempeño de anuncios digitales Meta Ads para la campaña de Posgrados UAO 2026-2S. Análisis de <strong style="color:#fff">383 registros</strong>, <strong style="color:#fff">97 conjuntos de anuncios</strong> y <strong style="color:#fff">336 creatividades únicas</strong>.</p>
+      <div class="cover-meta">
+        <div class="cm-item"><div class="cm-label">Fecha de corte</div><div class="cm-val">8 junio 2026</div></div>
+        <div class="cm-item"><div class="cm-label">Plataforma</div><div class="cm-val">Meta Ads (Facebook)</div></div>
+        <div class="cm-item"><div class="cm-label">Inversión Total</div><div class="cm-val">COP $46.265.660</div></div>
+        <div class="cm-item"><div class="cm-label">Total Leads</div><div class="cm-val">5.959 conversiones</div></div>
+      </div>
+    </div>
+    <div class="cover-logo-box">
+      <img src="data:image/png;base64,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" alt="Universidad Autónoma de Occidente">
+    </div>
+  </div>
+</div>
+<hr class="hr">
+
+<!-- ═══ RESUMEN EJECUTIVO ═══ -->
+<section id="resumen" class="sec">
+  <div class="sh"><div class="sh-eye">01 · Resumen Ejecutivo</div>
+    <h2 class="sh-title">Panorama General de la Pauta Digital</h2>
+    <p class="sh-desc">Lectura ejecutiva del desempeño consolidado del periodo Marzo 4 – Junio 8, 2026. Datos reales de Meta Ads Manager exportados con 383 registros de anuncios.</p></div>
+  <div class="sbox">
+    <h3>📋 Lectura Ejecutiva</h3>
+    <p>Durante el periodo <strong>Marzo 4 – Junio 8 de 2026</strong>, la Universidad Autónoma de Occidente ejecutó pauta digital en <strong>Meta Ads</strong> para la captación de leads de Posgrados 2026-2S. La campaña operó con <strong>97 conjuntos de anuncios</strong> y <strong>336 creatividades únicas</strong>, alcanzando una inversión total de <strong>COP $46.265.660</strong>. Se generaron <strong>5.959 conversiones (leads)</strong> con un CPA promedio de <strong>COP $7.764</strong>, lo que representa un desempeño global eficiente para el segmento de posgrados en Colombia.<br><br>
+    Los programas con <strong>mejor rendimiento</strong> son Esp. Logística Virtual (563 leads, CPA $3.624), Esp. Derechos Humanos (543 leads, CPA $2.925) y Esp. Logística Híbrida (366 leads, CPA $2.569). Los <strong>programas críticos</strong> que requieren intervención inmediata son Maestría en Administración de Empresas (CPA $32.115) y Esp. Comunicación Estratégica (CPA $24.486). El <strong>80% del gasto</strong> está en anuncios activos, mientras que un <strong>14,2% (COP $6.583.224)</strong> se invirtió en anuncios ya inactivos y un <strong>5,8% (COP $2.673.230)</strong> en anuncios que no están entregando — un total de COP $9.256.454 en gasto susceptible de optimización.</p>
+    <div class="sh-hl">
+      <div class="sh-it"><div class="sl">Inversión Total</div><div class="sv">$46,3M</div><div class="ss">COP · 97 conjuntos activos</div></div>
+      <div class="sh-it"><div class="sl">Total Leads</div><div class="sv">5.959</div><div class="ss">Conversiones Meta Ads</div></div>
+      <div class="sh-it"><div class="sl">CPA Promedio</div><div class="sv">$7.764</div><div class="ss">COP por lead</div></div>
+      <div class="sh-it"><div class="sl">CTR Promedio</div><div class="sv">0,54%</div><div class="ss">39.041 clics / 7,25M imp.</div></div>
+      <div class="sh-it"><div class="sl">Mejor CPA</div><div class="sv">$1.374</div><div class="ss">Conferencia Inmigración</div></div>
+      <div class="sh-it"><div class="sl">Mejor CTR</div><div class="sv">1,90%</div><div class="ss">Becas para El Cambio</div></div>
+    </div>
+  </div>
+  <div class="ig">
+    <div class="ic ok"><div class="ic-ico">🏆</div><div class="ic-t">Campaña Más Eficiente</div><div class="ic-b">Esp. Logística Virtual: 563 leads con CPA $3.624. La mejor combinación de volumen y eficiencia del portafolio. Candidata a escalar presupuesto.</div></div>
+    <div class="ic warn"><div class="ic-ico">⚠️</div><div class="ic-t">Mayor Gasto con Bajo Retorno</div><div class="ic-b">Maestría en Administración de Empresas: COP $1.766.343 de gasto con solo 55 leads (CPA $32.115). Requiere revisión urgente de segmentación y oferta.</div></div>
+    <div class="ic alt"><div class="ic-ico">💡</div><div class="ic-t">Oportunidad de Optimización</div><div class="ic-b">COP $9.256.454 (20% del presupuesto) en anuncios inactivos o sin entrega. Redirigir este gasto a las campañas con mejor CPA podría generar 1.190 leads adicionales.</div></div>
+    <div class="ic"><div class="ic-ico">📈</div><div class="ic-t">CTR Sobre Benchmark</div><div class="ic-b">Becas para El Cambio alcanzó CTR 1,90% y Energías Renovables 1,11%, ambos muy por encima del benchmark educativo (0,5–0,7%). Replicar sus creatividades.</div></div>
+  </div>
+</section>
+<hr class="hr">
+
+<!-- ═══ KPIs ═══ -->
+<section id="kpis" class="sec">
+  <div class="sh"><div class="sh-eye">02 · KPIs Principales</div>
+    <h2 class="sh-title">Indicadores Clave de Desempeño</h2>
+    <p class="sh-desc">Métricas consolidadas del periodo completo. Calculadas a partir de los 383 registros del reporte Meta Ads.</p></div>
+  <div class="kpi-grid">
+    <div class="kpi hi"><div class="kpi-ico">💰</div><div class="kpi-lbl">Inversión Total</div><div class="kpi-val">$46,27M</div><div class="kpi-sub">COP · 97 conjuntos</div><div class="kpi-tag tag-grey">100% ejecutado</div></div>
+    <div class="kpi"><div class="kpi-ico">👁️</div><div class="kpi-lbl">Impresiones</div><div class="kpi-val">7.254.902</div><div class="kpi-sub">Vistas totales</div><div class="kpi-tag tag-b">7,25M exposiciones</div></div>
+    <div class="kpi"><div class="kpi-ico">👤</div><div class="kpi-lbl">Alcance</div><div class="kpi-val">2.626.340</div><div class="kpi-sub">Cuentas únicas</div><div class="kpi-tag tag-grey">Frec. avg 1,28x</div></div>
+    <div class="kpi"><div class="kpi-ico">🖱️</div><div class="kpi-lbl">Clics en Enlace</div><div class="kpi-val">39.041</div><div class="kpi-sub">Total clics al landing</div><div class="kpi-tag tag-b">CPC: $1.185</div></div>
+    <div class="kpi hi"><div class="kpi-ico">📊</div><div class="kpi-lbl">CTR</div><div class="kpi-val">0,54%</div><div class="kpi-sub">Prom. ponderado</div><div class="kpi-tag tag-y">Cerca del benchmark</div></div>
+    <div class="kpi"><div class="kpi-ico">💲</div><div class="kpi-lbl">CPC</div><div class="kpi-val">$1.185</div><div class="kpi-sub">COP por clic enlace</div><div class="kpi-tag tag-grey">39.041 clics totales</div></div>
+    <div class="kpi"><div class="kpi-ico">📢</div><div class="kpi-lbl">CPM</div><div class="kpi-val">$6.377</div><div class="kpi-sub">COP por mil impresiones</div><div class="kpi-tag tag-g">Eficiente para edu</div></div>
+    <div class="kpi hi"><div class="kpi-ico">🎯</div><div class="kpi-lbl">Conversiones</div><div class="kpi-val">5.959</div><div class="kpi-sub">Leads generados</div><div class="kpi-tag tag-g">Meta Ads Leadgen</div></div>
+    <div class="kpi"><div class="kpi-ico">📉</div><div class="kpi-lbl">CPA Promedio</div><div class="kpi-val">$7.764</div><div class="kpi-sub">COP · Costo por lead</div><div class="kpi-tag tag-g">Saludable &lt;$10K</div></div>
+    <div class="kpi"><div class="kpi-ico">🔄</div><div class="kpi-lbl">Tasa Conv.</div><div class="kpi-val">15,3%</div><div class="kpi-sub">Conv / Clics enlace</div><div class="kpi-tag tag-g">↑ Alta post-clic</div></div>
+    <div class="kpi"><div class="kpi-ico">⚡</div><div class="kpi-lbl">Frecuencia</div><div class="kpi-val">1,28x</div><div class="kpi-sub">Exp. por cuenta</div><div class="kpi-tag tag-g">Sin fatiga publicitaria</div></div>
+    <div class="kpi"><div class="kpi-ico">📱</div><div class="kpi-lbl">Anuncios Activos</div><div class="kpi-val">165</div><div class="kpi-sub">De 383 registros</div><div class="kpi-tag tag-y">218 pausados/sin entr.</div></div>
+  </div>
+
+  <div class="chart-row" style="margin-top:22px">
+    <div class="chart-card">
+      <div class="cc-title">Distribución del Gasto por Estado de Entrega</div>
+      <div class="cc-sub">COP · Activo vs Inactivo vs Sin Entrega</div>
+      <div class="bc">
+        <div class="bc-row"><div class="bc-lbl">🟢 Activo</div><div class="bc-track"><div class="bc-fill ok" style="width:80%"><span>$37.009.206</span></div></div><div class="bc-num">80,0%</div></div>
+        <div class="bc-row"><div class="bc-lbl">⚪ Inactivo</div><div class="bc-track"><div class="bc-fill alt" style="width:14.2%"><span>$6.583.224</span></div></div><div class="bc-num">14,2%</div></div>
+        <div class="bc-row"><div class="bc-lbl">🔴 Sin Entrega</div><div class="bc-track"><div class="bc-fill" style="width:5.8%"><span>$2.673.230</span></div></div><div class="bc-num">5,8%</div></div>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:#fce4e4;border-radius:8px;font-size:12.5px;color:#961423">
+        ⚠️ <strong>COP $9.256.454</strong> (20%) invertidos en anuncios que ya no están activos o no están entregando. Oportunidad de reasignación inmediata.
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="cc-title">Semáforo de KPIs</div>
+      <div class="cc-sub">Evaluación contra benchmarks de pauta educativa</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="sem s-g"><div class="sem-dot"></div><div><strong>CTR 0,54%</strong> — Dentro del rango educativo (0,5–0,7%). Top campañas alcanzan 1,9%</div></div>
+        <div class="sem s-g"><div class="sem-dot"></div><div><strong>CPA $7.764</strong> — Saludable para posgrados Colombia. Meta óptimo: &lt;$6.000</div></div>
+        <div class="sem s-g"><div class="sem-dot"></div><div><strong>Frecuencia 1,28x</strong> — Excelente. Sin fatiga publicitaria (óptimo &lt;2x)</div></div>
+        <div class="sem s-g"><div class="sem-dot"></div><div><strong>Tasa conv. 15,3%</strong> — Alta eficiencia post-clic. Las landings convierten bien</div></div>
+        <div class="sem s-y"><div class="sem-dot"></div><div><strong>5.959 leads</strong> — Buen volumen. Potencial de escalar con presupuesto optimizado</div></div>
+        <div class="sem s-r"><div class="sem-dot"></div><div><strong>20% gasto sin retorno activo</strong> — Requiere acción inmediata de reasignación</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="chart-row">
+    <div class="chart-card" style="grid-column:1/-1">
+      <div class="cc-title">Distribución de Inversión — Top 10 Conjuntos de Anuncios</div>
+      <div class="cc-sub">Por monto de gasto COP</div>
+      <canvas id="chartGasto" height="100"></canvas>
+    </div>
+  </div>
+</section>
+<hr class="hr">
+
+<!-- ═══ CAMPAÑAS ═══ -->
+<section id="campanas" class="sec">
+  <div class="sh"><div class="sh-eye">03 · Análisis de Campañas</div>
+    <h2 class="sh-title">Ranking de Desempeño por Conjunto de Anuncios</h2>
+    <p class="sh-desc">Evaluación de los 97 conjuntos de anuncios del periodo. Top 10 por inversión con sus principales indicadores.</p></div>
+  <div class="tbl-wrap" style="margin-bottom:22px">
+    <table>
+      <thead><tr><th>#</th><th>Conjunto de Anuncios</th><th>Gasto COP</th><th>Conv.</th><th>CPA COP</th><th>CTR</th><th>Clasificación</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="nm">Maestría en IA y Ciencia de Datos 2026-2S</td><td class="num">$2.056.498</td><td class="num">250</td><td class="num">$8.226</td><td class="num">0,61%</td><td><span class="kpi-tag tag-y">Moderado</span></td></tr>
+        <tr><td>2</td><td class="nm">Esp. Logística Virtual 2026-2S Colombia</td><td class="num">$2.040.212</td><td class="num">563</td><td class="num">$3.624</td><td class="num">0,62%</td><td><span class="kpi-tag tag-g">⭐ Eficiente</span></td></tr>
+        <tr><td>3</td><td class="nm">Maestría en Administración de Empresas</td><td class="num">$1.766.343</td><td class="num">55</td><td class="num">$32.115</td><td class="num">0,49%</td><td><span class="kpi-tag tag-r">🔴 Crítico</span></td></tr>
+        <tr><td>4</td><td class="nm">Esp. Seguridad y Salud en el Trabajo Virtual</td><td class="num">$1.727.080</td><td class="num">307</td><td class="num">$5.626</td><td class="num">0,65%</td><td><span class="kpi-tag tag-g">✅ Eficiente</span></td></tr>
+        <tr><td>5</td><td class="nm">Esp. Gerencia del Talento Humano</td><td class="num">$1.586.004</td><td class="num">144</td><td class="num">$11.014</td><td class="num">0,37%</td><td><span class="kpi-tag tag-r">⚠️ Optimizar</span></td></tr>
+        <tr><td>6</td><td class="nm">Esp. Gerencia de Mantenimiento y Confiabilidad</td><td class="num">$1.582.108</td><td class="num">152</td><td class="num">$10.409</td><td class="num">0,51%</td><td><span class="kpi-tag tag-y">Revisar</span></td></tr>
+        <tr><td>7</td><td class="nm">Esp. Analítica de Big Data Colombia</td><td class="num">$1.562.263</td><td class="num">173</td><td class="num">$9.030</td><td class="num">0,64%</td><td><span class="kpi-tag tag-y">Moderado</span></td></tr>
+        <tr><td>8</td><td class="nm">Maestría en Sistemas Energéticos</td><td class="num">$1.529.869</td><td class="num">74</td><td class="num">$20.674</td><td class="num">0,47%</td><td><span class="kpi-tag tag-r">🔴 Crítico</span></td></tr>
+        <tr><td>9</td><td class="nm">Esp. Estrategia Publicitaria de Marca</td><td class="num">$1.523.471</td><td class="num">160</td><td class="num">$9.522</td><td class="num">0,52%</td><td><span class="kpi-tag tag-y">Moderado</span></td></tr>
+        <tr><td>10</td><td class="nm">Esp. Finanzas 2026-2S Virtual Ciudades</td><td class="num">$1.500.640</td><td class="num">120</td><td class="num">$12.505</td><td class="num">0,41%</td><td><span class="kpi-tag tag-r">⚠️ Optimizar</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="chart-row">
+    <div class="chart-card">
+      <div class="cc-title">Top 10 Campañas por Conversiones</div>
+      <div class="cc-sub">Ranking de leads generados por conjunto</div>
+      <div class="bc">
+        <div class="bc-row"><div class="bc-lbl" title="Esp. Logística Virtual">Esp. Logística Virtual</div><div class="bc-track"><div class="bc-fill ok" style="width:100%"><span>563 leads</span></div></div><div class="bc-num">$3.624 CPA</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Esp. D.Humanos Ciudades">Esp. D.Humanos Cdds.</div><div class="bc-track"><div class="bc-fill ok" style="width:89.9%"><span>506 leads</span></div></div><div class="bc-num">$2.866 CPA</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Esp. Logística Híbrida">Esp. Logística Híbrida</div><div class="bc-track"><div class="bc-fill ok" style="width:65%"><span>366 leads</span></div></div><div class="bc-num">$2.569 CPA</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Esp. SST Virtual">Esp. SST Virtual</div><div class="bc-track"><div class="bc-fill ok" style="width:54.5%"><span>307 leads</span></div></div><div class="bc-num">$5.626 CPA</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Esp. IA">Esp. Inteligencia Art.</div><div class="bc-track"><div class="bc-fill ok" style="width:46%"><span>259 leads</span></div></div><div class="bc-num">$5.227 CPA</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="MSc IA y Datos">MSc IA y Datos</div><div class="bc-track"><div class="bc-fill amber" style="width:44.4%"><span>250 leads</span></div></div><div class="bc-num">$8.226 CPA</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Esp. SST Presencial">Esp. SST Presencial</div><div class="bc-track"><div class="bc-fill amber" style="width:33.4%"><span>188 leads</span></div></div><div class="bc-num">$5.947 CPA</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Esp. Big Data">Esp. Big Data</div><div class="bc-track"><div class="bc-fill amber" style="width:30.7%"><span>173 leads</span></div></div><div class="bc-num">$9.030 CPA</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Esp. Estrategia Publi.">Esp. Estrategia Pub.</div><div class="bc-track"><div class="bc-fill amber" style="width:28.4%"><span>160 leads</span></div></div><div class="bc-num">$9.522 CPA</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Esp. Género">Esp. Género</div><div class="bc-track"><div class="bc-fill amber" style="width:28.1%"><span>158 leads</span></div></div><div class="bc-num">$9.154 CPA</div></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="cc-title">Campañas Críticas (CPA &gt; $20.000)</div>
+      <div class="cc-sub">Alto gasto con bajo retorno en conversiones</div>
+      <div class="bc">
+        <div class="bc-row"><div class="bc-lbl">MSc Adm. Empresas</div><div class="bc-track"><div class="bc-fill" style="width:100%"><span>CPA $32.115</span></div></div><div class="bc-num">55 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl">Esp. Com. Estratégica</div><div class="bc-track"><div class="bc-fill" style="width:76.2%"><span>CPA $24.486</span></div></div><div class="bc-num">61 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl">MSc Sistemas Energ.</div><div class="bc-track"><div class="bc-fill" style="width:64.4%"><span>CPA $20.674</span></div></div><div class="bc-num">74 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl">Esp. Mercadeo Pres.</div><div class="bc-track"><div class="bc-fill" style="width:62.9%"><span>CPA $20.194</span></div></div><div class="bc-num">73 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl">Esp. Finanzas (all)</div><div class="bc-track"><div class="bc-fill amber" style="width:44.5%"><span>CPA $14.292</span></div></div><div class="bc-num">207 leads</div></div>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:#fce4e4;border-radius:8px;font-size:12px;color:#961423;line-height:1.6">
+        🔴 Estas 5 campañas invirtieron <strong>COP $9.538.519</strong> generando solo <strong>470 leads</strong>. Si se optimizaran al CPA promedio ($7.764), deberían generar <strong>1.229 leads</strong> — un déficit de <strong>759 leads perdidos</strong>.
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="hr">
+
+<!-- ═══ TOP CONVERSIONES ═══ -->
+<section id="conversiones" class="sec">
+  <div class="sh"><div class="sh-eye">04 · Top Conversiones</div>
+    <h2 class="sh-title">Campañas con Mayor Volumen de Leads</h2>
+    <p class="sh-desc">Las campañas que generaron más conversiones y sus factores de éxito.</p></div>
+  <div class="tbl-wrap" style="margin-bottom:20px">
+    <table>
+      <thead><tr><th>Posición</th><th>Conjunto de Anuncios</th><th>Gasto COP</th><th>Leads</th><th>CPA COP</th><th>CTR</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td>🥇 #1</td><td class="nm">Esp. Logística Virtual 2026-2S Colombia</td><td class="num">$2.040.212</td><td class="num"><strong>563</strong></td><td class="num">$3.624</td><td class="num">0,62%</td><td><span class="kpi-tag tag-g">⭐ Top performer</span></td></tr>
+        <tr><td>🥈 #2</td><td class="nm">Esp. Derechos Humanos y Territorios Ciudades</td><td class="num">$1.450.438</td><td class="num"><strong>506</strong></td><td class="num">$2.866</td><td class="num">0,72%</td><td><span class="kpi-tag tag-g">⭐ Top performer</span></td></tr>
+        <tr><td>🥉 #3</td><td class="nm">Esp. Logística Híbrida Ciudades</td><td class="num">$940.213</td><td class="num"><strong>366</strong></td><td class="num">$2.569</td><td class="num">0,85%</td><td><span class="kpi-tag tag-g">⭐ Escalar</span></td></tr>
+        <tr><td>#4</td><td class="nm">Esp. Seguridad y Salud en el Trabajo Virtual</td><td class="num">$1.727.080</td><td class="num"><strong>307</strong></td><td class="num">$5.626</td><td class="num">0,65%</td><td><span class="kpi-tag tag-g">✅ Eficiente</span></td></tr>
+        <tr><td>#5</td><td class="nm">Esp. Inteligencia Artificial 2026-2S</td><td class="num">$1.353.749</td><td class="num"><strong>259</strong></td><td class="num">$5.227</td><td class="num">0,75%</td><td><span class="kpi-tag tag-g">✅ Eficiente</span></td></tr>
+        <tr><td>#6</td><td class="nm">Maestría en IA y Ciencia de Datos 2026-2S</td><td class="num">$2.056.498</td><td class="num"><strong>250</strong></td><td class="num">$8.226</td><td class="num">0,61%</td><td><span class="kpi-tag tag-y">Optimizar CTR</span></td></tr>
+        <tr><td>#7</td><td class="nm">Esp. SST Presencial Ciudades</td><td class="num">$1.118.108</td><td class="num"><strong>188</strong></td><td class="num">$5.947</td><td class="num">0,52%</td><td><span class="kpi-tag tag-y">Bueno</span></td></tr>
+        <tr><td>#8</td><td class="nm">Esp. Analítica de Big Data Colombia</td><td class="num">$1.562.263</td><td class="num"><strong>173</strong></td><td class="num">$9.030</td><td class="num">0,64%</td><td><span class="kpi-tag tag-y">Revisar CPA</span></td></tr>
+        <tr><td>#9</td><td class="nm">Esp. Estrategia Publicitaria de Marca</td><td class="num">$1.523.471</td><td class="num"><strong>160</strong></td><td class="num">$9.522</td><td class="num">0,52%</td><td><span class="kpi-tag tag-y">Revisar CPA</span></td></tr>
+        <tr><td>#10</td><td class="nm">Esp. Interculturalidad y Estudios de Género</td><td class="num">$1.446.341</td><td class="num"><strong>158</strong></td><td class="num">$9.154</td><td class="num">0,48%</td><td><span class="kpi-tag tag-y">Revisar CTR</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <div class="ct">💡 Patrón Común de las Top 3 Campañas</div>
+    <div class="cb">Las tres campañas con más conversiones comparten: (1) <strong>CTR entre 0,62% y 0,85%</strong>, superior al promedio de las campañas críticas; (2) <strong>Propuesta de valor tangible</strong> — logística y DDHH tienen alta demanda laboral en Colombia; (3) <strong>Segmentación geográfica ajustada</strong> (Colombia + Ciudades como variantes complementarias); (4) <strong>CPA menor a $6.000</strong> — indicativo de alta relevancia del anuncio para el público objetivo. Replicar este modelo en programas con bajo rendimiento.</div>
+  </div>
+</section>
+<hr class="hr">
+
+<!-- ═══ TOP CPA ═══ -->
+<section id="cpa" class="sec">
+  <div class="sh"><div class="sh-eye">05 · Top CPA</div>
+    <h2 class="sh-title">Campañas con Mejor Eficiencia de Costo</h2>
+    <p class="sh-desc">Rankings de campañas con menor costo por lead. Candidatas a escalar presupuesto.</p></div>
+  <div class="chart-row">
+    <div class="chart-card">
+      <div class="cc-title">Top 10 Mejor CPA (min. 6 conversiones)</div>
+      <div class="cc-sub">Menor costo por lead = mayor eficiencia</div>
+      <div class="bc">
+        <div class="bc-row"><div class="bc-lbl" title="Conf. Inmigración">Conf. Inmigración EEUU</div><div class="bc-track"><div class="bc-fill ok" style="width:100%"><span>CPA $1.374</span></div></div><div class="bc-num">56 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Becas p/ El Cambio">Becas para El Cambio</div><div class="bc-track"><div class="bc-fill ok" style="width:83.3%"><span>CPA $1.644</span></div></div><div class="bc-num">149 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Conf. DDHH Brasil">Conf. DDHH Brasil</div><div class="bc-track"><div class="bc-fill ok" style="width:75%"><span>CPA $1.831</span></div></div><div class="bc-num">55 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="WhatsApp Posgrados">WhatsApp Posgrados</div><div class="bc-track"><div class="bc-fill ok" style="width:62%"><span>CPA $2.213</span></div></div><div class="bc-num">99 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Energías Renovables">Esp. Energías Renov.</div><div class="bc-track"><div class="bc-fill ok" style="width:57%"><span>CPA $2.417</span></div></div><div class="bc-num">40 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Logística Híbrida">Esp. Logística Híbrida</div><div class="bc-track"><div class="bc-fill ok" style="width:53.9%"><span>CPA $2.569</span></div></div><div class="bc-num">366 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="D.Humanos Ciudades">D.Humanos Ciudades</div><div class="bc-track"><div class="bc-fill ok" style="width:47%"><span>CPA $2.866</span></div></div><div class="bc-num">506 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Der. Aduanero UR">Der. Aduanero UR</div><div class="bc-track"><div class="bc-fill ok" style="width:38%"><span>CPA $3.605</span></div></div><div class="bc-num">31 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="Logística Virtual">Logística Virtual</div><div class="bc-track"><div class="bc-fill ok" style="width:37.6%"><span>CPA $3.624</span></div></div><div class="bc-num">563 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl" title="D.Humanos Colombia">D.Humanos Colombia</div><div class="bc-track"><div class="bc-fill ok" style="width:36.5%"><span>CPA $3.727</span></div></div><div class="bc-num">37 leads</div></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="cc-title">Análisis de Eficiencia por Segmento</div>
+      <div class="cc-sub">Qué tipo de campañas tienen mejor CPA</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="background:#e8f5e9;border-radius:8px;padding:14px;border-left:3px solid #43a047">
+          <div style="font-size:11px;font-weight:700;color:#2e7d32;text-transform:uppercase;margin-bottom:5px">🥇 CPA &lt; $3.000 (Excelente)</div>
+          <div style="font-size:12.5px;color:#555;line-height:1.6">Conferencias gratuitas, becas y eventos de entrada generan los CPA más bajos. El modelo de contenido de valor (charlas, webinars, open house) convierte a menor costo porque el usuario ya tiene intención.</div>
+        </div>
+        <div style="background:#fff8e1;border-radius:8px;padding:14px;border-left:3px solid #f9a825">
+          <div style="font-size:11px;font-weight:700;color:#e65100;text-transform:uppercase;margin-bottom:5px">✅ CPA $3.000–$8.000 (Eficiente)</div>
+          <div style="font-size:12.5px;color:#555;line-height:1.6">Logística, Derechos Humanos e Inteligencia Artificial combinan CTR alto con propuestas de alta demanda laboral. Son los programas "estrella" del portafolio.</div>
+        </div>
+        <div style="background:#fce4e4;border-radius:8px;padding:14px;border-left:3px solid var(--red)">
+          <div style="font-size:11px;font-weight:700;color:#961423;text-transform:uppercase;margin-bottom:5px">⚠️ CPA &gt; $15.000 (Crítico)</div>
+          <div style="font-size:12.5px;color:#555;line-height:1.6">MBA y programas de alta especialización técnica tienen CPA elevado. Requieren mensajes de alta diferenciación, audiencias de nicho y ciclos de venta más largos.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="hr">
+
+<!-- ═══ TOP CTR ═══ -->
+<section id="ctr" class="sec">
+  <div class="sh"><div class="sh-eye">06 · Top CTR</div>
+    <h2 class="sh-title">Campañas con Mayor Tasa de Interacción</h2>
+    <p class="sh-desc">CTR benchmark Meta Ads educación: 0,50–0,70%. Las campañas por encima de 0,85% tienen potencial de escalar.</p></div>
+  <div class="tbl-wrap" style="margin-bottom:20px">
+    <table>
+      <thead><tr><th>#</th><th>Conjunto de Anuncios</th><th>Impresiones</th><th>Clics</th><th>CTR</th><th>Conv.</th><th>Evaluación</th></tr></thead>
+      <tbody>
+        <tr><td>🥇 #1</td><td class="nm">Becas para El Cambio 2026-2S</td><td class="num">58.593</td><td class="num">1.113</td><td class="num"><strong>1,90%</strong></td><td class="num">149</td><td><span class="kpi-tag tag-g">🔥 Excepcional</span></td></tr>
+        <tr><td>🥈 #2</td><td class="nm">Lanzamiento Esp. Energías Renovables</td><td class="num">14.250</td><td class="num">158</td><td class="num"><strong>1,11%</strong></td><td class="num">40</td><td><span class="kpi-tag tag-g">🔥 Muy alto</span></td></tr>
+        <tr><td>🥉 #3</td><td class="nm">Beneficio por siempre UAO 40% 2026-1S</td><td class="num">149.802</td><td class="num">1.519</td><td class="num"><strong>1,01%</strong></td><td class="num">75</td><td><span class="kpi-tag tag-g">✅ Alto</span></td></tr>
+        <tr><td>#4</td><td class="nm">Esp. Gerencia de Proyectos Ciudades</td><td class="num">58.997</td><td class="num">529</td><td class="num"><strong>0,90%</strong></td><td class="num">49</td><td><span class="kpi-tag tag-g">✅ Alto</span></td></tr>
+        <tr><td>#5</td><td class="nm">WhatsApp Posgrados Ciudades</td><td class="num">16.602</td><td class="num">142</td><td class="num"><strong>0,86%</strong></td><td class="num">99</td><td><span class="kpi-tag tag-g">✅ Alto</span></td></tr>
+        <tr><td>#6</td><td class="nm">Esp. Logística Híbrida Ciudades</td><td class="num">229.498</td><td class="num">1.944</td><td class="num"><strong>0,85%</strong></td><td class="num">366</td><td><span class="kpi-tag tag-g">⭐ Mejor doble</span></td></tr>
+        <tr><td>#7</td><td class="nm">Tráfico Landing SIN COSTO 2026-2S</td><td class="num">5.242</td><td class="num">44</td><td class="num"><strong>0,84%</strong></td><td class="num">5</td><td><span class="kpi-tag tag-y">Conv. baja</span></td></tr>
+        <tr><td>#8</td><td class="nm">Charla informativa posgrados UAO</td><td class="num">26.127</td><td class="num">211</td><td class="num"><strong>0,81%</strong></td><td class="num">25</td><td><span class="kpi-tag tag-y">Potencial</span></td></tr>
+        <tr><td>#9</td><td class="nm">Open House Posgrados UAO Mayo 2026</td><td class="num">63.834</td><td class="num">510</td><td class="num"><strong>0,80%</strong></td><td class="num">43</td><td><span class="kpi-tag tag-y">Potencial</span></td></tr>
+        <tr><td>#10</td><td class="nm">Conf. Inmigración EEUU</td><td class="num">26.137</td><td class="num">201</td><td class="num"><strong>0,77%</strong></td><td class="num">56</td><td><span class="kpi-tag tag-g">✅ Bueno</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ig">
+    <div class="ic ok"><div class="ic-ico">🎨</div><div class="ic-t">Aprendizaje Creativo #1</div><div class="ic-b">Las campañas con <strong>propuesta de acceso gratuito</strong> (Becas, Lanzamientos, CTR 1,11–1,90%) generan el doble del CTR vs. campañas de inscripción directa. El "trigger" de gratuidad supera al de beneficio económico.</div></div>
+    <div class="ic ok"><div class="ic-ico">📣</div><div class="ic-t">Aprendizaje Creativo #2</div><div class="ic-t">Beneficio Tangible Inmediato</div><div class="ic-b">"Beneficio por siempre UAO 40%" logró CTR 1,01% con 1.519 clics. Los descuentos o beneficios permanentes generan urgencia y alta respuesta. Replicar en programas con CTR bajo.</div></div>
+    <div class="ic warn"><div class="ic-ico">⚠️</div><div class="ic-t">CTR Alto ≠ Conversión Alta</div><div class="ic-b">Tráfico Landing SIN COSTO tiene CTR 0,84% pero solo 5 conversiones. Alto CTR con baja conversión sugiere problema en la landing page, formulario o alineación entre promesa del anuncio y contenido de la página.</div></div>
+    <div class="ic alt"><div class="ic-ico">🔧</div><div class="ic-t">Acciones para CTR Bajo</div><div class="ic-b">Campañas con CTR &lt;0,40% (Talento Humano 0,37%, Mercadeo 0,37%, Finanzas 0,41%) deben renovar creatividad con mensajes de urgencia, beneficios claros y llamado a la acción más directo.</div></div>
+  </div>
+</section>
+<hr class="hr">
+
+<!-- ═══ PROGRAMAS ═══ -->
+<section id="programas" class="sec">
+  <div class="sh"><div class="sh-eye">07 · Desempeño por Programa</div>
+    <h2 class="sh-title">Análisis por Programa Académico</h2>
+    <p class="sh-desc">Clasificación de los 15 programas con mayor inversión según su eficiencia y retorno.</p></div>
+  <div class="tbl-wrap" style="margin-bottom:22px">
+    <table>
+      <thead><tr><th>#</th><th>Programa</th><th>Gasto COP</th><th>Conv.</th><th>CPA COP</th><th>CTR</th><th>Clasificación</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="nm">Esp. Seguridad y Salud en el Trabajo</td><td class="num">$2.984.716</td><td class="num">516</td><td class="num">$5.784</td><td class="num">0,58%</td><td><span class="kpi-tag tag-g">⭐ Alto Desempeño</span></td></tr>
+        <tr><td>2</td><td class="nm">Esp. Finanzas</td><td class="num">$2.958.415</td><td class="num">207</td><td class="num">$14.292</td><td class="num">0,41%</td><td><span class="kpi-tag tag-r">⚠️ Optimizar</span></td></tr>
+        <tr><td>3</td><td class="nm">MSc IA y Ciencia de Datos</td><td class="num">$2.056.498</td><td class="num">250</td><td class="num">$8.226</td><td class="num">0,61%</td><td><span class="kpi-tag tag-y">Potencial</span></td></tr>
+        <tr><td>4</td><td class="nm">Esp. Logística Virtual</td><td class="num">$2.040.212</td><td class="num">563</td><td class="num">$3.624</td><td class="num">0,62%</td><td><span class="kpi-tag tag-g">⭐ Alto Desempeño</span></td></tr>
+        <tr><td>5</td><td class="nm">MSc Administración de Empresas</td><td class="num">$1.955.853</td><td class="num">58</td><td class="num">$33.722</td><td class="num">0,49%</td><td><span class="kpi-tag tag-r">🔴 Bajo Desempeño</span></td></tr>
+        <tr><td>6</td><td class="nm">Esp. Analítica de Big Data</td><td class="num">$1.623.738</td><td class="num">176</td><td class="num">$9.226</td><td class="num">0,64%</td><td><span class="kpi-tag tag-y">Potencial</span></td></tr>
+        <tr><td>7</td><td class="nm">Esp. Gerencia de Proyectos</td><td class="num">$1.593.341</td><td class="num">135</td><td class="num">$11.803</td><td class="num">0,59%</td><td><span class="kpi-tag tag-y">Revisar CPA</span></td></tr>
+        <tr><td>8</td><td class="nm">Esp. Derechos Humanos y Territorios</td><td class="num">$1.588.336</td><td class="num">543</td><td class="num">$2.925</td><td class="num">0,71%</td><td><span class="kpi-tag tag-g">⭐ Alto Desempeño</span></td></tr>
+        <tr><td>9</td><td class="nm">Esp. Ingeniería Clínica</td><td class="num">$1.586.235</td><td class="num">151</td><td class="num">$10.505</td><td class="num">0,45%</td><td><span class="kpi-tag tag-y">Revisar</span></td></tr>
+        <tr><td>10</td><td class="nm">Esp. Gerencia del Talento Humano</td><td class="num">$1.586.004</td><td class="num">144</td><td class="num">$11.014</td><td class="num">0,37%</td><td><span class="kpi-tag tag-r">⚠️ Optimizar CTR</span></td></tr>
+        <tr><td>11</td><td class="nm">Esp. Gerencia de Mantenimiento</td><td class="num">$1.582.108</td><td class="num">152</td><td class="num">$10.409</td><td class="num">0,51%</td><td><span class="kpi-tag tag-y">Revisar</span></td></tr>
+        <tr><td>12</td><td class="nm">Esp. Comunicación y Periodismo Digital</td><td class="num">$1.566.443</td><td class="num">164</td><td class="num">$9.551</td><td class="num">0,49%</td><td><span class="kpi-tag tag-y">Potencial</span></td></tr>
+        <tr><td>13</td><td class="nm">Esp. Comercio Exterior</td><td class="num">$1.562.956</td><td class="num">181</td><td class="num">$8.635</td><td class="num">0,38%</td><td><span class="kpi-tag tag-y">Revisar CTR</span></td></tr>
+        <tr><td>14</td><td class="nm">Esp. Diseño Publicitario en Contenidos</td><td class="num">$1.557.761</td><td class="num">181</td><td class="num">$8.606</td><td class="num">0,40%</td><td><span class="kpi-tag tag-y">Revisar CTR</span></td></tr>
+        <tr><td>15</td><td class="nm">Esp. Estrategia Publicitaria de Marca</td><td class="num">$1.552.593</td><td class="num">163</td><td class="num">$9.525</td><td class="num">0,52%</td><td><span class="kpi-tag tag-y">Moderado</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ig">
+    <div class="ic ok"><div class="ic-ico">🏆</div><div class="ic-t">Alto Desempeño</div><div class="ic-b"><strong>SST ($5.784), Logística Virtual ($3.624), Derechos Humanos ($2.925).</strong> Alta demanda laboral + mensaje claro de empleabilidad = máxima eficiencia. Escalar inversión en estos programas 2026-2S.</div></div>
+    <div class="ic"><div class="ic-ico">🚀</div><div class="ic-t">Potencial de Crecimiento</div><div class="ic-b"><strong>IA y Big Data, Comunicación Digital, Diseño Publicitario.</strong> CTR aceptable pero CPA mejorable. Con ajuste de creatividad y nuevas audiencias, podrían llegar a CPA &lt;$7.000.</div></div>
+    <div class="ic warn"><div class="ic-ico">⚙️</div><div class="ic-t">Requiere Optimización</div><div class="ic-b"><strong>Finanzas, Gerencia de Proyectos, Talento Humano, Mantenimiento.</strong> CPA entre $10K–$14K con CTR bajo. Necesitan renovación de mensaje, nuevas audiencias y posiblemente cambio de formato.</div></div>
+    <div class="ic alt"><div class="ic-ico">🔴</div><div class="ic-t">Bajo Desempeño</div><div class="ic-b"><strong>MBA Administración de Empresas (CPA $33.722).</strong> El programa de mayor CPA del portafolio. Con COP $1.955.853 solo generó 58 leads. Requiere revisión completa: mensaje, audiencia, oferta y ciclo de ventas.</div></div>
+  </div>
+</section>
+<hr class="hr">
+
+<!-- ═══ SIN CONVERSIÓN ═══ -->
+<section id="sin-conv" class="sec">
+  <div class="sh"><div class="sh-eye">08 · Sin Conversión / Baja Eficiencia</div>
+    <h2 class="sh-title">Campañas que Requieren Intervención</h2>
+    <p class="sh-desc">Análisis de campañas sin conversiones atribuidas y aquellas con gasto sin retorno óptimo.</p></div>
+  <div class="al warn"><span>ℹ️</span><div>Prácticamente todos los conjuntos con gasto reportaron al menos 1 conversión (solo 1 conjunto con COP $1.478 sin conversiones). Sin embargo, <strong>el 20% del gasto total está en anuncios inactivos o sin entrega</strong> — esto equivale a COP $9.256.454 que ya no está generando resultados activos. El análisis se centra en las campañas activas con CPA crítico (&gt;$20.000).</div></div>
+  <div class="chart-row">
+    <div class="chart-card">
+      <div class="cc-title">Campañas Activas con CPA Crítico</div>
+      <div class="cc-sub">Alto gasto, bajo retorno en conversiones</div>
+      <div class="bc">
+        <div class="bc-row"><div class="bc-lbl">MBA Adm. Empresas</div><div class="bc-track"><div class="bc-fill" style="width:100%"><span>CPA $32.115 · $1,77M</span></div></div><div class="bc-num">55 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl">Com. Estratégica</div><div class="bc-track"><div class="bc-fill" style="width:76.2%"><span>CPA $24.486 · $1,49M</span></div></div><div class="bc-num">61 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl">MSc Sist. Energét.</div><div class="bc-track"><div class="bc-fill" style="width:64.4%"><span>CPA $20.674 · $1,53M</span></div></div><div class="bc-num">74 leads</div></div>
+        <div class="bc-row"><div class="bc-lbl">Mercadeo Presencial</div><div class="bc-track"><div class="bc-fill amber" style="width:62.9%"><span>CPA $20.194 · $1,47M</span></div></div><div class="bc-num">73 leads</div></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="cc-title">Diagnóstico de Causas</div>
+      <div class="cc-sub">Por qué estas campañas tienen CPA alto</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="al danger" style="margin-bottom:0"><span>🎯</span><div><strong>Segmentación amplia:</strong> MBA y MSc requieren audiencias con perfil ejecutivo muy específico. Una segmentación general desperdicia impresiones en perfiles no cualificados.</div></div>
+        <div class="al warn" style="margin-bottom:0"><span>🎨</span><div><strong>Creatividad sin diferenciación:</strong> CTR bajo (0,37%–0,49%) indica que el mensaje no resuena. Necesitan copy que hable del ROI del programa, no solo de la matrícula.</div></div>
+        <div class="al warn" style="margin-bottom:0"><span>📱</span><div><strong>Modalidad presencial como limitante:</strong> Mercadeo Presencial (CPA $20.194) vs. su equivalente virtual. La modalidad presencial limita la audiencia geográfica y reduce conversión.</div></div>
+        <div class="al info" style="margin-bottom:0"><span>💡</span><div><strong>Ciclo de venta largo:</strong> MBA y maestrías tienen proceso de decisión de 3–6 meses. Meta Ads solo captura el inicio del funnel. Complementar con CRM y nurturing.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="rl" style="margin-top:18px">
+    <div class="ri"><div class="rn">1</div><div><div class="rt">Revisar segmentación MBA</div><div class="rb">Crear audiencia personalizada de ejecutivos: cargo directivo/gerencial, 30-50 años, interés en liderazgo y negocios. Excluir estudiantes de pregrado.</div></div></div>
+    <div class="ri"><div class="rn">2</div><div><div class="rt">Renovar creatividad Comunicación Estratégica</div><div class="rb">CTR 0,47% indica mensaje genérico. Cambiar a copy basado en casos de éxito: "Egresados que dirigen estrategia en Postobón, Carvajal, Argos".</div></div></div>
+    <div class="ri"><div class="rn">3</div><div><div class="rt">Reducir presupuesto Sistemas Energéticos</div><div class="rb">COP $1,53M para solo 74 leads es insostenible. Bajar a COP $600K y redirigir el resto a campañas de alto CTR. Crear eventos especiales para este nicho.</div></div></div>
+    <div class="ri"><div class="rn">4</div><div><div class="rt">Evaluar modalidad presencial Mercadeo</div><div class="rb">Analizar si el mercado local justifica pauta digital masiva para presencial. Alternativa: combinar con Google Ads para capturar búsquedas locales específicas.</div></div></div>
+  </div>
+</section>
+<hr class="hr">
+
+<!-- ═══ RECOMENDACIONES ═══ -->
+<section id="recomendaciones" class="sec">
+  <div class="sh"><div class="sh-eye">09 · Recomendaciones Estratégicas</div>
+    <h2 class="sh-title">Plan de Acción para el Próximo Ciclo</h2>
+    <p class="sh-desc">Recomendaciones accionables basadas en el análisis de los 383 registros reales del reporte. Aplicar para el siguiente periodo de pauta.</p></div>
+  <div class="callout" style="margin-bottom:24px">
+    <div class="ct">💰 Propuesta de Redistribución Presupuestal</div>
+    <div class="cb">De los <strong>COP $9.256.454</strong> actualmente en anuncios inactivos/sin entrega, se propone redistribuir: <strong>40% → Esp. Logística Virtual y Esp. Derechos Humanos</strong> (los 2 programas con mejor CPA-volumen); <strong>30% → Esp. Inteligencia Artificial y Big Data</strong> (alta demanda, CPA optimizable); <strong>20% → Nuevas creatividades</strong> con formato video/Reels para programas con CTR bajo; <strong>10% → Google Ads Search</strong> para capturar intención activa de búsqueda de posgrados.</div>
+  </div>
+  <div class="rl">
+    <div class="ri"><div class="rn">1</div><div><div class="rt">Escalar las 3 campañas "estrella"</div><div class="rb">Logística Virtual, Derechos Humanos y Logística Híbrida tienen CPA &lt;$3.700 y CTR &gt;0,72%. Duplicar su presupuesto para el siguiente ciclo. Potencial de +1.500 leads adicionales.</div></div></div>
+    <div class="ri"><div class="rn">2</div><div><div class="rt">Reasignar COP $9,25M de anuncios inactivos</div><div class="rb">Confirmar que todos los anuncios inactivos permanezcan pausados. Redirigir el presupuesto que va a "not_delivering" ($2,67M) a los conjuntos activos con mejor desempeño.</div></div></div>
+    <div class="ri"><div class="rn">3</div><div><div class="rt">Implementar modelo de contenido gratuito</div><div class="rb">Conferencias, charlas y lanzamientos tienen CPA de $1.374–$2.417. Crear un calendario de eventos mensuales (webinars, charlas abiertas) para atraer leads a bajo costo.</div></div></div>
+    <div class="ri"><div class="rn">4</div><div><div class="rt">Renovar creatividades con CTR bajo</div><div class="rb">Los 8 programas con CTR &lt;0,45% (Talento Humano, Mercadeo, Finanzas, Comercio Exterior) deben renovar imágenes y copy. Usar el modelo de "Becas para El Cambio" (CTR 1,90%) como referente.</div></div></div>
+    <div class="ri"><div class="rn">5</div><div><div class="rt">Crear audiencias Lookalike de los mejores leads</div><div class="rb">Construir audiencias similares (1–3%) basadas en los leads generados por las campañas con CPA &lt;$5.000. Probar en programas con bajo rendimiento para mejorar su eficiencia.</div></div></div>
+    <div class="ri"><div class="rn">6</div><div><div class="rt">Configurar remarketing multi-etapa</div><div class="rb">Crear secuencia: Awareness (video 15 seg.) → Consideración (carrusel con beneficios) → Conversión (oferta específica). El remarketing reduce CPA 40–60% en ciclos largo de decisión.</div></div></div>
+    <div class="ri"><div class="rn">7</div><div><div class="rt">Reducir presupuesto en campañas críticas</div><div class="rb">MBA Administración ($32.115 CPA) y Comunicación Estratégica ($24.486 CPA) deben reducir inversión 50% mientras se rediseñan. No pausar, pero tampoco mantener el mismo gasto sin mejoras.</div></div></div>
+    <div class="ri"><div class="rn">8</div><div><div class="rt">Implementar CAPI y tracking avanzado</div><div class="rb">Verificar que todos los conjuntos tengan el pixel de Meta correctamente configurado. Implementar Conversions API para mejorar atribución en navegadores con bloqueadores de cookies.</div></div></div>
+    <div class="ri"><div class="rn">9</div><div><div class="rt">Expandir a Google Ads Search</div><div class="rb">Meta Ads genera demanda, Google captura intención. Invertir en keywords: "posgrados Cali 2026", "especializaciones UAO", "MBA Valle del Cauca". Propuesta: COP $4M/mes en Search.</div></div></div>
+    <div class="ri"><div class="rn">10</div><div><div class="rt">Establecer KPIs por programa para 2026-2S</div><div class="rb">CPA objetivo global: &lt;$6.000. CTR mínimo: 0,60%. Frecuencia máxima: 2,5x. Meta de leads 2026-2S: 8.000 conversiones. Revisar y ajustar semanalmente.</div></div></div>
+  </div>
+
+  <div style="margin-top:28px" class="tbl-wrap">
+    <table>
+      <thead><tr><th>Acción</th><th>Campaña / Elemento</th><th>Recomendación</th><th>Prioridad</th><th>Impacto Est.</th></tr></thead>
+      <tbody>
+        <tr><td><span class="kpi-tag tag-g">Escalar</span></td><td class="nm">Logística Virtual, D.Humanos, Logística Híbrida</td><td>Duplicar presupuesto. CPA &lt;$3.700</td><td><span class="kpi-tag tag-r">🔴 Alta</span></td><td>+1.500 leads</td></tr>
+        <tr><td><span class="kpi-tag tag-r">Pausar</span></td><td class="nm">Anuncios inactivos / not_delivering</td><td>Reasignar COP $9,25M</td><td><span class="kpi-tag tag-r">🔴 Alta</span></td><td>+$9M optimizado</td></tr>
+        <tr><td><span class="kpi-tag tag-y">Optimizar</span></td><td class="nm">MBA Adm. Empresas (CPA $32K)</td><td>Segmentación ejecutiva nicho + nuevo copy</td><td><span class="kpi-tag tag-r">🔴 Alta</span></td><td>CPA -60%</td></tr>
+        <tr><td><span class="kpi-tag tag-b">Crear</span></td><td class="nm">Contenido gratuito (webinars, charlas)</td><td>Calendario mensual de eventos</td><td><span class="kpi-tag tag-y">Media</span></td><td>CPA ~$2.000</td></tr>
+        <tr><td><span class="kpi-tag tag-b">Crear</span></td><td class="nm">Audiencias Lookalike de mejores leads</td><td>1-3% similar a leads CPA &lt;$5K</td><td><span class="kpi-tag tag-y">Media</span></td><td>CTR +30%</td></tr>
+        <tr><td><span class="kpi-tag tag-b">Crear</span></td><td class="nm">Google Ads Search</td><td>COP $4M/mes en keywords de intención</td><td><span class="kpi-tag tag-y">Media</span></td><td>+40% cobertura</td></tr>
+        <tr><td><span class="kpi-tag tag-y">Renovar</span></td><td class="nm">Programas con CTR &lt;0,45%</td><td>Nuevas creatividades modelo Becas/Evento</td><td><span class="kpi-tag tag-y">Media</span></td><td>CTR +50-70%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div><!-- end .page -->
+<footer>
+  <strong>Dashboard Pauta Digital UAO · Posgrados 2026-2S</strong><br>
+  Meta Ads Manager · 383 registros · 97 conjuntos de anuncios · Periodo: Marzo 4 – Junio 8, 2026<br>
+  <span style="margin-top:4px;display:block">Universidad Autónoma de Occidente · Dirección de Mercadeo y Comunicaciones</span>
+</footer>
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Progress bar
+const prog=document.getElementById('prog');
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY,t=document.documentElement.scrollHeight-window.innerHeight;
+  prog.style.transform=`scaleX(${s/t})`;
+  document.getElementById('scrollTop').style.display=s>300?'flex':'none';
+});
+// Active nav
+const secs=document.querySelectorAll('section[id],div[id="cover"]');
+const nls=document.querySelectorAll('.nav-links a');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)nls.forEach(a=>a.classList.toggle('act',a.getAttribute('href')==='#'+e.target.id));});
+},{threshold:0.25,rootMargin:'-64px 0px 0px 0px'});
+secs.forEach(s=>obs.observe(s));
+
+// Chart.js - Top 10 Gasto
+const ctx=document.getElementById('chartGasto').getContext('2d');
+new Chart(ctx,{
+  type:'bar',
+  data:{
+    labels:['Esp. Logística Virtual','MSc IA y C.Datos','MBA Adm. Empresas','Esp. SST Virtual','Esp. G. Talento Humano','Esp. G. Mantenimiento','Esp. Big Data','MSc Sist. Energ.','Esp. Estr. Publi.','Esp. Finanzas Virtual'],
+    datasets:[{
+      label:'Gasto COP',
+      data:[2040212,2056498,1766343,1727080,1586004,1582108,1562263,1529869,1523471,1500640],
+      backgroundColor:['#43a047','#DC142D','#961423','#43a047','#f9a825','#f9a825','#f9a825','#961423','#f9a825','#f9a825'],
+      borderRadius:5,borderSkipped:false
+    }]
+  },
+  options:{
+    responsive:true,indexAxis:'y',
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`COP ${c.raw.toLocaleString('es-CO')}`}}},
+    scales:{x:{ticks:{callback:v=>`${(v/1000000).toFixed(1)}M`},grid:{color:'#f0ece8'}},y:{grid:{display:false},ticks:{font:{size:11}}}}
+  }
+});
+</script>
+</body>
+</html>
