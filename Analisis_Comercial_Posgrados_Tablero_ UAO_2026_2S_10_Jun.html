@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tablero Posgrados UAO 2026-2S</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#ECE5DC;--red:#DC142D;--red-dark:#961423;--red-accent:#F03C46;
+  --text:#231F20;--white:#FFFFFF;
+  --shadow:0 2px 12px rgba(35,31,32,0.08);--r:12px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+.header{background:var(--white);border-bottom:3px solid var(--red);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:72px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(35,31,32,0.12);}
+.header-logo{display:flex;align-items:center;gap:16px;}
+.header-logo img{height:44px;width:auto;}
+.header-title{border-left:2px solid var(--red);padding-left:16px;}
+.header-title h1{font-size:15px;font-weight:700;color:var(--red-dark);line-height:1.2;}
+.header-title p{font-size:11px;color:#666;}
+.header-badge{background:var(--red);color:var(--white);padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.5px;}
+
+.nav{background:var(--red-dark);padding:0 32px;display:flex;gap:4px;overflow-x:auto;}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,0.7);padding:12px 20px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;white-space:nowrap;border-bottom:3px solid transparent;transition:all 0.2s;}
+.nav-btn:hover,.nav-btn.active{color:var(--white);border-bottom-color:var(--red-accent);}
+
+.section{display:none;padding:28px 32px;max-width:1440px;margin:0 auto;animation:fadeIn 0.3s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.sec-title{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.sec-title h2{font-size:22px;font-weight:700;color:var(--red-dark);}
+.sec-title .line{flex:1;height:2px;background:linear-gradient(90deg,var(--red),transparent);}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:16px;margin-bottom:24px;}
+.kpi{background:var(--white);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);border-top:4px solid var(--red);}
+.kpi.g{border-top-color:#2e7d32;}.kpi.a{border-top-color:#f57c00;}.kpi.b{border-top-color:#1565c0;}
+.kpi-lbl{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.kpi-val{font-size:32px;font-weight:700;color:var(--text);line-height:1;}
+.kpi-sub{font-size:12px;color:#666;margin-top:6px;}
+.badge{display:inline-block;background:var(--red);color:var(--white);border-radius:12px;padding:2px 8px;font-size:10px;font-weight:700;margin-top:6px;}
+.badge.g{background:#2e7d32;}.badge.a{background:#f57c00;}.badge.b{background:#1565c0;}
+
+.card{background:var(--white);border-radius:var(--r);padding:24px;box-shadow:var(--shadow);margin-bottom:20px;}
+.card-title{font-size:15px;font-weight:700;color:var(--red-dark);margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--bg);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--red-dark);color:var(--white);padding:10px 12px;text-align:left;font-weight:600;font-size:11px;letter-spacing:0.3px;white-space:nowrap;}
+th.c{text-align:center;}
+td{padding:9px 12px;border-bottom:1px solid #f0ebe4;vertical-align:middle;}
+tr:hover td{background:#faf7f4;}
+tr.total-row td{border-bottom:none;font-weight:700;background:#f5f0e8;}
+.prog-name{font-size:12px;font-weight:500;min-width:200px;max-width:240px;}
+.num-cell{text-align:center;font-size:12px;}
+.tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;}
+.tr{background:#fde8ea;color:#961423;}.ta{background:#fff3e0;color:#e65100;}.tg{background:#e8f5e9;color:#1b5e20;}.tb{background:#e3f2fd;color:#0d47a1;}
+
+/* =================== IMPROVED FUNNEL =================== */
+.funnel-wrap{padding:16px 0;}
+.funnel-stage{display:flex;align-items:stretch;margin-bottom:3px;position:relative;}
+.funnel-bar-outer{flex:1;display:flex;align-items:stretch;}
+.funnel-bar-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  border-radius:6px;color:var(--white);
+  padding:12px 18px;min-height:52px;width:100%;
+  transition:filter 0.2s,transform 0.2s;cursor:default;
+}
+.funnel-bar-inner:hover{filter:brightness(1.08);}
+.funnel-bar-inner .f-label{font-size:13px;font-weight:600;flex:1;}
+.funnel-bar-inner .f-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0;}
+.funnel-bar-inner .f-val{font-size:18px;font-weight:700;line-height:1;}
+.funnel-bar-inner .f-pct{font-size:11px;opacity:0.85;}
+.funnel-connector{
+  display:flex;align-items:center;gap:8px;
+  padding:4px 0 4px 20px;font-size:11px;color:#888;
+}
+.funnel-connector .arrow{color:var(--red-accent);font-size:16px;line-height:1;}
+.funnel-connector .loss-badge{
+  background:#fde8ea;color:var(--red-dark);
+  border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700;
+}
+
+/* BAR CHART */
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.bar-lbl{width:220px;font-size:12px;color:var(--text);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
+.bar-track{flex:1;background:#f0ebe4;border-radius:4px;height:24px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:700;color:var(--white);min-width:28px;}
+.bar-num{width:44px;font-size:12px;font-weight:700;color:var(--text);text-align:right;}
+
+/* PRIORITY */
+.prio-head{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:8px;margin-bottom:8px;}
+.prio-head.p1{background:var(--red);color:var(--white);}.prio-head.p2{background:#f57c00;color:var(--white);}.prio-head.p3{background:#1565c0;color:var(--white);}.prio-head.p4{background:#555;color:var(--white);}
+.prio-head h4{font-size:14px;font-weight:700;}.prio-head span{margin-left:auto;font-size:20px;font-weight:700;}
+
+/* SCENARIO */
+.scen-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.scen-card{background:var(--white);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);text-align:center;border:2px solid transparent;}
+.scen-card.cons{border-color:#f57c00;}.scen-card.real{border-color:var(--red);}.scen-card.opti{border-color:#2e7d32;}
+.scen-lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.scen-card.cons .scen-lbl{color:#f57c00;}.scen-card.real .scen-lbl{color:var(--red);}.scen-card.opti .scen-lbl{color:#2e7d32;}
+.scen-num{font-size:40px;font-weight:700;color:var(--text);line-height:1;}
+.scen-sub{font-size:13px;color:#666;margin-top:4px;}
+.scen-desc{font-size:12px;color:#888;margin-top:12px;border-top:1px solid #f0ebe4;padding-top:12px;}
+
+/* ALERT */
+.alert{padding:14px 16px;border-radius:8px;margin-bottom:12px;border-left:4px solid;}
+.alert-r{background:#fde8ea;border-color:var(--red);}.alert-a{background:#fff3e0;border-color:#f57c00;}.alert-g{background:#e8f5e9;border-color:#2e7d32;}
+.alert h4{font-size:13px;font-weight:700;margin-bottom:4px;}.alert p{font-size:12px;color:#444;}
+
+/* RECOVERY */
+.rec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.rec-card{background:var(--bg);border-radius:8px;padding:14px;text-align:center;border:1px solid #d8d0c4;}
+.rec-pct{font-size:22px;font-weight:700;color:var(--red);}.rec-num{font-size:28px;font-weight:700;color:var(--text);}.rec-lbl{font-size:11px;color:#666;margin-top:4px;}
+
+/* PLAN */
+.plan-row{display:flex;gap:16px;margin-bottom:12px;padding:14px;background:#faf7f4;border-radius:8px;border-left:4px solid var(--red);}
+.plan-row.a{border-left-color:#f57c00;}.plan-row.g{border-left-color:#2e7d32;}
+.plan-days{font-size:11px;font-weight:700;color:var(--white);background:var(--red);padding:4px 10px;border-radius:12px;white-space:nowrap;align-self:start;flex-shrink:0;}
+.plan-days.a{background:#f57c00;}.plan-days.g{background:#2e7d32;}
+.plan-content h4{font-size:13px;font-weight:700;margin-bottom:4px;}.plan-content p{font-size:12px;color:#666;}
+.plan-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+
+/* MATRIX */
+.mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.mat-cell{padding:16px;border-radius:8px;}
+.mat-cell h4{font-size:13px;font-weight:700;margin-bottom:8px;}
+.mat-cell ul{list-style:none;}.mat-cell ul li{font-size:12px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.2);}
+.mat-s{background:var(--red-dark);color:var(--white);}.mat-p{background:#1565c0;color:var(--white);}.mat-r{background:#f57c00;color:var(--white);}.mat-c{background:#555;color:var(--white);}
+
+/* SEARCH */
+.search-wrap{margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.search-wrap input{border:1px solid #d8d0c4;border-radius:6px;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--white);color:var(--text);width:280px;}
+.search-wrap input:focus{outline:none;border-color:var(--red);}
+.search-wrap .sort-btn{background:var(--white);border:1px solid #d8d0c4;border-radius:6px;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);cursor:pointer;}
+.search-wrap .sort-btn:hover{border-color:var(--red);}
+
+/* LEGEND */
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;}
+.legend-item{display:flex;align-items:center;gap:6px;}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+
+/* FOOTER */
+.footer{text-align:center;padding:24px;font-size:11px;color:#999;border-top:1px solid #d8d0c4;margin-top:40px;}
+
+/* ── Filter bar ── */
+.filter-bar{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+.filter-group{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.filter-label{font-size:12px;font-weight:600;color:#555;white-space:nowrap;}
+.filter-btn{background:var(--white);border:2px solid #d8d0c4;border-radius:20px;padding:5px 14px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:#555;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.15s;}
+.filter-btn:hover{border-color:var(--red);color:var(--red);}
+.filter-btn.active{border-color:var(--red);background:var(--red);color:var(--white);font-weight:600;}
+.fb-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.filter-btn.active .fb-dot{background:rgba(255,255,255,0.9) !important;}
+
+/* ── Countdown banner ── */
+.countdown-banner{background:linear-gradient(135deg,var(--red-dark),var(--red));color:var(--white);border-radius:var(--r);padding:16px 24px;margin-bottom:24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.cd-main{display:flex;align-items:baseline;gap:8px;}
+.cd-days{font-size:48px;font-weight:700;line-height:1;}
+.cd-label{font-size:13px;font-weight:500;opacity:0.85;}
+.cd-sep{width:1px;background:rgba(255,255,255,0.3);align-self:stretch;flex-shrink:0;}
+.cd-detail{flex:1;min-width:220px;}
+.cd-detail h3{font-size:15px;font-weight:700;margin-bottom:4px;}
+.cd-detail p{font-size:12px;opacity:0.85;line-height:1.5;}
+.cd-urgency{display:flex;flex-direction:column;gap:6px;}
+.cd-urg-item{background:rgba(255,255,255,0.15);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600;}
+
+@media(max-width:768px){
+  .header{padding:0 12px;height:60px;}.header-title h1{font-size:12px;}
+  .nav{padding:0 6px;}.section{padding:14px;}
+  .kpi-grid{grid-template-columns:repeat(2,1fr);}.two-col,.three-col,.scen-grid,.mat-grid{grid-template-columns:1fr;}
+  .rec-grid{grid-template-columns:repeat(2,1fr);}.bar-lbl{width:110px;font-size:11px;}
+  .plan-row{flex-direction:column;}.funnel-bar-inner .f-label{font-size:12px;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">
+    <img src="data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/wAARCAIUAhQDACIAAREBAhEB/9sAQwAIBgYHBgUIBwcHCQkICgwUDQwLCwwZEhMPFB0aHx4dGhwcICQuJyAiLCMcHCg3KSwwMTQ0NB8nOT04MjwuMzQy/9sAQwEJCQkMCwwYDQ0YMiEcITIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIy/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMAAAERAhEAPwD3+iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigBKbu560rcKcelfOOpeKddj1S7RNWu1VZnAAlIAAYjArGtXjSV5Ho5bldXMJuFJpW7n0fuHqKNw9RXzN/wAJXr//AEGLz/v61H/CV6//ANBi8/7+tXP9fpdmez/qjjf5o/j/AJH0xkHoaWvIPhZrep6jr9zFe39xcRi33BZJCQDkc4Nev100qqqx5keFmGAqYGt7Go03a+gtFFFanEJSZ5xQ2e1fPXiLxNrlv4j1GKLVbtI0ndVVZSAAD0HtWNatGlG8j0Muy6rj6jp0mk0r6n0NuHqKNw9RXzN/wlev/wDQYvP+/rUf8JXr/wD0GLz/AL+tXP8AX6XZntf6o43+aP4/5H0xmlrxX4ba9q2oeL44LvULieIxOSkkhIz64Ne0jmumjVjVjzRPEzHL6mAqqlVabtfQdRRRWpwCUmaCQBzXE+JPiXpOiM8Fqftt2OCkZ+VT7t/hUznGCvI1oUKtefJSi5PyO2z71BPe21qu64uIoh6uwH868D1b4j+IdULKt19kjPG2AbT+fX9a5aaea4lMk8ryyHqzsWJ/E1xzx9NfCrn02G4TxVRXqyUfxZ9KP4r0FDhtWtM/9dV/xqaDxDo9ywWHUrWRj2WUGvmCisv7Q1+E7nwbppV19P8Agn1gsityGBB9DTu1fMel+JNY0ZgbDUJ4lH8G7Kf98nivRvDfxaEki22uxKhPAuY+n/Al7V0UsbTno9GeRjeGcZh05Q99Ltv9x6tSbhnqK4j4h6vJ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mc/ien0Fb/ajit6eGp03dLU8nGZ5jcWuWcrLstDA8W+HT4n0U2An8g+Yr79uenbFcJ/wph/+gwP+/R/xr1qk+tVUw8KjvJGWCzfF4KDhQlZN32ueS/8ACmH/AOguP+/R/wAaUfBhwR/xNxx/0x/+vXrdFZ/U6PY7P9Zcx/n/AARFBF5UEcec7VC5+lSUUtdWx4UpOTuwooooENKhhgjI9DXKa58PtB1tjK1v9nnPWSD5SfqOh/KuspO9TOEZq0kb0MVWw8uelJxfkeOah8HL6Ms2n6hDKOyzKVP5jP8AKufuPhp4rgYgaaJVH8UcyEH8yD+lfQmKMVySwNJ7XR71HirHQVpWl6r/ACsfOQ8AeKScf2PNn3ZQP51ftPhb4ouT+8tobcessw/9lzXv1FSsBTW7ZvLi/Fte7CK+/wDzPKNM+DiKVfUtRLdykK4/U132jeF9I0GMJYWcaN3kI3MfqTzWzijtXRTw9OGqR4+LzrG4tctSenZaIWiiitzywooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/9k=" alt="UAO Logo">
+    <div class="header-title">
+      <h1>Tablero de Posgrados — Análisis Comercial</h1>
+      <p>Universidad Autónoma de Occidente · Período 2026-2S</p>
+    </div>
+  </div>
+  <div class="header-badge">2026-2S</div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="show('resumen',this)">📊 Resumen Ejecutivo</button>
+  <button class="nav-btn" onclick="show('enrolados',this)">🎓 Enrolados</button>
+  <button class="nav-btn" onclick="show('estados',this)">📋 Estados CRM</button>
+  <button class="nav-btn" onclick="show('embudo',this)">🔽 Embudo</button>
+  <button class="nav-btn" onclick="show('recuperacion',this)">🔄 Recuperación</button>
+  <button class="nav-btn" onclick="show('proyeccion',this)">📈 Proyecciones</button>
+  <button class="nav-btn" onclick="show('callcenter',this)">📞 Call Center</button>
+  <button class="nav-btn" onclick="show('plan',this)">🗓️ Plan de Acción</button>
+  <button class="nav-btn" onclick="show('hallazgos',this)">💡 Hallazgos</button>
+</nav>
+
+<!-- ═══════════════════ RESUMEN ═══════════════════ -->
+<div id="resumen" class="section active">
+  <div class="sec-title"><h2>Resumen Ejecutivo</h2><div class="line"></div></div>
+  <!-- COUNTDOWN BANNER -->
+  <div class="countdown-banner">
+    <div class="cd-main">
+      <span class="cd-days">59</span>
+      <span class="cd-label">días<br>hábiles</span>
+    </div>
+    <div class="cd-sep"></div>
+    <div class="cd-detail">
+      <h3>⏰ Inicio de Clases: 8 de agosto de 2026</h3>
+      <p>Hoy: <strong>10 de junio de 2026</strong> · Quedan <strong>59 días calendario</strong> para cerrar matrículas.<br>
+      Cada semana de inacción representa perder <strong>~26 enrolados potenciales</strong> del pipeline activo.</p>
+    </div>
+    <div class="cd-sep"></div>
+    <div class="cd-urgency">
+      <div class="cd-urg-item">🔴 Semanas críticas restantes: ~8</div>
+      <div class="cd-urg-item">🟡 Meta mínima: +155 enrolados más</div>
+      <div class="cd-urg-item">🟢 Cierre inmediato disponible: +21 (16 pend. pago + 5 resp.)</div>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-lbl">Total Registros CRM</div><div class="kpi-val">5,670</div><div class="kpi-sub">Base completa de prospectos</div></div>
+    <div class="kpi g"><div class="kpi-lbl">Total Enrolados</div><div class="kpi-val">242</div><div class="kpi-sub">Interesados + Admitidos</div><span class="badge g">Activos</span></div>
+    <div class="kpi b"><div class="kpi-lbl">Admitidos</div><div class="kpi-val">192</div><div class="kpi-sub">79.3% de enrolados</div><span class="badge b">79.3%</span></div>
+    <div class="kpi"><div class="kpi-lbl">Interesados Enrolados</div><div class="kpi-val">50</div><div class="kpi-sub">20.7% pendientes</div></div>
+    <div class="kpi"><div class="kpi-lbl">No Contesta (CRM)</div><div class="kpi-val">3,031</div><div class="kpi-sub">No cont. + No cont. 1</div><span class="badge">53.4%</span></div>
+    <div class="kpi a"><div class="kpi-lbl">No Interesados</div><div class="kpi-val">1,252</div><div class="kpi-sub">22.1% del total</div><span class="badge a">Pérdida</span></div>
+    <div class="kpi g"><div class="kpi-lbl">Interesados CRM</div><div class="kpi-val">991</div><div class="kpi-sub">17.5% de la base</div></div>
+    <div class="kpi"><div class="kpi-lbl">Tasa de Conversión</div><div class="kpi-val">4.3%</div><div class="kpi-sub">Meta histórica: 7–8%</div></div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">🔑 Principales Hallazgos</div>
+      <div class="alert alert-r"><h4>🚨 Cuello de Botella Crítico</h4><p>53.4% de los registros (3,031) en "No Contesta" — mayor fuga del embudo y mayor oportunidad de recuperación.</p></div>
+      <div class="alert alert-a"><h4>⚠️ Alta Pérdida en No Interesados</h4><p>1,252 registros (22.1%) marcados como No Interesados. Requiere revisión de calidad de captación.</p></div>
+      <div class="alert alert-g"><h4>✅ IA lidera con fuerza</h4><p>Maestría en IA y Ciencia de Datos lidera con 50 enrolados (20.7% del total).</p></div>
+      <div class="alert alert-g"><h4>✅ Especializaciones dominan</h4><p>121 de 242 enrolados (50%) corresponden a especializaciones — portafolio diversificado es fortaleza.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Situación del Embudo</div>
+      <div style="font-size:13px;line-height:1.8;color:#444;">
+        <p style="margin-bottom:12px;">El embudo 2026-2S registra <strong>5,670 registros</strong> con conversión del <strong>4.3%</strong>, por debajo del histórico 7–8%.</p>
+        <ul style="list-style:none;padding:0;">
+          <li style="padding:6px 0;border-bottom:1px solid #f0ebe4;">📌 <strong>991 interesados</strong> activos pendientes seguimiento</li>
+          <li style="padding:6px 0;border-bottom:1px solid #f0ebe4;">📌 <strong>291 registros</strong> en "Enviado" sin activar</li>
+          <li style="padding:6px 0;border-bottom:1px solid #f0ebe4;">📌 <strong>16 pendientes</strong> pago matrícula — conversión inmediata</li>
+          <li style="padding:6px 0;border-bottom:1px solid #f0ebe4;">📌 <strong>42 números</strong> equivocados — depuración urgente</li>
+          <li style="padding:6px 0;">📌 <strong>14 No cumplen</strong> académicamente — revisar filtros</li>
+        </ul>
+        <div style="margin-top:16px;padding:12px;background:var(--bg);border-radius:8px;font-size:12px;">
+          <strong>Meta al 7%:</strong> 397 enrolados &nbsp;|&nbsp; <strong>Gap:</strong> −155 enrolados &nbsp;|&nbsp; <strong>Generado:</strong> 10/06/2026
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🎯 Top Programas por Enrolados</div>
+    <div id="top-bars"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ ENROLADOS ═══════════════════ -->
+<div id="enrolados" class="section">
+  <div class="sec-title"><h2>Enrolados por Programa Académico</h2><div class="line"></div></div>
+  <div class="kpi-grid">
+    <div class="kpi g"><div class="kpi-lbl">Total Enrolados</div><div class="kpi-val">242</div></div>
+    <div class="kpi b"><div class="kpi-lbl">Doctorados</div><div class="kpi-val">23</div><div class="kpi-sub">9.5%</div></div>
+    <div class="kpi"><div class="kpi-lbl">Especializaciones</div><div class="kpi-val">121</div><div class="kpi-sub">50.0%</div></div>
+    <div class="kpi a"><div class="kpi-lbl">Maestrías</div><div class="kpi-val">98</div><div class="kpi-sub">40.5%</div></div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">📊 Por Nivel Académico</div>
+      <div class="bar-row"><div class="bar-lbl">Especializaciones</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red);">50.0%</div></div><div class="bar-num">121</div></div>
+      <div class="bar-row"><div class="bar-lbl">Maestrías</div><div class="bar-track"><div class="bar-fill" style="width:81%;background:var(--red-dark);">40.5%</div></div><div class="bar-num">98</div></div>
+      <div class="bar-row"><div class="bar-lbl">Doctorados</div><div class="bar-track"><div class="bar-fill" style="width:19%;background:#961423;">9.5%</div></div><div class="bar-num">23</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Admitidos vs Interesados</div>
+      <div class="bar-row"><div class="bar-lbl">Admitidos</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red);">79.3%</div></div><div class="bar-num">192</div></div>
+      <div class="bar-row"><div class="bar-lbl">Interesados</div><div class="bar-track"><div class="bar-fill" style="width:26%;background:#f57c00;">20.7%</div></div><div class="bar-num">50</div></div>
+      <div style="margin-top:14px;padding:12px;background:#fde8ea;border-radius:8px;font-size:12px;color:#961423;"><strong>Nota:</strong> Los 50 "Interesados" son admitidos que aún no formalizan matrícula — prioridad de conversión inmediata.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🔬 Doctorados</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Programa</th><th class="c">Interesados</th><th class="c">Admitidos</th><th class="c">Total</th><th class="c">% Admitidos</th><th class="c">Estado</th></tr></thead>
+      <tbody>
+        <tr><td>Doctorado en Sostenibilidad</td><td class="num-cell">6</td><td class="num-cell">8</td><td class="num-cell"><strong>14</strong></td><td class="num-cell">57.1%</td><td class="num-cell"><span class="tag tg">Líder</span></td></tr>
+        <tr><td>Doctorado en Ingeniería (L. Automática)</td><td class="num-cell">0</td><td class="num-cell">4</td><td class="num-cell"><strong>4</strong></td><td class="num-cell">100%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr><td>Doctorado en Bioingeniería</td><td class="num-cell">2</td><td class="num-cell">1</td><td class="num-cell"><strong>3</strong></td><td class="num-cell">33.3%</td><td class="num-cell"><span class="tag ta">Potencial</span></td></tr>
+        <tr><td>Doctorado en Ingeniería (L. Energía)</td><td class="num-cell">0</td><td class="num-cell">2</td><td class="num-cell"><strong>2</strong></td><td class="num-cell">100%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr class="total-row"><td><strong>SUBTOTAL</strong></td><td class="num-cell">8</td><td class="num-cell">15</td><td class="num-cell">23</td><td class="num-cell">65.2%</td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="card-title">📚 Especializaciones</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Programa</th><th class="c">Interesados</th><th class="c">Admitidos</th><th class="c">Total</th><th class="c">% del Nivel</th><th class="c">Estado</th></tr></thead>
+      <tbody>
+        <tr><td>Gerencia de Proyectos</td><td class="num-cell">1</td><td class="num-cell">12</td><td class="num-cell"><strong>13</strong></td><td class="num-cell">10.7%</td><td class="num-cell"><span class="tag tg">Estrella</span></td></tr>
+        <tr><td>Finanzas Virtual</td><td class="num-cell">1</td><td class="num-cell">8</td><td class="num-cell"><strong>9</strong></td><td class="num-cell">7.4%</td><td class="num-cell"><span class="tag tg">Líder</span></td></tr>
+        <tr><td>Comunicación Estratégica</td><td class="num-cell">3</td><td class="num-cell">6</td><td class="num-cell"><strong>9</strong></td><td class="num-cell">7.4%</td><td class="num-cell"><span class="tag tg">Líder</span></td></tr>
+        <tr><td>Gerencia Talento Humano</td><td class="num-cell">2</td><td class="num-cell">7</td><td class="num-cell"><strong>9</strong></td><td class="num-cell">7.4%</td><td class="num-cell"><span class="tag tg">Líder</span></td></tr>
+        <tr><td>SST Virtual</td><td class="num-cell">2</td><td class="num-cell">7</td><td class="num-cell"><strong>9</strong></td><td class="num-cell">7.4%</td><td class="num-cell"><span class="tag tg">Líder</span></td></tr>
+        <tr><td>Finanzas Presencial</td><td class="num-cell">4</td><td class="num-cell">4</td><td class="num-cell"><strong>8</strong></td><td class="num-cell">6.6%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr><td>Analítica Big Data</td><td class="num-cell">1</td><td class="num-cell">5</td><td class="num-cell"><strong>6</strong></td><td class="num-cell">5.0%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr><td>Estrategia Publicitaria Marca</td><td class="num-cell">0</td><td class="num-cell">6</td><td class="num-cell"><strong>6</strong></td><td class="num-cell">5.0%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr><td>Inteligencia Artificial</td><td class="num-cell">2</td><td class="num-cell">4</td><td class="num-cell"><strong>6</strong></td><td class="num-cell">5.0%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr><td>Logística Presencial</td><td class="num-cell">2</td><td class="num-cell">4</td><td class="num-cell"><strong>6</strong></td><td class="num-cell">5.0%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr><td>Logística Virtual</td><td class="num-cell">1</td><td class="num-cell">5</td><td class="num-cell"><strong>6</strong></td><td class="num-cell">5.0%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr><td>Mercadeo</td><td class="num-cell">1</td><td class="num-cell">5</td><td class="num-cell"><strong>6</strong></td><td class="num-cell">5.0%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr><td>Ingeniería Clínica</td><td class="num-cell">1</td><td class="num-cell">4</td><td class="num-cell"><strong>5</strong></td><td class="num-cell">4.1%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr><td>Interculturalidad y Género</td><td class="num-cell">1</td><td class="num-cell">4</td><td class="num-cell"><strong>5</strong></td><td class="num-cell">4.1%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr><td>SST Presencial</td><td class="num-cell">1</td><td class="num-cell">3</td><td class="num-cell"><strong>4</strong></td><td class="num-cell">3.3%</td><td class="num-cell"><span class="tag ta">Potencial</span></td></tr>
+        <tr><td>Gerencia Mantenimiento</td><td class="num-cell">0</td><td class="num-cell">3</td><td class="num-cell"><strong>3</strong></td><td class="num-cell">2.5%</td><td class="num-cell"><span class="tag ta">Potencial</span></td></tr>
+        <tr><td>Comercio Exterior</td><td class="num-cell">1</td><td class="num-cell">2</td><td class="num-cell"><strong>3</strong></td><td class="num-cell">2.5%</td><td class="num-cell"><span class="tag ta">Potencial</span></td></tr>
+        <tr><td>Eficiencia Energética</td><td class="num-cell">1</td><td class="num-cell">2</td><td class="num-cell"><strong>3</strong></td><td class="num-cell">2.5%</td><td class="num-cell"><span class="tag ta">Potencial</span></td></tr>
+        <tr><td>Diseño Publicitario Digital</td><td class="num-cell">0</td><td class="num-cell">2</td><td class="num-cell"><strong>2</strong></td><td class="num-cell">1.7%</td><td class="num-cell"><span class="tag tr">Riesgo</span></td></tr>
+        <tr><td>Com. y Periodismo Digital</td><td class="num-cell">1</td><td class="num-cell">1</td><td class="num-cell"><strong>2</strong></td><td class="num-cell">1.7%</td><td class="num-cell"><span class="tag tr">Riesgo</span></td></tr>
+        <tr><td>DDHH y Territorios</td><td class="num-cell">0</td><td class="num-cell">1</td><td class="num-cell"><strong>1</strong></td><td class="num-cell">0.8%</td><td class="num-cell"><span class="tag tr">Riesgo</span></td></tr>
+        <tr class="total-row"><td><strong>SUBTOTAL</strong></td><td class="num-cell">26</td><td class="num-cell">95</td><td class="num-cell">121</td><td class="num-cell">100%</td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🎓 Maestrías</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Programa</th><th class="c">Interesados</th><th class="c">Admitidos</th><th class="c">Total</th><th class="c">% del Nivel</th><th class="c">Estado</th></tr></thead>
+      <tbody>
+        <tr><td>Maestría en IA y Ciencia de Datos</td><td class="num-cell">7</td><td class="num-cell">43</td><td class="num-cell"><strong>50</strong></td><td class="num-cell">51.0%</td><td class="num-cell"><span class="tag tg">Estrella #1</span></td></tr>
+        <tr><td>Maestría en Sistemas Energéticos</td><td class="num-cell">2</td><td class="num-cell">13</td><td class="num-cell"><strong>15</strong></td><td class="num-cell">15.3%</td><td class="num-cell"><span class="tag tg">Líder</span></td></tr>
+        <tr><td>Maestría en Administración Empresas</td><td class="num-cell">3</td><td class="num-cell">11</td><td class="num-cell"><strong>14</strong></td><td class="num-cell">14.3%</td><td class="num-cell"><span class="tag tg">Líder</span></td></tr>
+        <tr><td>Maestría en Gerencia de Ingeniería</td><td class="num-cell">2</td><td class="num-cell">9</td><td class="num-cell"><strong>11</strong></td><td class="num-cell">11.2%</td><td class="num-cell"><span class="tag tb">Sólido</span></td></tr>
+        <tr><td>Maestría en Comunicación Digital</td><td class="num-cell">2</td><td class="num-cell">3</td><td class="num-cell"><strong>5</strong></td><td class="num-cell">5.1%</td><td class="num-cell"><span class="tag ta">Potencial</span></td></tr>
+        <tr><td>Maestría en SST</td><td class="num-cell">0</td><td class="num-cell">3</td><td class="num-cell"><strong>3</strong></td><td class="num-cell">3.1%</td><td class="num-cell"><span class="tag tr">Riesgo</span></td></tr>
+        <tr class="total-row"><td><strong>SUBTOTAL</strong></td><td class="num-cell">16</td><td class="num-cell">82</td><td class="num-cell">98</td><td class="num-cell">100%</td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ ESTADOS CRM ═══════════════════ -->
+<div id="estados" class="section">
+  <div class="sec-title"><h2>Análisis por Estado CRM</h2><div class="line"></div></div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-lbl">Total Registros</div><div class="kpi-val">5,670</div></div>
+    <div class="kpi g"><div class="kpi-lbl">Interesados</div><div class="kpi-val">991</div><div class="kpi-sub">17.5%</div></div>
+    <div class="kpi"><div class="kpi-lbl">No Contesta Total</div><div class="kpi-val">3,031</div><div class="kpi-sub">53.4%</div><span class="badge">Cuello de botella</span></div>
+    <div class="kpi a"><div class="kpi-lbl">No Interesados</div><div class="kpi-val">1,252</div><div class="kpi-sub">22.1%</div><span class="badge a">Pérdida</span></div>
+  </div>
+
+  <!-- RESUMEN DE ESTADOS -->
+  <div class="card">
+    <div class="card-title">📊 Distribución Global de Estados</div>
+    <div id="estados-bars"></div>
+  </div>
+
+  <!-- TABLA COMPLETA DE PROGRAMAS POR ESTADO -->
+  <div class="card">
+    <div class="card-title">📋 Todos los Programas — Detalle Completo por Estado CRM</div>
+    <div class="filter-bar">
+      <div class="filter-group">
+        <span class="filter-label">🎨 Filtrar por riesgo:</span>
+        <button class="filter-btn active" id="fb-all" onclick="setRiskFilter('all',this)">
+          <span class="fb-dot" style="background:#888"></span> Todos
+        </button>
+        <button class="filter-btn" id="fb-alto" onclick="setRiskFilter('alto',this)">
+          <span class="fb-dot" style="background:#DC142D"></span> No Cont. ≥50% — Riesgo Alto
+        </button>
+        <button class="filter-btn" id="fb-medio" onclick="setRiskFilter('medio',this)">
+          <span class="fb-dot" style="background:#f57c00"></span> No Cont. 30–49% — Riesgo Medio
+        </button>
+        <button class="filter-btn" id="fb-bajo" onclick="setRiskFilter('bajo',this)">
+          <span class="fb-dot" style="background:#2e7d32"></span> Favorable — Bajo Riesgo
+        </button>
+      </div>
+      <div class="filter-group">
+        <input type="text" id="prog-search" placeholder="🔍 Buscar programa..." oninput="applyFilters()">
+        <button class="sort-btn" onclick="sortTable(2,'num')">↕ Interesados</button>
+        <button class="sort-btn" onclick="sortTable(3,'num')">↕ No Contesta</button>
+        <button class="sort-btn" onclick="sortTable(9,'num')">↕ Total</button>
+        <button class="sort-btn" onclick="sortTable(0,'str')">↕ A–Z</button>
+      </div>
+    </div>
+    <div id="filter-count" style="font-size:11px;color:#888;margin-bottom:8px;"></div>
+    <div class="tbl-wrap">
+      <table id="crm-table">
+        <thead>
+          <tr>
+            <th>Programa Académico</th>
+            <th class="c">Enviado</th>
+            <th class="c">Interesado</th>
+            <th class="c">No Contesta<br><span style="font-weight:400;font-size:10px;">(+No Cont. 1)</span></th>
+            <th class="c">% No Cont.</th>
+            <th class="c">No Interesado</th>
+            <th class="c">% Interesado</th>
+            <th class="c">Pend. Pago<br><span style="font-weight:400;font-size:10px;">Matrícula</span></th>
+            <th class="c">Respondida</th>
+            <th class="c">Total</th>
+          </tr>
+        </thead>
+        <tbody id="crm-tbody">
+          <tr><td class="prog-name">DOCTORADO EN BIOINGENIERÍA</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">9</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">6</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">35.3%</td><td class="num-cell">2</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">52.9%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">17</td></tr>
+<tr><td class="prog-name">DOCTORADO EN INGENIERÍA</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">18</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">19</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">45.2%</td><td class="num-cell">5</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">42.9%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">42</td></tr>
+<tr><td class="prog-name">DOCTORADO EN SOSTENIBILIDAD</td><td class="num-cell">6</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">24</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">51</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">56.7%</td><td class="num-cell">9</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">26.7%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">90</td></tr>
+<tr><td class="prog-name">ESP. ANALÍTICA DE BIG DATA</td><td class="num-cell">7</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">28</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">91</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">54.8%</td><td class="num-cell">40</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">16.9%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">166</td></tr>
+<tr><td class="prog-name">ESP. COMERCIO EXTERIOR</td><td class="num-cell">8</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">30</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">97</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">59.1%</td><td class="num-cell">26</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">18.3%</td><td class="num-cell"><strong style="color:#DC142D">1</strong></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">164</td></tr>
+<tr><td class="prog-name">ESP. COMUNICACIÓN ESTRATÉGICA</td><td class="num-cell">2</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">16</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">30</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">54.5%</td><td class="num-cell">7</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">29.1%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">55</td></tr>
+<tr><td class="prog-name">ESP. COM. ESTRATÉGICA DE MARCA DIGITAL</td><td class="num-cell">2</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">18</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">29</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">40.8%</td><td class="num-cell">19</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">25.4%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">71</td></tr>
+<tr><td class="prog-name">ESP. COM. Y PERIODISMO CON IA - VIRTUAL</td><td class="num-cell">11</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">22</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">91</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">56.9%</td><td class="num-cell">35</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">13.8%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">160</td></tr>
+<tr><td class="prog-name">ESP. CONTRATACIÓN ESTATAL</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">2</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">0</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">0.0%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">100.0%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">2</td></tr>
+<tr><td class="prog-name">ESP. DERECHO ADUANERO Y COM. EXTERIOR</td><td class="num-cell">35</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">41</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">327</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">62.4%</td><td class="num-cell">113</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">7.8%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">524</td></tr>
+<tr><td class="prog-name">ESP. DERECHOS HUMANOS Y TERRITORIOS</td><td class="num-cell">25</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">114</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">317</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">59.1%</td><td class="num-cell">77</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">21.3%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">536</td></tr>
+<tr><td class="prog-name">ESP. DISEÑO PUBLICITARIO CONT. DIGITALES</td><td class="num-cell">5</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">36</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">96</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">55.5%</td><td class="num-cell">32</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">20.8%</td><td class="num-cell"><strong style="color:#DC142D">2</strong></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">173</td></tr>
+<tr><td class="prog-name">ESP. EFICIENCIA ENERGÉTICA</td><td class="num-cell">7</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">19</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">34</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">42.5%</td><td class="num-cell">18</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">23.8%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">80</td></tr>
+<tr><td class="prog-name">ESP. ENERGÍAS RENOVABLES</td><td class="num-cell">6</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">9</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">10</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">35.7%</td><td class="num-cell">3</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">32.1%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">28</td></tr>
+<tr><td class="prog-name">ESP. FINANZAS</td><td class="num-cell">3</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">17</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">31</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">50.8%</td><td class="num-cell">8</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">27.9%</td><td class="num-cell"><strong style="color:#DC142D">1</strong></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">61</td></tr>
+<tr><td class="prog-name">ESP. FINANZAS - VIRTUAL</td><td class="num-cell">3</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">31</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">86</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">61.4%</td><td class="num-cell">18</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">22.1%</td><td class="num-cell"><strong style="color:#DC142D">2</strong></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">140</td></tr>
+<tr><td class="prog-name">ESP. FINANZAS - VIRTUAL UCEVA</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">2</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">0</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">0.0%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">100.0%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">2</td></tr>
+<tr><td class="prog-name">ESP. GERENCIA DE MANTENIMIENTO</td><td class="num-cell">13</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">27</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">82</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">51.6%</td><td class="num-cell">35</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">17.0%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">159</td></tr>
+<tr><td class="prog-name">ESP. GERENCIA DE PROYECTOS</td><td class="num-cell">3</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">38</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">74</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">53.2%</td><td class="num-cell">24</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">27.3%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">139</td></tr>
+<tr><td class="prog-name">ESP. GERENCIA DEL TALENTO HUMANO</td><td class="num-cell">5</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">40</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">29</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">30.5%</td><td class="num-cell">18</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">42.1%</td><td class="num-cell"><strong style="color:#DC142D">2</strong></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">95</td></tr>
+<tr><td class="prog-name">ESP. INGENIERÍA CLÍNICA</td><td class="num-cell">8</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">36</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">76</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">51.4%</td><td class="num-cell">26</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">24.3%</td><td class="num-cell"><strong style="color:#DC142D">1</strong></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">148</td></tr>
+<tr><td class="prog-name">ESP. INTELIGENCIA ARTIFICIAL</td><td class="num-cell">15</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">48</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">142</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">55.7%</td><td class="num-cell">48</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">18.8%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">255</td></tr>
+<tr><td class="prog-name">ESP. INTERCULTURALIDAD Y GÉNERO</td><td class="num-cell">1</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">23</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">61</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">59.2%</td><td class="num-cell">14</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">22.3%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">103</td></tr>
+<tr><td class="prog-name">ESP. LOGÍSTICA</td><td class="num-cell">38</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">15</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">138</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">38.5%</td><td class="num-cell">158</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">4.2%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">358</td></tr>
+<tr><td class="prog-name">ESP. LOGÍSTICA - VIRTUAL</td><td class="num-cell">21</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">68</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">252</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">46.7%</td><td class="num-cell">191</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">12.6%</td><td class="num-cell"><strong style="color:#DC142D">1</strong></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">540</td></tr>
+<tr><td class="prog-name">ESP. MERCADEO</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">25</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">89</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">61.4%</td><td class="num-cell">28</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">17.2%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">145</td></tr>
+<tr><td class="prog-name">ESP. SST PRESENCIAL</td><td class="num-cell">11</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">15</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">83</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">48.0%</td><td class="num-cell">59</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">8.7%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">173</td></tr>
+<tr><td class="prog-name">ESP. SST VIRTUAL</td><td class="num-cell">16</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">39</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">165</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">52.5%</td><td class="num-cell">92</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">12.4%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><strong style="color:#f57c00">1</strong></td><td class="num-cell" style="font-weight:700">314</td></tr>
+<tr><td class="prog-name">ESTRATEGIA PUBLICITARIA MARCA DIGITAL</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">17</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">89</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">66.4%</td><td class="num-cell">28</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">12.7%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">134</td></tr>
+<tr><td class="prog-name">MAESTRÍA EN ADMÓN. DE EMPRESAS</td><td class="num-cell">2</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">11</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">24</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">51.1%</td><td class="num-cell">9</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">23.4%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">47</td></tr>
+<tr><td class="prog-name">MAESTRÍA EN COMUNICACIÓN DIGITAL</td><td class="num-cell">9</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">33</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">85</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">55.2%</td><td class="num-cell">25</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">21.4%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">154</td></tr>
+<tr><td class="prog-name">MAESTRÍA EN GERENCIA DE INGENIERÍA</td><td class="num-cell">6</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">35</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">60</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">53.1%</td><td class="num-cell">9</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">31.0%</td><td class="num-cell"><strong style="color:#DC142D">2</strong></td><td class="num-cell"><strong style="color:#f57c00">1</strong></td><td class="num-cell" style="font-weight:700">113</td></tr>
+<tr><td class="prog-name">MAESTRÍA EN IA Y CIENCIA DE DATOS</td><td class="num-cell">14</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">41</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">142</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">61.5%</td><td class="num-cell">29</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">17.7%</td><td class="num-cell"><strong style="color:#DC142D">3</strong></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">231</td></tr>
+<tr><td class="prog-name">MAESTRÍA EN SST</td><td class="num-cell">2</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">24</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-weight:700">59</td><td class="num-cell" style="background:#fde8ea;color:#961423;font-size:11px">58.4%</td><td class="num-cell">16</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">23.8%</td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">101</td></tr>
+<tr><td class="prog-name">MAESTRÍA EN SISTEMAS ENERGÉTICOS</td><td class="num-cell">7</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-weight:700">17</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-weight:700">32</td><td class="num-cell" style="background:#fff3e0;color:#e65100;font-size:11px">48.5%</td><td class="num-cell">9</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20;font-size:11px">25.8%</td><td class="num-cell"><strong style="color:#DC142D">1</strong></td><td class="num-cell"><span style="color:#ccc">—</span></td><td class="num-cell" style="font-weight:700">66</td></tr>
+
+        </tbody>
+        <tfoot>
+          <tr style="background:#f5f0e8;">
+            <td style="font-weight:700;font-size:12px;">TOTAL GENERAL</td>
+            <td class="num-cell" style="font-weight:700">291</td>
+            <td class="num-cell" style="font-weight:700;color:#1b5e20">991</td>
+            <td class="num-cell" style="font-weight:700;color:#961423">3,031</td>
+            <td class="num-cell" style="font-weight:700;color:#961423">53.4%</td>
+            <td class="num-cell" style="font-weight:700">1,252</td>
+            <td class="num-cell" style="font-weight:700;color:#1b5e20">17.5%</td>
+            <td class="num-cell" style="font-weight:700;color:#DC142D">16</td>
+            <td class="num-cell" style="font-weight:700;color:#f57c00">26</td>
+            <td class="num-cell" style="font-weight:700">5,670</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:#888;">
+      * <strong>Pend. Pago Matrícula</strong> en rojo = cierre comercial inmediato disponible. &nbsp;|&nbsp; <strong>Respondida</strong> en naranja = prospecto activo con respuesta reciente.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Tabla Resumen — Riesgo por Estado</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Estado CRM</th><th class="c">Cantidad</th><th class="c">% Total</th><th>Conv. Potencial</th><th class="c">Riesgo</th><th>Acción</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Interesado</strong></td><td class="num-cell">991</td><td class="num-cell">17.5%</td><td>Alta (20–25%)</td><td class="num-cell"><span class="tag tg">Bajo</span></td><td>Seguimiento inmediato</td></tr>
+        <tr><td><strong>No contesta</strong></td><td class="num-cell">2,705</td><td class="num-cell">47.7%</td><td>Baja-Media (5–10%)</td><td class="num-cell"><span class="tag tr">Alto</span></td><td>Campaña multi-canal urgente</td></tr>
+        <tr><td><strong>No contesta 1</strong></td><td class="num-cell">326</td><td class="num-cell">5.7%</td><td>Baja (5–8%)</td><td class="num-cell"><span class="tag tr">Alto</span></td><td>2do intento + WhatsApp</td></tr>
+        <tr><td><strong>No Interesado</strong></td><td class="num-cell">1,252</td><td class="num-cell">22.1%</td><td>Muy baja (1–2%)</td><td class="num-cell"><span class="tag tr">Alto</span></td><td>Analizar causas captación</td></tr>
+        <tr><td><strong>Enviado</strong></td><td class="num-cell">291</td><td class="num-cell">5.1%</td><td>Media (15–20%)</td><td class="num-cell"><span class="tag ta">Medio</span></td><td>Activar primer contacto</td></tr>
+        <tr><td><strong>Respondida</strong></td><td class="num-cell">26</td><td class="num-cell">0.5%</td><td>Alta (30–40%)</td><td class="num-cell"><span class="tag tg">Bajo</span></td><td>Conversión a admitido urgente</td></tr>
+        <tr><td><strong>Pend. pago matrícula</strong></td><td class="num-cell">16</td><td class="num-cell">0.3%</td><td>Muy alta (70–80%)</td><td class="num-cell"><span class="tag tg">Bajo</span></td><td>Contacto inmediato — cierre</td></tr>
+        <tr><td><strong>Núm. equivocado</strong></td><td class="num-cell">42</td><td class="num-cell">0.7%</td><td>Sin datos</td><td class="num-cell"><span class="tag ta">Medio</span></td><td>Depuración CRM</td></tr>
+        <tr><td><strong>No cumple académico</strong></td><td class="num-cell">14</td><td class="num-cell">0.2%</td><td>Nula</td><td class="num-cell"><span class="tag tr">Alto</span></td><td>Redirigir o descartar</td></tr>
+        <tr class="total-row"><td><strong>TOTAL</strong></td><td class="num-cell">5,670</td><td class="num-cell">100%</td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ EMBUDO ═══════════════════ -->
+<div id="embudo" class="section">
+  <div class="sec-title"><h2>Embudo Comercial — Análisis de Conversión</h2><div class="line"></div></div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">🔽 Funnel de Conversión</div>
+      <div class="funnel-wrap">
+
+        <div class="funnel-stage">
+          <div class="funnel-bar-outer">
+            <div class="funnel-bar-inner" style="background:var(--red-dark);">
+              <span class="f-label">Total Registros CRM</span>
+              <div class="f-right"><span class="f-val">5,670</span><span class="f-pct">100% base</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="funnel-connector">
+          <span class="arrow">▼</span>
+          <span>Pérdida por No Interesados</span>
+          <span class="loss-badge">−1,252 (−22.1%)</span>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="funnel-bar-outer" style="padding:0 4%;">
+            <div class="funnel-bar-inner" style="background:#B81226;">
+              <span class="f-label">Registros Activos (sin No Interesados)</span>
+              <div class="f-right"><span class="f-val">4,418</span><span class="f-pct">77.9% base</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="funnel-connector">
+          <span class="arrow">▼</span>
+          <span>Sin contacto efectivo — No Contesta</span>
+          <span class="loss-badge">−3,031 (−68.6% activos)</span>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="funnel-bar-outer" style="padding:0 10%;">
+            <div class="funnel-bar-inner" style="background:#DC142D;">
+              <span class="f-label">Contactados / Con Respuesta</span>
+              <div class="f-right"><span class="f-val">1,387</span><span class="f-pct">24.5% base</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="funnel-connector">
+          <span class="arrow">▼</span>
+          <span>No avanzan en proceso</span>
+          <span class="loss-badge">−396 (−28.6%)</span>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="funnel-bar-outer" style="padding:0 18%;">
+            <div class="funnel-bar-inner" style="background:#E03040;">
+              <span class="f-label">Interesados CRM Activos</span>
+              <div class="f-right"><span class="f-val">991</span><span class="f-pct">17.5% base</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="funnel-connector">
+          <span class="arrow">▼</span>
+          <span>Conversión a enrolado</span>
+          <span class="loss-badge">−749 (−75.6%)</span>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="funnel-bar-outer" style="padding:0 26%;">
+            <div class="funnel-bar-inner" style="background:var(--red-accent);">
+              <span class="f-label">Enrolados (Admitidos + Int.)</span>
+              <div class="f-right"><span class="f-val">242</span><span class="f-pct">4.3% base</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="funnel-connector">
+          <span class="arrow">▼</span>
+          <span>Pendientes pago matrícula</span>
+          <span class="loss-badge">−16 activos</span>
+        </div>
+
+        <div class="funnel-stage">
+          <div class="funnel-bar-outer" style="padding:0 34%;">
+            <div class="funnel-bar-inner" style="background:#2e7d32;">
+              <span class="f-label">Matrícula Formalizada</span>
+              <div class="f-right"><span class="f-val">~226</span><span class="f-pct">4.0% base</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Pérdida por Etapa del Embudo</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Etapa</th><th class="c">Registros</th><th class="c">Pérdida</th><th class="c">% Pérdida</th><th class="c">Riesgo</th></tr></thead>
+        <tbody>
+          <tr><td>Entrada → No Interesados</td><td class="num-cell">5,670</td><td class="num-cell" style="color:#961423">−1,252</td><td class="num-cell">22.1%</td><td class="num-cell"><span class="tag tr">Alto</span></td></tr>
+          <tr><td>Activos → No Contesta</td><td class="num-cell">4,418</td><td class="num-cell" style="color:#961423">−3,031</td><td class="num-cell">68.6%</td><td class="num-cell"><span class="tag tr">Crítico</span></td></tr>
+          <tr><td>Contactados → Sin Conv.</td><td class="num-cell">1,387</td><td class="num-cell" style="color:#961423">−396</td><td class="num-cell">28.6%</td><td class="num-cell"><span class="tag tr">Alto</span></td></tr>
+          <tr><td>Interesados → Enrolados</td><td class="num-cell">991</td><td class="num-cell" style="color:#e65100">−749</td><td class="num-cell">75.6%</td><td class="num-cell"><span class="tag ta">Medio</span></td></tr>
+          <tr><td>Enrolados → Matrícula</td><td class="num-cell">242</td><td class="num-cell" style="color:#1b5e20">−16</td><td class="num-cell">6.6%</td><td class="num-cell"><span class="tag tg">Bajo</span></td></tr>
+        </tbody>
+      </table></div>
+      <div class="alert alert-r" style="margin-top:14px;"><h4>🚨 Cuello de Botella Principal</h4><p>El 68.6% de los registros activos no responde. Una campaña multi-canal (WhatsApp + email + llamadas en horario alternativo) puede recuperar 135–300 enrolados.</p></div>
+      <div class="alert alert-a" style="margin-top:8px;"><h4>⚠️ Segunda Mayor Fuga</h4><p>22.1% marcados "No Interesados" apunta a problemas en calidad o segmentación de leads en captación.</p></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📈 Comparativo por Programa — Estados CRM Principales</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Programa</th><th class="c">Total</th><th class="c">Interesado</th><th class="c">No Contesta</th><th class="c">No Interesado</th><th class="c">Enviado</th><th class="c">% Interés</th></tr></thead>
+      <tbody>
+        <tr><td>Esp. Logística Virtual</td><td class="num-cell">540</td><td class="num-cell" style="color:#1b5e20;font-weight:700">68</td><td class="num-cell" style="color:#961423;font-weight:700">252</td><td class="num-cell">191</td><td class="num-cell">21</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20">12.6%</td></tr>
+        <tr><td>Esp. Derechos Humanos</td><td class="num-cell">536</td><td class="num-cell" style="color:#1b5e20;font-weight:700">114</td><td class="num-cell" style="color:#961423;font-weight:700">317</td><td class="num-cell">77</td><td class="num-cell">25</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20">21.3%</td></tr>
+        <tr><td>Esp. Derecho Aduanero</td><td class="num-cell">524</td><td class="num-cell">41</td><td class="num-cell" style="color:#961423;font-weight:700">327</td><td class="num-cell">113</td><td class="num-cell">35</td><td class="num-cell" style="background:#fde8ea;color:#961423">7.8%</td></tr>
+        <tr><td>Esp. Logística Presencial</td><td class="num-cell">358</td><td class="num-cell">15</td><td class="num-cell" style="color:#961423;font-weight:700">138</td><td class="num-cell">158</td><td class="num-cell">38</td><td class="num-cell" style="background:#fde8ea;color:#961423">4.2%</td></tr>
+        <tr><td>Esp. SST Virtual</td><td class="num-cell">314</td><td class="num-cell">39</td><td class="num-cell" style="color:#961423;font-weight:700">165</td><td class="num-cell">92</td><td class="num-cell">16</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20">12.4%</td></tr>
+        <tr><td>Maestría IA y Datos</td><td class="num-cell">231</td><td class="num-cell" style="color:#1b5e20;font-weight:700">41</td><td class="num-cell" style="color:#961423;font-weight:700">142</td><td class="num-cell">29</td><td class="num-cell">14</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20">17.7%</td></tr>
+        <tr><td>Esp. Inteligencia Artificial</td><td class="num-cell">255</td><td class="num-cell" style="color:#1b5e20;font-weight:700">48</td><td class="num-cell" style="color:#961423;font-weight:700">142</td><td class="num-cell">48</td><td class="num-cell">15</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20">18.8%</td></tr>
+        <tr><td>Esp. Gerencia Proyectos</td><td class="num-cell">139</td><td class="num-cell" style="color:#1b5e20;font-weight:700">38</td><td class="num-cell">74</td><td class="num-cell">24</td><td class="num-cell">3</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20">27.3%</td></tr>
+        <tr><td>Maestría Comunic. Digital</td><td class="num-cell">154</td><td class="num-cell" style="color:#1b5e20;font-weight:700">33</td><td class="num-cell">85</td><td class="num-cell">25</td><td class="num-cell">9</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20">21.4%</td></tr>
+        <tr><td>Maestría Gerencia Ing.</td><td class="num-cell">113</td><td class="num-cell" style="color:#1b5e20;font-weight:700">35</td><td class="num-cell">60</td><td class="num-cell">9</td><td class="num-cell">6</td><td class="num-cell" style="background:#e8f5e9;color:#1b5e20">31.0%</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ RECUPERACIÓN ═══════════════════ -->
+<div id="recuperacion" class="section">
+  <div class="sec-title"><h2>Análisis de Recuperación Comercial</h2><div class="line"></div></div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-lbl">Potencial Recuperable</div><div class="kpi-val">4,309</div><div class="kpi-sub">Interesados + No Contesta + Enviados</div></div>
+    <div class="kpi g"><div class="kpi-lbl">Interesados Activos</div><div class="kpi-val">991</div><div class="kpi-sub">Alta probabilidad</div></div>
+    <div class="kpi a"><div class="kpi-lbl">No Contesta</div><div class="kpi-val">3,031</div><div class="kpi-sub">Media probabilidad</div></div>
+    <div class="kpi b"><div class="kpi-lbl">Pend. Pago Matrícula</div><div class="kpi-val">16</div><div class="kpi-sub">Conversión casi segura</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🔄 Escenarios de Recuperación</div>
+    <div class="rec-grid">
+      <div class="rec-card"><div class="rec-pct">5%</div><div class="rec-num">+215</div><div class="rec-lbl">enrolados adicionales</div><div style="font-size:11px;color:#888;margin-top:6px">De 4,309 recuperables</div></div>
+      <div class="rec-card"><div class="rec-pct">10%</div><div class="rec-num">+431</div><div class="rec-lbl">enrolados adicionales</div><div style="font-size:11px;color:#888;margin-top:6px">Escenario moderado</div></div>
+      <div class="rec-card"><div class="rec-pct">15%</div><div class="rec-num">+646</div><div class="rec-lbl">enrolados adicionales</div><div style="font-size:11px;color:#888;margin-top:6px">Esfuerzo sostenido</div></div>
+      <div class="rec-card"><div class="rec-pct">20%</div><div class="rec-num">+862</div><div class="rec-lbl">enrolados adicionales</div><div style="font-size:11px;color:#888;margin-top:6px">Máximo teórico</div></div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">🎯 Potencial por Segmento</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Segmento</th><th class="c">Volumen</th><th class="c">Conv. Est.</th><th class="c">Add. Enrol.</th><th class="c">Prioridad</th></tr></thead>
+        <tbody>
+          <tr><td>Pend. Pago Matrícula</td><td class="num-cell">16</td><td class="num-cell">75%</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+12</td><td class="num-cell"><span class="tag tg">P0</span></td></tr>
+          <tr><td>Respondida</td><td class="num-cell">26</td><td class="num-cell">35%</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+9</td><td class="num-cell"><span class="tag tg">P0</span></td></tr>
+          <tr><td>Interesados CRM</td><td class="num-cell">991</td><td class="num-cell">15%</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+149</td><td class="num-cell"><span class="tag tg">P1</span></td></tr>
+          <tr><td>Enviados sin contactar</td><td class="num-cell">291</td><td class="num-cell">12%</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+35</td><td class="num-cell"><span class="tag tb">P1</span></td></tr>
+          <tr><td>No Contesta</td><td class="num-cell">2,705</td><td class="num-cell">5%</td><td class="num-cell" style="color:#e65100;font-weight:700">+135</td><td class="num-cell"><span class="tag ta">P2</span></td></tr>
+          <tr><td>No Contesta 1</td><td class="num-cell">326</td><td class="num-cell">4%</td><td class="num-cell" style="color:#e65100;font-weight:700">+13</td><td class="num-cell"><span class="tag ta">P2</span></td></tr>
+          <tr class="total-row"><td><strong>TOTAL</strong></td><td class="num-cell">4,355</td><td></td><td class="num-cell" style="color:#1b5e20">+353</td><td></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Top Programas — Mayor Recuperación</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Programa</th><th class="c">Interesados</th><th class="c">No Cont.</th><th class="c">Pot. Est.</th></tr></thead>
+        <tbody>
+          <tr><td>Esp. Derechos Humanos</td><td class="num-cell">114</td><td class="num-cell">317</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+64</td></tr>
+          <tr><td>Esp. Logística Virtual</td><td class="num-cell">68</td><td class="num-cell">252</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+48</td></tr>
+          <tr><td>Esp. Derecho Aduanero</td><td class="num-cell">41</td><td class="num-cell">327</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+56</td></tr>
+          <tr><td>Maestría IA y Datos</td><td class="num-cell">41</td><td class="num-cell">142</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+28</td></tr>
+          <tr><td>Esp. Inteligencia Artificial</td><td class="num-cell">48</td><td class="num-cell">142</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+27</td></tr>
+        </tbody>
+      </table></div>
+      <div class="alert alert-g" style="margin-top:14px;"><h4>💡 Mayor ROI de Recuperación</h4><p>Concentrar esfuerzo en estos 5 programas puede generar <strong>+223 enrolados adicionales</strong> con tasa del 10%. Priorizar contacto multi-canal personalizado.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ PROYECCIONES ═══════════════════ -->
+<div id="proyeccion" class="section">
+  <div class="sec-title"><h2>Proyección de Matrículas</h2><div class="line"></div></div>
+  <div class="alert alert-a"><h4>📌 Base de Cálculo · Ventana Comercial Activa</h4><p>Total registros: <strong>5,670</strong> · Enrolados actuales: <strong>242</strong> · Conversión actual: <strong>4.3%</strong> · Meta histórica: <strong>7.0–8.0%</strong><br>
+  ⏰ <strong>Fecha hoy: 10 de junio 2026 · Inicio de clases: 8 de agosto 2026 · Quedan 59 días.</strong> Las proyecciones son alcanzables si se ejecuta el plan de acción en las próximas 4 semanas. Después de julio 15, la ventana de conversión se reduce drásticamente.</p></div>
+  <div class="scen-grid">
+    <div class="scen-card cons"><div class="scen-lbl">🟠 Conservador</div><div style="font-size:12px;color:#f57c00;font-weight:600;margin-bottom:4px">Conversión 7.0%</div><div class="scen-num">397</div><div class="scen-sub">matrículas proyectadas</div><div class="scen-desc"><strong>Gap:</strong> +155 · <strong>Incremento:</strong> +64%<br>Requiere plan estándar + call center activo</div></div>
+    <div class="scen-card real"><div class="scen-lbl">🔴 Realista</div><div style="font-size:12px;color:var(--red);font-weight:600;margin-bottom:4px">Conversión 7.3%</div><div class="scen-num">414</div><div class="scen-sub">matrículas proyectadas</div><div class="scen-desc"><strong>Gap:</strong> +172 · <strong>Incremento:</strong> +71%<br>Recuperación 10% No Contesta + seguimiento interesados</div></div>
+    <div class="scen-card opti"><div class="scen-lbl">🟢 Optimista</div><div style="font-size:12px;color:#2e7d32;font-weight:600;margin-bottom:4px">Conversión 8.0%</div><div class="scen-num">454</div><div class="scen-sub">matrículas proyectadas</div><div class="scen-desc"><strong>Gap:</strong> +212 · <strong>Incremento:</strong> +88%<br>Estrategia integral: recuperación 15%+, nuevas campañas</div></div>
+  </div>
+  <div class="card" style="margin-top:20px;">
+    <div class="card-title">📊 Proyección por Nivel Académico</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Nivel</th><th class="c">Enrolados Act.</th><th class="c">Reg. CRM Est.</th><th class="c">Proy. 7%</th><th class="c">Proy. 7.3%</th><th class="c">Proy. 8%</th><th class="c">Gap 7%</th></tr></thead>
+      <tbody>
+        <tr><td>Especializaciones</td><td class="num-cell">121</td><td class="num-cell">~4,000</td><td class="num-cell">280</td><td class="num-cell">292</td><td class="num-cell">320</td><td class="num-cell" style="color:#1b5e20">+159</td></tr>
+        <tr><td>Maestrías</td><td class="num-cell">98</td><td class="num-cell">~1,200</td><td class="num-cell">84</td><td class="num-cell">88</td><td class="num-cell">96</td><td class="num-cell" style="color:#961423">−14</td></tr>
+        <tr><td>Doctorados</td><td class="num-cell">23</td><td class="num-cell">~150</td><td class="num-cell">11</td><td class="num-cell">11</td><td class="num-cell">12</td><td class="num-cell" style="color:#961423">−12</td></tr>
+        <tr class="total-row"><td><strong>TOTAL</strong></td><td class="num-cell">242</td><td class="num-cell">5,670</td><td class="num-cell">397</td><td class="num-cell">414</td><td class="num-cell">454</td><td class="num-cell" style="color:#961423">+155</td></tr>
+      </tbody>
+    </table></div>
+    <div class="alert alert-r" style="margin-top:14px;"><h4>🚨 Gap Comercial</h4><p>Se requieren <strong>155 enrolados adicionales</strong> para la meta conservadora (7%). Con el potencial de recuperación identificado (+353), esto es <strong>completamente alcanzable</strong> con ejecución inmediata.</p></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CALL CENTER ═══════════════════ -->
+<div id="callcenter" class="section">
+  <div class="sec-title"><h2>Prioridades para Call Center</h2><div class="line"></div></div>
+  <div class="card">
+    <div class="prio-head p1"><h4>🔴 PRIORIDAD 0 — CIERRE INMEDIATO (esta semana)</h4><span>+21 est.</span></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Segmento</th><th class="c">Volumen</th><th class="c">Conv. Est.</th><th>Mensaje Clave</th><th>Canal</th></tr></thead><tbody>
+      <tr><td><strong>Pendiente Pago Matrícula</strong></td><td class="num-cell">16</td><td class="num-cell" style="color:#1b5e20">75% → +12</td><td>"¿Necesita apoyo para completar su proceso de matrícula?"</td><td>Llamada + WhatsApp</td></tr>
+      <tr><td><strong>Respondida</strong></td><td class="num-cell">26</td><td class="num-cell" style="color:#1b5e20">35% → +9</td><td>"Tenemos su solicitud aprobada. ¿Cuándo podemos agendar su ingreso?"</td><td>Llamada personal</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="card">
+    <div class="prio-head p1"><h4>🔴 PRIORIDAD 1 — CONVERSIÓN URGENTE (7–15 días)</h4><span>+184 est.</span></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Segmento</th><th class="c">Volumen</th><th class="c">Conv. Est.</th><th>Estrategia</th></tr></thead><tbody>
+      <tr><td><strong>Interesados CRM</strong></td><td class="num-cell">991</td><td class="num-cell" style="color:#1b5e20">15% → +149</td><td>Llamada personalizada + oferta becas/descuento + testimoniales + fecha límite clara</td></tr>
+      <tr><td><strong>Enviados sin activar</strong></td><td class="num-cell">291</td><td class="num-cell" style="color:#e65100">12% → +35</td><td>Primer contacto de activación: presentar programa, resolver dudas, agendar cita virtual</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="card">
+    <div class="prio-head p2"><h4>🟠 PRIORIDAD 2 — NO CONTESTA (15–30 días)</h4><span>+148 est.</span></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Segmento</th><th class="c">Volumen</th><th class="c">Conv. Est.</th><th>Estrategia</th></tr></thead><tbody>
+      <tr><td><strong>No Contesta</strong></td><td class="num-cell">2,705</td><td class="num-cell" style="color:#e65100">5% → +135</td><td>Campaña multi-horario (7am / 12pm / 7pm) + WhatsApp automatizado + email secuencial</td></tr>
+      <tr><td><strong>No Contesta 1</strong></td><td class="num-cell">326</td><td class="num-cell" style="color:#e65100">4% → +13</td><td>2do y 3er intento en canales alternativos con cambio de horario</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="card">
+    <div class="prio-head p3"><h4>🔵 PRIORIDAD 3 — DEPURACIÓN (continuo)</h4><span>Calidad datos</span></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Segmento</th><th class="c">Volumen</th><th>Acción</th></tr></thead><tbody>
+      <tr><td>Número Equivocado</td><td class="num-cell">42</td><td>Depurar CRM. Buscar datos alternativos. Verificar fuente del lead.</td></tr>
+      <tr><td>No Cumple Académicamente</td><td class="num-cell">14</td><td>Redirigir a programas de menor nivel o prerrequisitos. No descartar definitivamente.</td></tr>
+      <tr><td>Diligenciando Formulario</td><td class="num-cell">4</td><td>Asistencia técnica inmediata para completar inscripción.</td></tr>
+    </tbody></table></div>
+  </div>
+  <div class="card">
+    <div class="card-title">📊 Ranking de Programas — Prioridad Call Center</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th class="c">#</th><th>Programa</th><th class="c">Interesados</th><th class="c">No Contesta</th><th class="c">Potencial Est.</th><th class="c">Prioridad</th></tr></thead>
+      <tbody>
+        <tr><td class="num-cell">1</td><td>Esp. Derechos Humanos</td><td class="num-cell" style="color:#1b5e20;font-weight:700">114</td><td class="num-cell" style="color:#961423;font-weight:700">317</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+64</td><td class="num-cell"><span class="tag tr">P1</span></td></tr>
+        <tr><td class="num-cell">2</td><td>Esp. Derecho Aduanero</td><td class="num-cell">41</td><td class="num-cell" style="color:#961423;font-weight:700">327</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+56</td><td class="num-cell"><span class="tag tr">P1</span></td></tr>
+        <tr><td class="num-cell">3</td><td>Esp. Logística Virtual</td><td class="num-cell" style="color:#1b5e20;font-weight:700">68</td><td class="num-cell" style="color:#961423;font-weight:700">252</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+48</td><td class="num-cell"><span class="tag tr">P1</span></td></tr>
+        <tr><td class="num-cell">4</td><td>Maestría IA y Ciencia de Datos</td><td class="num-cell">41</td><td class="num-cell" style="color:#961423;font-weight:700">142</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+28</td><td class="num-cell"><span class="tag tr">P1</span></td></tr>
+        <tr><td class="num-cell">5</td><td>Esp. Inteligencia Artificial</td><td class="num-cell">48</td><td class="num-cell" style="color:#961423;font-weight:700">142</td><td class="num-cell" style="color:#1b5e20;font-weight:700">+27</td><td class="num-cell"><span class="tag tr">P1</span></td></tr>
+        <tr><td class="num-cell">6</td><td>Esp. SST Virtual</td><td class="num-cell">39</td><td class="num-cell">165</td><td class="num-cell" style="color:#e65100;font-weight:700">+30</td><td class="num-cell"><span class="tag ta">P1-2</span></td></tr>
+        <tr><td class="num-cell">7</td><td>Maestría Comunicación Digital</td><td class="num-cell">33</td><td class="num-cell">85</td><td class="num-cell" style="color:#e65100;font-weight:700">+18</td><td class="num-cell"><span class="tag ta">P1-2</span></td></tr>
+        <tr><td class="num-cell">8</td><td>Esp. Gerencia de Proyectos</td><td class="num-cell">38</td><td class="num-cell">74</td><td class="num-cell" style="color:#e65100;font-weight:700">+16</td><td class="num-cell"><span class="tag ta">P1-2</span></td></tr>
+        <tr><td class="num-cell">9</td><td>Maestría Gerencia Ingeniería</td><td class="num-cell">35</td><td class="num-cell">60</td><td class="num-cell" style="color:#e65100;font-weight:700">+15</td><td class="num-cell"><span class="tag ta">P1-2</span></td></tr>
+        <tr><td class="num-cell">10</td><td>Esp. Logística Presencial</td><td class="num-cell">15</td><td class="num-cell">138</td><td class="num-cell" style="color:#e65100;font-weight:700">+22</td><td class="num-cell"><span class="tag tb">P2</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ PLAN ═══════════════════ -->
+<div id="plan" class="section">
+  <div class="sec-title"><h2>Plan de Acción 30 — 60 — 90 Días</h2><div class="line"></div></div>
+  <div class="alert alert-r" style="margin-bottom:20px;">
+    <h4>⏰ Contexto de Urgencia — 59 días al inicio de clases (8 agosto 2026)</h4>
+    <p>La ventana de conversión activa es corta: <strong>30 días restantes</strong> son críticos para cerrar el 80% del gap. 
+    Pasado el <strong>15 de julio</strong>, los prospectos que no hayan iniciado proceso difícilmente matriculan. 
+    Cada semana de inacción equivale a perder ~26 enrolados potenciales del pipeline.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">🗓️ Primeros 30 Días — EJECUCIÓN INMEDIATA</div>
+    <div class="plan-row"><div class="plan-days">0–7 días</div><div class="plan-content"><h4>Cierre de Pendientes de Pago</h4><p><strong>Objetivo:</strong> Convertir los 16 "Pendiente pago matrícula" a enrolados confirmados. · <strong>Resp.:</strong> Call Center · <strong>Impacto:</strong> +12 enrolados inmediatos</p><div class="plan-tags"><span class="tag tg">Impacto: Alto</span><span class="tag tr">Prioridad: Crítica</span></div></div></div>
+    <div class="plan-row"><div class="plan-days">0–7 días</div><div class="plan-content"><h4>Campaña de Activación — 991 Interesados</h4><p><strong>Objetivo:</strong> Contactar 100% de interesados activos con propuesta personalizada. · <strong>Resp.:</strong> Call Center · <strong>Impacto:</strong> +50–150 enrolados</p><div class="plan-tags"><span class="tag tg">Impacto: Muy Alto</span><span class="tag tr">Prioridad: Crítica</span></div></div></div>
+    <div class="plan-row"><div class="plan-days">7–15 días</div><div class="plan-content"><h4>Depuración de Base CRM</h4><p><strong>Objetivo:</strong> Limpiar 42 números incorrectos, resolver 4 formularios en curso. · <strong>Resp.:</strong> CRM Manager · <strong>Impacto:</strong> Mejora calidad +15%</p><div class="plan-tags"><span class="tag tb">Impacto: Medio</span><span class="tag ta">Prioridad: Alta</span></div></div></div>
+    <div class="plan-row"><div class="plan-days">7–15 días</div><div class="plan-content"><h4>Activación 291 Enviados Sin Contactar</h4><p><strong>Objetivo:</strong> Primer contacto — correo + WhatsApp + llamada. · <strong>Resp.:</strong> Call Center + Marketing · <strong>Impacto:</strong> +35 enrolados</p><div class="plan-tags"><span class="tag tg">Impacto: Alto</span><span class="tag ta">Prioridad: Alta</span></div></div></div>
+    <div class="plan-row"><div class="plan-days">15–30 días</div><div class="plan-content"><h4>Campaña Multi-Horario No Contesta</h4><p><strong>Objetivo:</strong> 2do y 3er intento a 3,031 "No Contesta" en horarios 7am / 12pm / 7pm. · <strong>Resp.:</strong> Call Center · <strong>Impacto:</strong> +50–135 enrolados</p><div class="plan-tags"><span class="tag tg">Impacto: Alto</span><span class="tag tr">Prioridad: Crítica</span></div></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🗓️ 31–60 Días — CONSOLIDACIÓN</div>
+    <div class="plan-row a"><div class="plan-days a">31–45 días</div><div class="plan-content"><h4>Webinars de Presentación por Programa</h4><p><strong>Objetivo:</strong> Sesiones virtuales para Top 10 programas — convertir interesados en admitidos. · <strong>Resp.:</strong> Comunicaciones + Directores · <strong>Impacto:</strong> +30–60 enrolados</p><div class="plan-tags"><span class="tag tg">Impacto: Alto</span><span class="tag ta">Prioridad: Alta</span></div></div></div>
+    <div class="plan-row a"><div class="plan-days a">45–60 días</div><div class="plan-content"><h4>Campaña de Referidos — Egresados</h4><p><strong>Objetivo:</strong> Activar red de egresados con incentivo de descuento en matrícula. · <strong>Resp.:</strong> Marketing · <strong>Impacto:</strong> +20–40 enrolados nuevos</p><div class="plan-tags"><span class="tag tb">Impacto: Medio-Alto</span><span class="tag ta">Prioridad: Media</span></div></div></div>
+    <div class="plan-row a"><div class="plan-days a">45–60 días</div><div class="plan-content"><h4>Revisión Programas en Riesgo</h4><p><strong>Objetivo:</strong> Reforzar Maestría SST, Com. Periodismo y DDHH con baja conversión. · <strong>Resp.:</strong> Dirección Extensión · <strong>Impacto:</strong> +5–15 enrolados</p><div class="plan-tags"><span class="tag ta">Impacto: Medio</span><span class="tag ta">Prioridad: Media</span></div></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🗓️ 61–90 Días — CRECIMIENTO ESTRATÉGICO</div>
+    <div class="plan-row g"><div class="plan-days g">61–75 días</div><div class="plan-content"><h4>Campaña Digital Segmentada</h4><p><strong>Objetivo:</strong> Pauta Meta/Google para los 5 programas con mayor potencial sin conversión. · <strong>Resp.:</strong> Marketing Digital · <strong>Impacto:</strong> +40–80 nuevos leads</p><div class="plan-tags"><span class="tag tg">Impacto: Alto</span><span class="tag tb">Prioridad: Estratégica</span></div></div></div>
+    <div class="plan-row g"><div class="plan-days g">75–90 días</div><div class="plan-content"><h4>Implementar Lead Scoring</h4><p><strong>Objetivo:</strong> Calificación automática de leads por perfil y comportamiento. · <strong>Resp.:</strong> CRM + BI · <strong>Impacto:</strong> Mejora conversión +20–30% largo plazo</p><div class="plan-tags"><span class="tag tg">Impacto: Muy Alto</span><span class="tag tb">Prioridad: Estratégica</span></div></div></div>
+    <div class="plan-row g"><div class="plan-days g">75–90 días</div><div class="plan-content"><h4>Dashboard de Seguimiento Semanal</h4><p><strong>Objetivo:</strong> Reunión semanal con KPIs de conversión por programa y asesor. · <strong>Resp.:</strong> Dirección Extensión + BI · <strong>Impacto:</strong> Cultura data-driven sostenida</p><div class="plan-tags"><span class="tag tb">Impacto: Sostenido</span><span class="tag tb">Prioridad: Estratégica</span></div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ HALLAZGOS ═══════════════════ -->
+<div id="hallazgos" class="section">
+  <div class="sec-title"><h2>Hallazgos, Riesgos y Oportunidades</h2><div class="line"></div></div>
+  <div class="three-col">
+    <div class="card" style="border-top:4px solid var(--red);">
+      <div class="card-title">💡 10 Hallazgos Principales</div>
+      <ol style="font-size:13px;line-height:1.9;padding-left:16px;color:#333;">
+        <li>Maestría en IA lidera con 50 enrolados (20.7%)</li>
+        <li>53.4% de registros (3,031) en "No Contesta"</li>
+        <li>Conversión actual 4.3% vs meta 7–8%</li>
+        <li>16 pendientes de pago = cierre en &lt;7 días</li>
+        <li>Especializaciones = 50% de enrolados totales</li>
+        <li>Gerencia de Proyectos tiene la mejor tasa relativa</li>
+        <li>22.1% "No Interesados" — captación deficiente</li>
+        <li>291 enviados sin activar = oportunidad sin explotar</li>
+        <li>Maestría SST con 3 enrolados — riesgo viabilidad</li>
+        <li>Doctorado Sostenibilidad: 14 de 23 doctorales</li>
+      </ol>
+    </div>
+    <div class="card" style="border-top:4px solid #c62828;">
+      <div class="card-title">⚠️ 10 Riesgos Identificados</div>
+      <ol style="font-size:13px;line-height:1.9;padding-left:16px;color:#333;">
+        <li>Gap de 155 enrolados para meta conservadora</li>
+        <li>Base No Contesta masiva sin estrategia definida</li>
+        <li>Maestría SST — riesgo de no apertura del grupo</li>
+        <li>42 números incorrectos = leads perdidos</li>
+        <li>14 No cumplen — filtro de captación débil</li>
+        <li>51% de maestrías = 1 solo programa (IA)</li>
+        <li>Doctorados con base CRM muy pequeña</li>
+        <li>Com. Periodismo Digital: solo 2 enrolados</li>
+        <li>Sin datos de conversión histórica por canal</li>
+        <li>Top 3 programas = 35% enrolados (concentración)</li>
+      </ol>
+    </div>
+    <div class="card" style="border-top:4px solid #2e7d32;">
+      <div class="card-title">🚀 10 Oportunidades de Crecimiento</div>
+      <ol style="font-size:13px;line-height:1.9;padding-left:16px;color:#333;">
+        <li>Recuperar 10% No Contesta = +303 enrolados</li>
+        <li>16 pend. pago = cierre en &lt;7 días (+12)</li>
+        <li>Alta demanda IA: capitalizar con más grupos</li>
+        <li>Maestría Com. Digital: 21.4% tasa interés</li>
+        <li>Gerencia Proyectos: 27% tasa interés — ampliar</li>
+        <li>Campaña referidos puede generar 20–40 leads</li>
+        <li>Webinars pueden convertir 30–60 indecisos</li>
+        <li>Esp. Logística Virtual: 68 interesados sin cerrar</li>
+        <li>Automatización CRM reduce No Contesta en 30%</li>
+        <li>Becas parciales pueden convertir indecisos económicos</li>
+      </ol>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🏆 Matriz de Clasificación de Programas</div>
+    <div class="mat-grid">
+      <div class="mat-cell mat-s"><h4>⭐ ESTRELLAS — Alto vol. + Alta conv.</h4><ul><li>Maestría en IA y Ciencia de Datos (50 enrolados)</li><li>Esp. Gerencia de Proyectos (13 enrolados, 27% tasa)</li><li>Maestría en Sistemas Energéticos (15 enrolados)</li><li>Esp. Derechos Humanos (21.3% tasa interés)</li></ul></div>
+      <div class="mat-cell mat-p"><h4>📈 ALTO POTENCIAL — Buen interés + Bajo cierre</h4><ul><li>Maestría Comunicación Digital (21.4% interés)</li><li>Maestría Gerencia Ingeniería (31% interés)</li><li>Esp. Logística Virtual (68 interesados activos)</li><li>Esp. Inteligencia Artificial (48 interesados)</li><li>Esp. Analítica Big Data (28 interesados)</li></ul></div>
+      <div class="mat-cell mat-r"><h4>⚠️ EN RIESGO — Baja conv. + Baja gestión</h4><ul><li>Esp. Logística Presencial (4.2% tasa interés)</li><li>Esp. Derecho Aduanero (alta base, baja conv.)</li><li>Esp. Com. y Periodismo Digital (2 enrolados)</li><li>Esp. DDHH y Territorios (1 enrolado)</li><li>Esp. Diseño Publicitario (2 enrolados)</li></ul></div>
+      <div class="mat-cell mat-c"><h4>🚨 CRÍTICOS — Muy baja conversión</h4><ul><li>Maestría en SST (3 enrolados — riesgo apertura)</li><li>Esp. Energías Renovables (28 registros)</li><li>Esp. Contratación Estatal (2 registros)</li><li>Esp. Finanzas UCEVA (2 registros)</li></ul></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">📋 Conclusión Gerencial</div>
+    <div style="font-size:13px;line-height:1.9;color:#333;max-width:960px;">
+      <p style="margin-bottom:10px;">Al <strong>10 de junio de 2026</strong>, con inicio de clases el <strong>8 de agosto de 2026</strong>, quedan exactamente <strong>59 días</strong> para cerrar el proceso comercial del período 2026-2S. Se registran <strong>242 enrolados sobre 5,670 registros activos</strong> — tasa del <strong>4.3%</strong>, significativamente por debajo del histórico 7–8%. El <strong>gap para la meta mínima es de 155 enrolados</strong>. La ventana de conversión efectiva es de <strong>máximo 4–5 semanas</strong> antes de que los prospectos pierdan urgencia; después del 15 de julio la tasa de cierre cae históricamente entre 40–60%.</p>
+      <p style="margin-bottom:10px;">El mayor desafío es la gestión del <strong>53.4% de la base en "No Contesta"</strong> (3,031 registros) — el cuello de botella más crítico. Una campaña multi-canal con horarios no convencionales puede recuperar 135–300 enrolados adicionales. Los <strong>16 pendientes de pago</strong> deben ser el foco del Call Center en los próximos 7 días.</p>
+      <p style="margin-bottom:10px;"><strong>Para Marketing:</strong> enfocar pauta en Maestría IA, Gerencia de Proyectos y Logística Virtual con testimoniales, rankings y diferenciadores competitivos. Para <strong>Dirección Extensión:</strong> revisar viabilidad de Maestría SST y reforzar programas en riesgo con apoyo de decanaturas.</p>
+      <p>A nivel estratégico, avanzar hacia un modelo de <strong>Lead Scoring automatizado, secuencias de nurturing por email y WhatsApp Business</strong>, y reuniones semanales de KPIs para garantizar ejecución disciplinada en los 60 días restantes del período.</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Universidad Autónoma de Occidente · Dirección de Extensión y Posgrados · Tablero Comercial 2026-2S<br>
+  Generado: 10 de junio de 2026 · Datos: CRM Institucional
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Top programs bars
+const topProgs = [
+  {n:'Maestría IA y C. de Datos', v:50},
+  {n:'Esp. Gerencia de Proyectos', v:13},
+  {n:'Maestría Sistemas Energéticos', v:15},
+  {n:'Maestría Admón. Empresas', v:14},
+  {n:'Doc. Sostenibilidad', v:14},
+  {n:'Maestría Gerencia Ingeniería', v:11},
+  {n:'Esp. Finanzas Virtual', v:9},
+  {n:'Esp. Com. Estratégica', v:9},
+  {n:'Esp. Ger. Talento Humano', v:9},
+  {n:'Esp. SST Virtual', v:9},
+];
+const tb = document.getElementById('top-bars');
+const mxv = 50;
+topProgs.forEach((p,i) => {
+  const pct = Math.round(p.v/mxv*100);
+  const c = i===0?'#DC142D':i<3?'#961423':'#C5102A';
+  tb.innerHTML += `<div class="bar-row"><div class="bar-lbl">${p.n}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${c};">${p.v}</div></div><div class="bar-num">${p.v}</div></div>`;
+});
+
+// Estados bars
+const ests = [
+  {n:'No Contesta', v:2705, c:'#DC142D'},
+  {n:'No Interesado', v:1252, c:'#961423'},
+  {n:'Interesado', v:991, c:'#2e7d32'},
+  {n:'No Contesta 1', v:326, c:'#E03040'},
+  {n:'Enviado', v:291, c:'#1565c0'},
+  {n:'Núm. Equivocado', v:42, c:'#888'},
+  {n:'Respondida', v:26, c:'#f57c00'},
+  {n:'Pend. Pago Matrícula', v:16, c:'#f57c00'},
+  {n:'No Cumple Académico', v:14, c:'#888'},
+];
+const eb = document.getElementById('estados-bars');
+const mx2 = 2705;
+ests.forEach(e => {
+  const pct = Math.max(Math.round(e.v/mx2*100),2);
+  eb.innerHTML += `<div class="bar-row"><div class="bar-lbl">${e.n}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${e.c};">${e.v}</div></div><div class="bar-num">${e.v}</div></div>`;
+});
+
+// Table filter
+// ── Risk filter state ──
+let activeRisk = 'all';
+
+function setRiskFilter(risk, btn) {
+  activeRisk = risk;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function getRiskLevel(row) {
+  // col 4 = % No Contesta (text like "62.4%")
+  const pctText = row.cells[4].textContent.trim().replace('%','');
+  const pct = parseFloat(pctText) || 0;
+  if (pct >= 50) return 'alto';
+  if (pct >= 30) return 'medio';
+  return 'bajo';
+}
+
+function applyFilters() {
+  const q = document.getElementById('prog-search').value.toLowerCase().trim();
+  const rows = document.querySelectorAll('#crm-tbody tr');
+  let visible = 0;
+  rows.forEach(r => {
+    const nameMatch = r.cells[0].textContent.toLowerCase().includes(q);
+    const riskMatch = activeRisk === 'all' || getRiskLevel(r) === activeRisk;
+    const show = nameMatch && riskMatch;
+    r.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  const total = rows.length;
+  const lbl = activeRisk === 'all' ? 'todos los programas' :
+              activeRisk === 'alto' ? 'programas con Riesgo Alto (No Cont. ≥50%)' :
+              activeRisk === 'medio' ? 'programas con Riesgo Medio (No Cont. 30–49%)' :
+              'programas Favorables (No Cont. <30%)';
+  document.getElementById('filter-count').textContent =
+    `Mostrando ${visible} de ${total} programas — ${lbl}${q ? ` · búsqueda: "${q}"` : ''}`;
+}
+
+// ── Sort ──
+let sortDir = {};
+function sortTable(col, type) {
+  sortDir[col] = !sortDir[col];
+  const tbody = document.getElementById('crm-tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  rows.sort((a, b) => {
+    const av = a.cells[col].textContent.trim().replace(/[,%+\u2212\u2014—\-]/g,'');
+    const bv = b.cells[col].textContent.trim().replace(/[,%+\u2212\u2014—\-]/g,'');
+    if (type === 'num') {
+      return sortDir[col] ? (parseFloat(bv)||0)-(parseFloat(av)||0) : (parseFloat(av)||0)-(parseFloat(bv)||0);
+    } else {
+      return sortDir[col] ? bv.localeCompare(av,'es') : av.localeCompare(bv,'es');
+    }
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// Init count on load
+document.addEventListener('DOMContentLoaded', () => applyFilters());
+</script>
+</body>
+</html>
