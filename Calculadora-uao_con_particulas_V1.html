@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAO · Calculadora de descuentos Posgrados 2026</title>
+<style>
+/* ================================================================
+   UAO — Calculadora de descuentos Posgrados 2026
+   Doble perfil: Egresados (Por Siempre UAO 40%) y Aspirantes
+   (Estrategia comercial 2026, descuento variable por programa)
+   ================================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Archivo:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --crema: #ECE5DC;
+  --rojo: #DC142D;
+  --rojo-oscuro: #961423;
+  --rojo-tinta: #6E0E1A;
+  --tinta: #1F1F1F;
+  --tinta-suave: #56504A;
+  --blanco: #FFFFFF;
+  --gris-suave: #F7F4EF;
+  --oro: #B68A35;
+  --oro-suave: #F3E8D0;
+  --borde: #DCD2C4;
+
+  /* Perfil aspirante: paleta tinta/azulada institucional */
+  --acero: #233447;
+  --acero-medio: #34495E;
+  --acero-profundo: #16222F;
+
+  --display: "Fraunces", Georgia, serif;
+  --sans: "Archivo", system-ui, -apple-system, sans-serif;
+
+  --radio-lg: 24px;
+  --radio-md: 14px;
+  --sombra-flotante: 0 40px 80px -40px rgba(31,31,31,.45), 0 12px 28px -16px rgba(31,31,31,.25);
+  --sombra-suave: 0 18px 40px -28px rgba(31,31,31,.35);
+  --transicion: cubic-bezier(.22,1,.36,1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sans);
+  color: var(--tinta);
+  background: var(--crema);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.uao-discount-calculator {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding: clamp(32px, 6vw, 80px) clamp(16px, 4vw, 40px);
+  background:
+    radial-gradient(900px 520px at 90% -8%, rgba(255,255,255,.65) 0%, transparent 55%),
+    radial-gradient(700px 480px at -10% 110%, rgba(182,138,53,.10) 0%, transparent 55%),
+    var(--crema);
+  overflow: hidden;
+}
+
+/* Marca de agua dinámica según perfil */
+.uao-discount-calculator::before {
+  content: attr(data-marca);
+  position: absolute;
+  right: -2%;
+  bottom: -6%;
+  font-family: var(--display);
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(160px, 26vw, 380px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(150,20,35,.10);
+  pointer-events: none;
+  user-select: none;
+  transition: -webkit-text-stroke .4s;
+}
+
+.calculator-shell {
+  position: relative;
+  max-width: 1120px;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+/* ================================================================
+   CABECERA
+   ================================================================ */
+.calculator-header {
+  max-width: 760px;
+  margin: 0 auto clamp(36px, 5vw, 60px);
+  text-align: center;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rojo-oscuro);
+  margin-bottom: 22px;
+}
+
+.kicker::before, .kicker::after {
+  content: "";
+  width: 36px; height: 1px;
+  background: currentColor;
+  opacity: .45;
+}
+
+.calculator-header h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(2.1rem, 5.2vw, 3.6rem);
+  line-height: 1.06;
+  letter-spacing: -.015em;
+  margin-bottom: 18px;
+}
+
+.calculator-header h1 em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--rojo);
+  white-space: nowrap;
+  position: relative;
+}
+
+.calculator-header h1 em::after {
+  content: "";
+  position: absolute;
+  left: 2%; right: 2%; bottom: -.08em;
+  height: .14em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M2 9 C 50 2, 150 2, 198 7' fill='none' stroke='%23DC142D' stroke-width='3' stroke-linecap='round' opacity='.5'/%3E%3C/svg%3E") no-repeat center / 100% 100%;
+}
+
+.calculator-header p {
+  font-size: clamp(.96rem, 2vw, 1.1rem);
+  color: var(--tinta-suave);
+  max-width: 56ch;
+  margin: 0 auto;
+}
+
+/* ================================================================
+   SELECTOR DE PERFIL (egresado / aspirante)
+   ================================================================ */
+.perfil-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  max-width: 720px;
+  margin: 0 auto clamp(30px, 4vw, 44px);
+}
+
+@media (max-width: 560px) {
+  .perfil-switch { grid-template-columns: 1fr; }
+}
+
+.perfil-card {
+  position: relative;
+  text-align: left;
+  font-family: var(--sans);
+  background: var(--blanco);
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio-md);
+  padding: 18px 20px 18px 56px;
+  cursor: pointer;
+  transition: border-color .25s var(--transicion), box-shadow .25s var(--transicion), transform .25s var(--transicion);
+}
+
+.perfil-card:hover { transform: translateY(-2px); }
+
+.perfil-card .radio {
+  position: absolute;
+  left: 18px; top: 21px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--borde);
+  transition: border-color .25s, background .25s;
+}
+
+.perfil-card .radio::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--blanco);
+  transform: scale(0);
+  transition: transform .25s var(--transicion);
+}
+
+.perfil-card strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.perfil-card small {
+  font-size: .82rem;
+  color: var(--tinta-suave);
+}
+
+.perfil-card .perfil-pill {
+  position: absolute;
+  top: -10px; right: 14px;
+  font-size: .6rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--blanco);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+.perfil-card[data-perfil="egresado"] .perfil-pill { background: var(--rojo); }
+.perfil-card[data-perfil="aspirante"] .perfil-pill { background: var(--acero); }
+
+.perfil-card[data-perfil="egresado"][aria-pressed="true"] {
+  border-color: var(--rojo);
+  box-shadow: 0 16px 34px -20px rgba(220,20,45,.5);
+}
+
+.perfil-card[data-perfil="egresado"][aria-pressed="true"] .radio {
+  border-color: var(--rojo);
+  background: var(--rojo);
+}
+
+.perfil-card[data-perfil="aspirante"][aria-pressed="true"] {
+  border-color: var(--acero);
+  box-shadow: 0 16px 34px -20px rgba(35,52,71,.5);
+}
+
+.perfil-card[data-perfil="aspirante"][aria-pressed="true"] .radio {
+  border-color: var(--acero);
+  background: var(--acero);
+}
+
+.perfil-card[aria-pressed="true"] .radio::after { transform: scale(1); }
+
+.perfil-card:focus-visible {
+  outline: 3px solid var(--rojo);
+  outline-offset: 2px;
+}
+
+/* ================================================================
+   GRID PRINCIPAL
+   ================================================================ */
+.calculator-grid {
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  gap: clamp(20px, 3vw, 36px);
+  align-items: start;
+}
+
+@media (max-width: 880px) {
+  .calculator-grid { grid-template-columns: 1fr; }
+}
+
+/* ================================================================
+   PANEL SELECTOR
+   ================================================================ */
+.selector-card {
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra-suave);
+  padding: clamp(26px, 3.5vw, 38px);
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.selector-card h2 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.45rem;
+  letter-spacing: -.01em;
+}
+
+.step { display: flex; flex-direction: column; gap: 10px; }
+
+.step-label {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+
+.step-label .num {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  color: var(--rojo);
+}
+
+.nivel-tabs {
+  display: flex;
+  background: var(--gris-suave);
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.nivel-tabs button {
+  flex: 1;
+  font-family: var(--sans);
+  font-size: .84rem;
+  font-weight: 600;
+  color: var(--tinta-suave);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .25s var(--transicion), color .25s var(--transicion), box-shadow .25s var(--transicion);
+}
+
+.nivel-tabs button[aria-pressed="true"] {
+  background: var(--tinta);
+  color: var(--blanco);
+  box-shadow: 0 10px 22px -12px rgba(31,31,31,.6);
+}
+
+.nivel-tabs button:not([aria-pressed="true"]):hover { color: var(--tinta); }
+
+.nivel-tabs button:focus-visible,
+select:focus-visible,
+.cta-button:focus-visible {
+  outline: 3px solid var(--rojo);
+  outline-offset: 2px;
+}
+
+.select-wrap { position: relative; }
+
+select#programa {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: var(--sans);
+  font-size: .98rem;
+  font-weight: 500;
+  color: var(--tinta);
+  background: var(--gris-suave);
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio-md);
+  padding: 15px 48px 15px 18px;
+  cursor: pointer;
+  transition: border-color .25s var(--transicion), background .25s var(--transicion);
+}
+
+select#programa:hover { border-color: var(--rojo); background: var(--blanco); }
+
+.select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 20px; top: 50%;
+  width: 9px; height: 9px;
+  border-right: 2px solid var(--rojo-oscuro);
+  border-bottom: 2px solid var(--rojo-oscuro);
+  transform: translateY(-64%) rotate(45deg);
+  pointer-events: none;
+  transition: transform .25s var(--transicion);
+}
+
+.select-wrap:hover::after { transform: translateY(-44%) rotate(45deg); }
+
+.empty-state {
+  font-size: .88rem;
+  color: #93897b;
+  background: var(--gris-suave);
+  border: 1.5px dashed var(--borde);
+  border-radius: var(--radio-md);
+  padding: 16px 18px;
+}
+
+.empty-state[hidden] { display: none; }
+
+.resumen-mini {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.resumen-mini[hidden] { display: none; }
+
+.resumen-mini .item {
+  background: var(--gris-suave);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-md);
+  padding: 14px 14px;
+}
+
+.resumen-mini .item span {
+  display: block;
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #9a9085;
+  margin-bottom: 5px;
+}
+
+.resumen-mini .item strong {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.02rem;
+}
+
+@media (max-width: 560px) {
+  .resumen-mini { grid-template-columns: 1fr 1fr; }
+}
+
+.trust {
+  border-top: 1px solid var(--borde);
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trust li {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: .86rem;
+  color: var(--tinta-suave);
+}
+
+.trust li::before {
+  content: "";
+  flex-shrink: 0;
+  width: 16px; height: 16px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: var(--oro-suave) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5 7 11l5-6' fill='none' stroke='%23B68A35' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/11px no-repeat;
+}
+
+/* ================================================================
+   COMPROBANTE / VOUCHER
+   ================================================================ */
+.voucher {
+  position: relative;
+  background: var(--blanco);
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra-flotante);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.voucher.is-empty .voucher-real { display: none; }
+.voucher-placeholder { display: none; }
+
+.voucher.is-empty .voucher-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+  min-height: 480px;
+  padding: 40px;
+  background:
+    repeating-linear-gradient(-45deg, transparent 0 14px, rgba(31,31,31,.025) 14px 15px),
+    var(--gris-suave);
+}
+
+.voucher-placeholder .ph-seal {
+  width: 86px; height: 86px;
+  border-radius: 50%;
+  border: 2px dashed var(--borde);
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #b9ae9e;
+  animation: respirar 3.2s ease-in-out infinite;
+}
+
+@keyframes respirar {
+  0%, 100% { transform: scale(1); opacity: .8; }
+  50%       { transform: scale(1.06); opacity: 1; }
+}
+
+.voucher-placeholder p {
+  font-size: .95rem;
+  color: #93897b;
+  max-width: 30ch;
+}
+
+/* Franja superior — el color depende del perfil */
+.voucher-top {
+  position: relative;
+  padding: clamp(26px, 3.6vw, 40px);
+  color: var(--blanco);
+  transition: background .4s;
+}
+
+.voucher[data-perfil="egresado"] .voucher-top {
+  background:
+    radial-gradient(640px 300px at 110% -30%, rgba(255,255,255,.16) 0%, transparent 60%),
+    linear-gradient(160deg, var(--rojo) 0%, var(--rojo-oscuro) 62%, var(--rojo-tinta) 100%);
+}
+
+.voucher[data-perfil="aspirante"] .voucher-top {
+  background:
+    radial-gradient(640px 300px at 110% -30%, rgba(255,255,255,.12) 0%, transparent 60%),
+    linear-gradient(160deg, var(--acero-medio) 0%, var(--acero) 62%, var(--acero-profundo) 100%);
+}
+
+.voucher-top::after {
+  content: attr(data-microtexto);
+  position: absolute;
+  left: 0; right: 0; bottom: 8px;
+  font-size: .5rem;
+  font-weight: 700;
+  letter-spacing: .3em;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: .28;
+  text-align: center;
+}
+
+.voucher-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.modalidad-tag, .nivel-tag, .beneficio-tag {
+  font-size: .64rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 6px 14px;
+}
+
+.modalidad-tag {
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.4);
+}
+
+.nivel-tag { background: var(--blanco); }
+.voucher[data-perfil="egresado"]  .nivel-tag { color: var(--rojo-oscuro); }
+.voucher[data-perfil="aspirante"] .nivel-tag { color: var(--acero); }
+
+.beneficio-tag {
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.25);
+}
+
+.programa-nombre {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(1.3rem, 2.7vw, 1.7rem);
+  line-height: 1.22;
+  letter-spacing: -.01em;
+  max-width: 80%;
+  margin-bottom: 28px;
+}
+
+.price-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 22px 36px;
+}
+
+.price-label {
+  display: block;
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .75;
+  margin-bottom: 7px;
+}
+
+.valor-original {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(1.1rem, 2.3vw, 1.4rem);
+  position: relative;
+  opacity: .82;
+}
+
+.valor-original::after {
+  content: "";
+  position: absolute;
+  left: -4%; right: -4%; top: 52%;
+  height: 3px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 6' preserveAspectRatio='none'%3E%3Cpath d='M1 4 C 30 1, 90 5, 119 2' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' opacity='.92'/%3E%3C/svg%3E") no-repeat center / 100% 100%;
+  transform: rotate(-1.5deg);
+}
+
+.valor-descuento {
+  display: block;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6.2vw, 3.3rem);
+  line-height: 1;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.por-semestre {
+  font-size: .8rem;
+  font-weight: 500;
+  opacity: .8;
+  margin-top: 6px;
+  display: block;
+}
+
+/* Sello con porcentaje dinámico */
+.voucher-stamp {
+  position: absolute;
+  top: clamp(20px, 3vw, 32px);
+  right: clamp(20px, 3vw, 32px);
+  width: clamp(86px, 10vw, 108px);
+  height: clamp(86px, 10vw, 108px);
+  display: grid;
+  place-items: center;
+}
+
+.voucher-stamp svg { position: absolute; inset: 0; animation: girar 22s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+
+.voucher-stamp .stamp-core {
+  width: 62%; height: 62%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transform: rotate(7deg);
+}
+
+.voucher-stamp .pct {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.05rem, 2.3vw, 1.4rem);
+  color: var(--blanco);
+}
+
+.voucher-stamp .lbl {
+  font-size: .5rem;
+  font-weight: 800;
+  letter-spacing: .2em;
+  color: var(--blanco);
+  margin-top: 3px;
+}
+
+.perforacion {
+  position: relative;
+  border-top: 2px dashed var(--borde);
+  margin: 0 30px;
+}
+
+.perforacion::before, .perforacion::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 30px; height: 30px;
+  background: var(--crema);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  box-shadow: inset 0 2px 4px rgba(31,31,31,.12);
+}
+
+.perforacion::before { left: -46px; }
+.perforacion::after  { right: -46px; }
+
+.voucher-bottom {
+  padding: clamp(24px, 3.6vw, 38px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ahorro-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: linear-gradient(135deg, var(--oro-suave) 0%, #fbf4e2 100%);
+  border: 1px solid #e7d6ac;
+  border-radius: var(--radio-md);
+  padding: 16px 20px;
+}
+
+.ahorro-box .ahorro-label { display: flex; flex-direction: column; gap: 2px; }
+
+.ahorro-box .ahorro-label span:first-child {
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--rojo-oscuro);
+}
+
+.ahorro-box .ahorro-label span:last-child {
+  font-size: .78rem;
+  color: #8d7747;
+}
+
+.valor-ahorro {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.35rem, 3.2vw, 1.7rem);
+  color: var(--oro);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Banner de comparación de beneficios */
+.upsell {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: .85rem;
+  color: var(--tinta-suave);
+  background: var(--gris-suave);
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--rojo);
+  border-radius: 10px;
+  padding: 13px 16px;
+}
+
+.upsell[hidden] { display: none; }
+.upsell strong { color: var(--rojo); }
+
+.dynamic-message { font-size: .98rem; color: var(--tinta-suave); }
+.dynamic-message strong { font-weight: 700; }
+.voucher[data-perfil="egresado"]  .dynamic-message strong { color: var(--rojo); }
+.voucher[data-perfil="aspirante"] .dynamic-message strong { color: var(--acero); }
+
+.cta-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: .01em;
+  color: var(--blanco);
+  background: var(--tinta);
+  border-radius: 999px;
+  padding: 17px 30px;
+  overflow: hidden;
+  transition: transform .25s var(--transicion), box-shadow .25s var(--transicion);
+}
+
+.cta-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--rojo) 0%, var(--rojo-oscuro) 100%);
+  opacity: 0;
+  transition: opacity .3s var(--transicion);
+}
+
+.voucher[data-perfil="aspirante"] .cta-button::before {
+  background: linear-gradient(135deg, var(--acero-medio) 0%, var(--acero-profundo) 100%);
+}
+
+.cta-button span, .cta-button svg { position: relative; z-index: 1; }
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px -16px rgba(31,31,31,.55);
+}
+
+.cta-button:hover::before { opacity: 1; }
+.cta-button svg { transition: transform .25s var(--transicion); }
+.cta-button:hover svg { transform: translateX(4px); }
+
+.legal-note {
+  font-size: .76rem;
+  color: #a39a8d;
+  line-height: 1.55;
+}
+
+@keyframes subir {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.voucher-real.animar .voucher-top    { animation: subir .5s var(--transicion) both; }
+.voucher-real.animar .voucher-bottom { animation: subir .5s var(--transicion) .08s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@media (max-width: 560px) {
+  .programa-nombre { max-width: 100%; padding-right: 96px; }
+  .ahorro-box { flex-direction: column; align-items: flex-start; }
+  .nivel-tabs button { font-size: .78rem; }
+}
+
+/* ================================================================
+   MARCA · Logo y tagline
+   ================================================================ */
+.brand-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: clamp(22px, 3.4vw, 34px);
+}
+
+.brand-logo {
+  width: clamp(120px, 16vw, 168px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 8px 22px rgba(220,20,45,.18));
+  animation: logo-entrada 1s var(--transicion) both;
+}
+
+@keyframes logo-entrada {
+  from { opacity: 0; transform: translateY(-12px) scale(.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.brand-tagline {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(.95rem, 2vw, 1.15rem);
+  color: var(--rojo-oscuro);
+  letter-spacing: .01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-tagline::before, .brand-tagline::after {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+  opacity: .4;
+}
+
+/* ================================================================
+   PARTÍCULAS DE FONDO (canvas)
+   ================================================================ */
+#particulas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.calculator-shell { z-index: 2; }
+.uao-discount-calculator::before { z-index: 1; }
+
+
+/* ================================================================
+   RESPONSIVE REFINADO — móvil, tablet y desktop amplio
+   ================================================================ */
+
+/* ---------- Desktop amplio (>1280px): respirar más ---------- */
+@media (min-width: 1280px) {
+  .calculator-grid { gap: 44px; }
+  .voucher-bottom { gap: 24px; }
+}
+
+/* ---------- Tablet (≤1024px) ---------- */
+@media (max-width: 1024px) {
+  .uao-discount-calculator::before {
+    font-size: clamp(140px, 24vw, 260px);
+    right: -6%;
+  }
+}
+
+/* ---------- Tablet pequeña / móvil grande (≤880px) ---------- */
+@media (max-width: 880px) {
+  /* El comprobante pasa primero: es el resultado que el usuario espera ver
+     tras elegir; en una sola columna conviene selector arriba, así que
+     mantenemos selector → voucher pero acercamos el scroll con sticky tabs. */
+  .selector-card { padding: 24px 20px; }
+  .voucher-placeholder { min-height: 340px; }
+}
+
+/* ---------- Móvil (≤640px) ---------- */
+@media (max-width: 640px) {
+  .uao-discount-calculator {
+    padding: 28px 14px 56px;
+  }
+
+  /* Marca de agua más discreta para no ensuciar el contenido */
+  .uao-discount-calculator::before {
+    font-size: 150px;
+    right: -10%;
+    bottom: -2%;
+    opacity: .7;
+  }
+
+  .brand-bar { gap: 10px; margin-bottom: 20px; }
+  .brand-logo { width: 104px; }
+  .brand-tagline { font-size: .88rem; gap: 10px; }
+  .brand-tagline::before, .brand-tagline::after { width: 18px; }
+
+  .calculator-header { margin-bottom: 26px; }
+  .kicker { font-size: .62rem; letter-spacing: .18em; gap: 8px; }
+  .kicker::before, .kicker::after { width: 22px; }
+  .calculator-header h1 { font-size: 1.85rem; margin-bottom: 12px; }
+  .calculator-header h1 em { white-space: normal; }
+  .calculator-header p { font-size: .92rem; }
+
+  /* Tarjetas de perfil compactas */
+  .perfil-switch { gap: 10px; margin-bottom: 24px; }
+  .perfil-card { padding: 15px 16px 15px 50px; }
+  .perfil-card .radio { left: 16px; top: 17px; width: 20px; height: 20px; }
+  .perfil-card strong { font-size: .94rem; }
+  .perfil-card small { font-size: .78rem; line-height: 1.4; display: block; }
+  .perfil-card .perfil-pill { font-size: .56rem; padding: 3px 10px; top: -9px; right: 12px; }
+
+  /* Panel selector */
+  .selector-card { padding: 22px 18px; gap: 20px; border-radius: 18px; }
+  .selector-card h2 { font-size: 1.25rem; }
+  .step-label { font-size: .64rem; letter-spacing: .16em; }
+
+  .nivel-tabs { padding: 3px; }
+  .nivel-tabs button { font-size: .74rem; padding: 9px 4px; }
+
+  select#programa {
+    font-size: .9rem;
+    padding: 13px 42px 13px 14px;
+    /* permite que el texto largo se corte con elipsis nativa */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .empty-state { font-size: .82rem; padding: 13px 14px; }
+
+  .resumen-mini { gap: 8px; }
+  .resumen-mini .item { padding: 11px 12px; border-radius: 12px; }
+  .resumen-mini .item span { font-size: .56rem; }
+  .resumen-mini .item strong { font-size: .92rem; }
+
+  .trust { padding-top: 16px; gap: 8px; }
+  .trust li { font-size: .8rem; }
+
+  /* ---------- Comprobante en móvil ---------- */
+  .voucher { border-radius: 18px; }
+  .voucher-placeholder { min-height: 300px; padding: 28px; gap: 14px; }
+  .voucher-placeholder .ph-seal { width: 70px; height: 70px; font-size: 1.05rem; }
+  .voucher-placeholder p { font-size: .86rem; }
+
+  .voucher-top { padding: 22px 18px 30px; }
+
+  /* Sello: arriba a la derecha pero más pequeño y sin invadir el título */
+  .voucher-stamp {
+    width: 70px; height: 70px;
+    top: 16px; right: 16px;
+  }
+  .voucher-stamp .pct { font-size: .92rem; }
+  .voucher-stamp .lbl { font-size: .42rem; }
+
+  .voucher-meta { gap: 6px; margin-bottom: 12px; padding-right: 80px; }
+  .modalidad-tag, .nivel-tag, .beneficio-tag {
+    font-size: .56rem;
+    padding: 5px 10px;
+    letter-spacing: .12em;
+  }
+
+  .programa-nombre {
+    font-size: 1.18rem;
+    max-width: 100%;
+    padding-right: 0;       /* el sello ya no se superpone: meta lleva el padding */
+    margin-bottom: 20px;
+  }
+
+  /* Precios apilados, descuento primero (lo más importante) */
+  .price-row {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .price-label { font-size: .58rem; margin-bottom: 4px; }
+  .valor-original { font-size: 1.02rem; }
+  .valor-descuento { font-size: 2.15rem; }
+  .por-semestre { font-size: .72rem; margin-top: 4px; }
+
+  .voucher-top::after { font-size: .42rem; letter-spacing: .24em; bottom: 6px; }
+
+  .perforacion { margin: 0 22px; }
+  .perforacion::before, .perforacion::after { width: 24px; height: 24px; }
+  .perforacion::before { left: -34px; }
+  .perforacion::after  { right: -34px; }
+
+  .voucher-bottom { padding: 20px 18px 24px; gap: 16px; }
+
+  .ahorro-box {
+    flex-direction: row;            /* en fila si cabe: etiqueta + valor */
+    align-items: center;
+    padding: 13px 15px;
+    gap: 10px;
+  }
+  .ahorro-box .ahorro-label span:first-child { font-size: .6rem; }
+  .ahorro-box .ahorro-label span:last-child { display: none; } /* subtítulo fuera en móvil */
+  .valor-ahorro { font-size: 1.2rem; }
+
+  .upsell { font-size: .78rem; padding: 11px 13px; }
+  .dynamic-message { font-size: .88rem; }
+
+  .cta-button { padding: 15px 22px; font-size: .92rem; width: 100%; }
+
+  .legal-note { font-size: .68rem; }
+}
+
+/* ---------- Móvil muy estrecho (≤380px) ---------- */
+@media (max-width: 380px) {
+  .calculator-header h1 { font-size: 1.62rem; }
+  .nivel-tabs { flex-direction: column; border-radius: 16px; }
+  .nivel-tabs button { border-radius: 12px; padding: 10px; }
+  .valor-descuento { font-size: 1.9rem; }
+  .perfil-switch { grid-template-columns: 1fr; }
+  .ahorro-box { flex-direction: column; align-items: flex-start; }
+}
+
+/* ---------- Pantallas táctiles: áreas de toque generosas ---------- */
+@media (pointer: coarse) {
+  .nivel-tabs button { min-height: 44px; }
+  select#programa { min-height: 50px; }
+  .cta-button { min-height: 52px; }
+  .perfil-card { min-height: 64px; }
+}
+
+/* ---------- Desktop: límite de altura del placeholder para alinear columnas ---------- */
+@media (min-width: 881px) {
+  .voucher-placeholder { min-height: 520px; }
+}
+</style>
+</head>
+<body>
+
+<section class="uao-discount-calculator" id="app" data-marca="40%">
+  <canvas id="particulas" aria-hidden="true"></canvas>
+  <div class="calculator-shell">
+
+    <div class="brand-bar">
+      <img class="brand-logo" src="data:image/png;base64,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" alt="UAO — Universidad Autónoma de Occidente" width="275" height="92">
+      <span class="brand-tagline">Aprendizaje que transforma</span>
+    </div>
+
+    <header class="calculator-header">
+      <span class="kicker" id="kicker">Posgrados UAO · Descuentos 2026</span>
+      <h1>Calcula tu descuento en <em>Posgrados&nbsp;UAO</em></h1>
+      <p id="header-desc">Elige tu perfil y tu programa: si eres egresado UAO accedes al beneficio Por Siempre UAO del 40%; si aún no lo eres, también tienes descuentos especiales durante 2026.</p>
+    </header>
+
+    <!-- ============ PASO 0 · PERFIL ============ -->
+    <div class="perfil-switch" role="group" aria-label="Selecciona tu perfil">
+      <button type="button" class="perfil-card" data-perfil="egresado" aria-pressed="true">
+        <span class="perfil-pill">40% DTO</span>
+        <span class="radio" aria-hidden="true"></span>
+        <strong>Soy egresado UAO</strong>
+        <small>Beneficio Por Siempre UAO: 40% de descuento en todos los posgrados.</small>
+      </button>
+      <button type="button" class="perfil-card" data-perfil="aspirante" aria-pressed="false">
+        <span class="perfil-pill">Hasta 20% DTO</span>
+        <span class="radio" aria-hidden="true"></span>
+        <strong>Aún no soy egresado</strong>
+        <small>Descuentos comerciales 2026, según el programa que elijas.</small>
+      </button>
+    </div>
+
+    <div class="calculator-grid">
+
+      <!-- ============ PANEL SELECTOR ============ -->
+      <div class="selector-card">
+        <h2>Configura tu descuento</h2>
+
+        <div class="step">
+          <span class="step-label"><span class="num">i.</span> Nivel de formación</span>
+          <div class="nivel-tabs" id="nivel-tabs" role="group" aria-label="Filtrar por nivel de formación">
+            <button type="button" data-nivel="Todos" aria-pressed="true">Todos</button>
+            <button type="button" data-nivel="Especialización" aria-pressed="false">Especializaciones</button>
+            <button type="button" data-nivel="Maestría" aria-pressed="false">Maestrías</button>
+          </div>
+        </div>
+
+        <div class="step">
+          <label class="step-label" for="programa"><span class="num">ii.</span> Programa académico</label>
+          <div class="select-wrap">
+            <select id="programa" name="programa">
+              <option value="">Selecciona tu programa</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="empty-state" id="empty-msg">
+          Aún no has seleccionado un programa. Elige uno de la lista y tu comprobante de descuento aparecerá al instante.
+        </p>
+
+        <div class="resumen-mini" id="resumen-mini" hidden>
+          <div class="item">
+            <span>Modalidad</span>
+            <strong class="resumen-modalidad"></strong>
+          </div>
+          <div class="item">
+            <span>Nivel</span>
+            <strong class="resumen-nivel"></strong>
+          </div>
+          <div class="item">
+            <span>Descuento</span>
+            <strong class="resumen-descuento"></strong>
+          </div>
+        </div>
+
+        <ul class="trust" id="trust-list">
+          <li id="trust-1">Descuento del 40% aplicado sobre el valor del semestre.</li>
+          <li>Aplica para el primer y segundo periodo académico de 2026.</li>
+          <li>Acompañamiento de un asesor durante todo el proceso.</li>
+        </ul>
+      </div>
+
+      <!-- ============ COMPROBANTE ============ -->
+      <div class="voucher is-empty" id="voucher" data-perfil="egresado" aria-live="polite">
+
+        <div class="voucher-placeholder">
+          <div class="ph-seal" id="ph-seal">40%</div>
+          <p>Tu comprobante de descuento aparecerá aquí cuando elijas un programa.</p>
+        </div>
+
+        <div class="voucher-real" id="voucher-real">
+          <div class="voucher-top" id="voucher-top" data-microtexto="">
+
+            <div class="voucher-stamp" aria-hidden="true">
+              <svg viewBox="0 0 100 100">
+                <defs>
+                  <path id="circ" d="M 50,50 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"/>
+                </defs>
+                <text font-size="9.5" font-weight="700" letter-spacing="2.6" fill="rgba(255,255,255,.85)" font-family="Archivo, sans-serif">
+                  <textPath href="#circ" id="stamp-text">POSGRADOS UAO · DESCUENTO 2026 ·</textPath>
+                </text>
+              </svg>
+              <div class="stamp-core">
+                <span class="pct" id="stamp-pct">40%</span>
+                <span class="lbl">DTO</span>
+              </div>
+            </div>
+
+            <div class="voucher-meta">
+              <span class="nivel-tag"></span>
+              <span class="modalidad-tag"></span>
+              <span class="beneficio-tag" id="beneficio-tag"></span>
+            </div>
+
+            <h3 class="programa-nombre"></h3>
+
+            <div class="price-row">
+              <div>
+                <span class="price-label">Valor original</span>
+                <strong class="valor-original" id="valor-original"></strong>
+              </div>
+              <div>
+                <span class="price-label" id="label-descuento">Con descuento</span>
+                <strong class="valor-descuento" id="valor-descuento"></strong>
+                <span class="por-semestre">por semestre</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="perforacion" aria-hidden="true"></div>
+
+          <div class="voucher-bottom">
+            <div class="ahorro-box">
+              <div class="ahorro-label">
+                <span>Ahorro estimado</span>
+                <span>Lo que conservas en tu bolsillo cada semestre</span>
+              </div>
+              <strong class="valor-ahorro" id="valor-ahorro"></strong>
+            </div>
+
+            <p class="dynamic-message" id="dynamic-message"></p>
+
+            <p class="upsell" id="upsell" hidden></p>
+
+            <a href="https://wa.link/3tkd9y" class="cta-button" id="cta-button" target="_blank" rel="noopener">
+              <span>Quiero recibir información</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+
+            <p class="legal-note" id="legal-note">
+              Valores sujetos a validación institucional. Los descuentos aplican según las condiciones vigentes de la Universidad Autónoma de Occidente para el año 2026 y no son acumulables entre sí.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ==========================================================
+     1. CONFIGURACIÓN
+     ========================================================== */
+  const DESCUENTO_POR_SIEMPRE = 0.40; // Beneficio egresados — Por Siempre UAO
+  const CTA_URL = "https://wa.link/3tkd9y"; // ← Reemplazar por el enlace real
+
+  /* ==========================================================
+     2. DATOS — Posgrados 2026
+     - valorOriginal: valor de inversión semestre 2026
+     - dtoGeneral: % descuento comercial 2026 (aspirantes), según
+       comunicado VADF-4.040. null = sin descuento comercial.
+     - porSiempre: true si el programa participa del beneficio
+       Por Siempre UAO (40% egresados).
+     ========================================================== */
+  const programas = [
+    /* -------- Especializaciones · Presencial -------- */
+    { id: 1,  nombre: "Especialización en Analítica de Big Data", nivel: "Especialización", modalidad: "Presencial", valorOriginal: 9156000,  dtoGeneral: 0.06, porSiempre: false },
+    { id: 2,  nombre: "Especialización en Finanzas", nivel: "Especialización", modalidad: "Presencial", valorOriginal: 9779900,  dtoGeneral: 0.18, porSiempre: true },
+    { id: 3,  nombre: "Especialización en Gerencia de Mantenimiento y Confiabilidad", nivel: "Especialización", modalidad: "Presencial", valorOriginal: 8807000,  dtoGeneral: 0.06, porSiempre: true },
+    { id: 4,  nombre: "Especialización en Gerencia del Talento Humano", nivel: "Especialización", modalidad: "Presencial", valorOriginal: 9630000,  dtoGeneral: 0.10, porSiempre: true },
+    { id: 5,  nombre: "Especialización en Mercadeo", nivel: "Especialización", modalidad: "Presencial", valorOriginal: 9429000,  dtoGeneral: 0.15, porSiempre: true },
+    { id: 6,  nombre: "Especialización en Seguridad y Salud en el Trabajo", nivel: "Especialización", modalidad: "Presencial", valorOriginal: 9308000,  dtoGeneral: 0.15, porSiempre: true },
+
+    /* -------- Especializaciones · Combinada -------- */
+    { id: 7,  nombre: "Especialización en Analítica de Big Data", nivel: "Especialización", modalidad: "Combinada", valorOriginal: 9156000,  dtoGeneral: 0.06, porSiempre: true },
+    { id: 8,  nombre: "Especialización en Comunicación Estratégica", nivel: "Especialización", modalidad: "Combinada", valorOriginal: 8506000,  dtoGeneral: 0.06, porSiempre: true },
+    { id: 9,  nombre: "Especialización en Derechos Humanos y Territorios", nivel: "Especialización", modalidad: "Combinada", valorOriginal: 7989000,  dtoGeneral: 0.15, porSiempre: true },
+    { id: 10, nombre: "Especialización en Eficiencia Energética", nivel: "Especialización", modalidad: "Combinada", valorOriginal: 8757000,  dtoGeneral: 0.06, porSiempre: true },
+    { id: 11, nombre: "Especialización en Estrategia Publicitaria de Marca en Entornos Digitales", nivel: "Especialización", modalidad: "Combinada", valorOriginal: 9165000,  dtoGeneral: 0.17, porSiempre: true },
+    { id: 12, nombre: "Especialización en Gerencia de Proyectos", nivel: "Especialización", modalidad: "Combinada", valorOriginal: 9651900,  dtoGeneral: 0.06, porSiempre: true },
+    { id: 13, nombre: "Especialización en Ingeniería Clínica", nivel: "Especialización", modalidad: "Combinada", valorOriginal: 9308000,  dtoGeneral: 0.14, porSiempre: true },
+    { id: 14, nombre: "Especialización en Inteligencia Artificial", nivel: "Especialización", modalidad: "Combinada", valorOriginal: 9156000,  dtoGeneral: 0.15, porSiempre: true },
+    { id: 15, nombre: "Especialización en Logística", nivel: "Especialización", modalidad: "Combinada", valorOriginal: 8443000,  dtoGeneral: 0.09, porSiempre: true },
+
+    /* -------- Especializaciones · Virtual -------- */
+    { id: 16, nombre: "Especialización en Comercio Exterior", nivel: "Especialización", modalidad: "Virtual", valorOriginal: 6893000,  dtoGeneral: 0.06, porSiempre: true },
+    { id: 17, nombre: "Especialización en Comunicación y Periodismo Digital", nivel: "Especialización", modalidad: "Virtual", valorOriginal: 6802000,  dtoGeneral: 0.15, porSiempre: true },
+    { id: 18, nombre: "Especialización en Diseño Publicitario en Contenidos Digitales", nivel: "Especialización", modalidad: "Virtual", valorOriginal: 6881000,  dtoGeneral: 0.06, porSiempre: true },
+    { id: 19, nombre: "Especialización en Finanzas", nivel: "Especialización", modalidad: "Virtual", valorOriginal: 6944800,  dtoGeneral: 0.06, porSiempre: true },
+    { id: 20, nombre: "Especialización en Interculturalidad y Estudios de Género", nivel: "Especialización", modalidad: "Virtual", valorOriginal: 6802000,  dtoGeneral: 0.15, porSiempre: true },
+    { id: 21, nombre: "Especialización en Logística", nivel: "Especialización", modalidad: "Virtual", valorOriginal: 7240000,  dtoGeneral: 0.06, porSiempre: true },
+    { id: 22, nombre: "Especialización en Seguridad y Salud en el Trabajo", nivel: "Especialización", modalidad: "Virtual", valorOriginal: 7240000,  dtoGeneral: 0.06, porSiempre: true },
+
+    /* -------- Maestrías -------- */
+    { id: 23, nombre: "Maestría en Administración de Empresas", nivel: "Maestría", modalidad: "Presencial", valorOriginal: 13364000, dtoGeneral: 0.10, porSiempre: true },
+    { id: 24, nombre: "Maestría en Ingeniería de Desarrollo de Productos", nivel: "Maestría", modalidad: "Presencial", valorOriginal: 10846000, dtoGeneral: 0.20, porSiempre: false },
+    { id: 25, nombre: "Maestría en Sistemas Energéticos", nivel: "Maestría", modalidad: "Presencial", valorOriginal: 11370000, dtoGeneral: null, porSiempre: true },
+    { id: 26, nombre: "Maestría en Gerencia de Ingeniería", nivel: "Maestría", modalidad: "Combinada", valorOriginal: 11433000, dtoGeneral: 0.20, porSiempre: true },
+    { id: 27, nombre: "Maestría en Inteligencia Artificial y Ciencia de Datos", nivel: "Maestría", modalidad: "Combinada", valorOriginal: 10846000, dtoGeneral: 0.20, porSiempre: true },
+    { id: 28, nombre: "Maestría en Seguridad y Salud en el Trabajo", nivel: "Maestría", modalidad: "Combinada", valorOriginal: 12015000, dtoGeneral: 0.10, porSiempre: true },
+    { id: 29, nombre: "Maestría en Comunicación Digital", nivel: "Maestría", modalidad: "Virtual", valorOriginal: 9787000,  dtoGeneral: 0.20, porSiempre: true }
+  ];
+
+  /* ==========================================================
+     3. DOM
+     ========================================================== */
+  const $ = sel => document.querySelector(sel);
+
+  const app            = $("#app");
+  const kicker         = $("#kicker");
+  const perfilCards    = document.querySelectorAll(".perfil-card");
+  const nivelTabs      = $("#nivel-tabs");
+  const selectPrograma = $("#programa");
+  const emptyMsg       = $("#empty-msg");
+  const resumenMini    = $("#resumen-mini");
+  const trust1         = $("#trust-1");
+  const voucher        = $("#voucher");
+  const voucherReal    = $("#voucher-real");
+  const voucherTop     = $("#voucher-top");
+  const ctaButton      = $("#cta-button");
+  const upsell         = $("#upsell");
+  const phSeal         = $("#ph-seal");
+
+  let perfilActivo = "egresado";   // "egresado" | "aspirante"
+  let nivelActivo  = "Todos";
+  let animadores   = [];
+
+  /* ==========================================================
+     4. FORMATO Y CÁLCULO
+     ========================================================== */
+  const formatoCOP = new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    maximumFractionDigits: 0
+  });
+
+  const formatearMoneda = v => formatoCOP.format(v);
+  const formatearPct    = d => Math.round(d * 100) + "%";
+
+  /** Devuelve el descuento aplicable a un programa según el perfil,
+   *  o null si el programa no tiene descuento para ese perfil. */
+  function descuentoAplicable(programa, perfil) {
+    /* Egresado: SOLO programas del beneficio Por Siempre UAO, siempre al 40%.
+       Aspirante: SOLO programas con descuento comercial 2026 (tabla VADF-4.040). */
+    if (perfil === "egresado") {
+      return programa.porSiempre ? DESCUENTO_POR_SIEMPRE : null;
+    }
+    return programa.dtoGeneral;
+  }
+
+  function calcular(valorSemestre, descuento) {
+    const valorConDescuento = Math.round(valorSemestre * (1 - descuento));
+    return { valorConDescuento, ahorro: valorSemestre - valorConDescuento };
+  }
+
+  /* ==========================================================
+     5. COUNT-UP
+     ========================================================== */
+  const prefiereMenosMovimiento =
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function animarValor(el, valorFinal, duracion) {
+    if (prefiereMenosMovimiento) {
+      el.textContent = formatearMoneda(valorFinal);
+      return;
+    }
+    const inicio = performance.now();
+    let rafId;
+    function frame(ahora) {
+      const t = Math.min((ahora - inicio) / duracion, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = formatearMoneda(Math.round(valorFinal * eased));
+      if (t < 1) rafId = requestAnimationFrame(frame);
+    }
+    rafId = requestAnimationFrame(frame);
+    animadores.push(() => cancelAnimationFrame(rafId));
+  }
+
+  function detenerAnimaciones() {
+    animadores.forEach(stop => stop());
+    animadores = [];
+  }
+
+  /* ==========================================================
+     6. POBLAR SELECT
+     ========================================================== */
+  function poblarSelector() {
+    const valorPrevio = selectPrograma.value;
+    selectPrograma.innerHTML = "";
+
+    const op0 = document.createElement("option");
+    op0.value = "";
+    op0.textContent = "Selecciona tu programa";
+    selectPrograma.appendChild(op0);
+
+    const filtrados = programas.filter(p => {
+      const coincideNivel = nivelActivo === "Todos" || p.nivel === nivelActivo;
+      const tieneDescuento = descuentoAplicable(p, perfilActivo) != null;
+      return coincideNivel && tieneDescuento;
+    });
+
+    ["Presencial", "Combinada", "Virtual"].forEach(modalidad => {
+      const grupo = filtrados.filter(p => p.modalidad === modalidad);
+      if (!grupo.length) return;
+      const og = document.createElement("optgroup");
+      og.label = "Modalidad " + modalidad;
+      grupo.forEach(p => {
+        const op = document.createElement("option");
+        op.value = String(p.id);
+        if (perfilActivo === "egresado") {
+          op.textContent = p.nombre;            // todos al 40%, no repetir
+        } else {
+          const pct = descuentoAplicable(p, perfilActivo);
+          op.textContent = p.nombre + "  ·  " + formatearPct(pct) + " dto";
+        }
+        og.appendChild(op);
+      });
+      selectPrograma.appendChild(og);
+    });
+
+    const sigueDisponible = filtrados.some(p => String(p.id) === valorPrevio);
+    selectPrograma.value = sigueDisponible ? valorPrevio : "";
+    if (!sigueDisponible) mostrarEstadoVacio();
+  }
+
+  /* ==========================================================
+     7. RENDER
+     ========================================================== */
+  function mostrarEstadoVacio() {
+    detenerAnimaciones();
+    voucher.classList.add("is-empty");
+    emptyMsg.hidden = false;
+    resumenMini.hidden = true;
+  }
+
+  function renderizarPrograma(p) {
+    detenerAnimaciones();
+
+    const descuento = descuentoAplicable(p, perfilActivo);
+    if (descuento == null) return mostrarEstadoVacio();
+
+    const esPorSiempre = perfilActivo === "egresado" && p.porSiempre;
+    const { valorConDescuento, ahorro } = calcular(p.valorOriginal, descuento);
+
+    /* Etiquetas */
+    voucher.dataset.perfil = perfilActivo;
+    voucher.querySelector(".nivel-tag").textContent = p.nivel;
+    voucher.querySelector(".modalidad-tag").textContent = "Modalidad " + p.modalidad;
+    $("#beneficio-tag").textContent = esPorSiempre ? "Por Siempre UAO" : "Descuento 2026";
+    voucher.querySelector(".programa-nombre").textContent = p.nombre;
+
+    /* Sello y microtexto */
+    $("#stamp-pct").textContent = formatearPct(descuento);
+    $("#stamp-text").textContent = esPorSiempre
+      ? "POR SIEMPRE UAO · BENEFICIO EXCLUSIVO ·"
+      : "POSGRADOS UAO · DESCUENTO 2026 ·";
+    const micro = esPorSiempre
+      ? "POR SIEMPRE UAO · BENEFICIO " + formatearPct(descuento) + " · "
+      : "POSGRADOS UAO 2026 · DESCUENTO " + formatearPct(descuento) + " · ";
+    voucherTop.dataset.microtexto = micro.repeat(6);
+
+    /* Precios */
+    $("#label-descuento").textContent = esPorSiempre
+      ? "Con beneficio Por Siempre UAO"
+      : "Con descuento 2026";
+    $("#valor-original").textContent = formatearMoneda(p.valorOriginal);
+    animarValor($("#valor-descuento"), valorConDescuento, 750);
+    animarValor($("#valor-ahorro"), ahorro, 900);
+
+    /* Mensaje dinámico */
+    const nombreBeneficio = esPorSiempre
+      ? "el beneficio <strong>Por Siempre UAO (" + formatearPct(descuento) + ")</strong>"
+      : "el <strong>descuento del " + formatearPct(descuento) + " para 2026</strong>";
+    $("#dynamic-message").innerHTML =
+      "Con " + nombreBeneficio + ", pagarías " +
+      "<strong>" + formatearMoneda(valorConDescuento) + "</strong> y ahorrarías " +
+      "<strong>" + formatearMoneda(ahorro) + "</strong> en tu semestre.";
+
+    /* Upsell: si es aspirante y el programa participa de Por Siempre,
+       mostrar cuánto pagaría un egresado, como argumento comercial. */
+    if (perfilActivo === "aspirante" && p.porSiempre) {
+      const egresado = calcular(p.valorOriginal, DESCUENTO_POR_SIEMPRE);
+      upsell.innerHTML =
+        "¿Eres egresado UAO? Con el beneficio <strong>Por Siempre UAO (40%)</strong> este programa te costaría " +
+        "<strong>" + formatearMoneda(egresado.valorConDescuento) + "</strong> por semestre.";
+      upsell.hidden = false;
+    } else {
+      upsell.hidden = true;
+    }
+
+    ctaButton.href = CTA_URL;
+
+    /* Resumen lateral */
+    resumenMini.querySelector(".resumen-modalidad").textContent = p.modalidad;
+    resumenMini.querySelector(".resumen-nivel").textContent = p.nivel;
+    resumenMini.querySelector(".resumen-descuento").textContent = formatearPct(descuento);
+    resumenMini.hidden = false;
+    emptyMsg.hidden = true;
+
+    voucher.classList.remove("is-empty");
+
+    voucherReal.classList.remove("animar");
+    void voucherReal.offsetWidth;
+    voucherReal.classList.add("animar");
+  }
+
+  function refrescarTextosPerfil() {
+    const esEgresado = perfilActivo === "egresado";
+    app.dataset.marca = esEgresado ? "40%" : "2026";
+    kicker.textContent = esEgresado
+      ? "Por Siempre UAO · Beneficio egresados"
+      : "Posgrados UAO · Descuentos 2026";
+    trust1.textContent = esEgresado
+      ? "Descuento del 40% aplicado sobre el valor del semestre."
+      : "Descuentos de hasta el 20% según el programa elegido.";
+    phSeal.textContent = esEgresado ? "40%" : "2026";
+  }
+
+  /* ==========================================================
+     8. EVENTOS
+     ========================================================== */
+  perfilCards.forEach(card => {
+    card.addEventListener("click", () => {
+      perfilActivo = card.dataset.perfil;
+      perfilCards.forEach(c =>
+        c.setAttribute("aria-pressed", String(c === card))
+      );
+      refrescarTextosPerfil();
+      poblarSelector();
+      if (selectPrograma.value) {
+        const p = programas.find(x => String(x.id) === selectPrograma.value);
+        if (p) renderizarPrograma(p);
+      }
+    });
+  });
+
+  nivelTabs.addEventListener("click", e => {
+    const btn = e.target.closest("button[data-nivel]");
+    if (!btn) return;
+    nivelActivo = btn.dataset.nivel;
+    nivelTabs.querySelectorAll("button[data-nivel]").forEach(b =>
+      b.setAttribute("aria-pressed", String(b === btn))
+    );
+    poblarSelector();
+    if (selectPrograma.value) {
+      const p = programas.find(x => String(x.id) === selectPrograma.value);
+      if (p) renderizarPrograma(p);
+    }
+  });
+
+  selectPrograma.addEventListener("change", () => {
+    if (!selectPrograma.value) return mostrarEstadoVacio();
+    const p = programas.find(x => String(x.id) === selectPrograma.value);
+    if (p) renderizarPrograma(p);
+  });
+
+  /* ==========================================================
+     9. INIT
+     ========================================================== */
+  refrescarTextosPerfil();
+  poblarSelector();
+  mostrarEstadoVacio();
+})();
+</script>
+
+
+<script>
+/* ==============================================================
+   PARTÍCULAS DE MARCA v2 — Canvas 2D
+   Combina dos sistemas en un solo loop:
+   1) AMBIENTE: esferas suaves que flotan, se conectan con hilos
+      sutiles y se apartan del cursor (efecto original).
+   2) RÁFAGAS: explosiones de "polvo estelar" al hacer clic/tap,
+      adaptadas de la animación de referencia a la colorimetría
+      UAO (variación de color, tamaños mayores, vuelo radial),
+      con vida útil y desvanecimiento para no saturar.
+   ============================================================== */
+(function () {
+  "use strict";
+
+  const canvas = document.getElementById("particulas");
+  if (!canvas) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) { canvas.remove(); return; }
+
+  const ctx = canvas.getContext("2d");
+  const contenedor = canvas.parentElement;
+
+  /* ---------- Configuración (juega con estos valores) ---------- */
+  const config = {
+    rafagaParticulas: 26,      // partículas por clic (se reduce en móvil)
+    rafagaMax: 220,            // tope simultáneo de partículas de ráfaga
+    rafagaTamMax: 7,           // radio máximo del polvo de ráfaga
+    rafagaVelMax: 5.5,         // velocidad inicial máxima
+    variacionColor: 38         // variación aleatoria de color (de la referencia)
+  };
+
+  /* ---------- Paleta de marca ---------- */
+  const PALETA_AMBIENTE = [
+    { c: "220,20,45",   pesos: 5 },  // rojo principal
+    { c: "150,20,35",   pesos: 3 },  // rojo oscuro
+    { c: "182,138,53",  pesos: 2 },  // dorado
+    { c: "255,255,255", pesos: 2 }   // destello crema
+  ];
+
+  /* Materia de las ráfagas (objetos rgb, como en la referencia) */
+  const MATERIA = [
+    { r: 220, g: 20,  b: 45  },  // rojo UAO
+    { r: 150, g: 20,  b: 35  },  // rojo oscuro
+    { r: 182, g: 138, b: 53  },  // dorado
+    { r: 110, g: 14,  b: 26  },  // rojo tinta
+    { r: 243, g: 232, b: 208 }   // crema luminosa
+  ];
+
+  function colorAmbiente() {
+    const bolsa = [];
+    PALETA_AMBIENTE.forEach(p => { for (let i = 0; i < p.pesos; i++) bolsa.push(p.c); });
+    return bolsa[Math.floor(Math.random() * bolsa.length)];
+  }
+
+  /* Variación de color adaptada de la referencia:
+     toma un rgb base y lo perturba aleatoriamente. */
+  function variarColor(color) {
+    const v = config.variacionColor;
+    const cl = n => Math.max(0, Math.min(255, Math.round(n)));
+    return {
+      r: cl(color.r + (Math.random() * v - v / 2)),
+      g: cl(color.g + (Math.random() * v - v / 2)),
+      b: cl(color.b + (Math.random() * v - v / 2))
+    };
+  }
+
+  /* ---------- Estado ---------- */
+  let W = 0, H = 0, dpr = 1;
+  let ambiente = [];   // partículas flotantes permanentes
+  let rafagas = [];    // partículas de explosión (vida finita)
+  const mouse = { x: -9999, y: -9999 };
+
+  function esMovilFn() { return W < 640; }
+
+  function redimensionar() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = contenedor.offsetWidth;
+    H = contenedor.offsetHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    crearAmbiente();
+  }
+
+  /* ---------- Sistema 1: ambiente flotante ---------- */
+  function crearAmbiente() {
+    const esMovil = esMovilFn();
+    const densidad = esMovil ? 38000 : 26000;
+    const tope = esMovil ? 32 : 70;
+    const cantidad = Math.min(tope, Math.max(18, Math.round((W * H) / densidad)));
+    ambiente = Array.from({ length: cantidad }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: 1.2 + Math.random() * 2.6,
+      vx: (Math.random() - .5) * .35,
+      vy: (Math.random() - .5) * .35,
+      color: colorAmbiente(),
+      alfa: .25 + Math.random() * .45,
+      fase: Math.random() * Math.PI * 2,
+      velFase: .004 + Math.random() * .01
+    }));
+  }
+
+  const distEnlace = () => (esMovilFn() ? 90 : 130);
+
+  function actualizarAmbiente() {
+    ambiente.forEach(p => {
+      const dx = p.x - mouse.x, dy = p.y - mouse.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < 120 * 120 && d2 > .01) {
+        const f = (120 * 120 - d2) / (120 * 120) * .03;
+        const d = Math.sqrt(d2);
+        p.vx += (dx / d) * f;
+        p.vy += (dy / d) * f;
+      }
+      p.vx *= .985; p.vy *= .985;
+      if (Math.abs(p.vx) < .05) p.vx += (Math.random() - .5) * .02;
+      if (Math.abs(p.vy) < .05) p.vy += (Math.random() - .5) * .02;
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -20) p.x = W + 20;
+      if (p.x > W + 20) p.x = -20;
+      if (p.y < -20) p.y = H + 20;
+      if (p.y > H + 20) p.y = -20;
+    });
+  }
+
+  function dibujarAmbiente() {
+    /* hilos de conexión */
+    const enlace = distEnlace();
+    for (let i = 0; i < ambiente.length; i++) {
+      const a = ambiente[i];
+      for (let j = i + 1; j < ambiente.length; j++) {
+        const b = ambiente[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < enlace * enlace) {
+          const op = (1 - Math.sqrt(d2) / enlace) * .12;
+          ctx.strokeStyle = "rgba(150,20,35," + op.toFixed(3) + ")";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    /* esferas con halo */
+    ambiente.forEach(p => {
+      p.fase += p.velFase;
+      const titilar = .75 + Math.sin(p.fase) * .25;
+      const alfa = p.alfa * titilar;
+
+      const halo = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+      halo.addColorStop(0, "rgba(" + p.color + "," + (alfa * .9).toFixed(3) + ")");
+      halo.addColorStop(1, "rgba(" + p.color + ",0)");
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(" + p.color + "," + alfa.toFixed(3) + ")";
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  /* ---------- Sistema 2: ráfagas (adaptado de la referencia) ---------- */
+  function ParticulaRafaga(x, y) {
+    /* Dirección de vuelo aleatoria, como p.d de la referencia,
+       pero con velocidad cartesiana correcta. */
+    const ang = Math.random() * Math.PI * 2;
+    const vel = Math.pow(Math.random(), .6) * config.rafagaVelMax + .6;
+    const base = MATERIA[Math.floor(Math.random() * MATERIA.length)];
+    const col = variarColor(base);
+    return {
+      x, y,
+      vx: Math.cos(ang) * vel,
+      vy: Math.sin(ang) * vel,
+      r: Math.ceil(Math.random() * config.rafagaTamMax) * .8 + .8,
+      color: col.r + "," + col.g + "," + col.b,
+      vida: 1,                              // 1 → 0
+      decae: .006 + Math.random() * .012,   // velocidad de desvanecido
+      giro: (Math.random() - .5) * .04      // curvatura sutil del vuelo
+    };
+  }
+
+  function explotar(x, y) {
+    const cantidad = esMovilFn()
+      ? Math.round(config.rafagaParticulas * .6)
+      : config.rafagaParticulas;
+    for (let i = 0; i < cantidad; i++) {
+      rafagas.push(ParticulaRafaga(x, y));
+    }
+    /* cleanUpArray de la referencia: respeta el tope global */
+    if (rafagas.length > config.rafagaMax) {
+      rafagas.splice(0, rafagas.length - config.rafagaMax);
+    }
+  }
+
+  function actualizarRafagas() {
+    for (let i = rafagas.length - 1; i >= 0; i--) {
+      const p = rafagas[i];
+      /* curvatura: rota levemente el vector de velocidad */
+      const cos = Math.cos(p.giro), sin = Math.sin(p.giro);
+      const nvx = p.vx * cos - p.vy * sin;
+      const nvy = p.vx * sin + p.vy * cos;
+      p.vx = nvx * .988;   // fricción
+      p.vy = nvy * .988;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vida -= p.decae;
+
+      /* eliminar al apagarse o salir del lienzo */
+      if (p.vida <= 0 || p.x < -120 || p.x > W + 120 || p.y < -120 || p.y > H + 120) {
+        rafagas.splice(i, 1);
+      }
+    }
+  }
+
+  function dibujarRafagas() {
+    rafagas.forEach(p => {
+      const alfa = Math.max(0, p.vida) * .85;
+      const radio = p.r * (.4 + p.vida * .6);   // encoge al morir
+
+      const halo = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, radio * 3);
+      halo.addColorStop(0, "rgba(" + p.color + "," + (alfa * .8).toFixed(3) + ")");
+      halo.addColorStop(1, "rgba(" + p.color + ",0)");
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, radio * 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(" + p.color + "," + alfa.toFixed(3) + ")";
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, radio, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  /* ---------- Loop principal ---------- */
+  let visible = true;
+
+  function loop() {
+    if (visible) {
+      ctx.clearRect(0, 0, W, H);
+      actualizarAmbiente();
+      actualizarRafagas();
+      dibujarAmbiente();
+      dibujarRafagas();
+    }
+    requestAnimationFrame(loop);
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    visible = !document.hidden;
+  });
+
+  /* ---------- Interacción ---------- */
+  contenedor.addEventListener("pointermove", e => {
+    const rect = contenedor.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+
+  contenedor.addEventListener("pointerleave", () => {
+    mouse.x = -9999; mouse.y = -9999;
+  });
+
+  /* Clic/tap → ráfaga (de la referencia). Se omite sobre controles
+     interactivos para no distraer mientras el usuario opera la
+     calculadora. */
+  contenedor.addEventListener("pointerdown", e => {
+    if (e.target.closest("button, select, a, input, label")) return;
+    const rect = contenedor.getBoundingClientRect();
+    explotar(e.clientX - rect.left, e.clientY - rect.top);
+  });
+
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(redimensionar, 180);
+  });
+
+  /* ---------- Init: primera "explosión" de bienvenida ---------- */
+  redimensionar();
+  /* ráfaga inicial suave desde el centro superior, como saludo */
+  setTimeout(() => explotar(W / 2, Math.min(H * .18, 220)), 450);
+  loop();
+})();
+</script>
+
+</body>
+</html>
