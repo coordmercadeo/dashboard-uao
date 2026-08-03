@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAO · Tablero Estratégico Cohorte 2027-1S</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#FF0000;
+  --red-deep:#B30000;
+  --red-ink:#3A0000;
+  --ink:#191515;
+  --ink-soft:#5B5654;
+  --paper:#FBFAF8;
+  --panel:#FFFFFF;
+  --line:#E9E4E0;
+  --sand:#F4F0EB;
+  --green:#1E7A4C;
+  --amber:#B8720A;
+  --shadow: 0 1px 2px rgba(25,21,21,.04), 0 8px 24px -12px rgba(25,21,21,.12);
+  --radius: 14px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Manrope',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{ font-family:'Sora',sans-serif; margin:0; }
+.mono{ font-family:'IBM Plex Mono',monospace; }
+
+/* ---------- background texture ---------- */
+.grain{
+  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.035; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- header ---------- */
+header{
+  position:sticky; top:0; z-index:50;
+  background:var(--panel);
+  border-bottom:3px solid var(--red);
+}
+.header-top{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px clamp(16px,4vw,40px) 12px;
+  gap:20px; flex-wrap:wrap;
+}
+.brand{ display:flex; align-items:center; gap:14px; }
+.brand img{ width:46px; height:46px; display:block; }
+.brand .titles{ line-height:1.15; }
+.brand .eyebrow{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--red); font-weight:600;
+}
+.brand h1{ font-size:19px; font-weight:800; color:var(--ink); letter-spacing:-.01em; }
+.meta-pills{ display:flex; gap:8px; flex-wrap:wrap; }
+.pill{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; padding:6px 12px; border-radius:100px;
+  border:1px solid var(--line); color:var(--ink-soft); background:var(--sand); white-space:nowrap;
+}
+.pill.red{ background:var(--red); color:#fff; border-color:var(--red); font-weight:600; }
+
+nav.tabs{
+  display:flex; gap:2px; overflow-x:auto; padding:0 clamp(16px,4vw,40px);
+  scrollbar-width:none;
+}
+nav.tabs::-webkit-scrollbar{ display:none; }
+nav.tabs button{
+  font-family:'Sora',sans-serif; font-size:13px; font-weight:600; color:var(--ink-soft);
+  background:none; border:none; padding:12px 16px 13px; cursor:pointer; white-space:nowrap;
+  border-bottom:3px solid transparent; margin-bottom:-3px; transition:color .15s ease, border-color .15s ease;
+}
+nav.tabs button .n{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--red); margin-right:6px; }
+nav.tabs button:hover{ color:var(--ink); }
+nav.tabs button.active{ color:var(--red); border-color:var(--red); }
+
+/* ---------- layout ---------- */
+main{ position:relative; z-index:1; max-width:1240px; margin:0 auto; padding:32px clamp(16px,4vw,40px) 100px; }
+section.view{ display:none; animation:rise .35s ease; }
+section.view.active{ display:block; }
+@keyframes rise{ from{ opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+
+.view-head{ margin-bottom:28px; }
+.view-head .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--red); font-weight:700; margin-bottom:6px; display:block;}
+.view-head h2{ font-size:clamp(24px,3vw,32px); font-weight:800; letter-spacing:-.01em; }
+.view-head p{ color:var(--ink-soft); max-width:760px; margin-top:10px; font-size:15px; line-height:1.6; }
+
+.grid{ display:grid; gap:16px; }
+.g2{ grid-template-columns:repeat(2,1fr); }
+.g3{ grid-template-columns:repeat(3,1fr); }
+.g4{ grid-template-columns:repeat(4,1fr); }
+.g6{ grid-template-columns:repeat(6,1fr); }
+@media(max-width:900px){ .g2,.g3,.g4,.g6{ grid-template-columns:repeat(2,1fr);} }
+@media(max-width:560px){ .g2,.g3,.g4,.g6{ grid-template-columns:1fr;} }
+
+.card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:20px; box-shadow:var(--shadow);
+}
+.card h3{ font-size:15px; font-weight:700; margin-bottom:8px; }
+.card h4{ font-size:13px; font-weight:700; color:var(--red-deep); text-transform:uppercase; letter-spacing:.04em; margin-bottom:10px;}
+.card p{ font-size:13.5px; line-height:1.6; color:var(--ink-soft); margin:0 0 8px; }
+.card ul{ margin:0; padding-left:18px; }
+.card li{ font-size:13.5px; line-height:1.7; color:var(--ink-soft); }
+
+.section-block{ margin-bottom:40px; }
+.section-block > h3.block-title{
+  font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--ink);
+  display:flex; align-items:center; gap:10px; margin-bottom:16px;
+}
+.section-block > h3.block-title::after{ content:""; flex:1; height:1px; background:var(--line); }
+
+/* ---------- KPI strip ---------- */
+.kpi-strip{ display:grid; grid-template-columns:repeat(6,1fr); gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; margin-bottom:32px;}
+.kpi{ background:var(--panel); padding:18px 16px; }
+.kpi .big{ font-family:'Sora',sans-serif; font-size:26px; font-weight:800; color:var(--red); line-height:1; }
+.kpi .lbl{ font-size:11px; color:var(--ink-soft); margin-top:6px; line-height:1.35; }
+@media(max-width:900px){ .kpi-strip{ grid-template-columns:repeat(3,1fr);} }
+@media(max-width:560px){ .kpi-strip{ grid-template-columns:repeat(2,1fr);} }
+
+/* ---------- tables ---------- */
+.table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); box-shadow:var(--shadow);}
+table{ width:100%; border-collapse:collapse; min-width:640px; }
+thead th{
+  background:var(--red); color:#fff; text-align:left; font-family:'Sora',sans-serif; font-weight:700;
+  font-size:11.5px; text-transform:uppercase; letter-spacing:.03em; padding:11px 14px; white-space:nowrap;
+}
+tbody td{ padding:11px 14px; font-size:13px; color:var(--ink); border-top:1px solid var(--line); vertical-align:top; }
+tbody tr:nth-child(even){ background:var(--sand); }
+tbody td.muted{ color:var(--ink-soft); }
+
+.tag{ display:inline-block; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:100px; text-transform:uppercase; letter-spacing:.03em;}
+.tag.alta, .tag.alto{ background:#FDE2E2; color:var(--red-deep); }
+.tag.media, .tag.medio{ background:#FBEEDB; color:var(--amber); }
+.tag.baja, .tag.bajo{ background:#E1F2E7; color:var(--green); }
+
+/* ---------- pillars / funnel ---------- */
+.pillars{ display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
+@media(max-width:960px){ .pillars{grid-template-columns:repeat(2,1fr);} }
+.pillar{ border:1px solid var(--line); border-radius:var(--radius); padding:18px; background:var(--panel); position:relative; overflow:hidden;}
+.pillar .num{ font-family:'IBM Plex Mono',monospace; color:var(--red); font-size:11px; font-weight:600;}
+.pillar h4{ font-size:14px; font-weight:700; margin:8px 0 6px; color:var(--ink); text-transform:none; letter-spacing:0;}
+.pillar p{ font-size:12.5px; color:var(--ink-soft); line-height:1.55;}
+
+.funnel{ display:flex; flex-direction:column; gap:6px; margin:20px 0; }
+.funnel .stage{ display:grid; grid-template-columns:170px 1fr; align-items:center; gap:14px;}
+.funnel .stage .label{ font-size:12.5px; font-weight:700; text-align:right; color:var(--ink); }
+.funnel .stage .bar{ height:34px; background:linear-gradient(90deg,var(--red),var(--red-deep)); border-radius:8px; display:flex; align-items:center; padding:0 14px; color:#fff; font-size:11.5px; font-family:'IBM Plex Mono',monospace;}
+.funnel .stage:nth-child(1) .bar{width:100%;}
+.funnel .stage:nth-child(2) .bar{width:86%;}
+.funnel .stage:nth-child(3) .bar{width:70%;}
+.funnel .stage:nth-child(4) .bar{width:52%;}
+.funnel .stage:nth-child(5) .bar{width:36%;}
+.funnel .stage:nth-child(6) .bar{width:22%;}
+
+/* ---------- gantt ---------- */
+.gantt{ border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); box-shadow:var(--shadow); overflow-x:auto;}
+.gantt-grid{ min-width:820px; }
+.gantt-row{ display:grid; grid-template-columns:230px repeat(7,1fr); align-items:center; border-top:1px solid var(--line); }
+.gantt-row:first-child{ border-top:none; }
+.gantt-row.head{ background:var(--red); }
+.gantt-row.head div{ color:#fff; font-family:'Sora',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.03em; padding:10px 12px;}
+.gantt-row .rowlabel{ padding:10px 14px; font-size:12.5px; font-weight:600; color:var(--ink); background:var(--sand); }
+.gantt-cell{ padding:8px 6px; display:flex; justify-content:center; }
+.gantt-bar{ height:16px; width:100%; border-radius:5px; background:var(--red); opacity:.9;}
+.gantt-bar.empty{ background:transparent; }
+
+/* ---------- timeline months ---------- */
+.months{ display:grid; grid-template-columns:repeat(7,1fr); gap:12px; }
+@media(max-width:960px){ .months{grid-template-columns:repeat(2,1fr);} }
+.month-card{ border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); padding:14px; box-shadow:var(--shadow);}
+.month-card .m{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--red); font-weight:700; letter-spacing:.05em;}
+.month-card p{ font-size:12px; color:var(--ink-soft); line-height:1.55; margin-top:6px;}
+
+/* ---------- open house ---------- */
+.phases{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+@media(max-width:900px){ .phases{grid-template-columns:1fr;} }
+.phase{ border:1px solid var(--line); border-radius:var(--radius); padding:18px; background:var(--panel); box-shadow:var(--shadow);}
+.phase .tagline{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--red); text-transform:uppercase; letter-spacing:.08em; font-weight:700;}
+.phase h4{ font-size:16px; margin:6px 0 12px; }
+
+/* ---------- checklist ---------- */
+.checklist{ display:grid; gap:10px; }
+.check-item{ display:flex; gap:12px; align-items:flex-start; padding:12px 14px; border:1px solid var(--line); border-radius:10px; background:var(--panel);}
+.check-item .box{ width:18px; height:18px; border:2px solid var(--red); border-radius:5px; flex:none; margin-top:2px;}
+.check-item p{ margin:0; font-size:13.5px; color:var(--ink); line-height:1.5;}
+
+/* ---------- budget ---------- */
+.budget-wrap{ display:grid; grid-template-columns:280px 1fr; gap:24px; align-items:center; }
+@media(max-width:800px){ .budget-wrap{grid-template-columns:1fr;} }
+.legend{ display:grid; gap:8px; margin-top:14px; }
+.legend .row{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-soft);}
+.legend .sw{ width:10px; height:10px; border-radius:3px; flex:none;}
+
+.donut-wrap{ display:flex; flex-direction:column; align-items:center; gap:16px; }
+.donut{
+  width:230px; height:230px; border-radius:50%; position:relative; flex:none;
+  background:conic-gradient(
+    #FF0000 0% 40%,
+    #B30000 40% 65%,
+    #7A1F1F 65% 77%,
+    #E68A8A 77% 87%,
+    #F2C4C4 87% 95%,
+    #3A0000 95% 100%
+  );
+  box-shadow: var(--shadow);
+}
+.donut::after{
+  content:""; position:absolute; inset:19%; background:var(--panel); border-radius:50%;
+  z-index:1;
+}
+.donut .center{
+  position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+}
+.donut .center .big{ font-family:'Sora',sans-serif; font-weight:800; font-size:22px; color:var(--ink); }
+.donut .center .lbl{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em; max-width:110px; margin-top:2px;}
+
+footer{ text-align:center; padding:30px 20px 50px; color:var(--ink-soft); font-size:11.5px; font-family:'IBM Plex Mono',monospace;}
+footer .r{color:var(--red);}
+
+@media print{
+  nav.tabs{display:none;}
+  section.view{display:block !important; page-break-after:always;}
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header>
+  <div class="header-top">
+    <div class="brand">
+      <img src="data:image/png;base64,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" alt="UAO">
+      <div class="titles">
+        <span class="eyebrow">Dirección de Mercadeo Universitario</span>
+        <h1>Tablero Estratégico · Cohorte 2027-1S</h1>
+      </div>
+    </div>
+    <div class="meta-pills">
+      <span class="pill red">15 AGO 2026 → 15 FEB 2027</span>
+      <span class="pill">Posgrados</span>
+      <span class="pill">Pregrado</span>
+      <span class="pill">Universidad Autónoma de Occidente</span>
+    </div>
+  </div>
+  <nav class="tabs" id="tabnav"></nav>
+</header>
+
+<main id="views"></main>
+
+<footer>
+  UNIVERSIDAD AUTÓNOMA DE OCCIDENTE <span class="r">·</span> PLAN ESTRATÉGICO DE MERCADEO Y CAPTACIÓN <span class="r">·</span> COHORTE 2027-1S
+</footer>
+
+<script>
+// ============ CONFIG DE PESTAÑAS ============
+const TABS = [
+  { id:"resumen",      n:"01", label:"Resumen" },
+  { id:"journey",      n:"02", label:"Públicos & Journey" },
+  { id:"campanas",     n:"03", label:"Campañas insignia" },
+  { id:"calendario",   n:"04", label:"Calendario & Roadmap" },
+  { id:"actividades",  n:"05", label:"Matriz de actividades" },
+  { id:"automatizacion", n:"06", label:"Automatización SFMC" },
+  { id:"tablero",      n:"07", label:"Tablero ejecutivo" },
+  { id:"presupuesto",  n:"08", label:"Presupuesto & KPIs" },
+  { id:"riesgos",      n:"09", label:"Riesgos & Quick Wins" },
+  { id:"gobernanza",   n:"10", label:"Gobernanza" },
+];
+
+// ============ VISTA 01 · RESUMEN ============
+const VIEW_RESUMEN = `
+<div class="view-head">
+  <span class="eyebrow">Panorama general</span>
+  <h2>Un embudo, seis canales, un solo CRM</h2>
+  <p>Plan de mercadeo y captación para Posgrados (Especializaciones y Maestrías) y Pregrado de la UAO, cohorte 2027-1S. Integra medios digitales, ATL, BTL, CRM y eventos en una sola estrategia gobernada por datos entre el 15 de agosto de 2026 y el 15 de febrero de 2027.</p>
+</div>
+
+<div class="kpi-strip">
+  <div class="kpi"><div class="big">7</div><div class="lbl">meses de ejecución continua</div></div>
+  <div class="kpi"><div class="big">15 ago</div><div class="lbl">inicio de precalentamiento de audiencias</div></div>
+  <div class="kpi"><div class="big">1 sep</div><div class="lbl">encendido de pauta Meta Ads + Google Ads</div></div>
+  <div class="kpi"><div class="big">2</div><div class="lbl">ediciones de Open House · sep y nov</div></div>
+  <div class="kpi"><div class="big">40%</div><div class="lbl">descuento a egresados, activo ago–feb</div></div>
+  <div class="kpi"><div class="big">6</div><div class="lbl">journeys automatizados en SFMC</div></div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Pilares del plan</h3>
+  <div class="pillars">
+    <div class="pillar"><span class="num">01</span><h4>Activación temprana</h4><p>15–31 ago: expectativa, precalentamiento de bases CRM y audiencias, antes del encendido de pauta.</p></div>
+    <div class="pillar"><span class="num">02</span><h4>Inscripción sin costo</h4><p>Oferta ancla desde el día uno, con fecha de cierre visible que genera urgencia real y medible.</p></div>
+    <div class="pillar"><span class="num">03</span><h4>Open House 360°</h4><p>Dos ediciones (septiembre y noviembre), bisagra entre lo digital y lo presencial, con journey de antes, durante y después.</p></div>
+    <div class="pillar"><span class="num">04</span><h4>40% egresados</h4><p>Activa de forma continua entre agosto y febrero: palanca diferencial de lealtad y captación de bajo costo en Posgrados.</p></div>
+    <div class="pillar"><span class="num">05</span><h4>Automatización SFMC</h4><p>Journey Builder + Lead Scoring garantizan velocidad de respuesta y personalización por etapa.</p></div>
+  </div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Diagnóstico y benchmarking del sector</h3>
+  <div class="grid g2">
+    <div class="card">
+      <h4>Por qué una fase de precalentamiento</h4>
+      <p>La pauta paga inicia el 1 de septiembre, 2,5 semanas después del arranque del plan. Sin audiencias precalificadas ni bases nutridas, el costo por lead se eleva entre 20% y 35% en la primera quincena. El precalentamiento orgánico (15–31 ago) construye audiencias propias y lookalike listas desde el primer día de pauta.</p>
+    </div>
+    <div class="card">
+      <h4>Lectura del sector educación superior</h4>
+      <ul>
+        <li>La integración captación digital + CRM estructurado mejora la conversión de lead a matriculado frente a esquemas solo publicitarios.</li>
+        <li>El Open House rinde más como bisagra hacia un journey de seguimiento inmediato que como evento aislado.</li>
+        <li>Video corto, recorridos virtuales y testimonios de egresados lideran engagement en audiencias millennial/centennial.</li>
+        <li>Los beneficios a egresados son palanca de bajo CAC y alto impacto en Posgrados.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Diagnóstico interno · supuestos a validar con el equipo UAO</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Dimensión</th><th>Situación esperada</th><th>Implicación para el plan</th></tr></thead>
+    <tbody>
+      <tr><td><b>Base de datos CRM</b></td><td class="muted">Segmentada por programa y cohortes anteriores, con distinto grado de actualización</td><td class="muted">Priorizar limpieza y reactivación de base en el precalentamiento (15–31 ago)</td></tr>
+      <tr><td><b>Pauta digital</b></td><td class="muted">Historial en Meta Ads y Google Ads con aprendizaje de campañas previas</td><td class="muted">Reutilizar audiencias de conversión y exclusión de matriculados desde el día 1</td></tr>
+      <tr><td><b>Presencia ATL/BTL</b></td><td class="muted">Radio, prensa y OOH usados en temporada de alta demanda</td><td class="muted">Concentrar ATL/BTL en lanzamiento, Open House y cierre de Inscripción sin costo</td></tr>
+      <tr><td><b>Automatización</b></td><td class="muted">SFMC disponible; journeys por definir para esta cohorte</td><td class="muted">Diseñar Journey Builder por programa, etapa y canal (ver pestaña 06)</td></tr>
+      <tr><td><b>Comunidad de egresados</b></td><td class="muted">Base identificable pero subutilizada comercialmente</td><td class="muted">Activar campaña de 40% de descuento como puente fidelización–captación</td></tr>
+    </tbody>
+  </table></div>
+</div>
+`;
+
+// ============ VISTA 02 · PÚBLICOS & JOURNEY ============
+const VIEW_JOURNEY = `
+<div class="view-head">
+  <span class="eyebrow">Segmentación y trayectoria</span>
+  <h2>Públicos objetivo y customer journey</h2>
+  <p>Tres públicos con motivadores distintos y un mismo embudo de seis etapas, gobernado por Lead Scoring en Salesforce Marketing Cloud.</p>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Públicos objetivo</h3>
+  <div class="grid g3">
+    <div class="card"><h4>Pregrado</h4><p><b>Perfil:</b> bachilleres de 16–18 años y padres/acudientes como co-decisores.</p><p><b>Motivadores:</b> empleabilidad, prestigio, vida universitaria, becas y financiación, cercanía.</p></div>
+    <div class="card"><h4>Especializaciones</h4><p><b>Perfil:</b> profesionales de 24–35 años en ejercicio, foco en actualización rápida.</p><p><b>Motivadores:</b> aplicabilidad inmediata, horarios flexibles, ROI, networking.</p></div>
+    <div class="card"><h4>Maestrías</h4><p><b>Perfil:</b> profesionales de 27–40 años en roles de mayor responsabilidad.</p><p><b>Motivadores:</b> crecimiento profesional, especialización profunda, prestigio, convenios empresariales.</p></div>
+  </div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Estrategias específicas por programa</h3>
+  <div class="grid g3">
+    <div class="card"><h4>Pregrado</h4><ul>
+      <li>Comunicación dual: estudiante (identidad) + acudiente (empleabilidad y financiación)</li>
+      <li>Contenido nativo en Instagram, TikTok y YouTube: vida universitaria, testimonios, recorridos virtuales</li>
+      <li>Alianzas con colegios como canal estructural, no solo de campaña</li>
+    </ul></div>
+    <div class="card"><h4>Especializaciones</h4><ul>
+      <li>Foco en aplicabilidad inmediata y ROI profesional</li>
+      <li>LinkedIn y email B2B como soporte a Meta/Google Ads</li>
+      <li>Alianzas con gremios y colegios profesionales</li>
+    </ul></div>
+    <div class="card"><h4>Maestrías</h4><ul>
+      <li>Comunicación de mayor profundidad: investigación, docentes, convenios</li>
+      <li>Convenios empresariales y becas parciales como palanca de decisión</li>
+      <li>Seguimiento comercial consultivo 1 a 1</li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Customer journey · embudo de conversión</h3>
+  <div class="funnel">
+    <div class="stage"><div class="label">1 · Awareness</div><div class="bar">Video de marca, RRSS, prensa digital, OOH, radio</div></div>
+    <div class="stage"><div class="label">2 · Interés</div><div class="bar">Landing por programa, SEO/SEM, influenciadores</div></div>
+    <div class="stage"><div class="label">3 · Consideración</div><div class="bar">Formularios, WhatsApp, Open House, ferias</div></div>
+    <div class="stage"><div class="label">4 · Solicitud / Inscripción</div><div class="bar">Inscripción sin costo, recordatorios SMS/WhatsApp</div></div>
+    <div class="stage"><div class="label">5 · Admisión</div><div class="bar">Asesor, webinar de bienvenida, financiación</div></div>
+    <div class="stage"><div class="label">6 · Matrícula</div><div class="bar">Pago, inducción, activación de referidos</div></div>
+  </div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Estrategia omnicanal · frentes integrados</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Frente</th><th>Función en el embudo</th><th>Medios / herramientas</th></tr></thead>
+    <tbody>
+      <tr><td><b>Medios digitales de pauta</b></td><td class="muted">Generación de tráfico y leads calificados</td><td class="muted">Meta Ads, Google Ads (Search, Display, YouTube, PMax)</td></tr>
+      <tr><td><b>Orgánico y contenido</b></td><td class="muted">Awareness, posicionamiento, confianza de marca</td><td class="muted">Instagram, TikTok, LinkedIn, YouTube, blog, SEO</td></tr>
+      <tr><td><b>CRM y automatización</b></td><td class="muted">Nutrición, priorización y conversión de leads</td><td class="muted">SFMC: Journey Builder, Lead Scoring, Email, SMS, WhatsApp</td></tr>
+      <tr><td><b>ATL</b></td><td class="muted">Reconocimiento masivo en momentos clave</td><td class="muted">Radio, prensa, TV regional, OOH</td></tr>
+      <tr><td><b>BTL y eventos</b></td><td class="muted">Conversión y experiencia de marca</td><td class="muted">Open House, ferias, jornadas de financiación</td></tr>
+      <tr><td><b>Referidos y alianzas</b></td><td class="muted">Reducción de CAC y alcance de confianza</td><td class="muted">Egresados, convenios empresariales, colegios aliados</td></tr>
+    </tbody>
+  </table></div>
+</div>
+`;
+
+// ============ VISTA 03 · CAMPAÑAS INSIGNIA ============
+const VIEW_CAMPANAS = `
+<div class="view-head">
+  <span class="eyebrow">Ejes de conversión</span>
+  <h2>Campañas insignia</h2>
+  <p>Tres activaciones centrales del plan, cada una con objetivo, público, justificación, etapa del embudo, medios de soporte, KPIs y presupuesto sugerido.</p>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Inscripción sin costo</h3>
+  <div class="table-wrap"><table>
+    <tbody>
+      <tr><td style="width:190px"><b>Objetivo</b></td><td class="muted">Reducir la fricción de entrada al proceso de admisión y acelerar el paso de lead a inscrito</td></tr>
+      <tr><td><b>Público objetivo</b></td><td class="muted">Prospectos de Pregrado, Especializaciones y Maestrías en etapa de Interés y Consideración</td></tr>
+      <tr><td><b>Justificación</b></td><td class="muted">El costo de inscripción es una barrera frecuente; eliminarla reduce fricción y mide intención real desde temprano</td></tr>
+      <tr><td><b>Etapa del embudo</b></td><td class="muted">Consideración → Solicitud/Inscripción</td></tr>
+      <tr><td><b>Mecánica</b></td><td class="muted">Activa desde el 15 de agosto hasta la fecha de cierre comunicada, con recordatorios en T-15, T-7, T-3 y T-1</td></tr>
+      <tr><td><b>Medios de soporte</b></td><td class="muted">Meta Ads, Google Ads, Email, SMS, WhatsApp, landing dedicada con countdown</td></tr>
+      <tr><td><b>KPIs</b></td><td class="muted">N.º de inscripciones, tasa de conversión lead→inscrito, costo por inscrito, % de inscritos que matriculan</td></tr>
+      <tr><td><b>Impacto esperado</b></td><td class="muted">Incremento del volumen de inscritos en las primeras 4 semanas de pauta frente a una campaña sin urgencia</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">40% de descuento para egresados UAO · Posgrados</h3>
+  <div class="table-wrap"><table>
+    <tbody>
+      <tr><td style="width:190px"><b>Objetivo</b></td><td class="muted">Convertir la base de egresados en fuente activa de nuevas matrículas de posgrado</td></tr>
+      <tr><td><b>Público objetivo</b></td><td class="muted">Egresados de pregrado y posgrado UAO interesados en Especializaciones o Maestrías</td></tr>
+      <tr><td><b>Justificación</b></td><td class="muted">Menor CAC, mayor conversión y efecto embajador frente a nuevos prospectos</td></tr>
+      <tr><td><b>Etapa del embudo</b></td><td class="muted">Interés → Consideración → Inscripción, journey acelerado por relación previa</td></tr>
+      <tr><td><b>Vigencia</b></td><td class="muted"><b>Activa de forma continua del 15 de agosto de 2026 al 15 de febrero de 2027</b>, en paralelo a toda la cohorte, con picos de comunicación reforzada en septiembre (lanzamiento) y noviembre-enero (recta final de cierre)</td></tr>
+      <tr><td><b>Medios de soporte</b></td><td class="muted">Email a base de egresados, WhatsApp, LinkedIn, Oficina de Egresados, evento de lanzamiento en septiembre</td></tr>
+      <tr><td><b>KPIs</b></td><td class="muted">Egresados contactados, apertura/clic, leads, matriculados, % de referidos generados</td></tr>
+      <tr><td><b>Impacto esperado</b></td><td class="muted">Fuente de bajo CAC con efecto multiplicador vía referidos, sostenida durante todo el periodo</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Open House · dos ediciones, Pregrado y Posgrados</h3>
+  <p style="font-size:13.5px; color:var(--ink-soft); max-width:820px; margin:-4px 0 18px; line-height:1.6;">
+    Se plantean <b>dos ediciones</b> del Open House, ambas con oferta conjunta para Pregrado y Posgrados: la <b>primera en septiembre</b>, alineada con el encendido de pauta y el inicio del embudo de Consideración; la <b>segunda en noviembre</b>, justo antes del cierre de \u2018Inscripción sin costo\u2019 y del descenso estacional de diciembre, para capturar decisores tardíos y dar el último empujón antes de la temporada baja.
+  </p>
+  <div class="grid g2" style="margin-bottom:18px;">
+    <div class="card"><h4>Open House I · Septiembre 2026</h4><p>Coincide con el encendido de pauta (1 sep). Función: generar el primer gran pico de leads calificados del semestre y validar el journey de confirmación/nutrición de cara a la segunda edición.</p></div>
+    <div class="card"><h4>Open House II · Noviembre 2026</h4><p>Se ubica antes del cierre de Inscripción sin costo y del receso de diciembre. Función: convertir a los indecisos del embudo medio y reforzar la urgencia de cierre junto con la campaña de egresados.</p></div>
+  </div>
+  <div class="phases">
+    <div class="phase">
+      <span class="tagline">T-21 a T-1</span>
+      <h4>Antes</h4>
+      <ul>
+        <li>Landing de registro conectada en tiempo real a SFMC</li>
+        <li>Pauta de generación de registros segmentada por programa</li>
+        <li>Journey de confirmación T-7 / T-2 / T-1 / día del evento</li>
+        <li>Activación en colegios y empresas aliadas</li>
+        <li>Refuerzo ATL/BTL en la semana previa</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <span class="tagline">Día del evento</span>
+      <h4>Durante</h4>
+      <ul>
+        <li>Check-in digital que actualiza el estado del lead en tiempo real</li>
+        <li>Recorridos guiados, charlas por programa, stands de financiación</li>
+        <li>Captura de contenido para remarketing inmediato</li>
+        <li>Formulario de intención de inscripción in situ</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <span class="tagline">D+1 a D+15</span>
+      <h4>Después</h4>
+      <ul>
+        <li>Journey de agradecimiento y nutrición según Lead Scoring</li>
+        <li>Contacto comercial priorizado en 24–48 horas para score alto</li>
+        <li>Reactivación de registrados que no asistieron</li>
+        <li>Reporte registrados → asistentes → inscritos → matriculados</li>
+      </ul>
+    </div>
+  </div>
+  <div class="table-wrap" style="margin-top:16px"><table>
+    <tbody>
+      <tr><td style="width:190px"><b>KPIs</b></td><td class="muted">Registrados, tasa de asistencia, leads calificados post-evento, matriculados atribuibles, costo por matriculado</td></tr>
+      <tr><td><b>Impacto esperado</b></td><td class="muted">Pico de conversión en la semana del evento y aceleración del pipeline del mes siguiente</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Jornadas de financiación, webinars, lives, convenios y ferias</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Actividad</th><th>Frecuencia</th><th>Objetivo</th><th>Etapa</th><th>Medios de soporte</th></tr></thead>
+    <tbody>
+      <tr><td><b>Jornadas de financiación</b></td><td class="muted">Quincenal</td><td class="muted">Resolver la objeción económica</td><td class="muted">Consideración→Inscripción</td><td class="muted">Email, WhatsApp, asesor</td></tr>
+      <tr><td><b>Webinars por programa</b></td><td class="muted">Semanal (rotando)</td><td class="muted">Profundizar contenido académico</td><td class="muted">Interés→Consideración</td><td class="muted">Meta Ads, Email, LinkedIn, YouTube</td></tr>
+      <tr><td><b>Lives en RRSS</b></td><td class="muted">Quincenal</td><td class="muted">Cercanía y testimonios en vivo</td><td class="muted">Awareness→Interés</td><td class="muted">Instagram/TikTok/YouTube Live</td></tr>
+      <tr><td><b>Convenios empresariales</b></td><td class="muted">Mensual continua</td><td class="muted">Beneficios corporativos y becas</td><td class="muted">Interés→Inscripción</td><td class="muted">LinkedIn, Email B2B, comercial</td></tr>
+      <tr><td><b>Alianzas con colegios</b></td><td class="muted">Mensual continua</td><td class="muted">Flujo constante de leads Pregrado</td><td class="muted">Awareness→Interés</td><td class="muted">Visitas, charlas, redes</td></tr>
+      <tr><td><b>Ferias universitarias</b></td><td class="muted">Sep–nov y ene</td><td class="muted">Visibilidad y captura masiva</td><td class="muted">Awareness→Consideración</td><td class="muted">POP, formularios in situ, WhatsApp</td></tr>
+    </tbody>
+  </table></div>
+</div>
+`;
+
+// ============ VISTA 04 · CALENDARIO & ROADMAP ============
+const VIEW_CALENDARIO = `
+<div class="view-head">
+  <span class="eyebrow">Planeación en el tiempo</span>
+  <h2>Calendario comercial y roadmap</h2>
+  <p>Vista mensual, semana tipo y roadmap tipo Gantt de agosto de 2026 a febrero de 2027.</p>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Calendario mensual</h3>
+  <div class="months">
+    <div class="month-card"><div class="m">AGO 26</div><p>15 ago: lanzamiento del plan, campaña Inscripción sin costo y campaña 40% descuento a egresados (activa hasta el cierre de la cohorte). Precalentamiento de audiencias y reactivación de CRM.</p></div>
+    <div class="month-card"><div class="m">SEP 26</div><p>1 sep: encendido de pauta Meta/Google Ads. <b>Open House I</b> (Pregrado y Posgrados). Primera jornada de financiación. Lanzamiento de webinars.</p></div>
+    <div class="month-card"><div class="m">OCT 26</div><p>Seguimiento activo de la campaña 40% egresados. Ferias universitarias. Segunda ronda de jornadas de financiación.</p></div>
+    <div class="month-card"><div class="m">NOV 26</div><p><b>Open House II</b> (Pregrado y Posgrados). Recordatorios de cierre de Inscripción sin costo. Convenios empresariales en gestión activa.</p></div>
+    <div class="month-card"><div class="m">DIC 26</div><p>Campaña de temporada / decisión en familia (Pregrado). Nutrición de leads en pausa de eventos masivos. Webinars de bienvenida.</p></div>
+    <div class="month-card"><div class="m">ENE 27</div><p>Reactivación post-vacaciones. Última milla: llamadas, WhatsApp, recordatorios de pago. Feria de inicio de año.</p></div>
+    <div class="month-card"><div class="m">FEB 27</div><p>15 feb: cierre del plan. Confirmación de matrícula, journey de bienvenida/inducción y activación de referidos.</p></div>
+  </div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Semana tipo · fase activa de pauta (sep–ene)</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Día</th><th>Acción</th></tr></thead>
+    <tbody>
+      <tr><td><b>Lunes</b></td><td class="muted">Revisión de KPIs de la semana anterior (CPL, leads, inscritos). Ajuste de puja y presupuesto.</td></tr>
+      <tr><td><b>Martes</b></td><td class="muted">Envío de email masivo segmentado. Publicación de contenido orgánico en RRSS.</td></tr>
+      <tr><td><b>Miércoles</b></td><td class="muted">Webinar por programa (rotando Pregrado, Especializaciones, Maestrías).</td></tr>
+      <tr><td><b>Jueves</b></td><td class="muted">Campaña SMS/WhatsApp a leads en Consideración sin respuesta. Seguimiento comercial.</td></tr>
+      <tr><td><b>Viernes</b></td><td class="muted">Live o video corto en RRSS. Reporte semanal para el tablero ejecutivo.</td></tr>
+      <tr><td><b>Sábado</b></td><td class="muted">Actividad BTL puntual del mes (feria, jornada de financiación, visita a colegio).</td></tr>
+      <tr><td><b>Domingo</b></td><td class="muted">Pauta digital activa en modo automático. Monitoreo de alertas de presupuesto.</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Roadmap tipo Gantt · agosto 2026 – febrero 2027</h3>
+  <div class="gantt"><div class="gantt-grid" id="ganttGrid"></div></div>
+</div>
+`;
+
+// ============ VISTA 05 · MATRIZ DE ACTIVIDADES ============
+const VIEW_ACTIVIDADES = `
+<div class="view-head">
+  <span class="eyebrow">Detalle operativo</span>
+  <h2>Matriz maestra de actividades</h2>
+  <p>Consolidado de todas las actividades del plan: público, etapa del embudo, medios de soporte, KPI principal e inversión relativa sugerida.</p>
+</div>
+<div class="table-wrap"><table>
+  <thead><tr><th>Actividad</th><th>Público</th><th>Etapa del embudo</th><th>Medios de soporte</th><th>KPI principal</th><th>Presupuesto</th></tr></thead>
+  <tbody id="matrizBody"></tbody>
+</table></div>
+`;
+
+// ============ VISTA 06 · AUTOMATIZACIÓN SFMC ============
+const VIEW_AUTOMATIZACION = `
+<div class="view-head">
+  <span class="eyebrow">CRM & Orquestación</span>
+  <h2>Automatización en Salesforce Marketing Cloud</h2>
+  <p>Journey Builder, Lead Scoring y canales de mensajería como columna vertebral de personalización y velocidad de respuesta.</p>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Journeys clave (Journey Builder)</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Journey</th><th>Disparador</th><th>Pasos principales</th><th>Canales</th></tr></thead>
+    <tbody>
+      <tr><td><b>Bienvenida de lead nuevo</b></td><td class="muted">Registro en formulario (web, Meta, Google, evento)</td><td class="muted">Email inmediato → SMS de confirmación → WhatsApp con asesor asignado (24h)</td><td class="muted">Email · SMS · WhatsApp</td></tr>
+      <tr><td><b>Nutrición por programa</b></td><td class="muted">Lead sin avance en 3 días</td><td class="muted">4 emails educativos → recordatorio WhatsApp → oferta de cita con asesor</td><td class="muted">Email · WhatsApp</td></tr>
+      <tr><td><b>Confirmación Open House</b></td><td class="muted">Registro a evento</td><td class="muted">Confirmación inmediata → recordatorio T-7/T-2/T-1 → agradecimiento post-evento</td><td class="muted">Email · SMS · WhatsApp</td></tr>
+      <tr><td><b>Cierre Inscripción sin costo</b></td><td class="muted">Lead en Consideración sin inscribirse</td><td class="muted">Recordatorios T-15/T-7/T-3/T-1 con countdown → alerta última llamada</td><td class="muted">Email · SMS · WhatsApp</td></tr>
+      <tr><td><b>Reactivación de abandono</b></td><td class="muted">Inactividad de 10+ días</td><td class="muted">Encuesta de objeciones → oferta relevante → reintento de contacto comercial</td><td class="muted">Email · WhatsApp</td></tr>
+      <tr><td><b>Bienvenida de matriculado</b></td><td class="muted">Cambio de estado a matriculado</td><td class="muted">Kit de bienvenida digital → inducción → invitación a programa de referidos</td><td class="muted">Email · SMS · WhatsApp</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="grid g2">
+  <div class="card">
+    <h4>Lead Scoring</h4>
+    <p>Combina señales demográficas (programa, ciudad, tipo de público) y de comportamiento (apertura, clics, visitas a landing, asistencia a eventos, respuesta en WhatsApp).</p>
+    <ul>
+      <li><b>Score alto</b> → enrutamiento comercial prioritario en 24h</li>
+      <li><b>Score medio</b> → journeys de nutrición automatizada</li>
+      <li><b>Score bajo</b> → comunicación de awareness de bajo costo</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Gobierno de datos</h4>
+    <ul>
+      <li>Un único modelo de campos: programa, cohorte, etapa del embudo, canal de origen, última interacción</li>
+      <li>Sincronización en tiempo real entre formularios (web, Meta Lead Ads, Google Lead Form) y SFMC</li>
+      <li>Reglas de exclusión automática: matriculados y no interesados salen de captación activa</li>
+    </ul>
+  </div>
+</div>
+`;
+
+// ============ VISTA 07 · TABLERO EJECUTIVO ============
+const VIEW_TABLERO = `
+<div class="view-head">
+  <span class="eyebrow">Seguimiento directivo</span>
+  <h2>Tablero ejecutivo mensual</h2>
+  <p>Acciones, responsables, prioridad, indicador y fecha límite. Revisión recomendada el primer viernes hábil de cada mes.</p>
+</div>
+<div class="table-wrap"><table>
+  <thead><tr><th>Mes</th><th>Acción clave</th><th>Responsable</th><th>Prioridad</th><th>Indicador</th><th>Fecha</th></tr></thead>
+  <tbody>
+    <tr><td><b>Ago</b></td><td class="muted">Cierre de precalentamiento, validación de audiencias y lanzamiento de la campaña 40% egresados (activa hasta feb)</td><td class="muted">Growth / CRM</td><td><span class="tag alta">Alta</span></td><td class="muted">Audiencias activas ≥ meta</td><td class="mono">31 ago</td></tr>
+    <tr><td><b>Sep</b></td><td class="muted">Encendido de pauta y <b>Open House I</b> (Pregrado y Posgrados)</td><td class="muted">Pauta / Eventos</td><td><span class="tag alta">Alta</span></td><td class="muted">CPL en rango, asistentes ≥ meta</td><td class="mono">30 sep</td></tr>
+    <tr><td><b>Oct</b></td><td class="muted">Seguimiento intensivo de campaña 40% egresados y ferias universitarias</td><td class="muted">CRM / Eventos</td><td><span class="tag media">Media</span></td><td class="muted">Leads egresados, leads de feria</td><td class="mono">31 oct</td></tr>
+    <tr><td><b>Nov</b></td><td class="muted"><b>Open House II</b> (Pregrado y Posgrados) y aceleración de cierre de Inscripción sin costo</td><td class="muted">Eventos / Comercial</td><td><span class="tag alta">Alta</span></td><td class="muted">Matriculados atribuibles, tasa de inscritos sobre meta</td><td class="mono">30 nov</td></tr>
+    <tr><td><b>Dic</b></td><td class="muted">Sostenimiento de nutrición en temporada baja</td><td class="muted">CRM</td><td><span class="tag media">Media</span></td><td class="muted">Leads activos en journey de nutrición</td><td class="mono">20 dic</td></tr>
+    <tr><td><b>Ene</b></td><td class="muted">Reactivación y última milla de conversión</td><td class="muted">Comercial / CRM</td><td><span class="tag alta">Alta</span></td><td class="muted">Tasa de matrícula sobre admitidos</td><td class="mono">31 ene</td></tr>
+    <tr><td><b>Feb</b></td><td class="muted">Cierre de cohorte y activación de referidos</td><td class="muted">Dirección de Mercadeo</td><td><span class="tag alta">Alta</span></td><td class="muted">Matrícula total vs. meta, NPS de bienvenida</td><td class="mono">15 feb</td></tr>
+  </tbody>
+</table></div>
+
+<div class="section-block" style="margin-top:32px">
+  <h3 class="block-title">KPIs generales del plan</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Nivel</th><th>Indicadores</th></tr></thead>
+    <tbody>
+      <tr><td><b>Medios</b></td><td class="muted">CPL, CTR, CPM, alcance y frecuencia por canal</td></tr>
+      <tr><td><b>Conversión digital</b></td><td class="muted">Tasa de conversión de visita a lead, y de lead a inscrito</td></tr>
+      <tr><td><b>Conversión comercial</b></td><td class="muted">Contact rate, show rate a entrevista, tasa de admisión, tasa de matrícula</td></tr>
+      <tr><td><b>Eventos</b></td><td class="muted">Registrados, tasa de asistencia, leads calificados post-evento, matriculados atribuibles</td></tr>
+      <tr><td><b>CRM</b></td><td class="muted">% de leads en journey automatizado, tiempo de primera respuesta, apertura/clic, respuesta WhatsApp</td></tr>
+      <tr><td><b>Negocio</b></td><td class="muted">Matriculados vs. meta por programa, CAC por matriculado, recaudo proyectado por cohorte</td></tr>
+    </tbody>
+  </table></div>
+</div>
+`;
+
+// ============ VISTA 08 · PRESUPUESTO & KPIs ============
+const VIEW_PRESUPUESTO = `
+<div class="view-head">
+  <span class="eyebrow">Inversión sugerida</span>
+  <h2>Presupuesto por frente</h2>
+  <p>Distribución relativa de referencia; los valores absolutos deben ajustarse al presupuesto real disponible de la UAO para la cohorte 2027-1S.</p>
+</div>
+
+<div class="card budget-wrap">
+  <div class="donut-wrap">
+    <div class="donut"><div class="center"><span class="big">100%</span><span class="lbl">Presupuesto total del plan</span></div></div>
+    <div class="legend">
+      <div class="row"><span class="sw" style="background:#FF0000"></span>Pauta digital — 40%</div>
+      <div class="row"><span class="sw" style="background:#B30000"></span>BTL y eventos — 25%</div>
+      <div class="row"><span class="sw" style="background:#7A1F1F"></span>ATL — 12%</div>
+      <div class="row"><span class="sw" style="background:#E68A8A"></span>CRM y automatización — 10%</div>
+      <div class="row"><span class="sw" style="background:#F2C4C4"></span>Producción y creatividad — 8%</div>
+      <div class="row"><span class="sw" style="background:#3A0000"></span>Alianzas y referidos — 5%</div>
+    </div>
+  </div>
+  <div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Frente</th><th>%</th><th>Racional</th></tr></thead>
+      <tbody>
+        <tr><td><b>Pauta digital</b><br><span class="muted" style="font-size:11.5px">Meta Ads + Google Ads</span></td><td class="mono">40%</td><td class="muted">Motor principal de generación de leads durante 5 meses de pauta activa</td></tr>
+        <tr><td><b>BTL y eventos</b><br><span class="muted" style="font-size:11.5px">Open House, ferias, jornadas</span></td><td class="mono">25%</td><td class="muted">Mayor costo por actividad, mayor conversión a matrícula por contacto presencial</td></tr>
+        <tr><td><b>ATL</b><br><span class="muted" style="font-size:11.5px">Radio, prensa, OOH</span></td><td class="mono">12%</td><td class="muted">Refuerzo de marca en picos de tráfico</td></tr>
+        <tr><td><b>CRM y automatización</b><br><span class="muted" style="font-size:11.5px">SFMC, mensajería</span></td><td class="mono">10%</td><td class="muted">Alto retorno por bajo costo unitario de envío</td></tr>
+        <tr><td><b>Producción y creatividad</b></td><td class="mono">8%</td><td class="muted">Piezas para todos los canales</td></tr>
+        <tr><td><b>Alianzas y referidos</b></td><td class="mono">5%</td><td class="muted">Incentivos de bajo costo de adquisición</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+`;
+
+// ============ VISTA 09 · RIESGOS & QUICK WINS ============
+const VIEW_RIESGOS = `
+<div class="view-head">
+  <span class="eyebrow">Gestión del riesgo</span>
+  <h2>Riesgos, mitigación y Quick Wins</h2>
+  <p>Principales riesgos de ejecución del plan y las primeras victorias tempranas de bajo costo y alto impacto.</p>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Riesgos y mitigación</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Riesgo</th><th>Prob.</th><th>Impacto</th><th>Mitigación</th></tr></thead>
+    <tbody>
+      <tr><td><b>Costo por lead elevado en el arranque (1 sep)</b></td><td><span class="tag media">Media</span></td><td><span class="tag alto">Alto</span></td><td class="muted">Precalentamiento de audiencias (15–31 ago) y uso de audiencias de conversión/lookalike desde el día 1</td></tr>
+      <tr><td><b>Baja asistencia a Open House</b></td><td><span class="tag media">Media</span></td><td><span class="tag alto">Alto</span></td><td class="muted">Journey de confirmación multicanal y alianzas con colegios/empresas para invitación directa</td></tr>
+      <tr><td><b>Saturación de comunicación</b></td><td><span class="tag media">Media</span></td><td><span class="tag medio">Medio</span></td><td class="muted">Frecuencia controlada por journey y exclusión automática de matriculados/no interesados</td></tr>
+      <tr><td><b>Demora en respuesta comercial a leads calientes</b></td><td><span class="tag media">Media</span></td><td><span class="tag alto">Alto</span></td><td class="muted">Lead Scoring con enrutamiento prioritario y SLA de respuesta de 24 horas</td></tr>
+      <tr><td><b>Desalineación entre datos de marketing y matrícula real</b></td><td><span class="tag baja">Baja-Media</span></td><td><span class="tag alto">Alto</span></td><td class="muted">Modelo único de campos en CRM y tablero ejecutivo conectado a métricas académicas</td></tr>
+      <tr><td><b>Presupuesto insuficiente frente a la meta</b></td><td><span class="tag media">Media</span></td><td><span class="tag alto">Alto</span></td><td class="muted">Priorización de frentes de mayor conversión y Quick Wins de bajo costo</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Quick Wins · primeros 30–60 días</h3>
+  <div class="checklist">
+    <div class="check-item"><div class="box"></div><p>Reactivar y limpiar la base CRM de cohortes anteriores antes del 31 de agosto, sin costo de pauta.</p></div>
+    <div class="check-item"><div class="box"></div><p>Lanzar la comunicación de Inscripción sin costo por Email y WhatsApp a base propia desde el 15 de agosto.</p></div>
+    <div class="check-item"><div class="box"></div><p>Activar el journey de bienvenida automatizado en SFMC antes del encendido de pauta.</p></div>
+    <div class="check-item"><div class="box"></div><p>Confirmar y comunicar la fecha de cierre de Inscripción sin costo en todas las piezas desde el día uno.</p></div>
+    <div class="check-item"><div class="box"></div><p>Enviar la primera comunicación del 40% de descuento a egresados desde el 15 de agosto, en paralelo al lanzamiento del plan, y mantenerla activa sin interrupciones hasta el 15 de febrero.</p></div>
+    <div class="check-item"><div class="box"></div><p>Configurar el tablero ejecutivo mensual desde agosto, con primer corte formal a fin de septiembre.</p></div>
+  </div>
+</div>
+`;
+
+// ============ VISTA 10 · GOBERNANZA ============
+const VIEW_GOBERNANZA = `
+<div class="view-head">
+  <span class="eyebrow">Ejecución</span>
+  <h2>Plan de implementación y gobernanza</h2>
+  <p>Equipo, roles y ritmo de gestión para sostener la ejecución del plan durante los siete meses de la cohorte.</p>
+</div>
+
+<div class="section-block">
+  <h3 class="block-title">Equipo y roles</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Rol</th><th>Responsabilidad principal</th></tr></thead>
+    <tbody>
+      <tr><td><b>Dirección de Mercadeo Universitario</b></td><td class="muted">Visión general, aprobación de presupuesto y reporte a Rectoría/Vicerrectoría</td></tr>
+      <tr><td><b>CMO / Estrategia</b></td><td class="muted">Coherencia del plan, priorización de frentes y seguimiento de resultados globales</td></tr>
+      <tr><td><b>Growth y Pauta Digital</b></td><td class="muted">Gestión de Meta Ads y Google Ads, optimización de CPL y presupuesto de medios</td></tr>
+      <tr><td><b>CRM / Salesforce Marketing Cloud</b></td><td class="muted">Journeys, Lead Scoring, Email/SMS/WhatsApp y calidad de datos</td></tr>
+      <tr><td><b>Dirección Creativa</b></td><td class="muted">Producción de piezas para todos los canales y coherencia de marca</td></tr>
+      <tr><td><b>Eventos / BTL</b></td><td class="muted">Ejecución de Open House, ferias, jornadas de financiación y activaciones</td></tr>
+      <tr><td><b>Comercial / Admisiones</b></td><td class="muted">Contacto con leads calificados, cierre de inscripción y matrícula</td></tr>
+      <tr><td><b>Analítica</b></td><td class="muted">Tablero ejecutivo, reportes semanales/mensuales y aseguramiento de KPIs</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="grid g2">
+  <div class="card">
+    <h4>Ritmo de gestión</h4>
+    <ul>
+      <li>Reunión semanal de operación (medios, CRM, comercial) para ajustes tácticos</li>
+      <li>Comité mensual ejecutivo con el tablero de la pestaña 07 para decisiones de presupuesto y prioridades</li>
+      <li>Corte de cierre a 15 de febrero de 2027 con informe final y lecciones aprendidas para la siguiente cohorte</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Cierre</h4>
+    <p>El plan integra medios digitales, ATL, BTL, CRM, automatización y eventos en una sola estrategia gobernada por datos, con Inscripción sin costo y Open House como ejes de conversión, el 40% de descuento a egresados como palanca diferencial de Posgrados, y Salesforce Marketing Cloud como columna vertebral de personalización y velocidad de respuesta.</p>
+    <p>Su éxito depende de la disciplina de ejecución del calendario, la calidad del dato en CRM y la coordinación semanal entre medios, CRM, creatividad, eventos y admisiones.</p>
+  </div>
+</div>
+`;
+
+// ============ DATA: Matriz de actividades ============
+const ACTIVIDADES = [
+  ["Precalentamiento de audiencias (15–31 ago)","Base CRM + lookalikes","Awareness","Orgánico, Email, WhatsApp","Tamaño de audiencia activada","Bajo"],
+  ["Pauta always-on Meta/Google Ads","Todos los segmentos","Interés–Consideración","Meta Ads, Google Search/Display","CPL, CTR, tasa de conversión","Alto"],
+  ["Inscripción sin costo","Interés–Consideración","Consideración–Inscripción","Meta, Google, Email, SMS, WhatsApp","Inscritos, costo por inscrito","Medio-Alto"],
+  ["Open House I · sep (Pregrado y Posgrados)","Bachilleres, acudientes y profesionales","Consideración","Meta, Google, ATL, BTL","Asistentes, matriculados atribuibles","Alto"],
+  ["Open House II · nov (Pregrado y Posgrados)","Bachilleres, acudientes y profesionales","Consideración","Meta, Google, LinkedIn, Email","Asistentes, matriculados atribuibles","Alto"],
+  ["40% descuento egresados (ago–feb, continua)","Egresados UAO","Interés–Inscripción","Email, WhatsApp, LinkedIn","Matriculados por canal egresados","Bajo"],
+  ["Jornadas de financiación","Consideración avanzada","Consideración–Inscripción","Email, WhatsApp, asesor comercial","Leads con objeción resuelta","Bajo"],
+  ["Webinars por programa","Interés","Interés–Consideración","Meta Ads (registro), Email, YouTube","Registrados, asistentes","Bajo-Medio"],
+  ["Lives en RRSS","Awareness general","Awareness–Interés","Instagram/TikTok/YouTube Live","Alcance, interacciones","Bajo"],
+  ["Convenios empresariales","Empresas aliadas (Posgrados)","Interés–Inscripción","LinkedIn, Email B2B, comercial","N.º convenios activos, leads B2B","Bajo"],
+  ["Alianzas con colegios","Colegios aliados (Pregrado)","Awareness–Interés","Visitas, charlas, redes","N.º colegios activos, leads generados","Bajo"],
+  ["Ferias universitarias","Awareness general","Awareness–Consideración","POP, formularios in situ, WhatsApp","Leads capturados en feria","Medio"],
+  ["ATL de refuerzo (radio/prensa/OOH)","Awareness masivo","Awareness","Radio, Prensa, OOH","Alcance, recordación","Medio"],
+  ["Campaña de referidos","Matriculados y egresados","Post-matrícula","Email, WhatsApp, comunidad","N.º referidos generados","Bajo"],
+];
+
+// ============ DATA: Gantt ============
+const GANTT_MONTHS = ["Ago 26","Sep 26","Oct 26","Nov 26","Dic 26","Ene 27","Feb 27"];
+const GANTT_ROWS = [
+  ["Precalentamiento de audiencias",[1,0,0,0,0,0,0]],
+  ["Encendido pauta Meta/Google Ads",[0,1,1,1,1,1,1]],
+  ["Campaña Inscripción sin costo",[1,1,1,1,0,1,1]],
+  ["Open House I · sep (Pregrado y Posgrados)",[0,1,0,0,0,0,0]],
+  ["Open House II · nov (Pregrado y Posgrados)",[0,0,0,1,0,0,0]],
+  ["Campaña 40% descuento egresados",[1,1,1,1,1,1,1]],
+  ["Jornadas de financiación",[0,1,1,1,0,1,0]],
+  ["Webinars por programa",[0,1,1,1,1,1,0]],
+  ["Ferias universitarias",[0,1,1,0,0,1,0]],
+  ["Convenios y alianzas (continua)",[1,1,1,1,1,1,1]],
+  ["ATL de refuerzo (radio/prensa/OOH)",[0,1,1,0,0,1,0]],
+  ["Cierre de matrícula y bienvenida",[0,0,0,0,0,1,1]],
+];
+
+// ============ RENDER ============
+const VIEWS = {
+  resumen: VIEW_RESUMEN, journey: VIEW_JOURNEY, campanas: VIEW_CAMPANAS,
+  calendario: VIEW_CALENDARIO, actividades: VIEW_ACTIVIDADES, automatizacion: VIEW_AUTOMATIZACION,
+  tablero: VIEW_TABLERO, presupuesto: VIEW_PRESUPUESTO, riesgos: VIEW_RIESGOS, gobernanza: VIEW_GOBERNANZA,
+};
+
+function render(){
+  const nav = document.getElementById("tabnav");
+  const main = document.getElementById("views");
+  TABS.forEach((t,i)=>{
+    const btn = document.createElement("button");
+    btn.innerHTML = '<span class="n">'+t.n+'</span>'+t.label;
+    btn.dataset.target = t.id;
+    if(i===0) btn.classList.add("active");
+    btn.addEventListener("click", ()=> activate(t.id));
+    nav.appendChild(btn);
+
+    const sec = document.createElement("section");
+    sec.className = "view" + (i===0 ? " active" : "");
+    sec.id = "view-"+t.id;
+    sec.innerHTML = VIEWS[t.id];
+    main.appendChild(sec);
+  });
+}
+
+function activate(id){
+  document.querySelectorAll("section.view").forEach(s=> s.classList.toggle("active", s.id==="view-"+id));
+  document.querySelectorAll("nav.tabs button").forEach(b=> b.classList.toggle("active", b.dataset.target===id));
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function renderMatriz(){
+  const body = document.getElementById("matrizBody");
+  if(!body) return;
+  body.innerHTML = ACTIVIDADES.map(r=>
+    '<tr><td><b>'+r[0]+'</b></td><td class="muted">'+r[1]+'</td><td class="muted">'+r[2]+'</td><td class="muted">'+r[3]+'</td><td class="muted">'+r[4]+'</td><td><span class="tag '+r[5].split('-')[0].toLowerCase()+'">'+r[5]+'</span></td></tr>'
+  ).join("");
+}
+
+function renderGantt(){
+  const grid = document.getElementById("ganttGrid");
+  if(!grid) return;
+  let html = '<div class="gantt-row head"><div>Actividad</div>' + GANTT_MONTHS.map(m=>'<div style="text-align:center">'+m+'</div>').join("") + '</div>';
+  GANTT_ROWS.forEach(row=>{
+    html += '<div class="gantt-row"><div class="rowlabel">'+row[0]+'</div>' +
+      row[1].map(v=> '<div class="gantt-cell"><div class="gantt-bar'+(v?'':' empty')+'"></div></div>').join("") +
+      '</div>';
+  });
+  grid.innerHTML = html;
+}
+
+render();
+renderMatriz();
+renderGantt();
+
+</script>
+</body>
+</html>
