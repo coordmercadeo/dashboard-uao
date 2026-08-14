@@ -103,6 +103,7 @@ section.block.alt{background:var(--panel);}
 .donut-wrap{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
 .donut{width:150px;height:150px;border-radius:50%;flex-shrink:0;background:conic-gradient(var(--red) 0% 43%, #F2867E 43% 72%, var(--ink) 72% 100%);position:relative;box-shadow:inset 0 0 0 14px #fff;}
 .donut.donut4{background:conic-gradient(var(--red) 0% 42%, #F2867E 42% 69%, var(--ink) 69% 95%, #F7B7BD 95% 100%);}
+.donut.donut6{background:conic-gradient(var(--red) 0% 38%, #F2867E 38% 62%, var(--ink) 62% 78%, var(--grey) 78% 92%, var(--red-dark) 92% 98%, #F7B7BD 98% 100%);}
 .donut::after{content:"";position:absolute;inset:30px;background:var(--paper);border-radius:50%;box-shadow:var(--shadow);}
 .legend{flex:1;min-width:200px;display:grid;gap:9px;}
 .li{font-size:12.4px;font-weight:600;color:var(--ink-2);display:flex;align-items:center;gap:8px;}
@@ -191,9 +192,11 @@ section.block.alt{background:var(--panel);}
 @media (max-width:900px){.tabpanel.active{grid-template-columns:1fr;}}
 .ring-card{background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--line);}
 .ring-card h4{font-size:14.5px;}
-.ring-card .rr{display:flex;justify-content:space-between;font-size:11.6px;color:var(--ink-2);padding:6px 0;border-bottom:1px dashed var(--line);}
+.ring-card .rr{display:flex;justify-content:space-between;align-items:center;font-size:11.6px;color:var(--ink-2);padding:6px 0;border-bottom:1px dashed var(--line);}
 .ring-card .rr:last-child{border-bottom:none;}
 .ring-card .rr b{color:var(--grey);font-weight:600;}
+.ring-card .rr-nac{border-bottom:none;padding-bottom:2px;}
+.ring-card .rr-nac-reason{font-size:11px;color:var(--grey);text-align:right;padding-bottom:2px;font-style:italic;}
 table.datatable{width:100%;border-collapse:collapse;font-size:12.6px;}
 table.datatable th{background:var(--ink);color:#fff;text-align:left;padding:10px 12px;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.03em;}
 table.datatable td{padding:10px 12px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top;}
@@ -206,6 +209,15 @@ table.datatable tr:nth-child(even) td{background:var(--offwhite);}
 /* ---------- traditional media cards ---------- */
 .tm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
 @media (max-width:900px){.tm-grid{grid-template-columns:1fr;}}
+
+/* ---------- campaign structure diagram ---------- */
+.diagram-wrap{overflow-x:auto;padding-bottom:8px;}
+.diagram-wrap svg{min-width:1100px;width:100%;height:auto;display:block;}
+.diagram-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px;}
+@media (max-width:900px){.diagram-stats{grid-template-columns:repeat(2,1fr);}}
+.diagram-stat{background:var(--offwhite);border-radius:12px;padding:14px;text-align:center;}
+.diagram-stat b{display:block;font-family:'Poppins';font-size:22px;color:var(--red);}
+.diagram-stat span{font-size:11px;font-weight:700;color:var(--ink-2);text-transform:uppercase;letter-spacing:.03em;}
 .tm-card{background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--line);}
 .tm-card .icon{font-size:22px;margin-bottom:8px;}
 
@@ -244,6 +256,7 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
       <a href="#publicos">Públicos</a>
       <a href="#segmentacion">Segmentación</a>
       <a href="#conjuntos">Conjuntos</a>
+      <a href="#estructura">Estructura</a>
       <a href="#copies">Copys</a>
       <a href="#ctas">CTAs</a>
       <a href="#google">Google Ads</a>
@@ -259,15 +272,15 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
     <div class="hero-grid">
       <div>
         <div class="badge-row">
-          <span class="pill ink">7 líneas · Meta + Google + Medios</span>
+          <span class="pill ink">6 líneas · Meta + Google + Medios</span>
           <span class="pill red">Presupuesto total: $50.000.000 COP</span>
           <span class="pill outline">Formulario instantáneo por línea</span>
         </div>
         <h1>Plan de <span>Pauta</span><br>C-Lab UAO</h1>
-        <p class="lead">Tablero de campaña para el lanzamiento de C-Lab UAO. Presupuesto total del plan: $50.000.000 COP, de los cuales $33.500.000 son pauta paga (Meta Ads, Google Ads, medios tradicionales e impresos) y $16.500.000 se destinan a evento de lanzamiento, medios digitales aliados, relaciones públicas y contingencia. Segmentación independiente por cada una de las 7 líneas para no mezclar audiencias ni motivaciones.</p>
+        <p class="lead">Tablero de campaña para el lanzamiento de C-Lab UAO. Presupuesto total del plan: $50.000.000 COP, de los cuales $45.000.000 son pauta y medios pagados (Meta Ads, Google Ads, medios digitales aliados, medios tradicionales, relaciones públicas e impresos) y $5.000.000 se destinan a evento de lanzamiento y contingencia. El presupuesto prioriza los canales con mayor capacidad real de generar prospectos medibles. Segmentación independiente por cada una de las 6 líneas para no mezclar audiencias ni motivaciones.</p>
         <div class="hero-stats">
           <div class="hero-stat"><b>$50.000.000</b><span>Presupuesto total del plan</span></div>
-          <div class="hero-stat"><b>$33.500.000</b><span>En pauta paga</span></div>
+          <div class="hero-stat"><b>$45.000.000</b><span>En pauta y medios pagados</span></div>
           <div class="hero-stat"><b>10</b><span>Públicos + 7 territorios</span></div>
           <div class="hero-stat"><b>10 + 10</b><span>Copys y CTAs listos</span></div>
         </div>
@@ -296,26 +309,28 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
           <div class="info-row"><span class="k">Objetivo principal</span><span class="v red">Clientes potenciales + tráfico calificado</span></div>
           <div class="info-row"><span class="k">Ubicación de conversión</span><span class="v">Formulario instantáneo + WhatsApp + micrositio</span></div>
           <div class="info-row"><span class="k">Presupuesto total del lanzamiento</span><span class="v red">$50.000.000 COP</span></div>
-          <div class="info-row"><span class="k">Presupuesto en pauta paga</span><span class="v">$33.500.000 COP (Meta + Google + Medios + Impresos)</span></div>
+          <div class="info-row"><span class="k">Presupuesto en pauta paga</span><span class="v">$45.000.000 COP (Meta + Google + Aliados + Medios + RRPP + Impresos)</span></div>
           <div class="info-row"><span class="k">Proyecto</span><span class="v">C-Lab UAO — Industrias Creativas y Culturales</span></div>
-          <div class="info-row"><span class="k">Líneas activas</span><span class="v">7 líneas + remarketing</span></div>
+          <div class="info-row"><span class="k">Líneas activas</span><span class="v">6 líneas + remarketing</span></div>
           <div class="info-row"><span class="k">Duración del plan</span><span class="v">12 semanas (4 fases)</span></div>
           <div class="info-row"><span class="k">Modalidad</span><span class="v">Presencial y blended</span></div>
           <div class="info-row"><span class="k">Institución</span><span class="v">Universidad Autónoma de Occidente</span></div>
         </div>
       </div>
       <div class="card">
-        <h3><span class="num">$</span>Uso del presupuesto en pauta ($33.500.000)</h3>
+        <h3><span class="num">$</span>Uso del presupuesto en pauta ($45.000.000)</h3>
         <div class="donut-wrap" style="margin-top:16px;">
-          <div class="donut donut4"></div>
+          <div class="donut donut6"></div>
           <div class="legend">
-            <div class="li"><span class="sw" style="background:var(--red)"></span>42% · $14.000.000 · Meta Ads</div>
-            <div class="li"><span class="sw" style="background:#F2867E"></span>27% · $9.000.000 · Google Ads</div>
-            <div class="li"><span class="sw" style="background:var(--ink)"></span>26% · $8.700.000 · Medios tradicionales (Radio, TV y más)</div>
-            <div class="li"><span class="sw" style="background:#F7B7BD"></span>5% · $1.800.000 · Impresos (volantes, plegables, trípticos)</div>
+            <div class="li"><span class="sw" style="background:var(--red)"></span>38% · $17.000.000 · Meta Ads</div>
+            <div class="li"><span class="sw" style="background:#F2867E"></span>24% · $11.000.000 · Google Ads</div>
+            <div class="li"><span class="sw" style="background:var(--ink)"></span>16% · $7.000.000 · Medios tradicionales (Radio, TV y más)</div>
+            <div class="li"><span class="sw" style="background:var(--grey)"></span>14% · $6.500.000 · Medios digitales aliados</div>
+            <div class="li"><span class="sw" style="background:var(--red-dark)"></span>6% · $2.500.000 · Relaciones públicas</div>
+            <div class="li"><span class="sw" style="background:#F7B7BD"></span>2% · $1.000.000 · Impresos (volantes, plegables, trípticos)</div>
           </div>
         </div>
-        <div class="small-note">Estos $33.500.000 son la porción de pauta paga (canales publicitarios directos). El resto del presupuesto total ($16.500.000) se explica en la tabla completa de abajo.</div>
+        <div class="small-note">Se cuentan como pauta paga todos los rubros que requieren desembolso directo para ejecutarse, incluidas las publicaciones patrocinadas con medios digitales aliados y la gestión de relaciones públicas. El resto del presupuesto total ($5.000.000) corresponde a evento de lanzamiento y contingencia, y se explica en la tabla completa de abajo.</div>
       </div>
     </div>
 
@@ -323,10 +338,10 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
     <div class="card">
       <div id="budgetBars"></div>
       <div style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap;">
-        <span class="pill red">■ Pauta paga (canales publicitarios)</span>
-        <span class="pill outline">■ Relacionamiento y producción</span>
+        <span class="pill red">■ Pauta y medios pagados</span>
+        <span class="pill outline">■ Producción y contingencia</span>
       </div>
-      <div class="small-note">Suma exacta: $50.000.000 COP (100%). Medios tradicionales quedó explícitamente como Radio, TV y canales afines por $8.700.000 COP, e Impresos (volantes, plegables, trípticos) se independizó como rubro propio por $1.800.000 COP. Para lograrlo, "Creadores/influenciadores" se integró dentro de Meta Ads, Google Ads y Medios tradicionales (el contenido de creadores alimenta esos mismos canales), y "Producción de contenidos" se redistribuyó hacia Impresos, Evento de lanzamiento y Medios digitales aliados, que son los rubros con mayor necesidad de piezas producidas.</div>
+      <div class="small-note">Suma exacta: $50.000.000 COP (100%). Redistribución inteligente frente a la versión anterior: el Evento de lanzamiento pasó de 14% a 8% ($7.000.000 → $4.000.000), porque es una activación de un solo día con alcance limitado y aporta poco a la captación directa y medible de prospectos frente a canales digitales. Impresos y Relaciones públicas también se ajustaron a la baja. Ese presupuesto liberado ($6.000.000 en total) se trasladó a los tres canales con mayor capacidad real de generar registros: Meta Ads (+$3.000.000), Google Ads (+$2.000.000) y Medios digitales aliados (+$1.000.000). Medios tradicionales bajó de $8.700.000 a $7.000.000 para reforzar aún más esta reasignación.</div>
     </div>
   </div>
 </section>
@@ -364,17 +379,28 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
     <div class="two-col">
       <div class="card">
         <h3><span class="num">📍</span>Ubicación: resumen de segmentación en pauta</h3>
-        <p style="font-size:12.2px;color:var(--grey);margin-top:6px;font-weight:600;">Segmentación principal (mayor inversión)</p>
+        <p style="font-size:12.4px;color:var(--ink-2);margin-top:10px;line-height:1.65;">La segmentación principal <b>no es una sola ciudad</b>: agrupa 7 municipios del área de influencia directa de Cali dentro del mismo radio de segmentación en Meta y Google, porque comparten el mismo comportamiento de búsqueda, la misma capacidad de asistir presencialmente al campus y el mismo nivel de reconocimiento de la UAO. Meta y Google reparten el presupuesto de este grupo automáticamente hacia donde hay mejor respuesta, sin necesidad de crear un conjunto de anuncios por municipio.</p>
+        <p style="font-size:12.2px;color:var(--grey);margin-top:14px;font-weight:600;">Segmentación principal (mayor inversión) · 7 municipios</p>
         <div class="taglist">
           <span class="tag">Cali</span><span class="tag">Jamundí</span><span class="tag">Palmira</span>
           <span class="tag">Yumbo</span><span class="tag">La Cumbre</span><span class="tag">Vijes</span><span class="tag">Candelaria</span>
         </div>
-        <p style="font-size:12.2px;color:var(--grey);margin-top:16px;font-weight:600;">Segmentación de expansión</p>
+
+        <p style="font-size:12.4px;color:var(--ink-2);margin-top:18px;line-height:1.65;">La segmentación de expansión también agrupa varias ciudades, pero con dos lógicas distintas dentro del mismo grupo: <b>Valle del Cauca (resto) y Popayán</b> buscan captación regional con modalidad blended, mientras que <b>Bogotá y Medellín</b> ya no persiguen matrícula local, sino reconocimiento de marca en las dos ciudades con mayor peso mediático del país.</p>
+        <p style="font-size:12.2px;color:var(--grey);margin-top:14px;font-weight:600;">Segmentación de expansión · 4 ciudades/territorios</p>
         <div class="taglist">
-          <span class="tag exp">Resto Valle del Cauca</span><span class="tag exp">Popayán</span>
+          <span class="tag exp">Resto Valle del Cauca (captación)</span><span class="tag exp">Popayán (captación)</span>
           <span class="tag exp">Bogotá (reconocimiento)</span><span class="tag exp">Medellín (reconocimiento)</span>
         </div>
-        <div class="small-note">Ver la sección "Alcance geográfico" para el detalle de los 7 territorios completos priorizados en el plan.</div>
+
+        <p style="font-size:12.4px;color:var(--ink-2);margin-top:18px;line-height:1.65;">Por último, una parte de la pauta corre como <b>ejecución a nivel Colombia</b>, sin atarse a una ciudad específica: campañas de reconocimiento de marca en Google Display/YouTube y gestión de relaciones públicas digitales, pero también <b>captación real de datos con Meta Ads</b> (formulario instantáneo) dirigida a todo el país para la modalidad blended, ya que esta no depende de asistir físicamente al campus. Así, la capa nacional no es solo reconocimiento: también genera registros nuevos fuera del Valle del Cauca.</p>
+        <p style="font-size:12.2px;color:var(--grey);margin-top:14px;font-weight:600;">Ejecución a nivel Colombia · sin ciudad específica</p>
+        <div class="taglist">
+          <span class="tag exp">Reconocimiento de marca (RRPP + Display/YouTube)</span>
+          <span class="tag exp">Captación de leads con Meta Ads (modalidad blended)</span>
+        </div>
+
+        <div class="small-note">Ver la sección "Alcance geográfico" para el detalle completo de los 7 territorios más la capa de ejecución nacional priorizados en el plan.</div>
       </div>
       <div class="card">
         <h3><span class="num">🎂</span>Edad · dos públicos, dos discursos</h3>
@@ -404,10 +430,11 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
 <section class="block" id="conjuntos">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">Conjuntos de anuncios · Meta Ads — $14.000.000 COP</span>
-      <h2>8 conjuntos, uno por línea, con objetivo, formato e indicador</h2>
+      <span class="eyebrow">Conjuntos de anuncios · Meta Ads — $17.000.000 COP</span>
+      <h2>7 conjuntos, uno por línea, con objetivo, formato e indicador</h2>
       <p>Los intereses se usan como señales para el sistema de Meta, no como filtro rígido. Cada conjunto prueba un ángulo de mensaje distinto, con su propio copy y CTA, para identificar de dónde salen los registros con mejor tasa de contacto y matrícula, no solo el menor costo por lead.</p>
     </div>
+    <div class="note">El formato de producción se limita a tres tipos, para mantener la carga creativa manejable: <b>imágenes estáticas</b>, <b>videos en formato animado</b> (motion graphics) y <b>reels con personas hablando</b> (docentes, estudiantes o egresados a cámara). Cada conjunto combina dos de estos tres tipos para poder comparar cuál convierte mejor, sin depender de formatos adicionales como carrusel o colección.</div>
     <div class="adset-rows" id="adsetRows"></div>
     <div class="card" style="background:var(--ink);color:#fff;margin-top:16px;">
       <h3 style="color:#fff;"><span class="num" style="background:#fff;color:var(--ink);">≈</span>Públicos similares (lookalike)</h3>
@@ -423,6 +450,28 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
   </div>
 </section>
 
+<section class="block alt" id="estructura">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Campañas específicas</span>
+      <h2>Estructura de campaña: 1 campaña, 2 conjuntos, 3 creativos c/u</h2>
+      <p>Este bosquejo es distinto de los 7 conjuntos por línea de la sección anterior: aquellos cubren el <b>lanzamiento general</b> de C-Lab (todas las líneas a la vez); esta plantilla aplica cuando, más adelante, se quiera promocionar <b>una sola línea o programa puntual</b> con su propia campaña (por ejemplo, la apertura de inscripciones de un curso específico). En ese caso, se recomienda una campaña con dos conjuntos de anuncios que se diferencian por su segmentación geográfica. El <b>Conjunto 1 · País</b> combina segmentación detallada, públicos personalizados y egresados UAO; el <b>Conjunto 2 · Ciudades</b> aplica la misma lógica de segmentación detallada, pero a nivel de ciudad. Cada conjunto corre los mismos 3 tipos de creativo definidos para todo el plan: estático, video animado y reel con persona hablando, cada uno adaptado en 3 tamaños de formato.</p>
+    </div>
+    <div class="card">
+      <div class="diagram-wrap">
+<svg viewBox="0 0 1320 660" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif"><rect x="0" y="0" width="1320" height="660" fill="#FCFBFA"/><rect x="20" y="292" width="150" height="64" rx="10" fill="#EFEFEF" stroke="#1A1A1A" stroke-width="1.4" /><text x="95.0" y="319" font-size="12.5" font-family="Inter, sans-serif" font-weight="800" fill="#1A1A1A" text-anchor="middle">CAMPAÑA</text><text x="95.0" y="337" font-size="10" font-family="Inter, sans-serif" font-weight="600" fill="#595959" text-anchor="middle">(Línea o programa)</text><rect x="200" y="40" width="230" height="268" rx="12" fill="#FFFFFF" stroke="#C9C9C9" stroke-width="1.4" /><text x="315.0" y="62" font-size="12" font-family="Inter, sans-serif" font-weight="800" fill="#1A1A1A" text-anchor="middle">Conjunto de anuncios 1 · País</text><rect x="200" y="336" width="230" height="268" rx="12" fill="#FFFFFF" stroke="#C9C9C9" stroke-width="1.4" /><text x="315.0" y="358" font-size="12" font-family="Inter, sans-serif" font-weight="800" fill="#1A1A1A" text-anchor="middle">Conjunto de anuncios 2 · Ciudades</text><path d="M170,324.0 L185.0,324.0 L185.0,174.0 L200,174.0" fill="none" stroke="#D8D5D2" stroke-width="1.6"/><path d="M170,324.0 L185.0,324.0 L185.0,470.0 L200,470.0" fill="none" stroke="#D8D5D2" stroke-width="1.6"/><rect x="214" y="74" width="202" height="58" rx="8" fill="#E30613" stroke="#E30613" stroke-width="1.4" /><text x="315.0" y="92" font-size="10.3" font-family="Inter, sans-serif" font-weight="800" fill="#FFFFFF" text-anchor="middle">Segmentación detallada</text><text x="315.0" y="106.0" font-size="8.7" font-family="Inter, sans-serif" font-weight="600" fill="#FFFFFF" text-anchor="middle">Datos demográficos, intereses</text><text x="315.0" y="116.5" font-size="8.7" font-family="Inter, sans-serif" font-weight="600" fill="#FFFFFF" text-anchor="middle">y comportamientos</text><rect x="214" y="140" width="202" height="58" rx="8" fill="#1A1A1A" stroke="#1A1A1A" stroke-width="1.4" /><text x="315.0" y="158" font-size="10.3" font-family="Inter, sans-serif" font-weight="800" fill="#FFFFFF" text-anchor="middle">Públicos personalizados</text><text x="315.0" y="172.0" font-size="8.7" font-family="Inter, sans-serif" font-weight="600" fill="#FFFFFF" text-anchor="middle">Basados en visitas,</text><text x="315.0" y="182.5" font-size="8.7" font-family="Inter, sans-serif" font-weight="600" fill="#FFFFFF" text-anchor="middle">interacciones y comportamiento</text><text x="315.0" y="193.0" font-size="8.7" font-family="Inter, sans-serif" font-weight="600" fill="#FFFFFF" text-anchor="middle">digital</text><rect x="214" y="206" width="202" height="40" rx="8" fill="#7A1E2E" stroke="#7A1E2E" stroke-width="1.4" /><text x="315.0" y="230.0" font-size="10.8" font-family="Inter, sans-serif" font-weight="800" fill="#FFFFFF" text-anchor="middle">Egresados UAO</text><rect x="214" y="370" width="202" height="58" rx="8" fill="#A9677A" stroke="#A9677A" stroke-width="1.4" /><text x="315.0" y="388" font-size="10.3" font-family="Inter, sans-serif" font-weight="800" fill="#FFFFFF" text-anchor="middle">Segmentación detallada</text><text x="315.0" y="402.0" font-size="8.7" font-family="Inter, sans-serif" font-weight="600" fill="#FFFFFF" text-anchor="middle">Datos demográficos, intereses</text><text x="315.0" y="412.5" font-size="8.7" font-family="Inter, sans-serif" font-weight="600" fill="#FFFFFF" text-anchor="middle">y comportamientos</text><text x="315.0" y="462" font-size="9.5" font-family="Inter, sans-serif" font-weight="500" fill="#8a8a8a" text-anchor="middle">(Misma lógica de segmentación,</text><text x="315.0" y="476" font-size="9.5" font-family="Inter, sans-serif" font-weight="500" fill="#8a8a8a" text-anchor="middle">aplicada a nivel de ciudad)</text><rect x="500" y="63.0" width="176" height="46" rx="8" fill="#FFFFFF" stroke="#C9C9C9" stroke-width="1.4" /><text x="588.0" y="83" font-size="10.5" font-family="Inter, sans-serif" font-weight="700" fill="#1A1A1A" text-anchor="middle">🖼️ Creativo 1</text><text x="588.0" y="98" font-size="9.7" font-family="Inter, sans-serif" font-weight="600" fill="#595959" text-anchor="middle">Estático</text><path d="M430,174.0 L465.0,174.0 L465.0,86 L500,86" fill="none" stroke="#D8D5D2" stroke-width="1.6"/><rect x="724" y="70.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="780.0" y="89.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1080</text><line x1="676" y1="86" x2="724" y2="86" stroke="#D8D5D2" stroke-width="1.4"/><rect x="850" y="70.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="906.0" y="89.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1920</text><line x1="836" y1="86" x2="850" y2="86" stroke="#D8D5D2" stroke-width="1.4"/><rect x="976" y="70.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="1032.0" y="89.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1350</text><line x1="962" y1="86" x2="976" y2="86" stroke="#D8D5D2" stroke-width="1.4"/><rect x="1140" y="70.0" width="130" height="32" rx="16" fill="#E30613" stroke="#E30613" stroke-width="1.4" /><text x="1205.0" y="90.0" font-size="11" font-family="Inter, sans-serif" font-weight="800" fill="#FFFFFF" text-anchor="middle">TOFU</text><line x1="1088" y1="86" x2="1140" y2="86" stroke="#D8D5D2" stroke-width="1.4"/><rect x="500" y="159.0" width="176" height="46" rx="8" fill="#FFFFFF" stroke="#C9C9C9" stroke-width="1.4" /><text x="588.0" y="179.0" font-size="10.5" font-family="Inter, sans-serif" font-weight="700" fill="#1A1A1A" text-anchor="middle">🎞️ Creativo 2</text><text x="588.0" y="194.0" font-size="9.7" font-family="Inter, sans-serif" font-weight="600" fill="#595959" text-anchor="middle">Video animado</text><path d="M430,174.0 L465.0,174.0 L465.0,182.0 L500,182.0" fill="none" stroke="#D8D5D2" stroke-width="1.6"/><rect x="724" y="166.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="780.0" y="185.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1080</text><line x1="676" y1="182.0" x2="724" y2="182.0" stroke="#D8D5D2" stroke-width="1.4"/><rect x="850" y="166.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="906.0" y="185.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1920</text><line x1="836" y1="182.0" x2="850" y2="182.0" stroke="#D8D5D2" stroke-width="1.4"/><rect x="976" y="166.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="1032.0" y="185.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1350</text><line x1="962" y1="182.0" x2="976" y2="182.0" stroke="#D8D5D2" stroke-width="1.4"/><rect x="1140" y="166.0" width="130" height="32" rx="16" fill="#7A1E2E" stroke="#7A1E2E" stroke-width="1.4" /><text x="1205.0" y="186.0" font-size="11" font-family="Inter, sans-serif" font-weight="800" fill="#FFFFFF" text-anchor="middle">MOFU</text><line x1="1088" y1="182.0" x2="1140" y2="182.0" stroke="#D8D5D2" stroke-width="1.4"/><rect x="500" y="255.0" width="176" height="46" rx="8" fill="#FFFFFF" stroke="#C9C9C9" stroke-width="1.4" /><text x="588.0" y="275" font-size="10.5" font-family="Inter, sans-serif" font-weight="700" fill="#1A1A1A" text-anchor="middle">🎤 Creativo 3</text><text x="588.0" y="290" font-size="9.7" font-family="Inter, sans-serif" font-weight="600" fill="#595959" text-anchor="middle">Reel · persona hablando</text><path d="M430,174.0 L465.0,174.0 L465.0,278 L500,278" fill="none" stroke="#D8D5D2" stroke-width="1.6"/><rect x="724" y="262.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="780.0" y="281.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1080</text><line x1="676" y1="278" x2="724" y2="278" stroke="#D8D5D2" stroke-width="1.4"/><rect x="850" y="262.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="906.0" y="281.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1920</text><line x1="836" y1="278" x2="850" y2="278" stroke="#D8D5D2" stroke-width="1.4"/><rect x="976" y="262.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="1032.0" y="281.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1350</text><line x1="962" y1="278" x2="976" y2="278" stroke="#D8D5D2" stroke-width="1.4"/><rect x="1140" y="262.0" width="130" height="32" rx="16" fill="#1A1A1A" stroke="#1A1A1A" stroke-width="1.4" /><text x="1205.0" y="282.0" font-size="11" font-family="Inter, sans-serif" font-weight="800" fill="#FFFFFF" text-anchor="middle">BOFU</text><line x1="1088" y1="278" x2="1140" y2="278" stroke="#D8D5D2" stroke-width="1.4"/><rect x="500" y="359.0" width="176" height="46" rx="8" fill="#FFFFFF" stroke="#C9C9C9" stroke-width="1.4" /><text x="588.0" y="379" font-size="10.5" font-family="Inter, sans-serif" font-weight="700" fill="#1A1A1A" text-anchor="middle">🖼️ Creativo 1</text><text x="588.0" y="394" font-size="9.7" font-family="Inter, sans-serif" font-weight="600" fill="#595959" text-anchor="middle">Estático</text><path d="M430,470.0 L465.0,470.0 L465.0,382 L500,382" fill="none" stroke="#D8D5D2" stroke-width="1.6"/><rect x="724" y="366.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="780.0" y="385.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1080</text><line x1="676" y1="382" x2="724" y2="382" stroke="#D8D5D2" stroke-width="1.4"/><rect x="850" y="366.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="906.0" y="385.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1920</text><line x1="836" y1="382" x2="850" y2="382" stroke="#D8D5D2" stroke-width="1.4"/><rect x="976" y="366.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="1032.0" y="385.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1350</text><line x1="962" y1="382" x2="976" y2="382" stroke="#D8D5D2" stroke-width="1.4"/><rect x="1140" y="366.0" width="130" height="32" rx="16" fill="#E30613" stroke="#E30613" stroke-width="1.4" /><text x="1205.0" y="386.0" font-size="11" font-family="Inter, sans-serif" font-weight="800" fill="#FFFFFF" text-anchor="middle">TOFU</text><line x1="1088" y1="382" x2="1140" y2="382" stroke="#D8D5D2" stroke-width="1.4"/><rect x="500" y="455.0" width="176" height="46" rx="8" fill="#FFFFFF" stroke="#C9C9C9" stroke-width="1.4" /><text x="588.0" y="475.0" font-size="10.5" font-family="Inter, sans-serif" font-weight="700" fill="#1A1A1A" text-anchor="middle">🎞️ Creativo 2</text><text x="588.0" y="490.0" font-size="9.7" font-family="Inter, sans-serif" font-weight="600" fill="#595959" text-anchor="middle">Video animado</text><path d="M430,470.0 L465.0,470.0 L465.0,478.0 L500,478.0" fill="none" stroke="#D8D5D2" stroke-width="1.6"/><rect x="724" y="462.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="780.0" y="481.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1080</text><line x1="676" y1="478.0" x2="724" y2="478.0" stroke="#D8D5D2" stroke-width="1.4"/><rect x="850" y="462.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="906.0" y="481.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1920</text><line x1="836" y1="478.0" x2="850" y2="478.0" stroke="#D8D5D2" stroke-width="1.4"/><rect x="976" y="462.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="1032.0" y="481.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1350</text><line x1="962" y1="478.0" x2="976" y2="478.0" stroke="#D8D5D2" stroke-width="1.4"/><rect x="1140" y="462.0" width="130" height="32" rx="16" fill="#7A1E2E" stroke="#7A1E2E" stroke-width="1.4" /><text x="1205.0" y="482.0" font-size="11" font-family="Inter, sans-serif" font-weight="800" fill="#FFFFFF" text-anchor="middle">MOFU</text><line x1="1088" y1="478.0" x2="1140" y2="478.0" stroke="#D8D5D2" stroke-width="1.4"/><rect x="500" y="551.0" width="176" height="46" rx="8" fill="#FFFFFF" stroke="#C9C9C9" stroke-width="1.4" /><text x="588.0" y="571" font-size="10.5" font-family="Inter, sans-serif" font-weight="700" fill="#1A1A1A" text-anchor="middle">🎤 Creativo 3</text><text x="588.0" y="586" font-size="9.7" font-family="Inter, sans-serif" font-weight="600" fill="#595959" text-anchor="middle">Reel · persona hablando</text><path d="M430,470.0 L465.0,470.0 L465.0,574 L500,574" fill="none" stroke="#D8D5D2" stroke-width="1.6"/><rect x="724" y="558.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="780.0" y="577.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1080</text><line x1="676" y1="574" x2="724" y2="574" stroke="#D8D5D2" stroke-width="1.4"/><rect x="850" y="558.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="906.0" y="577.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1920</text><line x1="836" y1="574" x2="850" y2="574" stroke="#D8D5D2" stroke-width="1.4"/><rect x="976" y="558.0" width="112" height="32" rx="6" fill="#FFFFFF" stroke="#DADADA" stroke-width="1.4" /><text x="1032.0" y="577.5" font-size="9.3" font-family="Inter, sans-serif" font-weight="700" fill="#3A3A3A" text-anchor="middle">1080x1350</text><line x1="962" y1="574" x2="976" y2="574" stroke="#D8D5D2" stroke-width="1.4"/><rect x="1140" y="558.0" width="130" height="32" rx="16" fill="#1A1A1A" stroke="#1A1A1A" stroke-width="1.4" /><text x="1205.0" y="578.0" font-size="11" font-family="Inter, sans-serif" font-weight="800" fill="#FFFFFF" text-anchor="middle">BOFU</text><line x1="1088" y1="574" x2="1140" y2="574" stroke="#D8D5D2" stroke-width="1.4"/></svg>
+      </div>
+      <div class="diagram-stats">
+        <div class="diagram-stat"><b>2</b><span>Conjuntos de anuncios</span></div>
+        <div class="diagram-stat"><b>3</b><span>Creativos por conjunto</span></div>
+        <div class="diagram-stat"><b>6</b><span>Creativos en total por campaña</span></div>
+        <div class="diagram-stat"><b>18</b><span>Variaciones de formato (6 × 3 tamaños)</span></div>
+      </div>
+      <div class="small-note">TOFU (Estático) genera reconocimiento amplio y de bajo costo; MOFU (Video animado) profundiza el mensaje de la línea; BOFU (Reel con persona hablando) aporta prueba social y suele tener mejor tasa de conversión a formulario. Los 3 tamaños (1080×1080, 1080×1920, 1080×1350) cubren feed, historias/Reels y feed vertical en Meta e Instagram.</div>
+    </div>
+  </div>
+</section>
+
 <section class="block alt" id="copies">
   <div class="wrap">
     <div class="section-head">
@@ -430,6 +479,7 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
       <h2>10 copys nutridos para pauta digital</h2>
       <p>Diez piezas de copywriting completas, redactadas para adaptarse a distintos canales de pauta digital: Meta Ads en feed y Reels, Google en Search, Display y Discovery, y YouTube, sin depender de un solo formato. Cada tarjeta muestra el gancho inicial, el conjunto o momento de campaña al que está asignada, el CTA con el que rota y los canales donde mejor funciona; toca "Ver copy completo" para leer el texto entero.</p>
     </div>
+    <div class="note">Estos 10 copys son <b>propuestas de referencia</b>, no piezas finales listas para publicar. Cada anuncio real necesita su propia verificación (longitud según canal, políticas de Meta/Google, ortografía final) y, dentro de un mismo conjunto, conviene correr variaciones de copy para identificar cuál rinde mejor antes de escalar presupuesto.</div>
     <div class="copies-scroll" id="copiesScroll"></div>
   </div>
 </section>
@@ -441,6 +491,7 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
       <h2>10 CTA cortos con emoji</h2>
       <p>Rotar entre estos botones por conjunto de anuncios para identificar cuál mueve más al clic sin fatigar la creatividad.</p>
     </div>
+    <div class="note">Estos 10 CTA también son <b>propuestas de referencia</b>. No se debe fijar un único CTA por conjunto: lo recomendable es correr al menos 2-3 variaciones por anuncio en paralelo y quedarse con la de mejor CTR/CPL real, en lugar de asumir de antemano cuál va a funcionar mejor.</div>
     <div class="cta-grid" id="ctaGrid"></div>
   </div>
 </section>
@@ -450,7 +501,7 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
     <div class="section-head">
       <span class="eyebrow">Google Ads</span>
       <h2>Búsqueda de alta intención + YouTube + Display/Remarketing</h2>
-      <p>$9.000.000 COP distribuidos entre búsqueda, YouTube y remarketing, priorizando intención alta de inscripción por línea. Incluye una porción que antes estaba asignada a creadores, ahora integrada como contenido nativo para YouTube.</p>
+      <p>$11.000.000 COP distribuidos entre búsqueda, YouTube y remarketing, priorizando intención alta de inscripción por línea. Este canal recibió refuerzo adicional por su alta capacidad de generar prospectos calificados y medibles.</p>
     </div>
     <div class="table-scroll">
       <table class="datatable" id="googleChannelTable"></table>
@@ -532,7 +583,7 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
       <div class="card">
         <h3><span class="num">🔁</span>Pruebas A/B constantes</h3>
         <ul class="plain" style="margin-top:10px;font-size:12.4px;">
-          <li>Creativos: video vs. carrusel vs. imagen estática por línea</li>
+          <li>Creativos: video animado vs. reel con persona hablando vs. imagen estática por línea</li>
           <li>Copies: "empleabilidad" vs. "experiencia práctica" vs. "comunidad"</li>
           <li>Audiencias: intereses amplios vs. intereses específicos por línea</li>
         </ul>
@@ -544,9 +595,9 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
         <h3>De CPL más bajo a mejor tasa de contacto y matrícula</h3>
         <p>Cada semana se revisa costo por resultado, frecuencia, CTR y calidad del lead por conjunto, pausando los de bajo desempeño y reasignando presupuesto hacia los de mejor CPL <b>y</b> mejor tasa de contacto y matrícula, no solo el más barato. Se excluyen del remarketing los matriculados e inscritos ya gestionados, y el tiempo máximo de contacto comercial se fija en 24 a 48 horas hábiles desde el registro para no perder el interés inicial.</p>
       </div>
-      <div class="bignum">20→15→12→12→10→8→8→15</div>
+      <div class="bignum">20→23→12→12→10→8→15</div>
     </div>
-    <div class="small-note">Distribución porcentual de referencia entre los 8 conjuntos de Meta Ads (Audiovisual, Comunicación, Diseño, Publicidad y Mercadeo, Ingeniería/IA, Arte y Cultura, Content Managers, Remarketing), aplicada sobre el presupuesto vigente de $14.000.000 COP.</div>
+    <div class="small-note">Distribución porcentual de referencia entre los 7 conjuntos de Meta Ads: Audiovisual, Comunicación (incluye Content Management), Diseño, Publicidad y Mercadeo, Ingeniería y Ciencias, Arte y Cultura y Remarketing. Aplicada sobre el presupuesto vigente de $17.000.000 COP.</div>
   </div>
 </section>
 
@@ -569,59 +620,52 @@ h3.subhead::before{content:"";width:4px;height:17px;background:var(--red);border
 
 const ADSETS = [
   {
-    icon:'🎬', name:'Audiovisual', objetivo:'Generación de clientes potenciales', formato:'Reel + Carrusel', fase:'Expectativa → Lanzamiento', indicador:'Costo por lead calificado', pct:20, cop:'$2.800.000',
-    edad:'18–30 años', geo:'Cali + área metropolitana (principal) / expansión Valle-Pacífico',
+    icon:'🎬', name:'Audiovisual', objetivo:'Generación de clientes potenciales', formato:'Reel con persona hablando + Video animado', fase:'Expectativa → Lanzamiento', indicador:'Costo por lead calificado', pct:20, cop:'$3.400.000',
+    edad:'18–30 años', geo:'Cali y municipios cercanos (principal) / expansión resto del Valle del Cauca',
     intereses:['Cine','Fotografía','Producción de video','Cámaras','Streaming','Festivales de cine','Cinematografía','Edición de video','Realización audiovisual','Dirección de fotografía'],
     angle:'"Cuenta historias con equipos de nivel profesional en los Estudios de Televisión UAO"',
     copies:['01','02','09'], ctas:['¡Inscríbete ahora! 🎬','Conoce tu línea 🧭']
   },
   {
-    icon:'📲', name:'Comunicación', objetivo:'Generación de clientes potenciales', formato:'Reel + Imagen única', fase:'Expectativa → Lanzamiento', indicador:'Costo por lead calificado', pct:15, cop:'$2.100.000',
+    icon:'📲', name:'Comunicación', objetivo:'Generación de clientes potenciales', formato:'Reel con persona hablando + Imagen estática', fase:'Expectativa → Lanzamiento', indicador:'Costo por lead calificado', pct:23, cop:'$3.910.000',
     edad:'18–30 años', geo:'misma segmentación principal + expansión',
-    intereses:['Redes sociales','Marketing de contenidos','Periodismo digital','Creadores de contenido','Comunicación digital','Storytelling','Gestión de comunidades','Marca personal','Estrategia digital','Analítica de audiencias'],
-    angle:'"Domina el ecosistema digital: contenido, audiencias y marca en un solo lugar"',
-    copies:['03','09'], ctas:['Descubre C-Lab 🚀','Solicita información 📲']
+    intereses:['Redes sociales','Marketing de contenidos','Periodismo digital','Creadores de contenido','Comunicación digital','Storytelling','Gestión de comunidades','Content Manager (deporte, moda, música, entretenimiento)','Estrategia digital','Analítica de audiencias'],
+    angle:'"Domina el ecosistema digital y convierte tu pasión en contenido profesional: comunicación estratégica y gestión de nicho"',
+    copies:['03','08','09'], ctas:['Descubre C-Lab 🚀','Empieza tu ruta 🎯']
   },
   {
-    icon:'🎨', name:'Diseño', objetivo:'Generación de clientes potenciales', formato:'Carrusel + Colección', fase:'Lanzamiento → Sostenimiento', indicador:'Costo por lead calificado', pct:12, cop:'$1.680.000',
+    icon:'🎨', name:'Diseño', objetivo:'Generación de clientes potenciales', formato:'Imagen estática + Video animado', fase:'Lanzamiento → Sostenimiento', indicador:'Costo por lead calificado', pct:12, cop:'$2.040.000',
     edad:'18–30 años', geo:'misma segmentación principal + expansión',
     intereses:['Diseño gráfico','UX/UI','Adobe Creative Cloud','Figma','Diseño digital','Diseño de producto','Ilustración digital','Branding','Arte digital','Diseño de experiencias'],
     angle:'"Diseña experiencias, no solo piezas: de la idea al prototipo"',
     copies:['04'], ctas:['Empieza tu ruta 🎯','Conoce los cursos 📚']
   },
   {
-    icon:'📈', name:'Publicidad y Mercadeo', objetivo:'Generación de clientes potenciales', formato:'Reel + Carrusel', fase:'Lanzamiento → Sostenimiento', indicador:'Costo por lead / tasa de contacto', pct:12, cop:'$1.680.000',
+    icon:'📈', name:'Publicidad y Mercadeo', objetivo:'Generación de clientes potenciales', formato:'Reel con persona hablando + Imagen estática', fase:'Lanzamiento → Sostenimiento', indicador:'Costo por lead / tasa de contacto', pct:12, cop:'$2.040.000',
     edad:'18–45 años (incluye público secundario)', geo:'misma segmentación principal + expansión',
     intereses:['Publicidad','Branding','Marketing digital','Agencias creativas','Mercadeo','Comportamiento del consumidor','Estrategia de marca','E-commerce','Comunicaciones integradas','Investigación de mercados'],
     angle:'"Estrategia, creatividad y datos para marcas que sí conectan"',
     copies:['05'], ctas:['Agenda tu cupo 📅','Solicita información 📲']
   },
   {
-    icon:'🤖', name:'Ingeniería, Tecnología e IA', objetivo:'Generación de clientes potenciales', formato:'Reel + Imagen única', fase:'Expectativa → Lanzamiento', indicador:'Costo por lead calificado', pct:10, cop:'$1.400.000',
+    icon:'🤖', name:'Ingeniería y Ciencias', objetivo:'Generación de clientes potenciales', formato:'Video animado + Imagen estática', fase:'Expectativa → Lanzamiento', indicador:'Costo por lead calificado', pct:10, cop:'$1.700.000',
     edad:'18–30 años', geo:'misma segmentación principal + expansión',
     intereses:['Inteligencia artificial','Programación','Videojuegos','Desarrollo de software','Ciencia de datos','Creative coding','Tecnología','Innovación digital','Realidad aumentada','Gadgets'],
     angle:'"Tu conocimiento técnico también puede crear mundos creativos"',
     copies:['06'], ctas:['Descubre C-Lab 🚀','Conoce tu línea 🧭']
   },
   {
-    icon:'🎭', name:'Arte y Cultura (Órbita UAO)', objetivo:'Generación de clientes potenciales', formato:'Reel + Carrusel', fase:'Lanzamiento → Sostenimiento', indicador:'Costo por lead / interacción', pct:8, cop:'$1.120.000',
+    icon:'🎭', name:'Arte y Cultura (Órbita UAO)', objetivo:'Generación de clientes potenciales', formato:'Reel con persona hablando + Video animado', fase:'Lanzamiento → Sostenimiento', indicador:'Costo por lead / interacción', pct:8, cop:'$1.360.000',
     edad:'18–45 años (incluye público secundario)', geo:'misma segmentación principal + expansión',
     intereses:['Arte urbano','Gestión cultural','Música','Patrimonio cultural','Artes escénicas','Danza','Teatro','Cultura ciudadana','Creación artística','Colectivos culturales'],
     angle:'"Tu práctica cultural también es una industria"',
     copies:['07'], ctas:['Vive la experiencia 🎥','Conoce los cursos 📚']
   },
-  {
-    icon:'🎧', name:'Content Managers', objetivo:'Generación de clientes potenciales', formato:'Reel corto vertical', fase:'Expectativa → Lanzamiento', indicador:'Costo por lead calificado', pct:8, cop:'$1.120.000',
-    edad:'18–30 años', geo:'misma segmentación principal + expansión',
-    intereses:['Deporte','Moda','Entretenimiento','Música','Creación de contenido','Influencer marketing','TikTok','Cultura pop','Streaming de video','Redes sociales'],
-    angle:'"Convierte tu pasión en tu profesión: deporte, moda, música o entretenimiento"',
-    copies:['08'], ctas:['Empieza tu ruta 🎯','¡Inscríbete ahora! 🎬']
-  },
 ];
 
 const REMARKETING = {
-  icon:'♻️', name:'Remarketing', pct:15, cop:'$2.100.000',
-  objetivo:'Conversión y reconversión', formato:'Colección + Remarketing dinámico', fase:'Sostenimiento (semanas 9-12)', indicador:'Costo por lead / tasa de matrícula',
+  icon:'♻️', name:'Remarketing', pct:15, cop:'$2.550.000',
+  objetivo:'Conversión y reconversión', formato:'Imagen estática + Video animado', fase:'Sostenimiento (semanas 9-12)', indicador:'Costo por lead / tasa de matrícula',
   sources:[
     'Personas que interactuaron con Instagram o Facebook durante los últimos 365 días',
     'Visitantes del micrositio o landing por línea',
@@ -635,11 +679,11 @@ const REMARKETING = {
 };
 
 const COPIES = [
-  {idx:'01', h:'Siete rutas, un mismo destino: la industria creativa 🎬🎨🤖',
-   e:'C-Lab UAO reúne audiovisual, comunicación, diseño, publicidad, tecnología, arte y gestión de contenidos en un solo ecosistema formativo.',
+  {idx:'01', h:'Seis rutas, un mismo destino: la industria creativa 🎬🎨🤖',
+   e:'C-Lab UAO reúne audiovisual, comunicación, diseño, publicidad, tecnología y arte en un solo ecosistema formativo.',
    full:`En Cali nace un espacio donde la creatividad se convierte en oficio.
 
-C-Lab UAO es el nuevo ecosistema de formación de la Universidad Autónoma de Occidente para las industrias creativas y culturales, con siete rutas: Audiovisual, Comunicación, Diseño, Publicidad y Mercadeo, Ingeniería y Ciencias, Arte y Cultura, y Content Management.
+C-Lab UAO es el nuevo ecosistema de formación de la Universidad Autónoma de Occidente para las industrias creativas y culturales, con seis rutas: Audiovisual, Comunicación, Diseño, Publicidad y Mercadeo, Ingeniería y Ciencias, y Arte y Cultura.
 
 Aprende haciendo en los Estudios de Televisión y el Media Lab UAO, con inteligencia artificial integrada a cada proceso creativo y un modelo de certificación progresiva que avanza contigo.
 
@@ -695,7 +739,7 @@ Aprendes a diseñar flujos, interfaces y experiencias con intención, no solo pi
 
 Empieza tu ruta y construye un portafolio que abra puertas.`,
    badge:'Conjunto Diseño', cta:'Empieza tu ruta 🎯',
-   channels:['Meta Ads · carrusel','Google Display','YouTube · Discovery']},
+   channels:['Meta Ads · imagen estática','Google Display','YouTube · Discovery']},
 
   {idx:'05', h:'La atención es el recurso más escaso del mercado. Aprende a ganarla 📈',
    e:'Branding, marketing digital y comportamiento del consumidor en un ecosistema fragmentado.',
@@ -726,8 +770,8 @@ La línea Ingeniería y Ciencias de C-Lab UAO te forma en:
 Aprendes a convertir código en experiencias, no solo en funciones.
 
 Conoce tu línea y dale forma a lo que hasta ahora solo imaginabas.`,
-   badge:'Conjunto Ingeniería y Tecnología', cta:'Conoce tu línea 🧭',
-   channels:['Meta Ads · imagen única','Google Search','YouTube · Discovery']},
+   badge:'Conjunto Ingeniería y Ciencias', cta:'Conoce tu línea 🧭',
+   channels:['Meta Ads · imagen estática','Google Search','YouTube · Discovery']},
 
   {idx:'07', h:'Tu arte también puede sostenerse como industria 🎭',
    e:'Órbita UAO: creación artística, gestión cultural y ciudadanías activas.',
@@ -749,7 +793,7 @@ Vive la experiencia y fortalece tu proyecto desde adentro.`,
    e:'Content Manager deportivo, musical, de moda o de entretenimiento.',
    full:`Crear contenido no es lo mismo que gestionarlo con estrategia.
 
-La línea Content Management de C-Lab UAO te forma como:
+La línea Comunicación de C-Lab UAO te forma como Content Manager especializado:
 · Content Manager deportivo
 · Content Manager musical
 · Content Manager de moda
@@ -758,10 +802,10 @@ La línea Content Management de C-Lab UAO te forma como:
 Aprendes las lógicas de producción, circulación y consumo de tu nicho, con el respaldo de una certificación progresiva.
 
 Empieza tu ruta y profesionaliza lo que ya sabes hacer.`,
-   badge:'Conjunto Content Managers', cta:'Empieza tu ruta 🎯',
+   badge:'Conjunto Comunicación · Content Management', cta:'Empieza tu ruta 🎯',
    channels:['Meta Ads · Reel corto','TikTok (creadores aliados)','YouTube · Shorts']},
 
-  {idx:'09', h:'El día en que siete rutas se cruzan en un solo lugar 🚀',
+  {idx:'09', h:'El día en que seis rutas se cruzan en un solo lugar 🚀',
    e:'Vive el lanzamiento oficial de C-Lab UAO en el campus de la universidad.',
    full:`Antes de inscribirte, puedes conocer el espacio donde vas a formarte.
 
@@ -798,9 +842,9 @@ const CTAS = [
 ];
 
 const GOOGLE_CHANNELS = [
-  ['Red de búsqueda','Captar intención alta de inscripción por línea','$4.500.000 · 50%'],
-  ['YouTube Ads (In-stream / Discovery)','Reconocimiento y reproducciones del video manifiesto','$2.800.000 · 31%'],
-  ['Display + Remarketing','Recordación y reconversión de visitantes','$1.700.000 · 19%'],
+  ['Red de búsqueda','Captar intención alta de inscripción por línea','$5.500.000 · 50%'],
+  ['YouTube Ads (In-stream / Discovery)','Reconocimiento y reproducciones del video manifiesto','$3.400.000 · 31%'],
+  ['Display + Remarketing','Recordación y reconversión de visitantes','$2.100.000 · 19%'],
 ];
 
 const GOOGLE_KEYWORDS = [
@@ -808,7 +852,7 @@ const GOOGLE_KEYWORDS = [
   ['Comunicación / Content Mgmt','cursos de creación de contenido; educación continua en comunicación; storytelling digital'],
   ['Diseño','cursos de UX UI Cali; design thinking; diseño editorial; narrativas visuales'],
   ['Publicidad y mercadeo','cursos de marketing digital Cali; branding; publicidad para e-commerce'],
-  ['Ingeniería / IA','cursos de inteligencia artificial para creativos; creación de videojuegos; programación creativa'],
+  ['Ingeniería y Ciencias','cursos de inteligencia artificial para creativos; creación de videojuegos; programación creativa'],
   ['Arte y cultura','cursos de arte y cultura Cali; gestión artística; arte urbano taller Cali'],
   ['Transversal / marca','industrias creativas UAO; C-Lab UAO; educación continua UAO'],
 ];
@@ -827,40 +871,44 @@ const TRADITIONAL = [
 const TRADITIONAL_EXCLUDED = {icon:'🚫', name:'Excluido: prensa / periódico impreso', motivo:'Bajo alcance en el público objetivo joven de C-Lab. Se reemplaza por impresos institucionales dirigidos (volantes, plegables, trípticos), con su propio rubro dentro del presupuesto total.'};
 
 /* ============ PRESUPUESTO TOTAL DEL PLAN — $50.000.000 COP ============ */
-/* Creadores/influenciadores y Producción de contenidos se redistribuyeron dentro
-   de los canales de pauta y de los rubros de mayor impacto directo (ver nota en el tablero). */
+/* Redistribución inteligente: se recorta el Evento de lanzamiento (14%→8%), Impresos
+   y una porción de RRPP y Medios tradicionales, y se refuerzan los canales con mayor
+   capacidad real de generar prospectos medibles: Meta Ads, Google Ads y Medios digitales
+   aliados (ver nota en el tablero). */
 const BUDGET_FULL = [
-  {name:'Meta Ads', cop:'$14.000.000', pct:28, cat:'pauta'},
-  {name:'Google Ads', cop:'$9.000.000', pct:18, cat:'pauta'},
-  {name:'Medios tradicionales (Radio, TV y más)', cop:'$8.700.000', pct:17.4, cat:'pauta'},
-  {name:'Evento de lanzamiento', cop:'$7.000.000', pct:14, cat:'relac'},
-  {name:'Medios digitales aliados', cop:'$5.500.000', pct:11, cat:'relac'},
-  {name:'Relaciones públicas', cop:'$3.000.000', pct:6, cat:'relac'},
-  {name:'Impresos (volantes, plegables, trípticos)', cop:'$1.800.000', pct:3.6, cat:'pauta'},
+  {name:'Meta Ads', cop:'$17.000.000', pct:34, cat:'pauta'},
+  {name:'Google Ads', cop:'$11.000.000', pct:22, cat:'pauta'},
+  {name:'Medios tradicionales (Radio, TV y más)', cop:'$7.000.000', pct:14, cat:'pauta'},
+  {name:'Medios digitales aliados', cop:'$6.500.000', pct:13, cat:'pauta'},
+  {name:'Evento de lanzamiento', cop:'$4.000.000', pct:8, cat:'relac'},
+  {name:'Relaciones públicas', cop:'$2.500.000', pct:5, cat:'pauta'},
+  {name:'Impresos (volantes, plegables, trípticos)', cop:'$1.000.000', pct:2, cat:'pauta'},
   {name:'Contingencia y optimización', cop:'$1.000.000', pct:2, cat:'relac'},
 ];
 
 /* ============ TERRITORIOS — 3 ANILLOS ============ */
 const RINGS = [
   {
-    label:'Anillo 1 · Mercado principal', cities:[
-      {name:'Cali', reco:'Alta', capt:'Alta', pres:'Sí', blend:'Sí', nac:'—'},
-      {name:'Jamundí / Palmira / Yumbo', reco:'Media-Alta', capt:'Media-Alta', pres:'Sí', blend:'Sí', nac:'—'},
+    label:'Anillo 1 · Mercado principal', note:'Aquí el objetivo es captación directa de registros, no reputación nacional: Cali ya es el mercado propio de la UAO, con reconocimiento instalado por ser su sede.',
+    cities:[
+      {name:'Cali', reco:'Alta', capt:'Alta', pres:'Sí', blend:'Sí', nacFlag:'no', nac:'Mercado propio'},
+      {name:'Jamundí / Palmira / Yumbo', reco:'Media-Alta', capt:'Media-Alta', pres:'Sí', blend:'Sí', nacFlag:'no', nac:'Mercado propio'},
     ]
   },
   {
-    label:'Anillo 2 · Valle y reputación regional', cities:[
-      {name:'Valle del Cauca (resto)', reco:'Media', capt:'Media', pres:'Limitado', blend:'Sí', nac:'—'},
-      {name:'Popayán', reco:'Media', capt:'Baja-Media', pres:'No', blend:'Sí', nac:'—'},
+    label:'Anillo 2 · Valle y reputación regional', note:'Aquí el objetivo es extender la captación regional aprovechando el reconocimiento de la UAO en el suroccidente colombiano, no construir reputación a nivel país.',
+    cities:[
+      {name:'Valle del Cauca (resto)', reco:'Media', capt:'Media', pres:'Limitado', blend:'Sí', nacFlag:'no', nac:'Foco es captación regional'},
+      {name:'Popayán', reco:'Media', capt:'Baja-Media', pres:'No', blend:'Sí', nacFlag:'no', nac:'Foco es captación regional'},
     ]
   },
   {
     label:'Anillo 3 · Reputación nacional', note:'Estas ciudades son la puerta de entrada, pero el objetivo del Anillo 3 es más amplio: construir reconocimiento de marca de C-Lab UAO a nivel Colombia a través de PR nacional, medios digitales y contenido, no solo captación local en cada ciudad.',
     cities:[
-      {name:'Bogotá', reco:'Media', capt:'Baja-Media', pres:'No', blend:'Sí', nac:'Sí'},
-      {name:'Medellín', reco:'Media', capt:'Baja', pres:'No', blend:'Sí', nac:'Sí'},
-      {name:'Otras ciudades (Barranquilla, Bucaramanga, Pereira, Manizales, Armenia)', reco:'Baja / a evaluar', capt:'Baja', pres:'No', blend:'A evaluar', nac:'A evaluar'},
-      {name:'Colombia · impacto nacional', reco:'Media (vía RRPP y digital)', capt:'No es objetivo de captación local', pres:'No', blend:'Sí (asincrónico)', nac:'Sí, reconocimiento de marca a nivel país'},
+      {name:'Bogotá', reco:'Media', capt:'Baja-Media', pres:'No', blend:'Sí', nacFlag:'si', nac:'Es el objetivo aquí'},
+      {name:'Medellín', reco:'Media', capt:'Baja', pres:'No', blend:'Sí', nacFlag:'si', nac:'Es el objetivo aquí'},
+      {name:'Otras ciudades (Barranquilla, Bucaramanga, Pereira, Manizales, Armenia)', reco:'Baja / a evaluar', capt:'Baja', pres:'No', blend:'Sí', nacFlag:'eval', nac:'A evaluar'},
+      {name:'Colombia · impacto nacional', reco:'Media (vía RRPP, Google y Meta Ads)', capt:'Sí, vía Meta Ads (formulario instantáneo) para modalidad blended', pres:'No', blend:'Sí (asincrónico)', nacFlag:'si', nac:'Es el objetivo central de este anillo'},
     ]
   },
 ];
@@ -868,11 +916,11 @@ const RINGS = [
 /* ============ PÚBLICOS — 10 PERSONAS ============ */
 const PERSONAS = [
   {n:'P1', name:'Estudiante universitario de últimos semestres', edad:'19–24 años', ubic:'Cali, Jamundí, Palmira, Yumbo', ocup:'Estudiante de comunicación, diseño, publicidad, audiovisual, ingeniería o afines', motiv:'Complementar su formación con habilidades prácticas', necesid:'Portafolio profesional, experiencia práctica, contactos', barreras:'Tiempo, presupuesto propio, desconocimiento de la oferta', intereses:'Cine, fotografía, redes sociales, IA, cultura pop, música', plataformas:'Instagram, TikTok, YouTube, WhatsApp', mensaje:'"Aprende lo que el aula no alcanza a enseñarte."', linea:'Audiovisual, Comunicación, Diseño'},
-  {n:'P2', name:'Recién graduado en búsqueda de empleabilidad', edad:'22–28 años', ubic:'Cali y Valle del Cauca', ocup:'Profesional recién egresado sin experiencia consolidada', motiv:'Diferenciarse en procesos de selección', necesid:'Empleabilidad, certificación reconocida, networking', barreras:'Presupuesto, ansiedad por resultados rápidos', intereses:'Desarrollo profesional, LinkedIn, marca personal', plataformas:'LinkedIn, Instagram, Google (búsqueda activa)', mensaje:'"Certifícate en lo que la industria realmente contrata hoy."', linea:'Content Management, Publicidad y Mercadeo, Diseño'},
-  {n:'P3', name:'Profesional en actualización', edad:'26–40 años', ubic:'Cali, Bogotá, Medellín', ocup:'Community manager, publicista, ejecutivo de cuenta', motiv:'Actualizarse en IA aplicada, data storytelling', necesid:'Cursos cortos y aplicables de inmediato', barreras:'Tiempo laboral limitado, escepticismo', intereses:'Marketing digital, tendencias, casos de éxito', plataformas:'LinkedIn, Instagram, newsletters', mensaje:'"Actualiza tu perfil con las herramientas que ya cambian tu industria."', linea:'Comunicación, Publicidad y Mercadeo, Content Management'},
+  {n:'P2', name:'Recién graduado en búsqueda de empleabilidad', edad:'22–28 años', ubic:'Cali y Valle del Cauca', ocup:'Profesional recién egresado sin experiencia consolidada', motiv:'Diferenciarse en procesos de selección', necesid:'Empleabilidad, certificación reconocida, networking', barreras:'Presupuesto, ansiedad por resultados rápidos', intereses:'Desarrollo profesional, LinkedIn, marca personal', plataformas:'LinkedIn, Instagram, Google (búsqueda activa)', mensaje:'"Certifícate en lo que la industria realmente contrata hoy."', linea:'Comunicación, Publicidad y Mercadeo, Diseño'},
+  {n:'P3', name:'Profesional en actualización', edad:'26–40 años', ubic:'Cali, Bogotá, Medellín', ocup:'Community manager, publicista, ejecutivo de cuenta', motiv:'Actualizarse en IA aplicada, data storytelling', necesid:'Cursos cortos y aplicables de inmediato', barreras:'Tiempo laboral limitado, escepticismo', intereses:'Marketing digital, tendencias, casos de éxito', plataformas:'LinkedIn, Instagram, newsletters', mensaje:'"Actualiza tu perfil con las herramientas que ya cambian tu industria."', linea:'Comunicación, Publicidad y Mercadeo'},
   {n:'P4', name:'Realizador audiovisual / fotógrafo freelance', edad:'22–38 años', ubic:'Cali, Valle del Cauca, Bogotá', ocup:'Camarógrafo, director, fotógrafo, editor independiente', motiv:'Perfeccionar técnica, acceder a equipos profesionales', necesid:'Formación técnica especializada', barreras:'Costo de equipos, falta de espacios de práctica en Cali', intereses:'Cine, referentes internacionales, gremios', plataformas:'Instagram, YouTube, Vimeo', mensaje:'"Los Estudios de Televisión y el Media Lab, a tu disposición."', linea:'Audiovisual'},
   {n:'P5', name:'Diseñador gráfico, digital, UX/UI', edad:'22–35 años', ubic:'Cali, Bogotá, Medellín', ocup:'Diseñador freelance o en agencia/estudio', motiv:'Ampliar portafolio a experiencias digitales e IA', necesid:'UX/UI, design thinking, herramientas de IA', barreras:'Saturación de oferta genérica online', intereses:'Diseño de producto, branding, arte digital', plataformas:'Instagram, Behance, Pinterest, Discord', mensaje:'"Diseña experiencias, no solo piezas."', linea:'Diseño'},
-  {n:'P6', name:'Creador de contenido / gestor de nicho', edad:'18–30 años', ubic:'Cali y ciudades del Valle', ocup:'Creador independiente en deporte, moda, música o entretenimiento', motiv:'Profesionalizar su producción y monetizar', necesid:'Storytelling, producción, estrategia por nicho', barreras:'Percepción de "ya saber suficiente"', intereses:'Redes sociales, tendencias, cultura digital', plataformas:'TikTok, Instagram, YouTube', mensaje:'"Convierte tu contenido en una carrera."', linea:'Content Management'},
+  {n:'P6', name:'Creador de contenido / gestor de nicho', edad:'18–30 años', ubic:'Cali y ciudades del Valle', ocup:'Creador independiente en deporte, moda, música o entretenimiento', motiv:'Profesionalizar su producción y monetizar', necesid:'Storytelling, producción, estrategia por nicho', barreras:'Percepción de "ya saber suficiente"', intereses:'Redes sociales, tendencias, cultura digital', plataformas:'TikTok, Instagram, YouTube', mensaje:'"Convierte tu contenido en una carrera."', linea:'Comunicación'},
   {n:'P7', name:'Emprendedor / gestor cultural o artístico', edad:'25–45 años', ubic:'Cali y municipios cercanos', ocup:'Gestor cultural, artista, músico, colectivo', motiv:'Fortalecer su proyecto con gestión y difusión', necesid:'Formalización, redes de apoyo, visibilidad', barreras:'Desconfianza hacia lo académico, recursos limitados', intereses:'Arte urbano, patrimonio cultural, escena local', plataformas:'Instagram, Facebook, WhatsApp comunitario', mensaje:'"Tu práctica cultural también es una industria."', linea:'Arte y Cultura (Órbita UAO)'},
   {n:'P8', name:'Profesional/estudiante de ingeniería y tecnología', edad:'20–35 años', ubic:'Cali, Bogotá, Medellín', ocup:'Ingeniero, desarrollador, estudiante de ciencias', motiv:'Aplicar conocimiento técnico a proyectos creativos', necesid:'Puentes entre tecnología y creatividad', barreras:'Percepción de que lo creativo no es para perfiles técnicos', intereses:'IA, videojuegos, programación creativa', plataformas:'YouTube, Reddit, LinkedIn, Discord', mensaje:'"Tu código también puede crear mundos."', linea:'Ingeniería y Ciencias'},
   {n:'P9', name:'Empresas, agencias, productoras y medios', edad:'N/A (perfil B2B)', ubic:'Cali, Valle del Cauca, nacional', ocup:'Agencias, productoras, medios regionales, estudios', motiv:'Encontrar talento certificado, posicionarse como aliado', necesid:'Talento capacitado, visibilidad como marca aliada', barreras:'Tiempo de decisión largo', intereses:'Alianzas estratégicas, RSE, innovación', plataformas:'LinkedIn, correo directo, relacionamiento presencial', mensaje:'"Construyamos el talento que la industria creativa del Valle necesita."', linea:'Transversal'},
@@ -1040,12 +1088,15 @@ function renderRings(){
     panel.id = 'panel-ring-'+i;
     r.cities.forEach(c=>{
       const card = el('div','ring-card');
+      const nacClass = c.nacFlag==='si' ? 'ok' : (c.nacFlag==='eval' ? 'warn' : 'outline');
+      const nacLabel = c.nacFlag==='si' ? 'Sí' : (c.nacFlag==='eval' ? 'A evaluar' : 'No');
       card.innerHTML = `<h4>${c.name}</h4>
         <div class="rr"><b>Reconocimiento</b><span>${c.reco}</span></div>
         <div class="rr"><b>Captación de registros</b><span>${c.capt}</span></div>
         <div class="rr"><b>Cursos presenciales</b><span>${c.pres}</span></div>
         <div class="rr"><b>Cursos blended</b><span>${c.blend}</span></div>
-        <div class="rr"><b>Reputación nacional</b><span>${c.nac}</span></div>`;
+        <div class="rr rr-nac"><b>¿Objetivo de reputación nacional?</b><span class="pill ${nacClass}">${nacLabel}</span></div>
+        <div class="rr-nac-reason">${c.nac}</div>`;
       panel.appendChild(card);
     });
     wrapPanel.appendChild(panel);
