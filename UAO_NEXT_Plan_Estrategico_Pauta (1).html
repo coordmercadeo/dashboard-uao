@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAO NEXT · Plan de Lanzamiento y Pauta — $150M COP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;0,900;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rojo:#E2231A;
+  --rojo-oscuro:#A8151E;
+  --rojo-suave:#F6BDB6;
+  --crema:#FBF3E6;
+  --crema2:#F3E7D4;
+  --crema3:#EFDCC0;
+  --tinto:#3B1418;
+  --texto:#2B2018;
+  --texto-suave:#6b5c4f;
+  --verde:#2E7D5B;
+  --verde-suave:#DCEBE2;
+  --amarillo:#C98A1E;
+  --amarillo-suave:#F7E5C2;
+  --naranja:#C0521F;
+  --gris:#8a7d70;
+  --blanco:#FFFFFF;
+  --borde:#E7D9C4;
+  --sombra: 0 14px 34px rgba(59,20,24,.12);
+  --sombra-lg: 0 24px 60px rgba(59,20,24,.20);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'DM Sans', -apple-system, Segoe UI, sans-serif;
+  background:var(--crema);
+  color:var(--texto);
+  overflow:hidden;
+  height:100vh;
+  width:100vw;
+}
+h1,h2,h3,.serif{font-family:'DM Serif Display', Georgia, serif; font-weight:400;}
+.eyebrow{
+  text-transform:uppercase; letter-spacing:.14em; font-size:11.5px; font-weight:700;
+  color:var(--rojo); margin:0 0 10px 0; display:flex; align-items:center; gap:8px;
+}
+.eyebrow .ico{width:15px;height:15px;flex-shrink:0;}
+.mono-tag{
+  display:inline-flex; align-items:center; gap:8px; background:var(--tinto); color:var(--crema); font-size:11px;
+  letter-spacing:.08em; text-transform:uppercase; padding:6px 14px; border-radius:20px; font-weight:700;
+}
+.mono-tag.on-red{background:var(--rojo);}
+
+/* ---------- APP SHELL ---------- */
+#app{position:relative; height:100vh; width:100vw;}
+
+.topbar{
+  position:fixed; top:0; left:0; right:0; height:56px; z-index:500;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 18px; background:linear-gradient(180deg, rgba(251,243,230,.98), rgba(251,243,230,.85));
+  border-bottom:1px solid var(--borde);
+  backdrop-filter:blur(6px);
+}
+.brand{display:flex; align-items:center; gap:10px;}
+.brand .logo{
+  width:34px;height:34px;border-radius:9px;background:var(--rojo);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:'DM Serif Display',serif;font-size:16px;
+  box-shadow:0 4px 10px rgba(226,35,26,.35);
+}
+.brand .name{font-weight:700; font-size:14px; letter-spacing:.02em;}
+.brand .name small{display:block; font-weight:400; font-size:10.5px; color:var(--texto-suave); letter-spacing:.06em;}
+
+.progress-wrap{flex:1; max-width:420px; margin:0 26px; display:flex; align-items:center; gap:10px;}
+.progress-track{flex:1; height:5px; background:var(--crema2); border-radius:3px; overflow:hidden;}
+.progress-fill{height:100%; background:linear-gradient(90deg, var(--rojo), var(--amarillo)); width:3.4%; transition:width .35s ease;}
+.progress-label{font-size:11px; color:var(--texto-suave); white-space:nowrap; font-variant-numeric:tabular-nums;}
+
+.topbar-actions{display:flex; align-items:center; gap:8px;}
+.btn{
+  border:1px solid var(--borde); background:var(--blanco); color:var(--texto);
+  padding:8px 12px; border-radius:9px; font-size:12.5px; font-weight:700; cursor:pointer;
+  display:flex; align-items:center; gap:6px; font-family:inherit;
+}
+.btn:hover{border-color:var(--rojo); color:var(--rojo);}
+.btn.primary{background:var(--rojo); color:#fff; border-color:var(--rojo);}
+.btn.primary:hover{background:var(--rojo-oscuro); color:#fff;}
+.btn svg{width:14px;height:14px;}
+
+/* ---------- MENU ---------- */
+#menuOverlay{
+  position:fixed; inset:0; background:rgba(43,32,24,.6); z-index:900; display:none;
+  align-items:flex-start; justify-content:center; padding:80px 20px 40px;
+  backdrop-filter:blur(3px);
+}
+#menuOverlay.open{display:flex;}
+.menu-panel{
+  background:var(--crema); border-radius:18px; max-width:1020px; width:100%;
+  max-height:80vh; overflow-y:auto; box-shadow:var(--sombra-lg); border:1px solid var(--borde);
+  padding:26px 26px 30px;
+}
+.menu-panel h2{margin:0 0 4px; font-size:24px;}
+.menu-panel .sub{color:var(--texto-suave); font-size:13px; margin-bottom:18px;}
+.menu-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(215px,1fr)); gap:10px;}
+.menu-item{
+  text-align:left; border:1px solid var(--borde); background:var(--blanco); border-radius:12px;
+  padding:12px 14px; cursor:pointer; font-family:inherit;
+}
+.menu-item:hover{border-color:var(--rojo); background:#fff7ef;}
+.menu-item .num{color:var(--rojo); font-weight:700; font-size:11px; letter-spacing:.06em;}
+.menu-item .ttl{font-weight:700; font-size:13px; margin-top:3px;}
+.menu-item.active{border-color:var(--rojo); background:#FCEFE7;}
+
+/* ---------- SLIDES ---------- */
+.slides-wrap{position:absolute; top:56px; bottom:44px; left:0; right:0; overflow:hidden;}
+.slide{
+  position:absolute; inset:0; padding:34px 64px 30px; overflow-y:auto; overflow-x:hidden;
+  opacity:0; visibility:hidden; transform:translateX(24px);
+  transition:opacity .38s ease, transform .38s ease;
+}
+.slide.active{opacity:1; visibility:visible; transform:translateX(0); z-index:10;}
+
+/* decorative accents per slide */
+.bg-shape{position:absolute; border-radius:50%; z-index:0; pointer-events:none; opacity:.5;}
+.slide > .bg-shape.br{right:-140px; top:-140px; width:420px; height:420px; background:radial-gradient(circle at 30% 30%, var(--rojo-suave), transparent 70%);}
+.slide > .bg-shape.bl{left:-160px; bottom:-160px; width:380px; height:380px; background:radial-gradient(circle at 60% 60%, var(--amarillo-suave), transparent 70%);}
+.slide > *:not(.bg-shape){position:relative; z-index:1;}
+
+.slide-head{margin-bottom:22px;}
+.slide-head h1{font-size:32px; margin:2px 0 6px; color:var(--tinto); max-width:900px;}
+.slide-head .desc{color:var(--texto-suave); font-size:14.5px; max-width:760px; line-height:1.55;}
+
+.grid{display:grid; gap:18px;}
+.grid-2{grid-template-columns:1fr 1fr;}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+.grid-5{grid-template-columns:repeat(5,1fr);}
+
+.card{
+  background:var(--blanco); border:1px solid var(--borde); border-radius:16px; padding:18px 20px;
+  box-shadow:var(--sombra);
+}
+.card h3{font-size:15px; margin:0 0 10px; font-family:'DM Sans'; font-weight:700; color:var(--tinto); display:flex; align-items:center; gap:8px;}
+.card h3 .ico{width:18px;height:18px; color:var(--rojo); flex-shrink:0;}
+.card.tint{background:#FCEFE7; border-color:#F2D3B8;}
+.card.tint-green{background:var(--verde-suave); border-color:#BFDCCB;}
+.card.tint-amber{background:var(--amarillo-suave); border-color:#E9CB92;}
+.card.dark{background:var(--tinto); color:var(--crema); border-color:var(--tinto);}
+.card.dark h3{color:var(--crema);}
+.card.dark h3 .ico{color:var(--rojo-suave);}
+
+.kpi-card{background:var(--blanco); border:1px solid var(--borde); border-radius:16px; padding:16px 18px; box-shadow:var(--sombra);}
+.kpi-card .kpi-val{font-family:'DM Serif Display'; font-size:30px; color:var(--rojo); line-height:1;}
+.kpi-card .kpi-lbl{font-size:11.5px; color:var(--texto-suave); margin-top:6px; text-transform:uppercase; letter-spacing:.05em; font-weight:700;}
+
+table{width:100%; border-collapse:collapse; font-size:12.5px;}
+th{
+  text-align:left; background:var(--tinto); color:var(--crema); padding:9px 10px; font-weight:700;
+  font-size:11px; text-transform:uppercase; letter-spacing:.03em;
+}
+th:first-child{border-radius:8px 0 0 0;} th:last-child{border-radius:0 8px 0 0;}
+td{padding:8px 10px; border-bottom:1px solid var(--borde); vertical-align:top;}
+tr:nth-child(even) td{background:#FBF6ED;}
+.table-wrap{overflow-x:auto; border-radius:10px; border:1px solid var(--borde);}
+
+.tag{display:inline-block; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:20px; letter-spacing:.02em;}
+.tag.paid{background:#FCEFE7; color:var(--rojo-oscuro);}
+.tag.owned{background:#E9F2EC; color:var(--verde);}
+.tag.earned{background:#FDF3DC; color:var(--amarillo);}
+.tag.green{background:#E9F2EC; color:var(--verde);}
+.tag.amber{background:#FDF3DC; color:var(--amarillo);}
+.tag.red{background:#FBE4E1; color:var(--rojo-oscuro);}
+
+.pill-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;}
+.pill{background:var(--crema2); border-radius:20px; padding:5px 12px; font-size:11.5px; font-weight:700; color:var(--tinto);}
+
+.badge-num{
+  width:30px;height:30px;border-radius:50%;background:var(--rojo);color:#fff;font-size:13px;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center; flex-shrink:0; box-shadow:0 4px 10px rgba(226,35,26,.35);
+}
+
+footer.slide-src{margin-top:22px; font-size:10.5px; color:var(--gris); border-top:1px dashed var(--borde); padding-top:10px;}
+
+/* ---- ASK CARDS (opening) ---- */
+.ask-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+.ask-card{background:var(--blanco); border-radius:18px; padding:20px 20px 18px; box-shadow:var(--sombra); border:1px solid var(--borde); position:relative;}
+.ask-card .askno{font-family:'DM Serif Display'; font-size:44px; color:var(--rojo-suave); line-height:1; position:absolute; top:14px; right:18px;}
+.ask-card h4{margin:0 0 8px; font-size:15.5px; color:var(--tinto); max-width:80%;}
+.ask-card p{font-size:12px; color:var(--texto-suave); line-height:1.5; margin:0;}
+
+/* ---- STAT HERO ---- */
+.stat-hero{display:flex; align-items:center; gap:50px; margin-top:6px;}
+.stat-hero .big{flex-shrink:0;}
+.stat-hero .big .num{font-family:'DM Serif Display'; font-size:110px; color:var(--rojo); line-height:1;}
+.stat-hero .big .cap{font-size:13px; color:var(--texto-suave); max-width:260px; margin-top:4px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;}
+.stat-support{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; flex:1;}
+
+/* ---- QUOTE HERO ---- */
+.quote-hero{display:flex; flex-direction:column; align-items:flex-start; justify-content:center; height:calc(100% - 20px); max-width:920px;}
+.quote-hero .qmark{font-family:'DM Serif Display'; font-size:90px; color:var(--rojo-suave); line-height:.6; margin-bottom:-10px;}
+.quote-hero blockquote{font-family:'DM Serif Display'; font-size:34px; line-height:1.35; color:var(--tinto); margin:0 0 18px;}
+.quote-hero .attrib{font-size:13px; color:var(--texto-suave); font-weight:700;}
+
+/* ---- persona strip (compact) ---- */
+.persona-strip{display:grid; grid-template-columns:repeat(5,1fr); gap:12px;}
+.persona-chip{background:var(--blanco); border:1px solid var(--borde); border-radius:16px; padding:16px 14px; box-shadow:var(--sombra); text-align:left;}
+.persona-chip .picon{width:34px;height:34px;border-radius:10px; background:var(--tinto); display:flex; align-items:center; justify-content:center; margin-bottom:10px; color:var(--crema);}
+.persona-chip .page{font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--rojo); font-weight:700;}
+.persona-chip h4{margin:3px 0 8px; font-size:14.5px; font-family:'DM Serif Display'; color:var(--tinto);}
+.persona-chip .pq{font-size:11px; font-style:italic; color:var(--texto-suave); line-height:1.4; margin-bottom:8px; min-height:44px;}
+.persona-chip .pcta{font-size:10.5px; font-weight:700; color:var(--rojo-oscuro); background:#FCEFE7; padding:5px 8px; border-radius:8px; display:inline-block;}
+
+/* ---- balance split (digital vs presencial) ---- */
+.balance-wrap{display:flex; gap:0; border-radius:20px; overflow:hidden; box-shadow:var(--sombra); border:1px solid var(--borde);}
+.balance-side{flex:1; padding:22px 24px; }
+.balance-side.left{background:var(--tinto); color:var(--crema);}
+.balance-side.right{background:var(--blanco); color:var(--texto);}
+.balance-side h4{font-size:15px; margin:8px 0 10px; display:flex; align-items:center; gap:8px;}
+.balance-side.left h4{color:var(--crema);}
+.balance-side ul{margin:0; padding-left:18px; font-size:12.3px; line-height:1.7;}
+.balance-vs{width:56px; display:flex; align-items:center; justify-content:center; background:var(--rojo); color:#fff; font-family:'DM Serif Display'; font-size:15px; flex-shrink:0;}
+
+/* ---- Journey compact timeline ---- */
+.jtrack{display:flex; align-items:flex-start; gap:0; overflow-x:auto; padding:8px 0 14px;}
+.jnode{display:flex; flex-direction:column; align-items:center; min-width:96px; flex-shrink:0;}
+.jnode .dot{width:38px;height:38px;border-radius:50%; background:var(--rojo); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; box-shadow:0 4px 10px rgba(226,35,26,.3); z-index:2;}
+.jnode .lbl{font-size:10.5px; font-weight:700; text-align:center; margin-top:8px; color:var(--tinto); max-width:96px; line-height:1.3;}
+.jline{flex:1; height:3px; background:linear-gradient(90deg, var(--rojo), var(--amarillo)); margin-top:19px; min-width:20px;}
+
+/* ---- Fases timeline ---- */
+.fase-timeline{display:flex; gap:14px;}
+.fase-block{flex:1; border-radius:18px; padding:18px 18px 20px; box-shadow:var(--sombra); position:relative; overflow:hidden;}
+.fase-block .fnum{position:absolute; top:10px; right:14px; font-family:'DM Serif Display'; font-size:38px; opacity:.25;}
+.fase-block h4{margin:2px 0 2px; font-size:16px;}
+.fase-block .fsem{font-size:10.5px; opacity:.85; text-transform:uppercase; letter-spacing:.05em; font-weight:700;}
+.fase-block .fval{font-family:'DM Serif Display'; font-size:26px; margin:10px 0 2px;}
+.fase-block .fpct{font-size:11px; opacity:.85; margin-bottom:10px;}
+.fase-block p{font-size:11.6px; line-height:1.5; margin:0;}
+
+/* ---- Evento hero ---- */
+.evento-hero{display:grid; grid-template-columns:1.1fr .9fr; gap:22px;}
+.evento-visual{background:var(--tinto); border-radius:20px; padding:26px; color:var(--crema); display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden;}
+.evento-visual .ev-icon{width:52px;height:52px; border-radius:14px; background:var(--rojo); display:flex; align-items:center; justify-content:center; margin-bottom:16px;}
+.evento-visual h2{font-size:28px; margin:0 0 10px; color:var(--crema);}
+.evento-visual p{font-size:13px; color:#E8D9C2; line-height:1.6;}
+.evento-stats{display:flex; gap:14px; margin-top:18px;}
+.evento-stats .es{background:rgba(255,255,255,.08); border-radius:12px; padding:10px 14px; flex:1;}
+.evento-stats .es .v{font-family:'DM Serif Display'; font-size:24px; color:#fff;}
+.evento-stats .es .l{font-size:10px; color:#CBB9A0; text-transform:uppercase; letter-spacing:.04em;}
+
+/* charts */
+.chart-row{display:flex; gap:22px; align-items:center; flex-wrap:wrap;}
+.legend{display:flex; flex-direction:column; gap:7px; font-size:12px;}
+.legend .li{display:flex; align-items:center; gap:8px;}
+.legend .sw{width:11px;height:11px;border-radius:3px; flex-shrink:0;}
+.legend .lv{font-weight:700; margin-left:auto; padding-left:14px; font-variant-numeric:tabular-nums;}
+
+.bar-chart{display:flex; flex-direction:column; gap:9px;}
+.bar-row{display:grid; grid-template-columns:170px 1fr 90px; align-items:center; gap:10px; font-size:11.6px;}
+.bar-track{background:var(--crema2); border-radius:6px; height:16px; overflow:hidden;}
+.bar-fill{height:100%; border-radius:6px;}
+.bar-val{text-align:right; font-weight:700; font-variant-numeric:tabular-nums;}
+
+.funnel{display:flex; flex-direction:column; align-items:center; gap:4px; margin:6px 0;}
+.funnel-step{color:#fff; text-align:center; padding:10px 12px; border-radius:8px; font-size:12.5px; font-weight:700;}
+.funnel-step small{display:block; font-weight:400; font-size:10.5px; opacity:.9; margin-top:2px;}
+
+.timeline-months{display:grid; grid-template-columns:repeat(6,1fr); gap:10px;}
+.tmonth{background:var(--blanco); border:1px solid var(--borde); border-radius:12px; padding:10px 12px;}
+.tmonth h5{margin:0 0 2px; font-size:12.5px; color:var(--rojo-oscuro);}
+.tmonth .val{font-family:'DM Serif Display'; font-size:19px;}
+.tmonth .fase{font-size:10px; color:var(--texto-suave); text-transform:uppercase; letter-spacing:.04em;}
+.tmonth .bar{height:6px; background:var(--crema2); border-radius:4px; margin-top:8px; overflow:hidden;}
+.tmonth .bar i{display:block; height:100%; background:var(--rojo);}
+
+.decision-list{list-style:none; margin:0; padding:0; counter-reset:dec;}
+.decision-list li{counter-increment:dec; position:relative; padding:9px 0 9px 40px; border-bottom:1px solid var(--borde); font-size:12.6px;}
+.decision-list li:last-child{border-bottom:none;}
+.decision-list li::before{content:counter(dec); position:absolute; left:0; top:7px; width:26px; height:26px; background:var(--rojo); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;}
+.decision-list b{color:var(--tinto);}
+
+.scenario-card{border-radius:16px; padding:16px 18px; border:1px solid var(--borde); box-shadow:var(--sombra);}
+.scenario-card.cons{background:#FBEEEA;}
+.scenario-card.esp{background:#FDF3DC;}
+.scenario-card.opt{background:#EAF3EC;}
+.scenario-card h4{margin:0 0 4px; font-size:15px;}
+.scenario-card .stag{font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; font-weight:700; opacity:.7; margin-bottom:8px;}
+.scenario-card .row{display:flex; justify-content:space-between; font-size:12px; padding:4px 0; border-bottom:1px dashed rgba(0,0,0,.08);}
+.scenario-card .row b{font-variant-numeric:tabular-nums;}
+.scenario-card .hero-mat{text-align:center; margin:10px 0 12px; padding:10px; background:rgba(255,255,255,.55); border-radius:12px;}
+.scenario-card .hero-mat .v{font-family:'DM Serif Display'; font-size:32px;}
+.scenario-card .hero-mat .l{font-size:10px; text-transform:uppercase; letter-spacing:.04em; font-weight:700;}
+
+.cover-slide{display:flex; flex-direction:column; justify-content:center; height:100%; padding-left:10px;}
+.cover-slide .mono-tag{margin-bottom:18px;}
+.cover-slide h1{font-size:54px; line-height:1.06; margin:0 0 14px; color:var(--tinto); max-width:820px;}
+.cover-slide .lead{font-size:16.5px; color:var(--texto-suave); max-width:600px; line-height:1.6;}
+.cover-slide .foot-meta{margin-top:36px; display:flex; gap:30px; font-size:11.5px; color:var(--gris);}
+.cover-slide .arc{display:flex; gap:8px; margin-top:26px;}
+.cover-slide .arc span{background:var(--tinto); color:var(--crema); font-size:11px; font-weight:700; padding:6px 12px; border-radius:20px;}
+.cover-slide .arc span:nth-child(2){background:var(--rojo);}
+.cover-slide .arc span:nth-child(3){background:var(--amarillo);}
+
+.closing-slide{display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center;}
+.closing-slide h1{font-size:42px; max-width:820px; color:var(--tinto); margin-bottom:14px;}
+.closing-slide .steps3{display:flex; gap:18px; margin-top:30px;}
+.closing-slide .steps3 .s{background:var(--blanco); border:1px solid var(--borde); border-radius:16px; padding:16px 22px; box-shadow:var(--sombra); min-width:170px;}
+.closing-slide .steps3 .s .v{font-family:'DM Serif Display'; font-size:22px; color:var(--rojo);}
+.closing-slide .steps3 .s .l{font-size:11px; color:var(--texto-suave); margin-top:4px;}
+
+.scrollbar-hide::-webkit-scrollbar{width:6px;}
+.scrollbar-hide::-webkit-scrollbar-thumb{background:var(--borde); border-radius:6px;}
+
+.bottombar{
+  position:fixed; bottom:0; left:0; right:0; height:44px; z-index:500;
+  display:flex; align-items:center; justify-content:space-between; padding:0 18px;
+  background:rgba(251,243,230,.96); border-top:1px solid var(--borde);
+}
+.nav-btn{
+  width:34px;height:34px;border-radius:50%; border:1px solid var(--borde); background:var(--blanco);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+}
+.nav-btn:hover{border-color:var(--rojo); background:#FCEFE7;}
+.nav-btn svg{width:16px;height:16px; stroke:var(--tinto);}
+.nav-center{font-size:11.5px; color:var(--texto-suave); text-align:center;}
+.dots{display:flex; gap:4px; flex-wrap:wrap; max-width:460px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--borde); cursor:pointer;}
+.dot.active{background:var(--rojo); width:16px; border-radius:3px;}
+
+@media (max-width:1100px){
+  .grid-4{grid-template-columns:repeat(2,1fr);}
+  .grid-5{grid-template-columns:repeat(2,1fr);}
+  .grid-3{grid-template-columns:repeat(2,1fr);}
+  .grid-2{grid-template-columns:1fr;}
+  .persona-strip{grid-template-columns:repeat(2,1fr);}
+  .ask-grid{grid-template-columns:1fr;}
+  .evento-hero{grid-template-columns:1fr;}
+  .balance-wrap{flex-direction:column;}
+  .slide{padding:26px 22px 26px;}
+  .cover-slide h1{font-size:36px;}
+  .stat-hero{flex-direction:column; align-items:flex-start; gap:20px;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">u</div>
+      <div class="name">UAO NEXT <small>PLAN DE LANZAMIENTO Y PAUTA · $150M COP</small></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">01 / 23</div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn" id="menuBtn">☰ Menú</button>
+      <button class="btn primary" id="fsBtn">⛶ Pantalla completa</button>
+    </div>
+  </div>
+
+  <div class="slides-wrap scrollbar-hide" id="slidesWrap"></div>
+
+  <div class="bottombar">
+    <div class="nav-btn" id="prevBtn" title="Anterior (←)">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </div>
+    <div class="nav-center"><div class="dots" id="dots"></div></div>
+    <div class="nav-btn" id="nextBtn" title="Siguiente (→)">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </div>
+  </div>
+
+  <div id="menuOverlay">
+    <div class="menu-panel">
+      <h2>Índice del tablero</h2>
+      <div class="sub">Haz clic en cualquier módulo para ir directamente a él.</div>
+      <div class="menu-grid" id="menuGrid"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =========================================================================
+   ICONOS — set mínimo, estilo lineal (outline), sin librerías externas
+   ========================================================================= */
+const ICPATHS = {
+ target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>',
+ users:'<path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+ calendar:'<rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+ trending:'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+ shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+ check:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+ pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/>',
+ chat:'<path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 12.5 3h.5a8.5 8.5 0 0 1 8 8.5z"/>',
+ award:'<circle cx="12" cy="8" r="6"/><polyline points="8.2 13.6 7 22 12 19 17 22 15.8 13.6"/>',
+ radio:'<circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.5m-8.4 0a6 6 0 0 1 0-8.5M19.1 5a10 10 0 0 1 0 14m-14.2 0a10 10 0 0 1 0-14"/>',
+ phone:'<rect x="6" y="2" width="12" height="20" rx="2.4"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+ alert:'<path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/>',
+ dollar:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+ building:'<rect x="4" y="3" width="16" height="18" rx="1.5"/><line x1="9" y1="7" x2="9" y2="7.01"/><line x1="15" y1="7" x2="15" y2="7.01"/><line x1="9" y1="11" x2="9" y2="11.01"/><line x1="15" y1="11" x2="15" y2="11.01"/><line x1="9" y1="15" x2="15" y2="15"/>',
+ idcard:'<rect x="2" y="5" width="20" height="14" rx="2.4"/><circle cx="8" cy="12" r="2"/><line x1="13" y1="10" x2="19" y2="10"/><line x1="13" y1="14" x2="17" y2="14"/>',
+ heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>',
+ mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="23"/>',
+ globe:'<circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a13 13 0 0 1 0 18 13 13 0 0 1 0-18z"/>',
+ handshake:'<path d="M8 12l3 3 8-8"/><path d="M2 13l4 4 3-3-4-4-3 3z"/><path d="M13 6l3-3 6 6-3 3"/>',
+ flag:'<path d="M5 3v18"/><path d="M5 4h11l-2 4 2 4H5"/>',
+ layers:'<polygon points="12 2 2 8 12 14 22 8 12 2"/><polyline points="2 14 12 20 22 14"/><polyline points="2 11 12 17 22 11"/>',
+};
+function ic(name, size, color){ return `<svg class="ico" width="${size||18}" height="${size||18}" viewBox="0 0 24 24" fill="none" stroke="${color||'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICPATHS[name]||''}</svg>`; }
+
+/* =========================================================================
+   DATOS MAESTROS — Presupuesto total: $150.000.000 COP
+   ========================================================================= */
+const COP = n => '$' + n.toLocaleString('es-CO');
+const COPM = n => '$' + (n/1000000).toLocaleString('es-CO',{maximumFractionDigits:1}) + 'M';
+const BUDGET_TOTAL = 150000000;
+
+const MASTER_TABLE = [
+ {medio:'Producción de contenidos', canal:'Audiovisual / fotografía / testimoniales', objetivo:'Insumos creativos para todo el ecosistema', publico:'Transversal', fase:'F1 · Preparación', inv:12000000, kpi:'Piezas entregadas a tiempo', resultado:'Banco de 100% de piezas requeridas antes del lanzamiento'},
+ {medio:'Adaptaciones creativas', canal:'Accesibilidad (tipografía, contraste, formatos)', objetivo:'Garantizar usabilidad y comprensión 50+', publico:'Transversal', fase:'F1 · Preparación', inv:3000000, kpi:'Piezas validadas de accesibilidad', resultado:'100% piezas cumplen checklist de accesibilidad'},
+ {medio:'Relaciones Públicas', canal:'Dossier de prensa, preparación de voceros', objetivo:'Sembrar narrativa institucional', publico:'Medios / líderes de opinión', fase:'F1 · Preparación', inv:2000000, kpi:'Voceros y dossier listos', resultado:'Kit de prensa aprobado'},
+ {medio:'Relaciones Públicas', canal:'Free press, entrevistas, notas editoriales', objetivo:'Generar expectativa creíble (earned)', publico:'Familias, egresados, líderes de opinión 50+', fase:'F2 · Expectativa', inv:4000000, kpi:'Menciones / notas publicadas', resultado:'≥6 apariciones en medios regionales'},
+ {medio:'Medios aliados', canal:'Boletines Coomeva / Comfandi (seeding)', objetivo:'Validar interés en base afín ya cautiva', publico:'Asociados Coomeva 50+ / afiliados Comfandi', fase:'F2 · Expectativa', inv:2000000, kpi:'Clics desde boletín aliado', resultado:'Primeros 300+ leads calificados de canal aliado'},
+ {medio:'Meta Ads', canal:'Facebook + Instagram (teaser/awareness)', objetivo:'Awareness inicial y captura de intención temprana', publico:'55-64, Cali y área metropolitana', fase:'F2 · Expectativa', inv:5000000, kpi:'Alcance, frecuencia', resultado:'Base de audiencia caliente para remarketing'},
+ {medio:'Google Search', canal:'Búsquedas informativas/marca', objetivo:'Capturar intención temprana de búsqueda', publico:'Buscadores activos del tema', fase:'F2 · Expectativa', inv:2000000, kpi:'Clics, CTR', resultado:'Landing indexada y con tráfico calificado inicial'},
+ {medio:'Evento de lanzamiento', canal:'Activación en campus + cobertura de prensa', objetivo:'Detonar la marca y generar registros', publico:'Los 5 arquetipos + hijos influenciadores', fase:'F3 · Lanzamiento', inv:18000000, kpi:'Asistentes, registros in situ', resultado:'≥300 asistentes, ≥500 registros de interés'},
+ {medio:'Meta Ads', canal:'Facebook + Instagram (prospecting)', objetivo:'Generación de leads a escala', publico:'50-76+, Cali/Valle, intereses afines', fase:'F3 · Lanzamiento', inv:15000000, kpi:'Leads, CPL', resultado:'Mayor volumen de leads calificados del plan'},
+ {medio:'Google Search', canal:'Campañas de intención alta', objetivo:'Captura de demanda activa', publico:'Búsquedas de alta intención', fase:'F3 · Lanzamiento', inv:8000000, kpi:'Clics, conversiones', resultado:'Canal de mejor tasa de conversión del mix digital'},
+ {medio:'Google Display + Remarketing', canal:'Red de Display / remarketing', objetivo:'Reforzar recordación y recuperar visitantes', publico:'Visitantes de landing / video views', fase:'F3 · Lanzamiento', inv:4000000, kpi:'Frecuencia útil, CTR remarketing', resultado:'Reducción de costo de conversión en visitantes recurrentes'},
+ {medio:'YouTube', canal:'Video pre-roll / in-stream', objetivo:'Construir confianza mediante testimonios en video', publico:'55+ con consumo de video online', fase:'F3 · Lanzamiento', inv:4000000, kpi:'Vistas completas (VTR)', resultado:'Contenido educativo con alta retención'},
+ {medio:'Medios tradicionales', canal:'Radio (franjas AM/FM de conversación) + prensa regional', objetivo:'Cobertura y credibilidad institucional', publico:'55+ oyentes/lectores habituales', fase:'F3 · Lanzamiento', inv:10000000, kpi:'GRPs, menciones', resultado:'Refuerzo de confianza y cobertura fuera de lo digital'},
+ {medio:'Publicidad exterior', canal:'Vallas y mupis (Comuna 22, corredores UAO, clubes)', objetivo:'Presencia territorial cerca del campus', publico:'Vecinos Comuna 22, familiares de estudiantes', fase:'F3 · Lanzamiento', inv:10000000, kpi:'Impactos (OTS)', resultado:'Recordación local sostenida durante el lanzamiento'},
+ {medio:'Medios aliados', canal:'Activación conjunta con Coomeva / Comfandi', objetivo:'Aprovechar bases cautivas y co-branding', publico:'Asociados y afiliados 50+', fase:'F3 · Lanzamiento', inv:4000000, kpi:'Registros desde canal aliado', resultado:'Canal B2B2C validado como fuente estable de leads'},
+ {medio:'Creadores / voceros', canal:'Testimoniales de egresados y "embajadores" 55+', objetivo:'Prueba social auténtica, no idealizada', publico:'Todos los arquetipos', fase:'F3 · Lanzamiento', inv:3000000, kpi:'Engagement, vistas', resultado:'Contenido de mayor confianza que la pauta genérica'},
+ {medio:'Meta Ads', canal:'Facebook + Instagram (remarketing/conversión)', objetivo:'Convertir leads en registros e inscripciones', publico:'Leads tibios, visitantes de landing', fase:'F4 · Sostenimiento', inv:15000000, kpi:'CPL, tasa de matrícula', resultado:'Mejora progresiva de CPA vs. fase de lanzamiento'},
+ {medio:'Google Search', canal:'Sostenimiento de intención', objetivo:'Mantener flujo de demanda activa', publico:'Búsquedas de alta intención', fase:'F4 · Sostenimiento', inv:5000000, kpi:'Conversiones', resultado:'Flujo constante de matrículas mes a mes'},
+ {medio:'Google Display + Remarketing', canal:'Remarketing sostenido', objetivo:'Recuperar leads no convertidos', publico:'Base acumulada de visitantes/leads', fase:'F4 · Sostenimiento', inv:4000000, kpi:'CTR, frecuencia', resultado:'Reducción de fuga de leads calificados'},
+ {medio:'YouTube', canal:'Contenido educativo sostenido', objetivo:'Nutrir confianza en ciclo largo de decisión', publico:'Leads en consideración', fase:'F4 · Sostenimiento', inv:3000000, kpi:'VTR, suscriptores', resultado:'Repositorio de confianza para nuevas cohortes'},
+ {medio:'Medios tradicionales', canal:'Radio sostenida (menor frecuencia)', objetivo:'Mantener presencia y recordación', publico:'55+ oyentes habituales', fase:'F4 · Sostenimiento', inv:8000000, kpi:'GRPs', resultado:'Recordación de marca sostenida en el tiempo'},
+ {medio:'Medios aliados', canal:'Sostenimiento del canal Coomeva/Comfandi', objetivo:'Convertir el canal en fuente recurrente', publico:'Asociados y afiliados 50+', fase:'F4 · Sostenimiento', inv:2000000, kpi:'Registros mensuales', resultado:'Canal aliado consolidado como fuente estable'},
+ {medio:'Creadores / voceros', canal:'Nuevas historias de la primera cohorte', objetivo:'Prueba social basada en resultados reales', publico:'Familias e influenciadores', fase:'F4 · Sostenimiento', inv:2000000, kpi:'Alcance, reacciones', resultado:'Testimonios reales reemplazan el copy genérico'},
+ {medio:'Contingencia', canal:'Reserva estratégica de gestión', objetivo:'Ajustes de pauta, oportunidades no previstas', publico:'—', fase:'Transversal', inv:5000000, kpi:'% ejecutado con justificación', resultado:'Flexibilidad para optimizar el mix según datos reales'}
+];
+const MASTER_SUM = MASTER_TABLE.reduce((a,b)=>a+b.inv,0);
+
+const BY_MEDIO = [
+ {n:'Meta Ads (Facebook + Instagram)', v:35000000, c:'#E2231A'},
+ {n:'Medios tradicionales (radio + prensa)', v:18000000, c:'#C0521F'},
+ {n:'Evento de lanzamiento', v:18000000, c:'#A8151E'},
+ {n:'Google Search', v:15000000, c:'#C98A1E'},
+ {n:'Producción de contenidos', v:12000000, c:'#8a7d70'},
+ {n:'Publicidad exterior (OOH)', v:10000000, c:'#3B1418'},
+ {n:'Medios aliados (Coomeva/Comfandi)', v:8000000, c:'#2E7D5B'},
+ {n:'Google Display + Remarketing', v:8000000, c:'#D98C5F'},
+ {n:'YouTube', v:7000000, c:'#E39C7A'},
+ {n:'Relaciones Públicas', v:6000000, c:'#EBC08A'},
+ {n:'Creadores / voceros', v:5000000, c:'#B6704A'},
+ {n:'Contingencia', v:5000000, c:'#D6C6AD'},
+ {n:'Adaptaciones creativas / accesibilidad', v:3000000, c:'#9C8C74'},
+];
+
+const BY_FASE = [
+ {n:'Fase 1 · Preparación', v:17000000, c:'#C98A1E', sem:'Semanas 1-4', obj:'Alistar creatividad, accesibilidad y vocería antes de comunicar'},
+ {n:'Fase 2 · Expectativa', v:13000000, c:'#2E7D5B', sem:'Semanas 5-8', obj:'Sembrar interés y validar canales sin gastar el grueso del presupuesto'},
+ {n:'Fase 3 · Lanzamiento', v:81000000, c:'#E2231A', sem:'Semanas 9-12 (incluye evento + contingencia)', obj:'Concentrar el mayor esfuerzo de inversión en el momento de mayor atención'},
+ {n:'Fase 4 · Sostenimiento y conversión', v:39000000, c:'#3B1418', sem:'Meses 4-6', obj:'Convertir el interés generado en matrículas reales'},
+];
+
+const POE = [
+ {n:'Paid media', v:124000000, c:'#E2231A', d:'Meta, Google, medios tradicionales, OOH, aliados pagos, creadores, evento'},
+ {n:'Owned media (insumo)', v:15000000, c:'#2E7D5B', d:'Producción propia y adaptaciones que alimentan web, redes y WhatsApp institucionales'},
+ {n:'Earned media', v:6000000, c:'#C98A1E', d:'Relaciones públicas, free press, cobertura editorial'},
+ {n:'Reserva / contingencia', v:5000000, c:'#8a7d70', d:'Ajustes según desempeño real de la pauta'},
+];
+
+const DIGVSTRAD = [
+ {n:'Digital (Meta, Google, YouTube, creadores)', v:70000000, c:'#E2231A'},
+ {n:'Evento + Relaciones Públicas', v:24000000, c:'#A8151E'},
+ {n:'Medios tradicionales + exterior', v:28000000, c:'#C0521F'},
+ {n:'Medios aliados (mixto)', v:8000000, c:'#2E7D5B'},
+ {n:'Producción / creatividad', v:15000000, c:'#C98A1E'},
+ {n:'Contingencia', v:5000000, c:'#8a7d70'},
+];
+
+const BY_MONTH = [
+ {m:'Mes 1', fase:'Preparación', v:17000000},
+ {m:'Mes 2', fase:'Expectativa', v:13000000},
+ {m:'Mes 3', fase:'Lanzamiento', v:81000000},
+ {m:'Mes 4', fase:'Sostenimiento', v:13000000},
+ {m:'Mes 5', fase:'Sostenimiento', v:13000000},
+ {m:'Mes 6', fase:'Sostenimiento', v:13000000},
+];
+
+// Escenarios — cifras redondeadas para lectura ejecutiva. Presupuesto de captación (Meta+Google+YouTube) = $65.000.000
+const SCEN_BASE = [
+ {key:'cons', nombre:'Conservador', cpl:20000, leads:3250, rReg:.25, rAsis:.70, rMat:.15},
+ {key:'esp',  nombre:'Esperado',    cpl:16250, leads:4000, rReg:.30, rAsis:.75, rMat:.18},
+ {key:'opt',  nombre:'Optimista',   cpl:13000, leads:5000, rReg:.35, rAsis:.80, rMat:.22},
+];
+function calcScenario(s){
+  const registros = Math.round(s.leads*s.rReg);
+  const asistentes = Math.round(registros*s.rAsis);
+  const matriculas = Math.round(asistentes*s.rMat);
+  const cac = Math.round(BUDGET_TOTAL/matriculas/1000)*1000;
+  return {...s, registros, asistentes, matriculas, cac};
+}
+const SCENARIOS = SCEN_BASE.map(calcScenario);
+
+/* =========================================================================
+   RENDER HELPERS — SVG donut & bar charts
+   ========================================================================= */
+function donutSVG(data, size=180, thickness=30){
+  const total = data.reduce((a,b)=>a+b.v,0);
+  let acc = 0;
+  const r = size/2 - thickness/2;
+  const cx = size/2, cy = size/2;
+  const circumf = 2*Math.PI*r;
+  let paths = '';
+  data.forEach(d=>{
+    const frac = d.v/total;
+    const dash = frac*circumf;
+    const gap = circumf-dash;
+    const rot = (acc/total)*360 - 90;
+    paths += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${d.c}" stroke-width="${thickness}"
+      stroke-dasharray="${dash} ${gap}" transform="rotate(${rot} ${cx} ${cy})" stroke-linecap="butt"/>`;
+    acc += d.v;
+  });
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${paths}
+    <circle cx="${cx}" cy="${cy}" r="${r-thickness/2-4}" fill="var(--crema)"/>
+    <text x="${cx}" y="${cy-4}" text-anchor="middle" font-family="DM Serif Display" font-size="18" fill="#3B1418">${(total/1000000).toLocaleString('es-CO',{maximumFractionDigits:0})}M</text>
+    <text x="${cx}" y="${cy+14}" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6b5c4f" letter-spacing="1">COP TOTAL</text>
+    </svg>`;
+}
+function legendHTML(data, total){
+  return data.map(d=>`<div class="li"><span class="sw" style="background:${d.c}"></span>${d.n}<span class="lv">${COPM(d.v)} · ${(d.v/total*100).toFixed(1)}%</span></div>`).join('');
+}
+function barChartHTML(data, maxOverride){
+  const max = maxOverride || Math.max(...data.map(d=>d.v));
+  return `<div class="bar-chart">${data.map(d=>`
+    <div class="bar-row">
+      <div>${d.n}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(d.v/max*100).toFixed(1)}%; background:${d.c}"></div></div>
+      <div class="bar-val">${COPM(d.v)}</div>
+    </div>`).join('')}</div>`;
+}
+
+/* =========================================================================
+   CONTENIDO — 23 módulos, orientados a aprobación · lanzamiento · matrícula
+   ========================================================================= */
+const SECTIONS = [];
+function addSection(id,title,html,accent){ SECTIONS.push({id,title,html,accent:accent||'br'}); }
+const SHAPES = { br:'<div class="bg-shape br"></div>', bl:'<div class="bg-shape bl"></div>', both:'<div class="bg-shape br"></div><div class="bg-shape bl"></div>', none:'' };
+
+/* 01 — PORTADA */
+addSection('portada','Portada', `
+${SHAPES.both}
+<div class="cover-slide">
+  <span class="mono-tag on-red">${ic('flag',13,'#FBF3E6')} Propuesta para aprobación del Comité Directivo</span>
+  <h1 class="serif">UAO NEXT.<br>Aprobar, lanzar y matricular.</h1>
+  <p class="lead">Plan de comunicación, pauta e inversión para llevar UAO NEXT del papel al campus: un presupuesto, un cronograma y una meta de matrícula — no un nuevo diagnóstico de mercado.</p>
+  <div class="arc"><span>Aprobación</span><span>Lanzamiento presencial + digital</span><span>Matrícula</span></div>
+  <div class="foot-meta">
+    <div><b style="color:#3B1418">Presupuesto</b><br>$150.000.000 COP</div>
+    <div><b style="color:#3B1418">Horizonte</b><br>6 meses · 4 fases</div>
+    <div><b style="color:#3B1418">Mercado</b><br>Cali · Valle del Cauca</div>
+    <div><b style="color:#3B1418">Basado en</b><br>Informe UAO NEXT · Silver Partners × Incubar</div>
+  </div>
+</div>
+`,'both');
+
+/* 02 — EL PEDIDO DE HOY */
+addSection('pedido','El pedido de hoy', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('target',15)} Módulo 02</span>
+  <h1>Tres aprobaciones para activar el proyecto</h1>
+  <p class="desc">Este documento no repite el diagnóstico de mercado ni la investigación del adulto mayor — esa evidencia ya está validada en el Informe UAO NEXT (Silver Partners × Incubar, jul. 2026). Aquí está el plan de acción para convertir esa evidencia en matrículas reales.</p>
+</div>
+<div class="ask-grid">
+  <div class="ask-card"><div class="askno">01</div>${ic('dollar',20)}<h4 style="margin-top:10px;">Aprobar el presupuesto de $150.000.000</h4><p>Y su distribución en 4 fases — sin fraccionarlo entre áreas sin coordinación central.</p></div>
+  <div class="ask-card"><div class="askno">02</div>${ic('calendar',20)}<h4 style="margin-top:10px;">Aprobar la fecha del evento de lanzamiento</h4><p>El detonante presencial de confianza para este público — pieza central del plan.</p></div>
+  <div class="ask-card"><div class="askno">03</div>${ic('users',20)}<h4 style="margin-top:10px;">Designar un responsable único de campaña</h4><p>Que apruebe creatividad, medios y presupuesto, y mida matrícula real cada quince días.</p></div>
+</div>
+<div class="card tint" style="margin-top:18px;">
+<h3>${ic('check',18)} Lo que este plan entrega</h3>
+<p style="font-size:12.6px; line-height:1.6; margin:0;">Un mix de medios 360° dimensionado para un público que <b>confía en lo presencial y en las personas, no solo en la pauta digital</b>; un cronograma con fechas y responsables; y un sistema de medición que conecta cada peso invertido con una matrícula.</p>
+</div>
+`);
+
+/* 03 — OPORTUNIDAD EN 30 SEGUNDOS */
+addSection('oportunidad','La oportunidad en 30 segundos', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('trending',15)} Módulo 03 · Contexto (ya validado en el Informe UAO NEXT)</span>
+  <h1>Un mercado grande, desatendido y con demanda comprobada</h1>
+</div>
+<div class="stat-hero">
+  <div class="big">
+    <div class="num">70%</div>
+    <div class="cap">de interés alto declarado en un programa universitario 50+ en Cali</div>
+  </div>
+  <div class="stat-support">
+    <div class="kpi-card"><div class="kpi-val">448K</div><div class="kpi-lbl">Personas 60+ en Cali — 19,8% de la ciudad</div></div>
+    <div class="kpi-card"><div class="kpi-val">$120K</div><div class="kpi-lbl">Precio ancla ya validado por el estudio de mercado</div></div>
+    <div class="kpi-card"><div class="kpi-val">0</div><div class="kpi-lbl">Competidores que integran campus + prestigio + comunidad</div></div>
+  </div>
+</div>
+<div class="card tint-amber" style="margin-top:22px;">
+<p style="font-size:12.4px; line-height:1.6; margin:0;">El "por qué" completo — segmentación, arquetipos, benchmark competitivo y barreras — está documentado en el <b>Informe Final UAO NEXT</b> y sus anexos. Esta propuesta no repite esa evidencia: la usa como punto de partida para el plan de medios que sigue.</p>
+</div>
+`);
+
+/* 04 — PROMESA / POSICIONAMIENTO */
+addSection('promesa','Nuestra promesa de marca', `
+<div class="quote-hero">
+  <div class="qmark">"</div>
+  <blockquote>UAO NEXT es el Tercer Espacio del conocimiento y la vitalidad: la alternativa inteligente e intergeneracional al club social tradicional — campus, prestigio académico y comunidad en un solo lugar.</blockquote>
+  <div class="attrib">Posicionamiento de marca · Mensaje central: <b>"Invierte en ti, no en compras."</b></div>
+  <div class="pill-row" style="margin-top:18px;">
+    <span class="pill">${ic('users',13)} 40-54: "Tu experiencia es tu mejor capital"</span>
+    <span class="pill">${ic('award',13)} 55-64: "Tu segundo acto comienza aquí"</span>
+    <span class="pill">${ic('shield',13)} 65+: "Aprende haciendo, sin miedo a equivocarte"</span>
+  </div>
+</div>
+`,'bl');
+
+/* 05 — PERSONAS (compact) */
+addSection('personas','A quién le hablamos', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('users',15)} Módulo 05</span>
+  <h1>Cinco perfiles, cinco mensajes, un mismo campus</h1>
+</div>
+<div class="persona-strip" id="personaStrip"></div>
+`);
+
+/* 06 — NICHO TRADICIONAL: DIGITAL + PRESENCIAL */
+addSection('balance','Un nicho tradicional: presencial y digital, no uno u otro', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('handshake',15)} Módulo 06 · Principio rector del plan</span>
+  <h1>Este público confía en las personas antes que en las pantallas</h1>
+  <p class="desc">El adulto mayor de Cali consume medios tradicionales, valora la compra y el contacto presencial, y solo el 36% tenía acceso pleno a internet en el último dato disponible. Por eso el plan no es "digital-first": es un mix deliberadamente balanceado.</p>
+</div>
+<div class="balance-wrap">
+  <div class="balance-side left">
+    <h4>${ic('phone',18,'#FBF3E6')} Lo digital construye escala</h4>
+    <ul>
+      <li>Meta Ads y Google captan intención y generan leads medibles a bajo costo por contacto</li>
+      <li>WhatsApp Business responde en &lt;24h — el momento de la verdad comercial</li>
+      <li>YouTube y remarketing sostienen la confianza mientras decide</li>
+    </ul>
+  </div>
+  <div class="balance-vs">+</div>
+  <div class="balance-side right">
+    <h4>${ic('pin',18)} Lo presencial construye confianza</h4>
+    <ul>
+      <li>El evento de lanzamiento en campus es el detonante de decisión, no un accesorio</li>
+      <li>Radio y prensa regional aportan la credibilidad de tercero que la pauta paga no compra</li>
+      <li>Publicidad exterior en la Comuna 22 y aliados (Coomeva, Comfandi) ponen la marca donde ya confían</li>
+    </ul>
+  </div>
+</div>
+<div class="grid grid-2" style="margin-top:18px;">
+  <div class="kpi-card"><div class="kpi-val">46,7%</div><div class="kpi-lbl">del presupuesto en canales 100% digitales</div></div>
+  <div class="kpi-card"><div class="kpi-val">53,3%</div><div class="kpi-lbl">en evento, RRPP, medios tradicionales, exterior y aliados</div></div>
+</div>
+`);
+
+/* 07 — CUSTOMER JOURNEY (compact timeline) */
+addSection('journey','El camino hacia la matrícula', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('trending',15)} Módulo 07</span>
+  <h1>10 pasos, un asesor, cero fricción</h1>
+</div>
+<div class="jtrack" id="journeyTrack"></div>
+<div class="table-wrap" style="margin-top:8px;">
+<table><tr><th>Momento crítico</th><th>Qué falla si no se atiende</th><th>Cómo lo resolvemos</th></tr>
+<tr><td><b>Contacto</b></td><td>El lead se enfría si nadie responde rápido</td><td>WhatsApp Business con respuesta humana &lt;24h y asesor único</td></tr>
+<tr><td><b>Asistencia</b></td><td>La decisión se frena sin ver el campus</td><td>Evento de lanzamiento y visitas guiadas presenciales</td></tr>
+<tr><td><b>Matrícula</b></td><td>El precio percibido como pago único es la barrera #1 (40%)</td><td>Pago fraccionado y asesor que explica el formato de créditos</td></tr>
+</table>
+</div>
+`);
+
+/* 08 — ESTRATEGIA DE COMUNICACION */
+addSection('comunicacion','Cómo hablamos (y cómo no)', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('chat',15)} Módulo 08</span>
+  <h1>El lenguaje decide quién se siente convocado</h1>
+</div>
+<div class="grid grid-2">
+  <div class="card tint-green"><h3>${ic('check',18)} Siempre</h3>
+    <p style="font-size:12.4px; line-height:1.7;">Aprender · descubrir · conectar · compartir · mantenerse activo · explorar nuevas pasiones · crear comunidad · continuar creciendo. Tono claro, directo y en primera persona del plural.</p>
+  </div>
+  <div class="card tint"><h3>${ic('alert',18)} Nunca</h3>
+    <p style="font-size:12.4px; line-height:1.7;">Diminutivos ("abuelitos") · clichés de envejecimiento pasivo · tono clínico o condescendiente · mensajes centrados solo en limitaciones · la categoría "formación continua" (no convierte, según el estudio).</p>
+  </div>
+</div>
+`);
+
+/* 09 — FASES */
+addSection('fases','Las 4 fases del lanzamiento', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('calendar',15)} Módulo 09 · Referencia metodológica C-LAB UAO</span>
+  <h1>Preparación → Expectativa → Lanzamiento → Sostenimiento</h1>
+  <p class="desc">Se mantiene la lógica de 4 fases de C-LAB. La intensidad de inversión se concentra en el Lanzamiento porque, para este público, el evento presencial es el mayor acelerador de confianza y matrícula.</p>
+</div>
+<div class="fase-timeline" id="faseTimeline"></div>
+`);
+
+/* 10 — EVENTO DE LANZAMIENTO (hero) */
+addSection('evento','El evento: el corazón del lanzamiento', `
+<div class="evento-hero">
+  <div class="evento-visual">
+    <div class="ev-icon">${ic('pin',26,'#FBF3E6')}</div>
+    <h2 class="serif">"Un día en tu segundo acto"</h2>
+    <p>Jornada abierta en el campus UAO: recorrido guiado, clases muestra de las tres rutas (Tec/IA, bienestar, arte), testimonios en vivo y entrega simbólica del carné de bienvenida — con hijos y familiares invitados como acompañantes.</p>
+    <div class="evento-stats">
+      <div class="es"><div class="v">$18M</div><div class="l">Presupuesto (12%)</div></div>
+      <div class="es"><div class="v">≥300</div><div class="l">Asistentes</div></div>
+      <div class="es"><div class="v">≥500</div><div class="l">Registros</div></div>
+    </div>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:14px;"><h3>${ic('layers',18)} Agenda del día</h3>
+      <p style="font-size:12.2px; line-height:1.75;">Conferencia inaugural con testimonios reales → talleres demostrativos por ruta curricular → zona de registro asistido (letra grande, un asesor por persona) → cobertura de prensa y fotografía institucional → seguimiento comercial &lt;48h a todos los registrados.</p>
+    </div>
+    <div class="card tint"><h3>${ic('check',18)} Por qué no es opcional</h3>
+      <p style="font-size:12.2px; line-height:1.6;">La evidencia primaria confirma que la presencialidad y el "ver para creer" son centrales en la decisión de este segmento. El evento es, junto con Meta Ads, el mayor generador de leads calificados de todo el plan.</p>
+    </div>
+  </div>
+</div>
+`);
+
+/* 11 — ECOSISTEMA DE MEDIOS */
+addSection('ecosistema','El ecosistema de medios 360°', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('layers',15)} Módulo 11</span>
+  <h1>Paid · Owned · Earned trabajando juntos</h1>
+</div>
+<div class="chart-row">
+  <div id="poeChart"></div>
+  <div class="legend" id="poeLegend" style="flex:1; min-width:300px;"></div>
+</div>
+`);
+
+/* 12 — MEDIOS DIGITALES */
+addSection('digitales','Medios digitales: Meta y Google', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('phone',15)} Módulo 12</span>
+  <h1>Captación medible, sin asumir que Instagram es el canal principal</h1>
+</div>
+<div class="grid grid-2">
+  <div class="card"><h3>${ic('target',18)} Meta Ads — $35.000.000 (23,3%)</h3>
+    <p style="font-size:12.3px; line-height:1.65;">Facebook como plataforma principal (afín al consumo de medios 50+ en Colombia), Instagram como canal complementario para 40-59. Prospecting por geografía e intereses, remarketing de visitantes, Lead Ads con botón directo a WhatsApp, y pruebas A/B de mensaje y formato.</p>
+  </div>
+  <div class="card"><h3>${ic('globe',18)} Google — $27.000.000 (18,0%)</h3>
+    <p style="font-size:12.3px; line-height:1.65;">Search ($15M) captura intención activa de búsqueda; Display + Remarketing ($8M) sostiene recordación y recupera visitantes; YouTube ($7M) construye confianza con testimonios en video — el formato de mayor credibilidad para decisiones de largo ciclo.</p>
+  </div>
+</div>
+<div class="card tint" style="margin-top:14px;"><h3>${ic('check',18)} Principio de optimización</h3><p style="font-size:12.2px; margin:0;">El detalle completo de audiencias, keywords y pruebas A/B por canal se ajusta con datos reales desde la Fase 2 (Expectativa) — la contingencia del plan existe para reforzar el canal de mejor desempeño observado.</p></div>
+`);
+
+/* 13 — MEDIOS TRADICIONALES Y PRESENCIALES */
+addSection('tradicionales','Medios tradicionales y presencia física', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('radio',15)} Módulo 13</span>
+  <h1>Donde este público ya confía</h1>
+</div>
+<div class="grid grid-3">
+  <div class="card"><h3>${ic('radio',18)} Radio — $18M (12%)</h3><p style="font-size:12px; line-height:1.6;">Franjas de conversación AM/FM de alta audiencia 55+. Cobertura y credibilidad fuera de lo digital, sostenida en Lanzamiento y con menor frecuencia en meses 4-6.</p></div>
+  <div class="card"><h3>${ic('pin',18)} Exterior — $10M (6,7%)</h3><p style="font-size:12px; line-height:1.6;">Vallas y mupis concentrados en la Comuna 22 y corredores de acceso al campus: recordación local sostenida durante el lanzamiento.</p></div>
+  <div class="card"><h3>${ic('mic',18)} Prensa (earned) — dentro de RRPP</h3><p style="font-size:12px; line-height:1.6;">Notas editoriales priorizadas sobre pauta pagada: la credibilidad de tercero pesa más que el anuncio para este público.</p></div>
+</div>
+`);
+
+/* 14 — ALIADOS */
+addSection('aliados','Aliados: la puerta más económica al segmento', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('handshake',15)} Módulo 14</span>
+  <h1>Cajas y cooperativas ya tienen la confianza y la base de datos</h1>
+</div>
+<div class="table-wrap">
+<table>
+<tr><th>Aliado</th><th>Qué aporta</th><th>Estado</th></tr>
+<tr><td><b>Coomeva</b></td><td>72.628 asociados en el segmento, financiación en operación, convenio comercial vigente con la UAO</td><td><span class="tag green">Activo — ancla B2B2C</span></td></tr>
+<tr><td><b>Comfandi</b></td><td>658.000 afiliados (22,3% mayores de 50), interés expreso en articular información e intergeneracionalidad</td><td><span class="tag amber">Formalizar convenio</span></td></tr>
+<tr><td><b>Cámara de Comercio de Cali</b></td><td>Distrito de bienestar, red empresarial para el segmento en transición laboral</td><td><span class="tag amber">En exploración</span></td></tr>
+<tr><td><b>Empresas grandes del Valle</b></td><td>Programas de pre-retiro obligatorios por ley — palanca comercial 40-55</td><td><span class="tag amber">En exploración</span></td></tr>
+</table>
+</div>
+<div class="card tint" style="margin-top:14px;"><p style="font-size:12.4px; margin:0;"><b>$8.000.000 (5,3%)</b> distribuidos en seeding, activación conjunta y sostenimiento — con foco prioritario en Coomeva por tener convenio ya vigente.</p></div>
+`);
+
+/* 15 — PRESUPUESTO (money hero) */
+addSection('presupuesto','¿Dónde están los $150.000.000?', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('dollar',15)} Módulo 15 · La cifra que pedimos aprobar</span>
+  <h1>Un presupuesto trazable, medio por medio</h1>
+</div>
+<div class="chart-row">
+  <div id="medioChart"></div>
+  <div class="legend" id="medioLegend" style="flex:1; min-width:320px; max-height:280px; overflow-y:auto;"></div>
+</div>
+<div class="grid grid-3" style="margin-top:16px;">
+  <div class="kpi-card"><div class="kpi-val" id="sumCheck">$150.000.000</div><div class="kpi-lbl">Suma verificada — 24 líneas de inversión</div></div>
+  <div class="kpi-card"><div class="kpi-val">23,3%</div><div class="kpi-lbl">Máxima concentración en un solo medio (Meta Ads)</div></div>
+  <div class="kpi-card"><div class="kpi-val">3,3%</div><div class="kpi-lbl">Contingencia para reforzar lo que mejor funcione</div></div>
+</div>
+`);
+
+/* 16 — TABLA MAESTRA */
+addSection('tabla-maestra','El detalle línea por línea', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('layers',15)} Módulo 16</span>
+  <h1>Tabla maestra de inversión</h1>
+</div>
+<div class="table-wrap" id="masterTableWrap" style="max-height:440px; overflow-y:auto;"></div>
+`);
+
+/* 17 — INVERSION POR FASE Y MES */
+addSection('fase-mes','Cómo se distribuye en el tiempo', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('calendar',15)} Módulo 17</span>
+  <h1>Por fase y mes a mes</h1>
+</div>
+<div class="chart-row" style="margin-bottom:20px;">
+  <div id="faseChart"></div>
+  <div class="legend" id="faseLegend" style="flex:1; min-width:320px;"></div>
+</div>
+<div class="timeline-months" id="monthGrid"></div>
+`);
+
+/* 18 — PROYECCIONES */
+addSection('proyecciones','De la pauta a la matrícula', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('trending',15)} Módulo 18</span>
+  <h1>Tres escenarios, un mismo presupuesto</h1>
+  <p class="desc">No existe histórico propio de pauta para este segmento y ciudad: las cifras son <b>supuestos de planeación</b> sobre bandas de CPL razonables para educación 50+ en Colombia — se calibran con datos reales desde la primera semana activa.</p>
+</div>
+<div class="grid grid-3" id="scenarioCards"></div>
+`);
+
+/* 19 — KPIs */
+addSection('kpis','Cómo sabremos que funciona', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('check',15)} Módulo 19</span>
+  <h1>Un indicador por etapa del embudo</h1>
+</div>
+<div class="grid grid-5">
+  <div class="card"><h3>Awareness</h3><p style="font-size:11.6px;">Alcance · Impresiones · Frecuencia</p></div>
+  <div class="card"><h3>Consideración</h3><p style="font-size:11.6px;">CTR · Visitas · Tiempo en landing</p></div>
+  <div class="card"><h3>Captación</h3><p style="font-size:11.6px;">Leads · CPL · Tasa de conversión</p></div>
+  <div class="card"><h3>Comercial</h3><p style="font-size:11.6px;">Respuesta &lt;24h · Asistencia · Matrículas</p></div>
+  <div class="card"><h3>Eficiencia</h3><p style="font-size:11.6px;">CPA · ROI · CAC por matrícula</p></div>
+</div>
+<div class="card tint" style="margin-top:16px;"><h3>${ic('clock',18)} Ritual de medición</h3><p style="font-size:12.3px; margin:0;">Tablero quincenal en Lanzamiento, mensual en Sostenimiento. La contingencia del 3,3% se reasigna hacia el canal de mejor CPL real observado.</p></div>
+`);
+
+/* 20 — RIESGOS */
+addSection('riesgos','Riesgos y cómo los mitigamos', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('alert',15)} Módulo 20</span>
+  <h1>Nada se deja a la improvisación</h1>
+</div>
+<div class="table-wrap">
+<table><tr><th>Riesgo</th><th>Mitigación</th></tr>
+<tr><td>Baja asistencia al evento de lanzamiento</td><td>Confirmación telefónica/WhatsApp previa + transporte facilitado para grupos e invitados prioritarios</td></tr>
+<tr><td>CPL digital más alto de lo esperado</td><td>Contingencia del 3,3% y reasignación quincenal hacia el canal de mejor desempeño real</td></tr>
+<tr><td>Respuesta comercial lenta enfría los leads</td><td>WhatsApp Business con SLA de respuesta &lt;24h y asesor único por lead, medido semanalmente</td></tr>
+<tr><td>Dilución organizacional del proyecto</td><td>Responsable único de campaña con autoridad sobre creatividad, medios y presupuesto</td></tr>
+<tr><td>Percepción de precio como barrera</td><td>Comunicación explícita del pago fraccionado desde el primer contacto, nunca membresía fija</td></tr>
+</table>
+</div>
+`);
+
+/* 21 — DECISIONES (closing ask) */
+addSection('decisiones','Las decisiones que pedimos aprobar', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('flag',15)} Módulo 21</span>
+  <h1>10 decisiones para pasar del plan a la acción</h1>
+</div>
+<ol class="decision-list">
+  <li><b>Aprobar el presupuesto de $150.000.000</b> y su distribución por fase.</li>
+  <li><b>Designar un responsable único de campaña</b> con autoridad sobre creatividad, medios y presupuesto.</li>
+  <li><b>Aprobar el concepto creativo y el tono</b> ("Invierte en ti, no en compras") antes de producir piezas.</li>
+  <li><b>Confirmar fecha y formato del evento de lanzamiento</b> en campus.</li>
+  <li><b>Formalizar el canal con Coomeva</b> como primer aliado B2B2C activo.</li>
+  <li><b>Habilitar WhatsApp Business con respuesta humana &lt;24h</b> antes de activar pauta de captación.</li>
+  <li><b>Validar la landing/micrositio</b> bajo criterios de accesibilidad antes del lanzamiento.</li>
+  <li><b>Aprobar el naming definitivo</b> con el equipo de marca.</li>
+  <li><b>Definir el criterio de éxito del piloto</b> (CPL, asistencia, matrículas) para decidir Sostenimiento.</li>
+  <li><b>Reservar el 3,3% de contingencia</b> como mecanismo de reasignación, no como colchón sin gobernanza.</li>
+</ol>
+`);
+
+/* 22 — CRONOGRAMA DE ARRANQUE */
+addSection('arranque','Próximos 30 días', `
+<div class="slide-head">
+  <span class="eyebrow">${ic('calendar',15)} Módulo 22</span>
+  <h1>De la aprobación a la primera pauta activa</h1>
+</div>
+<div class="grid grid-2">
+  <div class="card"><h3>${ic('check',18)} Semanas 1-2</h3>
+    <p style="font-size:12.3px; line-height:1.7;">Aprobación del plan por el Comité · producción de piezas base · configuración de CRM, WhatsApp Business y landing.</p>
+  </div>
+  <div class="card"><h3>${ic('calendar',18)} Semanas 3-4</h3>
+    <p style="font-size:12.3px; line-height:1.7;">Formalización del canal Coomeva y contacto con Comfandi · definición de fecha y logística del evento · inicio de gestiones de RRPP.</p>
+  </div>
+</div>
+<div class="card tint-green" style="margin-top:14px;"><h3>${ic('target',18)} Quick win inmediato</h3><p style="font-size:12.3px; margin:0;">Activar la base de egresados y comunidad universitaria como primer canal owned/earned, sin costo de medios, mientras se aprueba el resto del plan.</p></div>
+`);
+
+/* 23 — CIERRE */
+addSection('cierre','Cierre', `
+<div class="closing-slide">
+  <span class="mono-tag on-red">${ic('flag',13,'#FBF3E6')} UAO NEXT</span>
+  <h1 class="serif" style="margin-top:16px;">Aprueba hoy. Lanza con un evento memorable. Matricula con un sistema medible.</h1>
+  <div class="steps3">
+    <div class="s"><div class="v">$150M</div><div class="l">Presupuesto listo para ejecutar</div></div>
+    <div class="s"><div class="v">12 semanas</div><div class="l">De la aprobación al lanzamiento</div></div>
+    <div class="s"><div class="v">162-308</div><div class="l">Matrículas estimadas en escenario esperado-optimista</div></div>
+  </div>
+</div>
+`,'both');
+
+/* =========================================================================
+   RENDER APP
+   ========================================================================= */
+const PERSONAS = [
+ {age:'40-54', icon:'target', name:'El profesional en juego', quote:'"Quiero seguir en juego, no que me preparen para salir."', cta:'Agenda tu actualización'},
+ {age:'55-59', icon:'award', name:'El segundo acto', quote:'"No me retiro: empiezo mi segundo acto."', cta:'Agenda tu visita al campus'},
+ {age:'60-64', icon:'idcard', name:'El tejedor de pertenencia', quote:'"Yo también soy parte de esta universidad."', cta:'Conoce el carné UAO NEXT'},
+ {age:'65-69', icon:'shield', name:'El autónomo digital', quote:'"No me da miedo aprender; me da miedo equivocarme."', cta:'Aprende con acompañamiento'},
+ {age:'70+', icon:'heart', name:'El contemplativo vital', quote:'"Estudio para disfrutar y entender, no para producir."', cta:'Vive el campus'},
+];
+function renderPersonas(){
+  document.getElementById('personaStrip').innerHTML = PERSONAS.map(p=>`
+    <div class="persona-chip">
+      <div class="picon">${ic(p.icon,18,'#FBF3E6')}</div>
+      <div class="page">${p.age} AÑOS</div>
+      <h4>${p.name}</h4>
+      <div class="pq">${p.quote}</div>
+      <div class="pcta">${p.cta} →</div>
+    </div>`).join('');
+}
+
+const JOURNEY = ['Descubrim.','Interés','Consider.','Confianza','Registro','Contacto','Asistencia','Matrícula','Fideliz.','Referido'];
+function renderJourney(){
+  document.getElementById('journeyTrack').innerHTML = JOURNEY.map((j,i)=>`
+    ${i>0?'<div class="jline"></div>':''}
+    <div class="jnode"><div class="dot">${i+1}</div><div class="lbl">${j}</div></div>`).join('');
+}
+
+const FASES_CARDS = [
+ {n:'Fase 1', t:'Preparación', s:'Semanas 1-4', v:17000000, c:'#C98A1E', tc:'#3B1418', d:'Producción de contenidos, accesibilidad y vocería. Sin pauta activa.'},
+ {n:'Fase 2', t:'Expectativa', s:'Semanas 5-8', v:13000000, c:'#2E7D5B', tc:'#FBF3E6', d:'RRPP, seeding con aliados y pauta digital de bajo volumen.'},
+ {n:'Fase 3', t:'Lanzamiento', s:'Semanas 9-12', v:81000000, c:'#E2231A', tc:'#FBF3E6', d:'Evento en campus + mix 360° completo. El mayor esfuerzo del plan.'},
+ {n:'Fase 4', t:'Sostenimiento', s:'Meses 4-6', v:39000000, c:'#3B1418', tc:'#FBF3E6', d:'Remarketing, conversión sostenida y testimonios reales.'},
+];
+function renderFases(){
+  document.getElementById('faseTimeline').innerHTML = FASES_CARDS.map(f=>`
+    <div class="fase-block" style="background:${f.c}; color:${f.tc};">
+      <div class="fnum">${f.n.replace('Fase ','')}</div>
+      <div class="fsem">${f.s}</div>
+      <h4>${f.t}</h4>
+      <div class="fval">${COPM(f.v)}</div>
+      <div class="fpct">${(f.v/BUDGET_TOTAL*100).toFixed(1)}% del presupuesto</div>
+      <p>${f.d}</p>
+    </div>`).join('');
+}
+
+function renderPresupuesto(){
+  document.getElementById('medioChart').innerHTML = donutSVG(BY_MEDIO, 220, 34);
+  document.getElementById('medioLegend').innerHTML = legendHTML(BY_MEDIO, BUDGET_TOTAL);
+  document.getElementById('sumCheck').textContent = COP(MASTER_SUM);
+}
+
+function renderMasterTable(){
+  let html = `<table><tr><th>Medio</th><th>Canal</th><th>Objetivo</th><th>Público</th><th>Fase</th><th>Inversión</th><th>%</th><th>KPI</th><th>Resultado esperado</th></tr>`;
+  MASTER_TABLE.forEach(r=>{
+    html += `<tr><td><b>${r.medio}</b></td><td>${r.canal}</td><td>${r.objetivo}</td><td>${r.publico}</td><td>${r.fase}</td><td>${COP(r.inv)}</td><td>${(r.inv/BUDGET_TOTAL*100).toFixed(1)}%</td><td>${r.kpi}</td><td>${r.resultado}</td></tr>`;
+  });
+  html += `<tr style="font-weight:700;"><td colspan="5">TOTAL</td><td>${COP(MASTER_SUM)}</td><td>100.0%</td><td colspan="2"></td></tr>`;
+  html += `</table>`;
+  document.getElementById('masterTableWrap').innerHTML = html;
+}
+
+function renderFaseSection(){
+  document.getElementById('faseChart').innerHTML = donutSVG(BY_FASE, 190, 30);
+  document.getElementById('faseLegend').innerHTML = legendHTML(BY_FASE, BUDGET_TOTAL);
+}
+
+function renderMonths(){
+  const max = Math.max(...BY_MONTH.map(m=>m.v));
+  document.getElementById('monthGrid').innerHTML = BY_MONTH.map(m=>`
+    <div class="tmonth">
+      <h5>${m.m}</h5>
+      <div class="fase">${m.fase}</div>
+      <div class="val">${COPM(m.v)}</div>
+      <div class="bar"><i style="width:${(m.v/max*100).toFixed(0)}%"></i></div>
+    </div>`).join('');
+}
+
+function renderPOE(){
+  document.getElementById('poeChart').innerHTML = donutSVG(POE, 190, 30);
+  document.getElementById('poeLegend').innerHTML = POE.map(d=>`
+    <div class="li"><span class="sw" style="background:${d.c}"></span>${d.n}<span class="lv">${COPM(d.v)} · ${(d.v/BUDGET_TOTAL*100).toFixed(1)}%</span></div>
+    <div style="font-size:11px; color:var(--texto-suave); margin:-2px 0 6px 19px;">${d.d}</div>
+  `).join('');
+}
+
+function renderScenarios(){
+  const wrap = document.getElementById('scenarioCards');
+  const cls = {cons:'cons', esp:'esp', opt:'opt'};
+  wrap.innerHTML = SCENARIOS.map(s=>`
+    <div class="scenario-card ${cls[s.key]}">
+      <div class="stag">Escenario</div>
+      <h4>${s.nombre}</h4>
+      <div class="hero-mat"><div class="v">${s.matriculas.toLocaleString('es-CO')}</div><div class="l">Matrículas estimadas</div></div>
+      <div class="row"><span>CPL supuesto</span><b>${COP(s.cpl)}</b></div>
+      <div class="row"><span>Leads estimados</span><b>${s.leads.toLocaleString('es-CO')}</b></div>
+      <div class="row"><span>Registros a evento/sesión</span><b>${s.registros.toLocaleString('es-CO')}</b></div>
+      <div class="row"><span>Asistentes</span><b>${s.asistentes.toLocaleString('es-CO')}</b></div>
+      <div class="row" style="border-bottom:none;"><span>CAC aprox. por matrícula</span><b>${COP(s.cac)}</b></div>
+    </div>`).join('');
+}
+
+/* ---- Bootstrap de la app ---- */
+const wrap = document.getElementById('slidesWrap');
+SECTIONS.forEach((s,i)=>{
+  const div = document.createElement('div');
+  div.className = 'slide' + (i===0?' active':'');
+  div.id = 'slide-'+s.id;
+  div.innerHTML = s.html;
+  wrap.appendChild(div);
+});
+
+renderPersonas();
+renderJourney();
+renderFases();
+renderPresupuesto();
+renderMasterTable();
+renderFaseSection();
+renderMonths();
+renderPOE();
+renderScenarios();
+
+// menu
+const menuGrid = document.getElementById('menuGrid');
+menuGrid.innerHTML = SECTIONS.map((s,i)=>`<button class="menu-item" data-i="${i}"><div class="num">${String(i+1).padStart(2,'0')}</div><div class="ttl">${s.title}</div></button>`).join('');
+
+// dots
+const dotsWrap = document.getElementById('dots');
+dotsWrap.innerHTML = SECTIONS.map((s,i)=>`<div class="dot" data-i="${i}" title="${s.title}"></div>`).join('');
+
+let current = 0;
+function goTo(i){
+  if(i<0) i=0; if(i>=SECTIONS.length) i=SECTIONS.length-1;
+  document.querySelectorAll('.slide')[current].classList.remove('active');
+  current = i;
+  document.querySelectorAll('.slide')[current].classList.add('active');
+  document.querySelectorAll('.slide')[current].scrollTop = 0;
+  document.getElementById('progressFill').style.width = ((current+1)/SECTIONS.length*100)+'%';
+  document.getElementById('progressLabel').textContent = String(current+1).padStart(2,'0')+' / '+SECTIONS.length;
+  document.querySelectorAll('.menu-item').forEach(el=>el.classList.toggle('active', +el.dataset.i===current));
+  document.querySelectorAll('.dot').forEach(el=>el.classList.toggle('active', +el.dataset.i===current));
+  closeMenu();
+}
+document.getElementById('prevBtn').onclick = ()=>goTo(current-1);
+document.getElementById('nextBtn').onclick = ()=>goTo(current+1);
+document.querySelectorAll('.menu-item').forEach(el=>el.onclick=()=>goTo(+el.dataset.i));
+document.querySelectorAll('.dot').forEach(el=>el.onclick=()=>goTo(+el.dataset.i));
+
+function openMenu(){document.getElementById('menuOverlay').classList.add('open');}
+function closeMenu(){document.getElementById('menuOverlay').classList.remove('open');}
+document.getElementById('menuBtn').onclick = openMenu;
+document.getElementById('menuOverlay').addEventListener('click', e=>{ if(e.target.id==='menuOverlay') closeMenu(); });
+
+document.getElementById('fsBtn').onclick = ()=>{
+  if(!document.fullscreenElement){ document.documentElement.requestFullscreen().catch(()=>{}); }
+  else{ document.exitFullscreen(); }
+};
+
+window.addEventListener('keydown', e=>{
+  if(document.getElementById('menuOverlay').classList.contains('open')){
+    if(e.key==='Escape') closeMenu();
+    return;
+  }
+  if(e.key==='ArrowRight' || e.key===' ') { goTo(current+1); e.preventDefault(); }
+  if(e.key==='ArrowLeft') { goTo(current-1); e.preventDefault(); }
+  if(e.key==='Escape') closeMenu();
+});
+
+goTo(0);
+</script>
+</body>
+</html>
