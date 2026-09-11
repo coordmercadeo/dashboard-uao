@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UAO Fest | Estado de campaña</title>
+<style>
+:root {
+ --bg:#f5f6fa; --card:#fff; --ink:#171b26; --muted:#687083; --line:#e6e8ee;
+ --red:#d71920; --red2:#ef4b51; --soft:#fff0f1; --amber:#fff7df; --amberInk:#8a5b00;
+ --blue:#eef4ff; --blueInk:#2356a8; --green:#eafaf1; --greenInk:#157347;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}
+.wrap{max-width:1440px;margin:auto;padding:28px}
+.head{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:20px}
+.eyebrow{font-size:12px;letter-spacing:.13em;font-weight:800;color:var(--red);text-transform:uppercase}
+h1{font-size:34px;margin:5px 0 7px;letter-spacing:-.03em}
+.sub{font-size:14px;line-height:1.5;color:var(--muted);max-width:850px}
+.cut{padding:9px 13px;border-radius:999px;background:#171b26;color:#fff;font-size:12px;white-space:nowrap}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 6px 24px rgba(20,26,40,.045)}
+.kpi{padding:18px}
+.kpi .lab{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}
+.kpi .val{font-size:33px;font-weight:900;margin:7px 0 3px}
+.kpi .foot{font-size:11px;color:var(--muted);line-height:1.35}
+.kpi.main{background:linear-gradient(145deg,#c80e15,#e92830);border:none;color:#fff}
+.kpi.main .lab,.kpi.main .foot{color:#ffd9db}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-bottom:18px}
+.section{padding:22px}
+h2{font-size:19px;margin:0 0 5px}
+.desc{font-size:13px;line-height:1.5;color:var(--muted);margin-bottom:17px}
+.source-row{padding:10px 0}
+.row-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;margin-bottom:7px}
+.row-top strong{display:block;font-size:14px}
+.row-top span{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.right{text-align:right}
+.right b{display:block;font-size:16px}
+.right small{font-size:10px;color:var(--muted)}
+.track{height:10px;border-radius:999px;background:#eef0f4;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,var(--red),var(--red2));border-radius:999px}
+.source-row.commercial{background:var(--blue);margin:5px -10px;padding:11px 10px;border-radius:12px}
+.source-row.commercial .fill{background:linear-gradient(90deg,#1d4ed8,#60a5fa)}
+.source-row.missing{background:var(--amber);margin:5px -10px;padding:11px 10px;border-radius:12px}
+.source-row.missing .fill{background:#d9b24c}
+.commercial-box{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.cbox{padding:17px;border-radius:15px;border:1px solid var(--line)}
+.cbox h3{font-size:14px;margin:0 0 9px}
+.cbox .big{font-size:32px;font-weight:900}
+.cbox p{font-size:12px;color:var(--muted);line-height:1.45;margin:5px 0 0}
+.cbox.one{background:var(--amber);border-color:#f0dfaa}
+.cbox.two{background:var(--blue);border-color:#cbdcff}
+.notice{padding:14px;border-radius:13px;font-size:12px;line-height:1.5;margin-bottom:12px}
+.notice.green{background:var(--green);color:var(--greenInk)}
+.notice.amber{background:var(--amber);color:var(--amberInk)}
+.table-card{padding:22px;overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:780px}
+th{text-align:left;color:var(--muted);font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--line);padding:11px}
+td{padding:12px 11px;border-bottom:1px solid var(--line);font-size:13px}
+.num{text-align:right}
+.strong{font-weight:900;color:var(--red)}
+.highlight{background:#fafbfe}
+.cell-note{font-size:10px;color:var(--muted);margin-top:2px;font-weight:400}
+tfoot td{font-weight:900;border-top:2px solid #d6dae3}
+.note{font-size:11px;color:var(--muted);line-height:1.55;margin-top:15px}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+@media(max-width:620px){.wrap{padding:15px}.head{flex-direction:column}.kpis{grid-template-columns:1fr}.commercial-box{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="eyebrow">Universidad Autónoma de Occidente · UAO Fest 2026</div>
+      <h1>Estado de campaña y captación por origen</h1>
+      <div class="sub">
+        Base depurada por contacto. El tablero usa <b>567 registrados únicos oficiales</b> como total de control
+        y conserva la trazabilidad entre actividades, únicos observados y valor conciliado.
+      </div>
+    </div>
+    <div class="cut">Corte · 11 sep 2026</div>
+  </div>
+
+  <div class="kpis">
+    <div class="card kpi main"><div class="lab">Únicos oficiales</div><div class="val">567</div><div class="foot">Cifra principal de campaña</div></div>
+    <div class="card kpi"><div class="lab">Filas de actividad</div><div class="val">1,090</div><div class="foot">Registros brutos del archivo</div></div>
+    <div class="card kpi"><div class="lab">Únicos observados</div><div class="val">577</div><div class="foot">Por nombre normalizado</div></div>
+    <div class="card kpi"><div class="lab">Origen identificado</div><div class="val">430</div><div class="foot">75.8% del total oficial</div></div>
+    <div class="card kpi"><div class="lab">Pendiente conciliación</div><div class="val">10</div><div class="foot">Diferencia archivo vs. oficial</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="card section">
+      <h2>Captación por origen</h2>
+      <div class="desc">Cada contacto se atribuye una sola vez. Las cifras conciliadas suman exactamente 567.</div>
+      
+    <div class="source-row ">
+      <div class="row-top">
+        <div>
+          <strong>Facebook pauta</strong>
+          <span>182 contactos únicos observados.</span>
+        </div>
+        <div class="right">
+          <b>179</b>
+          <small>31.6%</small>
+        </div>
+      </div>
+      <div class="track"><div class="fill" style="width:100.0%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="row-top">
+        <div>
+          <strong>Sin origen</strong>
+          <span>139 contactos únicos observados.</span>
+        </div>
+        <div class="right">
+          <b>137</b>
+          <small>24.2%</small>
+        </div>
+      </div>
+      <div class="track"><div class="fill" style="width:76.5%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="row-top">
+        <div>
+          <strong>WhatsApp</strong>
+          <span>84 contactos únicos observados.</span>
+        </div>
+        <div class="right">
+          <b>82</b>
+          <small>14.5%</small>
+        </div>
+      </div>
+      <div class="track"><div class="fill" style="width:45.8%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="row-top">
+        <div>
+          <strong>QR pantallas</strong>
+          <span>77 contactos únicos observados.</span>
+        </div>
+        <div class="right">
+          <b>76</b>
+          <small>13.4%</small>
+        </div>
+      </div>
+      <div class="track"><div class="fill" style="width:42.5%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="row-top">
+        <div>
+          <strong>Email</strong>
+          <span>37 contactos únicos observados.</span>
+        </div>
+        <div class="right">
+          <b>36</b>
+          <small>6.3%</small>
+        </div>
+      </div>
+      <div class="track"><div class="fill" style="width:20.1%"></div></div>
+    </div>
+    
+    <div class="source-row missing">
+      <div class="row-top">
+        <div>
+          <strong>Comercial1</strong>
+          <span>No se encontró el valor “Comercial1” en el archivo adjunto.</span>
+        </div>
+        <div class="right">
+          <b>0</b>
+          <small>0.0%</small>
+        </div>
+      </div>
+      <div class="track"><div class="fill" style="width:0.0%"></div></div>
+    </div>
+    
+    <div class="source-row commercial">
+      <div class="row-top">
+        <div>
+          <strong>Comercial2</strong>
+          <span>55 actividades → 32 contactos únicos observados → 31 conciliados.</span>
+        </div>
+        <div class="right">
+          <b>31</b>
+          <small>5.5%</small>
+        </div>
+      </div>
+      <div class="track"><div class="fill" style="width:17.3%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="row-top">
+        <div>
+          <strong>Redes</strong>
+          <span>19 contactos únicos observados.</span>
+        </div>
+        <div class="right">
+          <b>19</b>
+          <small>3.4%</small>
+        </div>
+      </div>
+      <div class="track"><div class="fill" style="width:10.6%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="row-top">
+        <div>
+          <strong>Web</strong>
+          <span>6 contactos únicos observados.</span>
+        </div>
+        <div class="right">
+          <b>6</b>
+          <small>1.1%</small>
+        </div>
+      </div>
+      <div class="track"><div class="fill" style="width:3.4%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="row-top">
+        <div>
+          <strong>Festival - Web</strong>
+          <span>1 contactos únicos observados.</span>
+        </div>
+        <div class="right">
+          <b>1</b>
+          <small>0.2%</small>
+        </div>
+      </div>
+      <div class="track"><div class="fill" style="width:0.6%"></div></div>
+    </div>
+    
+    </div>
+
+    <div class="card section">
+      <h2>Comercial1 vs. Comercial2</h2>
+      <div class="desc">Corrección específica del tablero anterior.</div>
+
+      <div class="commercial-box">
+        <div class="cbox one">
+          <h3>Comercial1</h3>
+          <div class="big">0</div>
+          <p>No existe ningún valor “Comercial1” en el archivo suministrado. No se asignaron registros de manera artificial.</p>
+        </div>
+        <div class="cbox two">
+          <h3>Comercial2</h3>
+          <div class="big">31</div>
+          <p><b>55</b> actividades corresponden a <b>32</b> contactos únicos observados; conciliado: <b>31</b>.</p>
+        </div>
+      </div>
+
+      <div class="notice green">
+        <b>Corrección:</b> en la primera versión yo había renombrado Comercial2 simplemente como “Comercial”.
+        Ahora se conserva el nombre exacto <b>Comercial2</b>.
+      </div>
+      <div class="notice amber">
+        Para incorporar <b>Comercial1</b> con registros reales necesito que en la fuente exista ese origen
+        o que se defina qué registros actualmente marcados como otro origen deben considerarse Comercial1.
+      </div>
+    </div>
+  </div>
+
+  <div class="card table-card">
+    <h2>Detalle completo por origen</h2>
+    <div class="desc">
+      “Actividades” cuenta filas; “únicos observados” elimina duplicidad por contacto;
+      “únicos conciliados” ajusta proporcionalmente al total oficial.
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Origen</th>
+          <th class="num">Actividades</th>
+          <th class="num">Únicos observados</th>
+          <th class="num">Únicos conciliados</th>
+          <th class="num">% del total</th>
+        </tr>
+      </thead>
+      <tbody>
+    <tr class="">
+      <td><b>Facebook pauta</b><div class="cell-note"></div></td>
+      <td class="num">320</td>
+      <td class="num">182</td>
+      <td class="num strong">179</td>
+      <td class="num">31.6%</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>Sin origen</b><div class="cell-note"></div></td>
+      <td class="num">305</td>
+      <td class="num">139</td>
+      <td class="num strong">137</td>
+      <td class="num">24.2%</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>WhatsApp</b><div class="cell-note"></div></td>
+      <td class="num">132</td>
+      <td class="num">84</td>
+      <td class="num strong">82</td>
+      <td class="num">14.5%</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>QR pantallas</b><div class="cell-note"></div></td>
+      <td class="num">126</td>
+      <td class="num">77</td>
+      <td class="num strong">76</td>
+      <td class="num">13.4%</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>Email</b><div class="cell-note"></div></td>
+      <td class="num">92</td>
+      <td class="num">37</td>
+      <td class="num strong">36</td>
+      <td class="num">6.3%</td>
+    </tr>
+    
+    <tr class="highlight">
+      <td><b>Comercial1</b><div class="cell-note">No identificado en archivo</div></td>
+      <td class="num">0</td>
+      <td class="num">0</td>
+      <td class="num strong">0</td>
+      <td class="num">0.0%</td>
+    </tr>
+    
+    <tr class="highlight">
+      <td><b>Comercial2</b><div class="cell-note"></div></td>
+      <td class="num">55</td>
+      <td class="num">32</td>
+      <td class="num strong">31</td>
+      <td class="num">5.5%</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>Redes</b><div class="cell-note"></div></td>
+      <td class="num">31</td>
+      <td class="num">19</td>
+      <td class="num strong">19</td>
+      <td class="num">3.4%</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>Web</b><div class="cell-note"></div></td>
+      <td class="num">11</td>
+      <td class="num">6</td>
+      <td class="num strong">6</td>
+      <td class="num">1.1%</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>Festival - Web</b><div class="cell-note"></div></td>
+      <td class="num">14</td>
+      <td class="num">1</td>
+      <td class="num strong">1</td>
+      <td class="num">0.2%</td>
+    </tr>
+    </tbody>
+      <tfoot>
+        <tr>
+          <td>Total</td>
+          <td class="num">1086</td>
+          <td class="num">577</td>
+          <td class="num">567</td>
+          <td class="num">100,0%</td>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="note">
+      Nota: existen además etiquetas operativas en el archivo (“prueba” y “Pago exentó UAO fest”) asociadas
+      a contactos que ya tienen otro origen predominante, por lo que no se presentan como canales independientes de captación.
+      Comercial1 no se encontró en ninguna celda del archivo.
+    </div>
+  </div>
+</div>
+</body>
+</html>
