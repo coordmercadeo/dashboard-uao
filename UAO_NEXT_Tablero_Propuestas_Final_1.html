@@ -97,12 +97,13 @@ body{font-family:'DM Sans',-apple-system,Segoe UI,sans-serif;background:#1c1210;
 .glegend .sw{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
 
 /* Gantt grid: label column + timeline column, all rows share these two columns */
-.gantt{position:relative;display:grid;grid-template-columns:216px 1fr;background:#fff;border:1px solid var(--borde);border-radius:14px;box-shadow:var(--sombra);overflow:hidden;}
+.gantt-scroll{overflow-x:auto;border-radius:14px;border:1px solid var(--borde);box-shadow:var(--sombra);}
+.gantt{position:relative;display:grid;grid-template-columns:216px 1fr;background:#fff;}
 .gantt-gridlines{position:absolute;top:0;left:216px;right:0;bottom:0;z-index:0;pointer-events:none;}
 .gantt-gridlines .gl{position:absolute;top:0;bottom:0;width:1px;background:rgba(122,15,28,.09);}
 .gantt-gridlines .gl.strong{background:rgba(122,15,28,.18);}
 
-.g-cell-label{position:relative;z-index:1;display:flex;align-items:center;padding:0 10px;font-size:10.8px;font-weight:700;color:var(--texto);
+.g-cell-label{position:sticky;left:0;z-index:3;display:flex;align-items:center;padding:0 10px;font-size:10.8px;font-weight:700;color:var(--texto);
   border-bottom:1px solid var(--borde);border-right:1px solid var(--borde);background:#fff;gap:7px;line-height:1.25;}
 .g-cell-label .dot{width:8px;height:8px;border-radius:3px;flex-shrink:0;}
 .g-cell-track{position:relative;z-index:1;border-bottom:1px solid var(--borde);min-height:30px;background:transparent;}
@@ -423,6 +424,9 @@ function ganttHTML(cfg, pos){
     </div>
   </div>`;
 
+  const totalDays = totalMs/86400000;
+  const ganttMinWidth = Math.max(1100, Math.round(totalDays*7));
+
   return `<div class="kanban-slide scrollbar-hide">
     <div class="kanban-head">
       <div class="eyebrow">Módulo ${String(pos).padStart(2,'0')} · ${cfg.eyebrow}</div>
@@ -430,7 +434,8 @@ function ganttHTML(cfg, pos){
       <p>${cfg.desc}</p>
     </div>
     <div class="glegend">${legend}</div>
-    <div class="gantt">
+    <div class="gantt-scroll">
+    <div class="gantt" style="min-width:${ganttMinWidth}px">
       <div class="gantt-gridlines">${gridlines}</div>
       <div class="g-cell-label g-ruler-label">Línea de tiempo</div>
       <div class="g-cell-track g-ruler-track">${rulerMarks}</div>
@@ -438,7 +443,8 @@ function ganttHTML(cfg, pos){
       <div class="g-cell-track g-etapa-track">${etapaBands}</div>
       ${rowsHTML}
     </div>
-    <div class="gnote">${cfg.note}</div>
+    </div>
+    <div class="gnote">${cfg.note} <span style="opacity:.7">(Desplaza el cronograma horizontalmente para ver todo el rango de fechas.)</span></div>
     ${vdHTML}
   </div>`;
 }
@@ -605,7 +611,6 @@ function iconFwd(){
    toda la navegación (hotspots, botones, menú) se recalcula sola. */
 const DECK = [
   {kind:'pdf', pdf:1}, {kind:'pdf', pdf:2}, {kind:'pdf', pdf:3},
-  {kind:'personas'},
   {kind:'pdf', pdf:4}, {kind:'pdf', pdf:5}, {kind:'pdf', pdf:6},
   {kind:'pdf', pdf:7}, {kind:'pdf', pdf:8}, {kind:'pdf', pdf:9}, {kind:'pdf', pdf:10},
   {kind:'pdf', pdf:11, isProposalsGrid:true},
@@ -621,7 +626,8 @@ const DECK = [
   {kind:'pdf', pdf:21, brand:'Siempre UAO', isProposalDetailStart:true},
   {kind:'pdf', pdf:22, brand:'Siempre UAO'},
   {kind:'pdf', pdf:23, brand:'Siempre UAO', isMockupPage:true},
-  {kind:'pdf', pdf:24, isContinueTarget:true},
+  {kind:'personas', isContinueTarget:true},
+  {kind:'pdf', pdf:24},
   {kind:'pdf', pdf:25},
   {kind:'pdf', pdf:26},
   {kind:'budget'},
@@ -655,13 +661,13 @@ function titleFor(pos){
 
 const MENU_SECTIONS = [
  {label:'Diagnóstico y concepto', pages:[posOfPdf(1),posOfPdf(2),posOfPdf(3)]},
- {label:'A quién le hablamos (55+)', pages:[posOfKind('personas')]},
  {label:'Concepto de naming', pages:[posOfPdf(4),posOfPdf(5),posOfPdf(6)]},
  {label:'Las 4 propuestas de naming', pages:[posOfPdf(7),posOfPdf(8),posOfPdf(9),posOfPdf(10),posOfPdf(11)]},
  {label:'UAO NEXT', pages:[posOfPdf(12),posOfPdf(13),posOfPdf(14)]},
  {label:'UAO Senior', pages:[posOfPdf(15),posOfPdf(16),posOfPdf(17)]},
  {label:'Sirius UAO', pages:[posOfPdf(18),posOfPdf(19),posOfPdf(20)]},
  {label:'Siempre UAO', pages:[posOfPdf(21),posOfPdf(22),posOfPdf(23)]},
+ {label:'A quién le hablamos (55+)', pages:[posOfKind('personas')]},
  {label:'Lanzamiento, medios y presupuesto', pages:[posOfPdf(24),posOfPdf(25),posOfPdf(26),posOfKind('budget')]},
  {label:'Cronogramas (línea de tiempo)', pages:[posOfKind('ganttA'),posOfKind('ganttB')]},
  {label:'Cierre', pages:[posOfPdf(29)]},
@@ -691,7 +697,7 @@ DECK.forEach((d,idx)=>{
       overlays += `<button class="backbtn" data-to="${PROPOSALS_GRID_POS}">${iconBack()} Volver a las 4 propuestas</button>`;
     }
     if(d.isMockupPage){
-      overlays += `<button class="floatbtn" data-to="${CONTINUE_TARGET_POS}">Continuar a estrategia y presupuesto ${iconFwd()}</button>`;
+      overlays += `<button class="floatbtn" data-to="${CONTINUE_TARGET_POS}">Continuar a públicos y estrategia ${iconFwd()}</button>`;
     }
     div.innerHTML = `<div class="slide-imgwrap" style="background:${p.bg}">
       <img src="${p.img}" alt="${p.title}" draggable="false">
