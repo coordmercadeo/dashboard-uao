@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pregrado 2027-1S | Meta Ads vs Salesforce</title>
+<style>
+:root {
+  --uao:#b10f1b;
+  --uao-dark:#7f0b13;
+  --ink:#17191d;
+  --muted:#68707b;
+  --bg:#f4f5f7;
+  --card:#ffffff;
+  --line:#e2e5e9;
+  --green:#138a5b;
+  --green-bg:#e7f6ef;
+  --amber:#a76600;
+  --amber-bg:#fff3d8;
+  --red:#b42318;
+  --red-bg:#fdecea;
+  --blue:#285ea8;
+  --blue-bg:#eaf2fd;
+  --shadow:0 10px 30px rgba(16,24,40,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+header{
+  background:linear-gradient(135deg,#18191c 0%,#27292e 55%,#17181b 100%);
+  color:#fff;
+  padding:28px clamp(18px,4vw,48px) 24px;
+  border-bottom:5px solid var(--uao);
+}
+.header-inner{max-width:1500px;margin:0 auto}
+.eyebrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.badge{font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16)}
+.badge.red{background:rgba(177,15,27,.28);border-color:rgba(255,106,117,.3)}
+h1{font-size:clamp(28px,4vw,48px);line-height:1.04;margin:0 0 10px;font-weight:850;letter-spacing:-.03em}
+.header-sub{max-width:1100px;color:#d4d7dc;font-size:15px;line-height:1.55}
+.header-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+button,.btn{
+  border:0;border-radius:10px;padding:10px 14px;font-weight:750;cursor:pointer;
+  background:#fff;color:#202124;box-shadow:none
+}
+button.secondary{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.18)}
+main{max-width:1500px;margin:0 auto;padding:24px clamp(14px,3vw,36px) 54px}
+.alert{
+  background:#fff9e9;border:1px solid #f3d793;border-left:5px solid #d49a19;
+  padding:14px 16px;border-radius:12px;box-shadow:var(--shadow);margin-bottom:18px;
+  font-size:13px;line-height:1.55
+}
+.alert strong{color:#694700}
+.tabs{
+  display:flex;gap:8px;overflow:auto;padding:4px;margin-bottom:18px;
+  background:#e9ebee;border-radius:13px;position:sticky;top:8px;z-index:20;box-shadow:0 6px 18px rgba(16,24,40,.06)
+}
+.tab-btn{white-space:nowrap;background:transparent;color:#43474d;border-radius:10px;padding:10px 13px}
+.tab-btn.active{background:#fff;color:var(--uao);box-shadow:0 2px 10px rgba(16,24,40,.08)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:16px}
+.kpi{
+  background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px;
+  box-shadow:var(--shadow);min-height:112px
+}
+.kpi .label{font-size:12px;color:var(--muted);font-weight:750;text-transform:uppercase;letter-spacing:.035em}
+.kpi .value{font-size:30px;font-weight:850;letter-spacing:-.035em;margin:7px 0 3px}
+.kpi .note{font-size:12px;color:var(--muted);line-height:1.4}
+.kpi.good{border-top:4px solid var(--green)} .kpi.warn{border-top:4px solid var(--amber)} .kpi.bad{border-top:4px solid var(--red)} .kpi.info{border-top:4px solid var(--blue)}
+.panel{
+  background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px;
+  box-shadow:var(--shadow);margin-bottom:16px
+}
+.panel h2{font-size:20px;margin:0 0 5px;letter-spacing:-.02em}
+.panel h3{font-size:15px;margin:0 0 10px}
+.panel-sub{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px}
+.two-col{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.85fr);gap:16px}
+.three-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 14px}
+input,select{padding:10px 12px;border:1px solid #d5d8dd;border-radius:9px;background:#fff;min-width:190px;font:inherit}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:980px;background:#fff}
+th{position:sticky;top:0;background:#f5f6f8;color:#464b52;font-size:11px;text-transform:uppercase;letter-spacing:.035em;text-align:left;padding:10px;border-bottom:1px solid var(--line);z-index:1}
+td{padding:10px;border-bottom:1px solid #edf0f2;font-size:12.5px;vertical-align:top}
+tr:hover td{background:#fafbfc}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.program{font-weight:730}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 8px;font-size:11px;font-weight:800;white-space:nowrap}
+.pill.good{background:var(--green-bg);color:var(--green)} .pill.warn{background:var(--amber-bg);color:var(--amber)} .pill.bad{background:var(--red-bg);color:var(--red)} .pill.info{background:var(--blue-bg);color:var(--blue)}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.bar-row{display:grid;grid-template-columns:minmax(180px,1.4fr) minmax(220px,3fr) 72px;gap:10px;align-items:center;margin:10px 0}
+.bar-label{font-size:12px;font-weight:700;line-height:1.2}
+.bar-track{height:18px;background:#edf0f3;border-radius:999px;position:relative;overflow:hidden}
+.bar-meta{height:100%;background:#31343a;border-radius:999px;position:absolute;left:0;top:0;opacity:.28}
+.bar-sf{height:100%;background:var(--uao);border-radius:999px;position:absolute;left:0;top:0;opacity:.88}
+.bar-val{font-size:11px;text-align:right;font-variant-numeric:tabular-nums;color:#555b64}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:4px 0 12px}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend .l-meta::before{background:#31343a;opacity:.35} .legend .l-sf::before{background:var(--uao)}
+.stat-list{display:grid;gap:9px}
+.stat-item{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #edf0f2;font-size:12.5px}
+.stat-item strong{font-variant-numeric:tabular-nums}
+.callout{border-radius:12px;padding:13px 14px;font-size:12.5px;line-height:1.55;background:#f8f9fb;border:1px solid var(--line)}
+.callout.red{background:#fff5f5;border-color:#f4c7c7} .callout.blue{background:#f2f7fd;border-color:#cfe0f6} .callout.green{background:#f1faf6;border-color:#caeadc}
+.insights{display:grid;gap:12px}
+.insight{padding:14px;border-radius:12px;border:1px solid var(--line);background:#fff}
+.insight .type{font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:5px}
+.insight strong{font-size:14px}
+.insight p{font-size:12.5px;line-height:1.55;color:#4c525a;margin:6px 0 0}
+.daily-bars{display:flex;align-items:end;gap:7px;height:240px;padding:24px 8px 26px;border-bottom:1px solid var(--line);overflow-x:auto}
+.day-col{min-width:44px;height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:6px}
+.day-stack{width:30px;height:calc(var(--h) * 1%);min-height:2px;border-radius:7px 7px 3px 3px;display:flex;flex-direction:column-reverse;overflow:hidden;background:#eee}
+.day-fb{background:#3e4652;height:var(--fbh)} .day-ig{background:var(--uao);height:var(--igh)}
+.day-num{font-size:10px;font-weight:800} .day-label{font-size:10px;color:var(--muted);white-space:nowrap}
+svg{max-width:100%;height:auto}
+.small{font-size:11px;color:var(--muted)}
+.footer-note{font-size:11px;color:var(--muted);line-height:1.55;margin-top:10px}
+.progress{height:10px;background:#edf0f2;border-radius:999px;overflow:hidden}
+.progress > i{display:block;height:100%;background:var(--uao);border-radius:999px}
+.cards-mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mini{background:#f8f9fb;border:1px solid var(--line);padding:13px;border-radius:12px}
+.mini b{font-size:22px;display:block;margin-bottom:3px}
+.mini span{font-size:11px;color:var(--muted)}
+@media(max-width:1000px){
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .two-col{grid-template-columns:1fr}
+  .three-col{grid-template-columns:1fr}
+  .cards-mini{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .kpis{grid-template-columns:1fr}
+  .cards-mini{grid-template-columns:1fr}
+  h1{font-size:30px}
+  .bar-row{grid-template-columns:1fr}
+  .bar-val{text-align:left}
+}
+@media print{
+  body{background:#fff}
+  .tabs,.header-actions,.filters{display:none!important}
+  .tab-panel{display:block!important;break-before:page}
+  .tab-panel:first-of-type{break-before:auto}
+  .panel,.kpi{box-shadow:none}
+  main{max-width:none;padding:10px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="eyebrow">
+      <span class="badge red">UAO · Pregrado</span>
+      <span class="badge">Cohorte 2027-1S</span>
+      <span class="badge">Corte 17 sep 2026</span>
+    </div>
+    <h1>Consistencia de captación<br>Meta Ads vs Salesforce</h1>
+    <div class="header-sub">
+      Cruce por programa académico, excluyendo UAO Fest y separando hechos observados de hipótesis.
+      El análisis prioriza trazabilidad del flujo de datos, diferencias de volumen y calidad del registro CRM.
+    </div>
+    <div class="header-actions">
+      <button onclick="window.print()">Imprimir / PDF</button>
+      <button class="secondary" onclick="exportComparison()">Exportar comparación CSV</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="alert">
+    <strong>Advertencia de comparabilidad:</strong>
+    el archivo de Meta es un reporte agregado por campaña para <b>2026-07-25 a 2026-09-17</b>,
+    mientras Salesforce contiene fechas de creación completas entre <b>2026-09-04 y 2026-09-16</b>.
+    Además, Meta no trae correo/teléfono/ID de cada lead. Por eso, las “brechas” son <b>aparentes diferencias de volumen</b>,
+    no una prueba de leads perdidos. El tablero evita afirmar error de integración sin evidencia individual.
+  </div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="resumen">Resumen ejecutivo</button>
+    <button class="tab-btn" data-tab="comparacion">Comparación por programa</button>
+    <button class="tab-btn" data-tab="discrepancias">Detalle de discrepancias</button>
+    <button class="tab-btn" data-tab="temporal">Evolución temporal</button>
+    <button class="tab-btn" data-tab="calidad">Calidad de datos</button>
+    <button class="tab-btn" data-tab="hallazgos">Hallazgos</button>
+  </nav>
+
+  <section id="resumen" class="tab-panel active">
+    <div class="grid kpis">
+      <div class="kpi info"><div class="label">Meta después de excluir UAO Fest</div><div class="value">1,464</div><div class="note">Incluye campañas genéricas no asignables a programa.</div></div>
+      <div class="kpi info"><div class="label">Meta atribuible a programa</div><div class="value">1,102</div><div class="note">Base comparable por programa.</div></div>
+      <div class="kpi warn"><div class="label">Salesforce · origen Meta</div><div class="value">483</div><div class="note">Registros con origen fb/ig en el extracto.</div></div>
+      <div class="kpi warn"><div class="label">Salesforce mapeado a programa</div><div class="value">482</div><div class="note">1 registro pagado quedó sin programa identificable.</div></div>
+      <div class="kpi bad"><div class="label">Cobertura bruta SF / Meta</div><div class="value">33.0%</div><div class="note">483 / 1.464. Indicador general, afectado por campañas genéricas.</div></div>
+      <div class="kpi bad"><div class="label">Cobertura comparable</div><div class="value">43.7%</div><div class="note">482 / 1.102, usando solo programas identificables.</div></div>
+      <div class="kpi bad"><div class="label">Brecha aparente comparable</div><div class="value">620</div><div class="note">No equivale automáticamente a leads perdidos.</div></div>
+      <div class="kpi good"><div class="label">Programas con coincidencia alta</div><div class="value">7</div><div class="note">Criterio analítico: 90%–110% de SF/Meta.</div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <h2>Meta vs Salesforce por programa</h2>
+        <div class="panel-sub">Barras relativas al mayor volumen de Meta. La barra roja muestra Salesforce dentro del mismo programa.</div>
+        <div class="legend"><span class="l-meta">Meta Ads</span><span class="l-sf">Salesforce</span></div>
+        <div id="summaryBars"></div>
+      </div>
+      <div>
+        <div class="panel">
+          <h2>Lectura ejecutiva</h2>
+          <div class="stat-list">
+            <div class="stat-item"><span>Programas analizados</span><strong>20</strong></div>
+            <div class="stat-item"><span>Salesforce por debajo de Meta</span><strong>17</strong></div>
+            <div class="stat-item"><span>Salesforce por encima de Meta</span><strong>0</strong></div>
+            <div class="stat-item"><span>Coincidencia exacta</span><strong>3</strong></div>
+            <div class="stat-item"><span>Diferencia moderada</span><strong>1</strong></div>
+            <div class="stat-item"><span>Diferencia significativa</span><strong>12</strong></div>
+          </div>
+        </div>
+        <div class="callout red">
+          <b>Hallazgo estructural:</b> 362 resultados de Meta (24.7% del total post-exclusión)
+          provienen de campañas genéricas y no se pueden repartir por programa con este archivo.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="comparacion" class="tab-panel">
+    <div class="panel">
+      <h2>Comparación consolidada por programa</h2>
+      <div class="panel-sub">
+        Fórmulas: Diferencia = Salesforce − Meta. Diferencia % = Diferencia / Meta. Cobertura = Salesforce / Meta.
+        La cobertura puede superar 100% si Salesforce contiene más registros.
+      </div>
+      <div class="filters">
+        <input id="searchProgram" placeholder="Buscar programa…">
+        <select id="filterClass">
+          <option value="">Todas las clasificaciones</option>
+          <option>Coincidencia alta</option>
+          <option>Diferencia moderada</option>
+          <option>Diferencia significativa</option>
+          <option>Salesforce tiene más registros</option>
+        </select>
+        <select id="filterDirection">
+          <option value="">Todas las direcciones</option>
+          <option>Salesforce por debajo</option>
+          <option>Salesforce por encima</option>
+          <option>Similar</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Programa</th><th class="num">Meta</th><th class="num">Salesforce</th><th class="num">Diferencia</th>
+            <th class="num">Dif. %</th><th class="num">Cobertura</th><th class="num">Brecha aparente</th><th>Clasificación</th>
+          </tr></thead>
+          <tbody id="comparisonBody"></tbody>
+        </table>
+      </div>
+      <div class="footer-note">
+        Umbrales de clasificación definidos para este tablero: alta 90%–110%; moderada 70%–&lt;90% o &gt;110%–130%; significativa fuera de esos rangos.
+        Son una convención analítica, no una regla oficial de Meta ni Salesforce.
+      </div>
+    </div>
+  </section>
+
+  <section id="discrepancias" class="tab-panel">
+    <div class="cards-mini">
+      <div class="mini"><b>217</b><span>Mayor diferencia absoluta: Ingeniería Electrónica y Telecomunicaciones</span></div>
+      <div class="mini"><b>3</b><span>Programas con Meta &gt; 0 y Salesforce = 0</span></div>
+      <div class="mini"><b>3</b><span>Programas con coincidencia exacta</span></div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+      <h2>Programas con mayor discrepancia</h2>
+      <div class="panel-sub">Ordenados por diferencia absoluta. La última columna contiene hipótesis a validar, no causas confirmadas.</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Programa</th><th class="num">Meta</th><th class="num">SF</th><th class="num">Brecha</th><th class="num">Cobertura</th><th>Dato observado</th><th>Hipótesis posible</th></tr></thead>
+          <tbody id="discrepancyBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="three-col">
+      <div class="callout green"><b>Coincidencias exactas</b><div id="exactList" class="small" style="margin-top:7px"></div></div>
+      <div class="callout blue"><b>Coincidencias altas</b><div id="highList" class="small" style="margin-top:7px"></div></div>
+      <div class="callout red"><b>Sin registro Salesforce en el extracto</b><div id="zeroList" class="small" style="margin-top:7px"></div></div>
+    </div>
+  </section>
+
+  <section id="temporal" class="tab-panel">
+    <div class="grid kpis">
+      <div class="kpi info"><div class="label">Ventana Meta reportada</div><div class="value" style="font-size:21px">2026-07-25<br>→ 2026-09-17</div><div class="note">Reporte agregado por campaña.</div></div>
+      <div class="kpi info"><div class="label">Ventana Salesforce observada</div><div class="value" style="font-size:21px">2026-09-04<br>→ 2026-09-16</div><div class="note">13 fechas con registros Meta-origin.</div></div>
+      <div class="kpi warn"><div class="label">Pico Salesforce</div><div class="value">235</div><div class="note">04/09/2026 · 48.7% del extracto Meta-origin.</div></div>
+      <div class="kpi bad"><div class="label">Meta diario disponible</div><div class="value">No</div><div class="note">No se puede reconstruir una serie Meta acumulada real con este export.</div></div>
+    </div>
+
+    <div class="panel">
+      <h2>Salesforce: creación diaria de registros Meta-origin</h2>
+      <div class="panel-sub">Facebook + Instagram. El 4 de septiembre concentra un volumen inusualmente alto y debe interpretarse con cautela (posible lote inicial/corte del archivo).</div>
+      <div class="legend"><span class="l-meta">Facebook</span><span class="l-sf">Instagram</span></div>
+      <div id="dailyBars" class="daily-bars"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Acumulado Salesforce dentro del extracto</h2>
+      <div class="panel-sub">
+        Se muestra únicamente Salesforce. No se dibuja una curva diaria de Meta porque el archivo de Meta no contiene fecha individual de captación.
+        El total Meta atribuible a programa (1,102) funciona solo como referencia agregada, no como serie temporal.
+      </div>
+      <div id="cumulativeChart"></div>
+    </div>
+  </section>
+
+  <section id="calidad" class="tab-panel">
+    <div class="grid kpis">
+      <div class="kpi info"><div class="label">Salesforce · registros completos analizados</div><div class="value">547</div><div class="note">1 fila final del archivo no pudo reconstruirse completamente en la extracción.</div></div>
+      <div class="kpi good"><div class="label">Duplicados dentro del subset Meta</div><div class="value">0</div><div class="note">Mismo contacto + mismo programa.</div></div>
+      <div class="kpi warn"><div class="label">Periodo interesado vacío · Meta-origin</div><div class="value">61</div><div class="note">12.6% de los 483 registros.</div></div>
+      <div class="kpi warn"><div class="label">Sin programa identificable</div><div class="value">1</div><div class="note">Dentro del subset fb/ig.</div></div>
+      <div class="kpi good"><div class="label">Sin móvil</div><div class="value">0</div><div class="note">Subset Meta-origin.</div></div>
+      <div class="kpi good"><div class="label">Sin correo</div><div class="value">0</div><div class="note">Subset Meta-origin.</div></div>
+      <div class="kpi info"><div class="label">Contactos con más de un programa</div><div class="value">5</div><div class="note">Se conservan: no son duplicados dentro del programa.</div></div>
+      <div class="kpi warn"><div class="label">Repeticiones contacto-programa · export completo</div><div class="value">6</div><div class="note">Incluyen tareas/orígenes duplicados; no afectan el subset Meta por programa.</div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <h2>Origen de registros en Salesforce</h2>
+        <div class="panel-sub">Distribución sobre los 547 registros completos recuperados.</div>
+        <div id="sourceBars"></div>
+      </div>
+      <div class="panel">
+        <h2>Periodo de interés dentro de fb/ig</h2>
+        <div class="stat-list">
+          <div class="stat-item"><span>2027-1S explícito</span><strong>412</strong></div>
+          <div class="stat-item"><span>Periodo vacío</span><strong>61</strong></div>
+          <div class="stat-item"><span>Otros periodos</span><strong>10</strong></div>
+        </div>
+        <div class="callout blue" style="margin-top:10px">
+          Para medir <b>ingestión desde Meta</b>, el tablero conserva los registros fb/ig aunque el periodo esté vacío o haya sido actualizado.
+          El periodo se trata como una dimensión de calidad CRM, no como condición para descartar un lead ya ingresado.
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <h2>Meta: campañas sin programa asignable</h2>
+        <div class="panel-sub">362 resultados no se pueden repartir por programa con el nivel de detalle del archivo.</div>
+        <div class="table-wrap">
+          <table style="min-width:600px"><thead><tr><th>Campaña</th><th class="num">Resultados</th></tr></thead><tbody id="genericBody"></tbody></table>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Exclusión UAO Fest</h2>
+        <div class="stat-list">
+          <div class="stat-item"><span>Resultados UAO Fest retirados de Meta</span><strong>289</strong></div>
+          <div class="stat-item"><span>Registros fb/ig con “UAO Fest” mencionado en notas</span><strong>122</strong></div>
+          <div class="stat-item"><span>Registros fb/ig identificados como UAO Fest en campo primario</span><strong>0</strong></div>
+        </div>
+        <div class="callout blue" style="margin-top:10px">
+          Las menciones de UAO Fest en comentarios se interpretan como <b>invitación/seguimiento comercial</b>, no como origen de captación,
+          porque el campo de fuente/programa sigue identificando el programa académico.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="hallazgos" class="tab-panel">
+    <div class="panel">
+      <h2>Hallazgos automáticos y lectura recomendada</h2>
+      <div class="panel-sub">Cada punto distingue lo comprobado en las bases de lo que todavía requiere validación operacional.</div>
+      <div class="insights">
+        <div class="insight">
+          <div class="type">Dato comprobado</div>
+          <strong>La comparación por programa cubre 1,102 resultados Meta y 482 registros Salesforce.</strong>
+          <p>La cobertura comparable es 43.7%. Esto describe los dos archivos disponibles; no demuestra por sí solo una pérdida de integración.</p>
+        </div>
+        <div class="insight">
+          <div class="type">Hallazgo</div>
+          <strong>Hay 7 programas con cobertura entre 90% y 110%.</strong>
+          <p>Ingeniería Mecánica, Cine y Narrativas y Entretenimiento Digital coinciden exactamente. Arquitectura, Mecatrónica, Eléctrica y Biomédica quedan muy cerca del volumen Meta.</p>
+        </div>
+        <div class="insight">
+          <div class="type">Hallazgo</div>
+          <strong>Las mayores brechas se concentran en Electrónica/Telecomunicaciones y Publicidad en Medios Digitales.</strong>
+          <p>Electrónica y Telecomunicaciones registra 217 en Meta y 0 en Salesforce dentro del subset fb/ig recuperado. Publicidad consolida 187 en Meta frente a 29 en Salesforce.</p>
+        </div>
+        <div class="insight">
+          <div class="type">Hipótesis a validar</div>
+          <strong>El desfase de fechas puede explicar una parte relevante de las diferencias.</strong>
+          <p>Meta reporta 2026-07-25 a 2026-09-17; Salesforce observado inicia en 2026-09-04. Sin fechas individuales de Meta no es posible aislar cuánto de la brecha ocurrió antes del 4 de septiembre.</p>
+        </div>
+        <div class="insight">
+          <div class="type">Hallazgo de estructura</div>
+          <strong>362 resultados Meta quedan fuera de la comparación por programa.</strong>
+          <p>Las campañas “PROGRAMAS GENERAL” y “PROGRAMAS NOCHE” no incluyen en este archivo el desglose necesario para repartir los leads entre programas.</p>
+        </div>
+        <div class="insight">
+          <div class="type">Hallazgo CRM</div>
+          <strong>61 registros fb/ig no tienen Periodo Interesado.</strong>
+          <p>Esto equivale al 12.6% del subset Meta-origin. Completar ese campo mejoraría la lectura estricta de la cohorte 2027-1S.</p>
+        </div>
+        <div class="insight">
+          <div class="type">Acción recomendada</div>
+          <strong>Para una conciliación exacta, exportar Meta a nivel lead.</strong>
+          <p>El próximo cruce debería incluir fecha/hora del lead, formulario, campaña, teléfono/correo (o un identificador estable) y luego empatar contra Contact ID / correo / celular en Salesforce. Así sí se pueden separar “no llegó”, “llegó tarde”, “llegó duplicado” y “cambió de programa”.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Metodología aplicada</h2>
+      <div class="three-col">
+        <div class="callout"><b>1. Normalización</b><br>Nombres de programa unificados sin depender de tildes, mayúsculas, guiones o modalidad. Variantes de Publicidad y Electrónica se consolidan bajo el programa académico.</div>
+        <div class="callout"><b>2. Salesforce comparable</b><br>Se usan registros con origen <b>fb</b> o <b>ig</b>. Orgánico y Google quedan fuera del cruce Meta vs Salesforce, pero aparecen en calidad de datos.</div>
+        <div class="callout"><b>3. Duplicados</b><br>Se considera duplicado dentro del programa el mismo Contact ID (o teléfono/correo si faltara ID). Interés en dos programas se conserva como dos atribuciones.</div>
+        <div class="callout"><b>4. UAO Fest</b><br>La campaña UAO Fest se elimina de Meta. En Salesforce no se eliminan leads de programa solo porque un asesor haya escrito “invitación a UAO Fest” en el seguimiento.</div>
+        <div class="callout"><b>5. Brecha</b><br>Brecha aparente = Meta − Salesforce cuando Meta es mayor. No se denomina “pérdida real” porque Meta no trae identificadores individuales.</div>
+        <div class="callout"><b>6. Temporal</b><br>Solo Salesforce permite serie diaria. El archivo Meta disponible no soporta una curva acumulada diaria sin inventar datos.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const DATA = {"comparison": [{"programa": "Ingeniería Electrónica y Telecomunicaciones", "meta": 217, "salesforce": 0, "diferencia": -217, "diferencia_pct": -100.0, "coincidencia_pct": 0.0, "faltantes": 217, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "Verificar ventana temporal, ruteo de integración, nomenclatura de programa y clasificación del origen en Salesforce."}, {"programa": "Publicidad en Medios Digitales", "meta": 187, "salesforce": 29, "diferencia": -158, "diferencia_pct": -84.5, "coincidencia_pct": 15.5, "faltantes": 158, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "La brecha puede combinar desfase de fechas, campañas iniciadas antes del corte Salesforce o problemas de atribución/origen."}, {"programa": "Psicología", "meta": 125, "salesforce": 97, "diferencia": -28, "diferencia_pct": -22.4, "coincidencia_pct": 77.6, "faltantes": 28, "adicionales": 0, "clasificacion": "Diferencia moderada", "direccion": "Salesforce por debajo", "hipotesis": "Diferencia moderada; conviene validar fechas y latencia de integración antes de concluir pérdida."}, {"programa": "Arquitectura", "meta": 60, "salesforce": 57, "diferencia": -3, "diferencia_pct": -5.0, "coincidencia_pct": 95.0, "faltantes": 3, "adicionales": 0, "clasificacion": "Coincidencia alta", "direccion": "Salesforce por debajo", "hipotesis": "Los volúmenes están razonablemente alineados en el extracto disponible."}, {"programa": "Ingeniería Mecatrónica", "meta": 57, "salesforce": 55, "diferencia": -2, "diferencia_pct": -3.5, "coincidencia_pct": 96.5, "faltantes": 2, "adicionales": 0, "clasificacion": "Coincidencia alta", "direccion": "Salesforce por debajo", "hipotesis": "Los volúmenes están razonablemente alineados en el extracto disponible."}, {"programa": "Mercadeo y Negocios Internacionales", "meta": 57, "salesforce": 20, "diferencia": -37, "diferencia_pct": -64.9, "coincidencia_pct": 35.1, "faltantes": 37, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "Revisar sincronización, periodo de interés, formularios y posibles registros clasificados como orgánicos."}, {"programa": "Ingeniería Eléctrica", "meta": 46, "salesforce": 44, "diferencia": -2, "diferencia_pct": -4.3, "coincidencia_pct": 95.7, "faltantes": 2, "adicionales": 0, "clasificacion": "Coincidencia alta", "direccion": "Salesforce por debajo", "hipotesis": "Los volúmenes están razonablemente alineados en el extracto disponible."}, {"programa": "Ingeniería de Datos e Inteligencia Artificial", "meta": 45, "salesforce": 1, "diferencia": -44, "diferencia_pct": -97.8, "coincidencia_pct": 2.2, "faltantes": 44, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "La brecha puede combinar desfase de fechas, campañas iniciadas antes del corte Salesforce o problemas de atribución/origen."}, {"programa": "Contaduría Pública", "meta": 40, "salesforce": 11, "diferencia": -29, "diferencia_pct": -72.5, "coincidencia_pct": 27.5, "faltantes": 29, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "La brecha puede combinar desfase de fechas, campañas iniciadas antes del corte Salesforce o problemas de atribución/origen."}, {"programa": "Derecho", "meta": 38, "salesforce": 25, "diferencia": -13, "diferencia_pct": -34.2, "coincidencia_pct": 65.8, "faltantes": 13, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "Revisar sincronización, periodo de interés, formularios y posibles registros clasificados como orgánicos."}, {"programa": "Ingeniería Mecánica", "meta": 32, "salesforce": 32, "diferencia": 0, "diferencia_pct": 0.0, "coincidencia_pct": 100.0, "faltantes": 0, "adicionales": 0, "clasificacion": "Coincidencia alta", "direccion": "Similar", "hipotesis": "Los volúmenes están razonablemente alineados en el extracto disponible."}, {"programa": "Ingeniería Biomédica", "meta": 31, "salesforce": 29, "diferencia": -2, "diferencia_pct": -6.5, "coincidencia_pct": 93.5, "faltantes": 2, "adicionales": 0, "clasificacion": "Coincidencia alta", "direccion": "Salesforce por debajo", "hipotesis": "Los volúmenes están razonablemente alineados en el extracto disponible."}, {"programa": "Comunicación Social - Periodismo", "meta": 28, "salesforce": 19, "diferencia": -9, "diferencia_pct": -32.1, "coincidencia_pct": 67.9, "faltantes": 9, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "Revisar sincronización, periodo de interés, formularios y posibles registros clasificados como orgánicos."}, {"programa": "Diseño de la Comunicación Gráfica", "meta": 28, "salesforce": 0, "diferencia": -28, "diferencia_pct": -100.0, "coincidencia_pct": 0.0, "faltantes": 28, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "Verificar ventana temporal, ruteo de integración, nomenclatura de programa y clasificación del origen en Salesforce."}, {"programa": "Ingeniería Industrial", "meta": 26, "salesforce": 9, "diferencia": -17, "diferencia_pct": -65.4, "coincidencia_pct": 34.6, "faltantes": 17, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "Revisar sincronización, periodo de interés, formularios y posibles registros clasificados como orgánicos."}, {"programa": "Cine", "meta": 25, "salesforce": 25, "diferencia": 0, "diferencia_pct": 0.0, "coincidencia_pct": 100.0, "faltantes": 0, "adicionales": 0, "clasificacion": "Coincidencia alta", "direccion": "Similar", "hipotesis": "Los volúmenes están razonablemente alineados en el extracto disponible."}, {"programa": "Narrativas y Entretenimiento Digital", "meta": 20, "salesforce": 20, "diferencia": 0, "diferencia_pct": 0.0, "coincidencia_pct": 100.0, "faltantes": 0, "adicionales": 0, "clasificacion": "Coincidencia alta", "direccion": "Similar", "hipotesis": "Los volúmenes están razonablemente alineados en el extracto disponible."}, {"programa": "Ingeniería Informática", "meta": 19, "salesforce": 4, "diferencia": -15, "diferencia_pct": -78.9, "coincidencia_pct": 21.1, "faltantes": 15, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "La brecha puede combinar desfase de fechas, campañas iniciadas antes del corte Salesforce o problemas de atribución/origen."}, {"programa": "Ingeniería Multimedia", "meta": 18, "salesforce": 5, "diferencia": -13, "diferencia_pct": -72.2, "coincidencia_pct": 27.8, "faltantes": 13, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "La brecha puede combinar desfase de fechas, campañas iniciadas antes del corte Salesforce o problemas de atribución/origen."}, {"programa": "Tecnología en Gestión Ambiental y Turística", "meta": 3, "salesforce": 0, "diferencia": -3, "diferencia_pct": -100.0, "coincidencia_pct": 0.0, "faltantes": 3, "adicionales": 0, "clasificacion": "Diferencia significativa", "direccion": "Salesforce por debajo", "hipotesis": "Verificar ventana temporal, ruteo de integración, nomenclatura de programa y clasificación del origen en Salesforce."}], "daily": [{"date": "2026-09-04", "label": "04 Sep", "total": 235, "cum": 235, "fb": 154, "ig": 81}, {"date": "2026-09-05", "label": "05 Sep", "total": 15, "cum": 250, "fb": 11, "ig": 4}, {"date": "2026-09-06", "label": "06 Sep", "total": 18, "cum": 268, "fb": 11, "ig": 7}, {"date": "2026-09-07", "label": "07 Sep", "total": 25, "cum": 293, "fb": 16, "ig": 9}, {"date": "2026-09-08", "label": "08 Sep", "total": 21, "cum": 314, "fb": 16, "ig": 5}, {"date": "2026-09-09", "label": "09 Sep", "total": 19, "cum": 333, "fb": 12, "ig": 7}, {"date": "2026-09-10", "label": "10 Sep", "total": 24, "cum": 357, "fb": 12, "ig": 12}, {"date": "2026-09-11", "label": "11 Sep", "total": 18, "cum": 375, "fb": 14, "ig": 4}, {"date": "2026-09-12", "label": "12 Sep", "total": 17, "cum": 392, "fb": 11, "ig": 6}, {"date": "2026-09-13", "label": "13 Sep", "total": 23, "cum": 415, "fb": 17, "ig": 6}, {"date": "2026-09-14", "label": "14 Sep", "total": 22, "cum": 437, "fb": 10, "ig": 12}, {"date": "2026-09-15", "label": "15 Sep", "total": 29, "cum": 466, "fb": 19, "ig": 10}, {"date": "2026-09-16", "label": "16 Sep", "total": 17, "cum": 483, "fb": 9, "ig": 8}], "generic_campaigns": [{"campana": "⭕ ABO_CP_PROGRAMAS_GENERAL_2026", "resultados": 228}, {"campana": "⚫ ABO_PROGRAMAS_NOCHE_S2", "resultados": 134}], "metrics": {"meta_all_results": 1753, "meta_uaofest": 289, "meta_post_exclusion": 1464, "meta_generic": 362, "meta_mapped": 1102, "sf_total_complete": 547, "sf_paid_total": 483, "sf_mapped": 482, "raw_coverage": 33.0, "comparable_coverage": 43.7, "comparable_gap": 620, "program_count": 20, "high_count": 7, "moderate_count": 1, "significant_count": 12, "below_count": 17, "above_count": 0, "exact_count": 3, "full_duplicates_removed": 6, "paid_program_duplicates": 0, "cross_program_repeat_people": 5, "missing_program_paid": 1, "missing_mobile_paid": 0, "missing_email_paid": 0, "missing_period_paid": 61, "explicit_2027_1s": 412, "other_periods": 10, "uaofest_notes_paid": 122, "uaofest_primary_paid": 0, "incomplete_parser_rows": 1, "peak_date": "04/09/2026", "peak_value": 235, "peak_share": 48.7, "meta_period_start": "2026-07-25", "meta_period_end": "2026-09-17", "sf_date_start": "2026-09-04", "sf_date_end": "2026-09-16", "generic_share": 24.7}, "source_counts": {"facebook": 312, "instagram": 171, "orgánico": 61, "google": 2, "sin fuente": 1}, "estado_counts": {"Abierta": 333, "Completada": 150}, "criterio_counts": {"Pendiente Contactar": 264, "Duplicado - gestión otra tarea": 78, "Si continúa": 64, "No interesado": 51, "Número Errado": 14, "Aplaza ingreso": 4, "Sin dato": 4, "Enrolado": 3, "Campaña eventos": 1}, "period_counts": {"2027-1S": 412, "Sin dato": 61, "2027-2S": 3, "2027-1C": 3, "2026-2S": 1, "2026-08-01 00:00:00": 1, "2026-1S": 1, "2028-1S": 1}};
+const fmt = n => new Intl.NumberFormat('es-CO').format(n);
+const pct = n => n == null ? '—' : new Intl.NumberFormat('es-CO', {maximumFractionDigits:1}).format(n) + '%';
+
+function classTone(c){
+  if(c === 'Coincidencia alta') return 'good';
+  if(c === 'Diferencia moderada') return 'warn';
+  if(c === 'Diferencia significativa') return 'bad';
+  return 'info';
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+function renderSummaryBars(){
+  const max = Math.max(...DATA.comparison.map(d => d.meta), 1);
+  document.getElementById('summaryBars').innerHTML = DATA.comparison.map(d => `
+    <div class="bar-row" title="${d.programa} · Meta ${fmt(d.meta)} · Salesforce ${fmt(d.salesforce)}">
+      <div class="bar-label">${d.programa}</div>
+      <div class="bar-track">
+        <div class="bar-meta" style="width:${(d.meta/max*100).toFixed(1)}%"></div>
+        <div class="bar-sf" style="width:${(d.salesforce/max*100).toFixed(1)}%"></div>
+      </div>
+      <div class="bar-val">${fmt(d.meta)} / ${fmt(d.salesforce)}</div>
+    </div>`).join('');
+}
+
+function renderComparison(){
+  const q = (document.getElementById('searchProgram').value || '').toLowerCase();
+  const fc = document.getElementById('filterClass').value;
+  const fd = document.getElementById('filterDirection').value;
+  const rows = DATA.comparison.filter(d =>
+    d.programa.toLowerCase().includes(q) &&
+    (!fc || d.clasificacion === fc) &&
+    (!fd || d.direccion === fd)
+  );
+  document.getElementById('comparisonBody').innerHTML = rows.map(d => `
+    <tr>
+      <td class="program">${d.programa}</td>
+      <td class="num">${fmt(d.meta)}</td>
+      <td class="num">${fmt(d.salesforce)}</td>
+      <td class="num">${d.diferencia > 0 ? '+' : ''}${fmt(d.diferencia)}</td>
+      <td class="num">${d.diferencia_pct == null ? '—' : pct(d.diferencia_pct)}</td>
+      <td class="num">${pct(d.coincidencia_pct)}</td>
+      <td class="num">${fmt(d.faltantes)}</td>
+      <td><span class="pill ${classTone(d.clasificacion)}"><span class="dot"></span>${d.clasificacion}</span></td>
+    </tr>`).join('');
+}
+['searchProgram','filterClass','filterDirection'].forEach(id => document.getElementById(id).addEventListener('input', renderComparison));
+
+function renderDiscrepancies(){
+  const rows = [...DATA.comparison].sort((a,b)=>Math.abs(b.diferencia)-Math.abs(a.diferencia));
+  document.getElementById('discrepancyBody').innerHTML = rows.map(d => `
+    <tr>
+      <td class="program">${d.programa}</td>
+      <td class="num">${fmt(d.meta)}</td>
+      <td class="num">${fmt(d.salesforce)}</td>
+      <td class="num">${d.diferencia > 0 ? '+' : ''}${fmt(d.diferencia)}</td>
+      <td class="num">${pct(d.coincidencia_pct)}</td>
+      <td>${d.diferencia === 0 ? 'Mismo volumen en ambos archivos.' : (d.salesforce < d.meta ? 'Salesforce queda por debajo del volumen Meta.' : 'Salesforce queda por encima del volumen Meta.')}</td>
+      <td>${d.hipotesis}</td>
+    </tr>`).join('');
+
+  const exact = DATA.comparison.filter(d => d.diferencia === 0);
+  const high = DATA.comparison.filter(d => d.clasificacion === 'Coincidencia alta');
+  const zero = DATA.comparison.filter(d => d.meta > 0 && d.salesforce === 0);
+  document.getElementById('exactList').innerHTML = exact.length ? exact.map(d=>`• ${d.programa} (${d.meta} / ${d.salesforce})`).join('<br>') : 'Ninguno';
+  document.getElementById('highList').innerHTML = high.length ? high.map(d=>`• ${d.programa} · ${pct(d.coincidencia_pct)}`).join('<br>') : 'Ninguno';
+  document.getElementById('zeroList').innerHTML = zero.length ? zero.map(d=>`• ${d.programa} · Meta ${fmt(d.meta)}`).join('<br>') : 'Ninguno';
+}
+
+function renderDaily(){
+  const max = Math.max(...DATA.daily.map(d => d.total), 1);
+  document.getElementById('dailyBars').innerHTML = DATA.daily.map(d => {
+    const h = Math.max(3, d.total/max*100);
+    const fbp = d.total ? d.fb/d.total*100 : 0;
+    const igp = d.total ? d.ig/d.total*100 : 0;
+    return `<div class="day-col" title="${d.date} · Total ${d.total} · fb ${d.fb} · ig ${d.ig}">
+      <div class="day-num">${d.total}</div>
+      <div class="day-stack" style="--h:${h}">
+        <div class="day-fb" style="--fbh:${fbp}%"></div>
+        <div class="day-ig" style="--igh:${igp}%"></div>
+      </div>
+      <div class="day-label">${d.label}</div>
+    </div>`;
+  }).join('');
+
+  // Standalone SVG cumulative line
+  const W=1100,H=320,P=48;
+  const vals = DATA.daily.map(d=>d.cum);
+  const maxY = Math.max(DATA.metrics.meta_mapped, ...vals, 1);
+  const x = i => P + i*(W-2*P)/Math.max(1,DATA.daily.length-1);
+  const y = v => H-P - v*(H-2*P)/maxY;
+  const pts = DATA.daily.map((d,i)=>`${x(i)},${y(d.cum)}`).join(' ');
+  const grid = [0,.25,.5,.75,1].map(t=>{
+    const v=Math.round(maxY*t), yy=y(v);
+    return `<line x1="${P}" y1="${yy}" x2="${W-P}" y2="${yy}" stroke="#e7e9ed"/><text x="${P-9}" y="${yy+4}" text-anchor="end" font-size="11" fill="#737982">${fmt(v)}</text>`;
+  }).join('');
+  const labels = DATA.daily.map((d,i)=> i%2===0 ? `<text x="${x(i)}" y="${H-17}" text-anchor="middle" font-size="10" fill="#737982">${d.label}</text>` : '').join('');
+  const metaY=y(DATA.metrics.meta_mapped);
+  document.getElementById('cumulativeChart').innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Acumulado Salesforce">
+      ${grid}
+      <line x1="${P}" y1="${metaY}" x2="${W-P}" y2="${metaY}" stroke="#a76600" stroke-dasharray="6 6" stroke-width="2"/>
+      <text x="${W-P}" y="${Math.max(14,metaY-8)}" text-anchor="end" font-size="11" fill="#8a5a00">Meta atribuible agregado: ${fmt(DATA.metrics.meta_mapped)}</text>
+      <polyline fill="none" stroke="#b10f1b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="${pts}"/>
+      ${DATA.daily.map((d,i)=>`<circle cx="${x(i)}" cy="${y(d.cum)}" r="4" fill="#b10f1b"><title>${d.date} · acumulado ${d.cum}</title></circle>`).join('')}
+      ${labels}
+    </svg>`;
+}
+
+function renderSourceBars(){
+  const entries = Object.entries(DATA.source_counts).sort((a,b)=>b[1]-a[1]);
+  const max = Math.max(...entries.map(e=>e[1]),1);
+  document.getElementById('sourceBars').innerHTML = entries.map(([k,v]) => `
+    <div class="bar-row">
+      <div class="bar-label">${k}</div>
+      <div class="bar-track"><div class="bar-sf" style="width:${(v/max*100).toFixed(1)}%"></div></div>
+      <div class="bar-val">${fmt(v)}</div>
+    </div>`).join('');
+}
+
+function renderGeneric(){
+  document.getElementById('genericBody').innerHTML = DATA.generic_campaigns.map(d=>`
+    <tr><td class="program">${d.campana}</td><td class="num">${fmt(d.resultados)}</td></tr>`).join('');
+}
+
+function exportComparison(){
+  const headers = ['Programa','Meta Ads','Salesforce','Diferencia','Diferencia %','Cobertura %','Brecha aparente','Clasificación','Dirección'];
+  const lines = [headers.join(';')];
+  DATA.comparison.forEach(d => {
+    const row = [d.programa,d.meta,d.salesforce,d.diferencia,d.diferencia_pct ?? '',d.coincidencia_pct ?? '',d.faltantes,d.clasificacion,d.direccion]
+      .map(v => `"${String(v).replaceAll('"','""')}"`);
+    lines.push(row.join(';'));
+  });
+  const blob = new Blob(["\ufeff"+lines.join('\n')], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Comparacion_Pregrado_2027_1S_Meta_vs_Salesforce.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+renderSummaryBars();
+renderComparison();
+renderDiscrepancies();
+renderDaily();
+renderSourceBars();
+renderGeneric();
+</script>
+</body>
+</html>
