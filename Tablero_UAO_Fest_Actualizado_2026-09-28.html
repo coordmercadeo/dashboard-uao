@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UAO Fest · Estado actualizado</title>
+<style>
+:root {
+  --bg:#f4f6fa; --card:#fff; --ink:#151a27; --muted:#687083; --line:#e5e8ef;
+  --red:#d71920; --red2:#ef4b51; --redsoft:#fff0f1;
+  --blue:#2856c7; --bluesoft:#eef4ff; --green:#087443; --greensoft:#eafaf1;
+  --amber:#956400; --ambersoft:#fff7df; --dark:#20283a;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}
+.wrap{max-width:1500px;margin:auto;padding:28px}
+.header{display:flex;justify-content:space-between;gap:22px;align-items:flex-start;margin-bottom:20px}
+.eyebrow{font-size:12px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:var(--red)}
+h1{font-size:36px;line-height:1.08;margin:6px 0 7px;letter-spacing:-.035em}
+.subtitle{font-size:14px;line-height:1.55;color:var(--muted);max-width:910px}
+.cutbox{display:grid;gap:7px;justify-items:end}
+.cut{background:var(--dark);color:#fff;border-radius:999px;padding:10px 14px;font-size:12px;white-space:nowrap}
+.data-cut{font-size:11px;color:var(--muted);text-align:right}
+.tabs{display:flex;gap:8px;overflow:auto;margin-bottom:18px}
+.tab-btn{border:1px solid var(--line);background:#fff;color:#596174;border-radius:999px;padding:9px 14px;font-weight:800;font-size:12px;cursor:pointer;white-space:nowrap}
+.tab-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+.tab{display:none} .tab.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 6px 24px rgba(20,28,45,.045)}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:13px;margin-bottom:18px}
+.kpi{padding:18px}
+.kpi.primary{background:linear-gradient(145deg,#c90f16,#ea2931);border:none;color:#fff}
+.kpi .label{font-size:10px;letter-spacing:.065em;text-transform:uppercase;color:var(--muted);font-weight:900}
+.kpi.primary .label,.kpi.primary .note{color:#ffd8db}
+.kpi .value{font-size:32px;font-weight:950;letter-spacing:-.035em;margin:7px 0 3px}
+.kpi .note{font-size:11px;color:var(--muted);line-height:1.35}
+.grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-bottom:18px}
+.grid2.equal{grid-template-columns:1fr 1fr}
+.section{padding:22px}
+.section h2{font-size:19px;margin:0 0 5px}
+.desc{font-size:12.5px;line-height:1.5;color:var(--muted);margin-bottom:17px}
+.insights{display:grid;gap:10px}
+.insight{border-radius:14px;padding:14px 15px;font-size:12.5px;line-height:1.5}
+.insight.good{background:var(--greensoft);color:var(--green)}
+.insight.info{background:var(--bluesoft);color:#234f9f}
+.insight.warn{background:var(--ambersoft);color:var(--amber)}
+.insight.neutral{background:#f3f4f7;color:#4a5365}
+.source-row{padding:9px 0}
+.source-row.blue{background:var(--bluesoft);margin:5px -10px;padding:11px 10px;border-radius:12px}
+.source-row.amber{background:var(--ambersoft);margin:5px -10px;padding:11px 10px;border-radius:12px}
+.source-row.gray{background:#f4f4f5;margin:5px -10px;padding:11px 10px;border-radius:12px;opacity:.85}
+.source-top{display:flex;justify-content:space-between;gap:15px;align-items:flex-end;margin-bottom:7px}
+.source-top strong{display:block;font-size:13px}
+.source-top span{display:block;font-size:10.5px;color:var(--muted);margin-top:2px}
+.source-value{text-align:right}
+.source-value b{display:block;font-size:17px}
+.source-value small{font-size:10px}
+.up{color:var(--green);font-weight:800}
+.down{color:#b42318;font-weight:800}
+.flat{color:var(--muted);font-weight:800}
+.bar-track{height:10px;border-radius:999px;background:#eef0f4;overflow:hidden}
+.bar-track.thin{height:7px}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--red2));border-radius:999px}
+.bar-fill.dark{background:linear-gradient(90deg,#20283a,#778199)}
+.source-row.blue .bar-fill{background:linear-gradient(90deg,#2451bd,#77a4ff)}
+.source-row.amber .bar-fill{background:linear-gradient(90deg,#ca941a,#e8c45c)}
+.donut-wrap{display:flex;align-items:center;gap:24px;margin:12px 0 18px}
+.donut{width:158px;height:158px;border-radius:50%;background:conic-gradient(var(--red) 0 73.5%,#eceff4 73.5% 100%);position:relative;flex:0 0 auto}
+.donut:after{content:"";position:absolute;inset:24px;background:#fff;border-radius:50%}
+.donut-center{position:absolute;inset:0;z-index:2;display:grid;place-items:center;text-align:center}
+.donut-center b{font-size:27px;display:block}
+.donut-center span{font-size:10px;color:var(--muted)}
+.legend-row{display:flex;align-items:center;gap:8px;font-size:12px;margin:9px 0}
+.dot{width:9px;height:9px;border-radius:50%}
+.dot.red{background:var(--red)} .dot.gray{background:#d6dbe4}
+.statline{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}
+.statline:last-child{border-bottom:none}
+.statline span{color:var(--muted)} .statline b{font-size:13px}
+.timeline{height:275px;display:flex;gap:5px;align-items:flex-end;padding:14px 2px 0;border-top:1px solid var(--line);overflow-x:auto}
+.day{min-width:29px;flex:1;text-align:center;height:225px;display:flex;flex-direction:column;justify-content:flex-end}
+.day.event{background:var(--redsoft);border-radius:8px}
+.day-count{font-size:9px;color:var(--muted);height:16px}
+.day-barbox{height:175px;display:flex;align-items:flex-end;justify-content:center}
+.day-bar{width:66%;min-width:8px;background:linear-gradient(180deg,#f2656b,var(--red));border-radius:6px 6px 2px 2px}
+.day-label{font-size:9px;color:var(--muted);height:27px;margin-top:6px;transform:rotate(-48deg)}
+.career-row{margin-bottom:13px}
+.career-top{display:flex;justify-content:space-between;gap:12px;font-size:11.5px;margin-bottom:5px}
+.career-top span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:88%}
+.table-card{padding:22px;overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:980px}
+th{text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:11px;border-bottom:1px solid var(--line)}
+td{font-size:12.5px;padding:12px 11px;border-bottom:1px solid var(--line)}
+th.num,td.num{text-align:right}
+td.strong{color:var(--red);font-weight:950}
+tr.highlight{background:#f8faff}
+.quality-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+.quality-box{padding:18px}
+.quality-box b{font-size:28px;display:block;margin-bottom:5px}
+.quality-box span{font-size:11px;color:var(--muted);line-height:1.4}
+.growth-list{display:grid;gap:10px}
+.growth-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:13px}
+.growth-item span{font-size:12px;color:var(--muted)} .growth-item b{font-size:15px}
+.footer{font-size:10.5px;color:var(--muted);line-height:1.55;margin-top:14px;padding:2px}
+@media(max-width:1120px){.kpis{grid-template-columns:repeat(3,1fr)}.quality-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:850px){.grid2,.grid2.equal{grid-template-columns:1fr}}
+@media(max-width:620px){.wrap{padding:15px}.header{flex-direction:column}.cutbox{justify-items:start}.data-cut{text-align:left}.kpis{grid-template-columns:1fr 1fr}h1{font-size:29px}.donut-wrap{align-items:flex-start;flex-direction:column}}
+@media(max-width:430px){.kpis,.quality-grid{grid-template-columns:1fr}}
+@media print{body{background:#fff}.tabs{display:none}.tab{display:block!important;margin-bottom:20px}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="header">
+    <div>
+      <div class="eyebrow">Universidad Autónoma de Occidente · UAO Fest 2026</div>
+      <h1>Estado actualizado de la campaña</h1>
+      <div class="subtitle">
+        Captación depurada, comportamiento por origen, evolución diaria, programas de interés y calidad de la BBDD.
+        El indicador principal usa <b>contactos únicos identificados</b>, evitando que varias actividades de una misma persona
+        inflen el resultado.
+      </div>
+    </div>
+    <div class="cutbox">
+      <div class="cut">Archivo recibido · 28 de septiembre de 2026 · 8:19 a. m.</div>
+      <div class="data-cut">Última fecha de creación encontrada: <b>26 de septiembre de 2026</b></div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" onclick="openTab('resumen',this)">Resumen</button>
+    <button class="tab-btn" onclick="openTab('origen',this)">Origen</button>
+    <button class="tab-btn" onclick="openTab('evolucion',this)">Evolución</button>
+    <button class="tab-btn" onclick="openTab('programas',this)">Programas</button>
+    <button class="tab-btn" onclick="openTab('calidad',this)">Calidad de datos</button>
+  </nav>
+
+  <section id="resumen" class="tab active">
+    <div class="kpis">
+      <div class="card kpi primary">
+        <div class="label">Contactos únicos</div>
+        <div class="value">1,357</div>
+        <div class="note">Personas identificadas después de eliminar repeticiones</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">Actividades / filas</div>
+        <div class="value">2,401</div>
+        <div class="note">Volumen bruto del reporte actualizado</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">Cambio neto vs. 15 sep</div>
+        <div class="value">+653</div>
+        <div class="note">704 → 1357 contactos únicos</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">Origen identificado</div>
+        <div class="value">73.5%</div>
+        <div class="note">997 de 1357 contactos</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">Sin origen</div>
+        <div class="value">360</div>
+        <div class="note">26.5% del total actual</div>
+      </div>
+      <div class="card kpi">
+        <div class="label">Comercial2</div>
+        <div class="value">121</div>
+        <div class="note">+60 vs. corte anterior</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card section">
+        <h2>Lectura ejecutiva</h2>
+        <div class="desc">Principales cambios frente al último tablero del 15 de septiembre de 2026 · 3:54 p. m..</div>
+        <div class="insights">
+          <div class="insight good">
+            <strong>La base alcanza 1,357 contactos únicos.</strong>
+            Son <strong>+653</strong> contactos netos frente al corte anterior de 704.
+            Entre ambos archivos aparecen 690 contactos que antes no estaban y dejan de aparecer 37.
+          </div>
+          <div class="insight info">
+            <strong>Los canales que más crecen en volumen son:</strong>
+            Sin origen (+206),
+            Facebook pauta (+115),
+            WhatsApp (+88) y
+            QR pantallas (+69).
+          </div>
+          <div class="insight warn">
+            <strong>“Sin origen” aumenta a 360 contactos</strong> y representa 26.5% de la base.
+            Es el principal punto a corregir para mejorar la lectura real de atribución.
+          </div>
+          <div class="insight neutral">
+            La BBDD recibida hoy tiene como última fecha de creación el <strong>26 de septiembre de 2026</strong>.
+            Por eso el tablero distingue entre la fecha en que se recibió el archivo y la fecha más reciente contenida en los datos.
+          </div>
+        </div>
+      </div>
+
+      <div class="card section">
+        <h2>Cobertura de origen</h2>
+        <div class="desc">Participación de contactos con fuente de captación identificada.</div>
+        <div class="donut-wrap">
+          <div class="donut">
+            <div class="donut-center"><div><b>73.5%</b><span>con origen</span></div></div>
+          </div>
+          <div>
+            <div class="legend-row"><i class="dot red"></i><b>997</b>&nbsp;con origen identificado</div>
+            <div class="legend-row"><i class="dot gray"></i><b>360</b>&nbsp;sin origen</div>
+          </div>
+        </div>
+        <div class="statline"><span>Facebook pauta</span><b>325 · 23.9%</b></div>
+        <div class="statline"><span>WhatsApp</span><b>178 · 13.1%</b></div>
+        <div class="statline"><span>QR pantallas</span><b>154 · 11.3%</b></div>
+        <div class="statline"><span>Email</span><b>126 · 9.3%</b></div>
+        <div class="statline"><span>Comercial2</span><b>121 · 8.9%</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="origen" class="tab">
+    <div class="grid2">
+      <div class="card section">
+        <h2>Contactos únicos por origen</h2>
+        <div class="desc">
+          Cada contacto cuenta una sola vez. Si presenta varias actividades, se usa su origen predominante;
+          en caso de empate, el origen más temprano observado.
+        </div>
+        
+    <div class="source-row ">
+      <div class="source-top">
+        <div>
+          <strong>Facebook pauta</strong>
+          <span>556 actividades brutas</span>
+        </div>
+        <div class="source-value">
+          <b>325</b>
+          <small class="up">+115 vs. 15 sep</small>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:90.3%"></div></div>
+    </div>
+    
+    <div class="source-row amber">
+      <div class="source-top">
+        <div>
+          <strong>Sin origen</strong>
+          <span>661 actividades brutas</span>
+        </div>
+        <div class="source-value">
+          <b>360</b>
+          <small class="up">+206 vs. 15 sep</small>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:100.0%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="source-top">
+        <div>
+          <strong>WhatsApp</strong>
+          <span>280 actividades brutas</span>
+        </div>
+        <div class="source-value">
+          <b>178</b>
+          <small class="up">+88 vs. 15 sep</small>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:49.4%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="source-top">
+        <div>
+          <strong>QR pantallas</strong>
+          <span>256 actividades brutas</span>
+        </div>
+        <div class="source-value">
+          <b>154</b>
+          <small class="up">+69 vs. 15 sep</small>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:42.8%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="source-top">
+        <div>
+          <strong>Email</strong>
+          <span>264 actividades brutas</span>
+        </div>
+        <div class="source-value">
+          <b>126</b>
+          <small class="up">+53 vs. 15 sep</small>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:35.0%"></div></div>
+    </div>
+    
+    <div class="source-row gray">
+      <div class="source-top">
+        <div>
+          <strong>Comercial1</strong>
+          <span>No aparece en la BBDD actual</span>
+        </div>
+        <div class="source-value">
+          <b>0</b>
+          <small class="flat">0 vs. 15 sep</small>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:0.0%"></div></div>
+    </div>
+    
+    <div class="source-row blue">
+      <div class="source-top">
+        <div>
+          <strong>Comercial2</strong>
+          <span>201 actividades brutas</span>
+        </div>
+        <div class="source-value">
+          <b>121</b>
+          <small class="up">+60 vs. 15 sep</small>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:33.6%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="source-top">
+        <div>
+          <strong>Redes</strong>
+          <span>78 actividades brutas</span>
+        </div>
+        <div class="source-value">
+          <b>55</b>
+          <small class="up">+33 vs. 15 sep</small>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:15.3%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="source-top">
+        <div>
+          <strong>Web</strong>
+          <span>74 actividades brutas</span>
+        </div>
+        <div class="source-value">
+          <b>37</b>
+          <small class="up">+29 vs. 15 sep</small>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:10.3%"></div></div>
+    </div>
+    
+    <div class="source-row ">
+      <div class="source-top">
+        <div>
+          <strong>Festival - Web</strong>
+          <span>14 actividades brutas</span>
+        </div>
+        <div class="source-value">
+          <b>1</b>
+          <small class="flat">0 vs. 15 sep</small>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:0.3%"></div></div>
+    </div>
+    
+      </div>
+
+      <div class="card section">
+        <h2>Crecimiento por canal</h2>
+        <div class="desc">Variación de contactos únicos frente al corte del 15 de septiembre.</div>
+        <div class="growth-list">
+          <div class="growth-item"><span>Sin origen</span><b class="up">+206</b></div><div class="growth-item"><span>Facebook pauta</span><b class="up">+115</b></div><div class="growth-item"><span>WhatsApp</span><b class="up">+88</b></div><div class="growth-item"><span>QR pantallas</span><b class="up">+69</b></div>
+        </div>
+        <div class="insight warn" style="margin-top:14px">
+          <strong>Comercial1 continúa en 0.</strong> La etiqueta no aparece en ninguna celda del archivo actual.
+          Comercial2 sí se mantiene separado y alcanza 121 contactos únicos.
+        </div>
+      </div>
+    </div>
+
+    <div class="card table-card">
+      <h2 style="font-size:19px;margin:0 0 5px">Detalle completo por origen</h2>
+      <div class="desc">Actividades brutas, comparación de contactos únicos y cambio de participación.</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Origen</th>
+            <th class="num">Actividades actuales</th>
+            <th class="num">Únicos 15 sep</th>
+            <th class="num">Únicos actuales</th>
+            <th class="num">Variación</th>
+            <th class="num">% actual</th>
+            <th class="num">Cambio participación</th>
+          </tr>
+        </thead>
+        <tbody>
+    <tr class="">
+      <td><b>Facebook pauta</b></td>
+      <td class="num">556</td>
+      <td class="num">210</td>
+      <td class="num strong">325</td>
+      <td class="num"><span class="up">+115</span></td>
+      <td class="num">23.9%</td>
+      <td class="num">-5.9 pp</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>Sin origen</b></td>
+      <td class="num">661</td>
+      <td class="num">154</td>
+      <td class="num strong">360</td>
+      <td class="num"><span class="up">+206</span></td>
+      <td class="num">26.5%</td>
+      <td class="num">+4.7 pp</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>WhatsApp</b></td>
+      <td class="num">280</td>
+      <td class="num">90</td>
+      <td class="num strong">178</td>
+      <td class="num"><span class="up">+88</span></td>
+      <td class="num">13.1%</td>
+      <td class="num">+0.3 pp</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>QR pantallas</b></td>
+      <td class="num">256</td>
+      <td class="num">85</td>
+      <td class="num strong">154</td>
+      <td class="num"><span class="up">+69</span></td>
+      <td class="num">11.3%</td>
+      <td class="num">-0.7 pp</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>Email</b></td>
+      <td class="num">264</td>
+      <td class="num">73</td>
+      <td class="num strong">126</td>
+      <td class="num"><span class="up">+53</span></td>
+      <td class="num">9.3%</td>
+      <td class="num">-1.1 pp</td>
+    </tr>
+    
+    <tr class="highlight">
+      <td><b>Comercial1</b></td>
+      <td class="num">0</td>
+      <td class="num">0</td>
+      <td class="num strong">0</td>
+      <td class="num"><span class="flat">0</span></td>
+      <td class="num">0.0%</td>
+      <td class="num">0.0 pp</td>
+    </tr>
+    
+    <tr class="highlight">
+      <td><b>Comercial2</b></td>
+      <td class="num">201</td>
+      <td class="num">61</td>
+      <td class="num strong">121</td>
+      <td class="num"><span class="up">+60</span></td>
+      <td class="num">8.9%</td>
+      <td class="num">+0.3 pp</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>Redes</b></td>
+      <td class="num">78</td>
+      <td class="num">22</td>
+      <td class="num strong">55</td>
+      <td class="num"><span class="up">+33</span></td>
+      <td class="num">4.1%</td>
+      <td class="num">+0.9 pp</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>Web</b></td>
+      <td class="num">74</td>
+      <td class="num">8</td>
+      <td class="num strong">37</td>
+      <td class="num"><span class="up">+29</span></td>
+      <td class="num">2.7%</td>
+      <td class="num">+1.6 pp</td>
+    </tr>
+    
+    <tr class="">
+      <td><b>Festival - Web</b></td>
+      <td class="num">14</td>
+      <td class="num">1</td>
+      <td class="num strong">1</td>
+      <td class="num"><span class="flat">0</span></td>
+      <td class="num">0.1%</td>
+      <td class="num">-0.1 pp</td>
+    </tr>
+    </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="evolucion" class="tab">
+    <div class="card section" style="margin-bottom:18px">
+      <h2>Evolución diaria de contactos</h2>
+      <div class="desc">
+        Cada persona se ubica una sola vez en su primera fecha de creación observada.
+        Se resaltan visualmente los días 24–26 de septiembre.
+      </div>
+      <div class="timeline">
+    <div class="day " title="18/08: 4 contactos">
+      <div class="day-count">4</div>
+      <div class="day-barbox"><div class="day-bar" style="height:4.0%"></div></div>
+      <div class="day-label">18/08</div>
+    </div>
+    
+    <div class="day " title="19/08: 1 contactos">
+      <div class="day-count">1</div>
+      <div class="day-barbox"><div class="day-bar" style="height:4.0%"></div></div>
+      <div class="day-label">19/08</div>
+    </div>
+    
+    <div class="day " title="20/08: 2 contactos">
+      <div class="day-count">2</div>
+      <div class="day-barbox"><div class="day-bar" style="height:4.0%"></div></div>
+      <div class="day-label">20/08</div>
+    </div>
+    
+    <div class="day " title="21/08: 16 contactos">
+      <div class="day-count">16</div>
+      <div class="day-barbox"><div class="day-bar" style="height:13.9%"></div></div>
+      <div class="day-label">21/08</div>
+    </div>
+    
+    <div class="day " title="24/08: 19 contactos">
+      <div class="day-count">19</div>
+      <div class="day-barbox"><div class="day-bar" style="height:16.5%"></div></div>
+      <div class="day-label">24/08</div>
+    </div>
+    
+    <div class="day " title="25/08: 11 contactos">
+      <div class="day-count">11</div>
+      <div class="day-barbox"><div class="day-bar" style="height:9.6%"></div></div>
+      <div class="day-label">25/08</div>
+    </div>
+    
+    <div class="day " title="26/08: 24 contactos">
+      <div class="day-count">24</div>
+      <div class="day-barbox"><div class="day-bar" style="height:20.9%"></div></div>
+      <div class="day-label">26/08</div>
+    </div>
+    
+    <div class="day " title="27/08: 35 contactos">
+      <div class="day-count">35</div>
+      <div class="day-barbox"><div class="day-bar" style="height:30.4%"></div></div>
+      <div class="day-label">27/08</div>
+    </div>
+    
+    <div class="day " title="28/08: 17 contactos">
+      <div class="day-count">17</div>
+      <div class="day-barbox"><div class="day-bar" style="height:14.8%"></div></div>
+      <div class="day-label">28/08</div>
+    </div>
+    
+    <div class="day " title="29/08: 17 contactos">
+      <div class="day-count">17</div>
+      <div class="day-barbox"><div class="day-bar" style="height:14.8%"></div></div>
+      <div class="day-label">29/08</div>
+    </div>
+    
+    <div class="day " title="30/08: 6 contactos">
+      <div class="day-count">6</div>
+      <div class="day-barbox"><div class="day-bar" style="height:5.2%"></div></div>
+      <div class="day-label">30/08</div>
+    </div>
+    
+    <div class="day " title="31/08: 25 contactos">
+      <div class="day-count">25</div>
+      <div class="day-barbox"><div class="day-bar" style="height:21.7%"></div></div>
+      <div class="day-label">31/08</div>
+    </div>
+    
+    <div class="day " title="01/09: 22 contactos">
+      <div class="day-count">22</div>
+      <div class="day-barbox"><div class="day-bar" style="height:19.1%"></div></div>
+      <div class="day-label">01/09</div>
+    </div>
+    
+    <div class="day " title="02/09: 46 contactos">
+      <div class="day-count">46</div>
+      <div class="day-barbox"><div class="day-bar" style="height:40.0%"></div></div>
+      <div class="day-label">02/09</div>
+    </div>
+    
+    <div class="day " title="03/09: 26 contactos">
+      <div class="day-count">26</div>
+      <div class="day-barbox"><div class="day-bar" style="height:22.6%"></div></div>
+      <div class="day-label">03/09</div>
+    </div>
+    
+    <div class="day " title="04/09: 66 contactos">
+      <div class="day-count">66</div>
+      <div class="day-barbox"><div class="day-bar" style="height:57.4%"></div></div>
+      <div class="day-label">04/09</div>
+    </div>
+    
+    <div class="day " title="05/09: 16 contactos">
+      <div class="day-count">16</div>
+      <div class="day-barbox"><div class="day-bar" style="height:13.9%"></div></div>
+      <div class="day-label">05/09</div>
+    </div>
+    
+    <div class="day " title="06/09: 12 contactos">
+      <div class="day-count">12</div>
+      <div class="day-barbox"><div class="day-bar" style="height:10.4%"></div></div>
+      <div class="day-label">06/09</div>
+    </div>
+    
+    <div class="day " title="07/09: 48 contactos">
+      <div class="day-count">48</div>
+      <div class="day-barbox"><div class="day-bar" style="height:41.7%"></div></div>
+      <div class="day-label">07/09</div>
+    </div>
+    
+    <div class="day " title="08/09: 51 contactos">
+      <div class="day-count">51</div>
+      <div class="day-barbox"><div class="day-bar" style="height:44.3%"></div></div>
+      <div class="day-label">08/09</div>
+    </div>
+    
+    <div class="day " title="09/09: 32 contactos">
+      <div class="day-count">32</div>
+      <div class="day-barbox"><div class="day-bar" style="height:27.8%"></div></div>
+      <div class="day-label">09/09</div>
+    </div>
+    
+    <div class="day " title="10/09: 52 contactos">
+      <div class="day-count">52</div>
+      <div class="day-barbox"><div class="day-bar" style="height:45.2%"></div></div>
+      <div class="day-label">10/09</div>
+    </div>
+    
+    <div class="day " title="11/09: 66 contactos">
+      <div class="day-count">66</div>
+      <div class="day-barbox"><div class="day-bar" style="height:57.4%"></div></div>
+      <div class="day-label">11/09</div>
+    </div>
+    
+    <div class="day " title="12/09: 11 contactos">
+      <div class="day-count">11</div>
+      <div class="day-barbox"><div class="day-bar" style="height:9.6%"></div></div>
+      <div class="day-label">12/09</div>
+    </div>
+    
+    <div class="day " title="13/09: 16 contactos">
+      <div class="day-count">16</div>
+      <div class="day-barbox"><div class="day-bar" style="height:13.9%"></div></div>
+      <div class="day-label">13/09</div>
+    </div>
+    
+    <div class="day " title="14/09: 28 contactos">
+      <div class="day-count">28</div>
+      <div class="day-barbox"><div class="day-bar" style="height:24.3%"></div></div>
+      <div class="day-label">14/09</div>
+    </div>
+    
+    <div class="day " title="15/09: 43 contactos">
+      <div class="day-count">43</div>
+      <div class="day-barbox"><div class="day-bar" style="height:37.4%"></div></div>
+      <div class="day-label">15/09</div>
+    </div>
+    
+    <div class="day " title="16/09: 35 contactos">
+      <div class="day-count">35</div>
+      <div class="day-barbox"><div class="day-bar" style="height:30.4%"></div></div>
+      <div class="day-label">16/09</div>
+    </div>
+    
+    <div class="day " title="17/09: 48 contactos">
+      <div class="day-count">48</div>
+      <div class="day-barbox"><div class="day-bar" style="height:41.7%"></div></div>
+      <div class="day-label">17/09</div>
+    </div>
+    
+    <div class="day " title="18/09: 49 contactos">
+      <div class="day-count">49</div>
+      <div class="day-barbox"><div class="day-bar" style="height:42.6%"></div></div>
+      <div class="day-label">18/09</div>
+    </div>
+    
+    <div class="day " title="19/09: 18 contactos">
+      <div class="day-count">18</div>
+      <div class="day-barbox"><div class="day-bar" style="height:15.7%"></div></div>
+      <div class="day-label">19/09</div>
+    </div>
+    
+    <div class="day " title="20/09: 16 contactos">
+      <div class="day-count">16</div>
+      <div class="day-barbox"><div class="day-bar" style="height:13.9%"></div></div>
+      <div class="day-label">20/09</div>
+    </div>
+    
+    <div class="day " title="21/09: 50 contactos">
+      <div class="day-count">50</div>
+      <div class="day-barbox"><div class="day-bar" style="height:43.5%"></div></div>
+      <div class="day-label">21/09</div>
+    </div>
+    
+    <div class="day " title="22/09: 93 contactos">
+      <div class="day-count">93</div>
+      <div class="day-barbox"><div class="day-bar" style="height:80.9%"></div></div>
+      <div class="day-label">22/09</div>
+    </div>
+    
+    <div class="day " title="23/09: 105 contactos">
+      <div class="day-count">105</div>
+      <div class="day-barbox"><div class="day-bar" style="height:91.3%"></div></div>
+      <div class="day-label">23/09</div>
+    </div>
+    
+    <div class="day event" title="24/09: 115 contactos">
+      <div class="day-count">115</div>
+      <div class="day-barbox"><div class="day-bar" style="height:100.0%"></div></div>
+      <div class="day-label">24/09</div>
+    </div>
+    
+    <div class="day event" title="25/09: 96 contactos">
+      <div class="day-count">96</div>
+      <div class="day-barbox"><div class="day-bar" style="height:83.5%"></div></div>
+      <div class="day-label">25/09</div>
+    </div>
+    
+    <div class="day event" title="26/09: 20 contactos">
+      <div class="day-count">20</div>
+      <div class="day-barbox"><div class="day-bar" style="height:17.4%"></div></div>
+      <div class="day-label">26/09</div>
+    </div>
+    </div>
+    </div>
+
+    <div class="grid2 equal">
+      <div class="card section">
+        <h2>Picos de captación</h2>
+        <div class="statline"><span>24 de septiembre</span><b>115 contactos</b></div>
+        <div class="statline"><span>23 de septiembre</span><b>105 contactos</b></div>
+        <div class="statline"><span>25 de septiembre</span><b>96 contactos</b></div>
+        <div class="statline"><span>22 de septiembre</span><b>93 contactos</b></div>
+        <div class="statline"><span>26 de septiembre</span><b>20 contactos</b></div>
+      </div>
+
+      <div class="card section">
+        <h2>Movimiento entre archivos</h2>
+        <div class="statline"><span>Contactos actuales no presentes en el corte anterior</span><b>+690</b></div>
+        <div class="statline"><span>Contactos del corte anterior que ya no aparecen</span><b>-37</b></div>
+        <div class="statline"><span>Cambio neto</span><b>+653</b></div>
+        <div class="statline"><span>Añadidos con fecha 16 sep o posterior</span><b>645</b></div>
+        <div class="statline"><span>Añadidos con fecha 15 sep o anterior</span><b>45</b></div>
+        <div class="insight neutral" style="margin-top:14px">
+          Esta conciliación evita interpretar automáticamente todos los registros nuevos del archivo como captación ocurrida después del corte anterior.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="programas" class="tab">
+    <div class="grid2">
+      <div class="card section">
+        <h2>Programas con mayor interés</h2>
+        <div class="desc">
+          Contactos únicos asociados a cada programa. Una persona puede aparecer en más de un programa si tiene múltiples intereses.
+        </div>
+        
+    <div class="career-row">
+      <div class="career-top"><span>Mercadeo Y Negocios Internacionales</span><b>316</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:100.0%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Psicología</span><b>203</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:64.2%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Ingeniería De Datos E Inteligencia Artificial</span><b>190</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:60.1%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Cine</span><b>169</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:53.5%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Ingeniería Biomédica</span><b>155</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:49.1%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Ingeniería Informática</span><b>155</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:49.1%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Ingeniería Mecatrónica</span><b>127</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:40.2%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Derecho</span><b>111</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:35.1%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Comunicación Social- Periodismo</span><b>110</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:34.8%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Publicidad En Medios Digitales</span><b>105</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:33.2%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Arquitectura</span><b>101</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:32.0%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Ingeniería Industrial</span><b>94</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:29.7%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Ingeniería Mecánica</span><b>72</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:22.8%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Diseño De La Comunicación Gráfica</span><b>56</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:17.7%"></div></div>
+    </div>
+    
+    <div class="career-row">
+      <div class="career-top"><span>Ingeniería Eléctrica</span><b>55</b></div>
+      <div class="bar-track thin"><div class="bar-fill dark" style="width:17.4%"></div></div>
+    </div>
+    
+      </div>
+
+      <div class="card section">
+        <h2>Indicadores de interés</h2>
+        <div class="statline"><span>Programa líder</span><b>Mercadeo Y Negocios Internacionales</b></div>
+        <div class="statline"><span>Contactos del programa líder</span><b>316</b></div>
+        <div class="statline"><span>Segundo programa</span><b>Psicología</b></div>
+        <div class="statline"><span>Contactos del segundo programa</span><b>203</b></div>
+        <div class="statline"><span>Contactos con más de un interés</span><b>594</b></div>
+        <div class="statline"><span>Total contactos únicos</span><b>1357</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="calidad" class="tab">
+    <div class="quality-grid">
+      <div class="card quality-box"><b>2,401</b><span>filas de actividad en el archivo</span></div>
+      <div class="card quality-box"><b>1,357</b><span>contactos únicos identificados</span></div>
+      <div class="card quality-box"><b>1,044</b><span>filas adicionales vinculadas a contactos ya contabilizados</span></div>
+      <div class="card quality-box"><b>21</b><span>contactos con más de un origen registrado</span></div>
+    </div>
+
+    <div class="grid2 equal">
+      <div class="card section">
+        <h2>Controles de consistencia</h2>
+        <div class="insight warn" style="margin-bottom:10px">
+          <strong>8 nombres</strong> están asociados a más de un Id. de cuenta.
+          Por eso el tablero continúa consolidando principalmente por nombre normalizado.
+        </div>
+        <div class="insight warn" style="margin-bottom:10px">
+          <strong>3 Id. de cuenta</strong> aparecen asociados a más de un nombre.
+          El Id. de cuenta se utiliza como control complementario y no como criterio único.
+        </div>
+        <div class="insight info">
+          <strong>Comercial1:</strong> se encontraron 0 filas con esa etiqueta en cualquier campo del archivo.
+          Por tanto permanece en 0.
+        </div>
+      </div>
+
+      <div class="card section">
+        <h2>Regla de depuración</h2>
+        <div class="statline"><span>1. Normalización</span><b>Nombre completo</b></div>
+        <div class="statline"><span>2. Eliminación de repetición</span><b>1 persona = 1 contacto</b></div>
+        <div class="statline"><span>3. Origen</span><b>Predominante / más temprano</b></div>
+        <div class="statline"><span>4. Comparación histórica</span><b>Misma metodología</b></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Nota metodológica: la BBDD no incluye correo o celular como identificadores alternativos suficientes para una conciliación individual adicional.
+      Por eso la deduplicación se realiza mediante nombre completo normalizado, usando el Id. de cuenta como control complementario.
+      El archivo recibido el 28 de septiembre contiene registros con fecha de creación hasta el 26 de septiembre de 2026.
+    </div>
+  </section>
+</div>
+
+<script>
+function openTab(id, btn) {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
