@@ -1,0 +1,3591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAO · Sistema de Marketing y Automatización por WhatsApp</title>
+<meta name="description" content="Prototipo funcional UAO para demostrar flujos de WhatsApp, Salesforce, calificación, agenda y handoff comercial.">
+<style>
+:root{
+  --uao-red:#ff0000;
+  --uao-red-dark:#cf0000;
+  --uao-red-soft:#fff0f1;
+  --uao-black:#111318;
+  --uao-ink:#20242d;
+  --uao-gray:#697386;
+  --uao-line:#e6e8ec;
+  --uao-bg:#f5f6f8;
+  --uao-white:#ffffff;
+  --wa:#25D366;
+  --wa-dark:#075E54;
+  --wa-light:#DCF8C6;
+  --sf:#0b8fd9;
+  --green:#12a150;
+  --amber:#ef9b11;
+  --blue:#1a73e8;
+  --purple:#7c3aed;
+  --shadow:0 8px 30px rgba(17,19,24,.09);
+  --shadow-lg:0 18px 55px rgba(17,19,24,.14);
+  --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+  background:var(--uao-bg);
+  color:var(--uao-ink);
+  min-height:100vh;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.header{
+  background:linear-gradient(110deg,var(--uao-red) 0%,#ee0000 60%,var(--uao-red-dark) 100%);
+  color:#fff;
+  position:sticky;top:0;z-index:50;
+  box-shadow:0 6px 22px rgba(255,0,0,.18);
+}
+.header-main{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:14px 24px;max-width:1600px;margin:auto;
+}
+.brand{display:flex;align-items:center;gap:18px;min-width:0}
+.brand img{width:152px;max-height:58px;object-fit:contain;filter:brightness(0) invert(1)}
+.brand-divider{height:48px;width:1px;background:rgba(255,255,255,.45)}
+.brand-copy{min-width:0}
+.brand-title{font-size:20px;font-weight:800;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-sub{font-size:12px;opacity:.86;margin-top:4px}
+.header-actions{display:flex;align-items:center;gap:10px}
+.status-pill,.demo-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(255,255,255,.35);border-radius:999px;
+  padding:8px 12px;font-size:12px;font-weight:700;background:rgba(255,255,255,.08)
+}
+.status-dot{width:9px;height:9px;background:var(--wa);border-radius:50%;box-shadow:0 0 0 4px rgba(37,211,102,.15)}
+.nav{
+  background:#fff;color:var(--uao-ink);
+  display:flex;gap:2px;padding:0 18px;overflow-x:auto;
+  border-bottom:1px solid var(--uao-line);
+}
+.nav button{
+  border:0;background:transparent;padding:13px 16px;
+  color:#536072;font-size:12.5px;font-weight:700;white-space:nowrap;
+  border-bottom:3px solid transparent;
+}
+.nav button:hover{color:var(--uao-red);background:#fff8f8}
+.nav button.active{color:var(--uao-red);border-bottom-color:var(--uao-red);background:#fff5f5}
+.shell{max-width:1600px;margin:0 auto;padding:22px}
+.tab{display:none}.tab.active{display:block}
+.hero{
+  display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-bottom:18px;
+}
+.hero-main{
+  background:linear-gradient(135deg,#17191f,#2a2e37);color:#fff;border-radius:24px;
+  padding:26px;min-height:218px;position:relative;overflow:hidden;box-shadow:var(--shadow);
+}
+.hero-main:after{
+  content:"";position:absolute;right:-90px;top:-100px;width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,0,0,.50),rgba(255,0,0,0) 68%);
+}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#ffb4b4;margin-bottom:10px}
+.hero-main h1{font-size:30px;line-height:1.08;max-width:780px;position:relative;z-index:1}
+.hero-main p{margin-top:12px;max-width:780px;color:#d9dde5;line-height:1.6;font-size:14px;position:relative;z-index:1}
+.hero-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
+.btn{
+  border:0;border-radius:11px;padding:10px 14px;font-weight:800;font-size:12.5px;
+  transition:.18s ease;display:inline-flex;align-items:center;justify-content:center;gap:7px
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--uao-red);color:white;box-shadow:0 8px 20px rgba(255,0,0,.25)}
+.btn-white{background:#fff;color:var(--uao-black)}
+.btn-outline{background:#fff;border:1px solid var(--uao-line);color:var(--uao-ink)}
+.btn-wa{background:var(--wa);color:#064c29}
+.btn-dark{background:var(--uao-black);color:white}
+.btn-sm{padding:8px 11px;font-size:11.5px}
+.hero-side{
+  background:#fff;border:1px solid var(--uao-line);border-radius:24px;padding:22px;box-shadow:var(--shadow)
+}
+.hero-side h3{font-size:14px;margin-bottom:12px}
+.mini-flow{display:flex;flex-direction:column;gap:10px}
+.mini-step{display:flex;gap:10px;align-items:flex-start}
+.mini-step .n{
+  width:28px;height:28px;border-radius:50%;background:var(--uao-red-soft);color:var(--uao-red);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0
+}
+.mini-step b{display:block;font-size:12px}.mini-step span{font-size:11px;color:var(--uao-gray);line-height:1.4}
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{
+  background:#fff;border:1px solid var(--uao-line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)
+}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.card-title-wrap{display:flex;gap:10px;align-items:flex-start}
+.card-icon{
+  width:38px;height:38px;border-radius:11px;background:var(--uao-red-soft);color:var(--uao-red);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0
+}
+.card h2,.card h3{font-size:15px}.sub{font-size:11.5px;color:var(--uao-gray);margin-top:3px;line-height:1.45}
+.badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 9px;font-size:10.5px;font-weight:800}
+.badge-red{background:#ffe8e8;color:#c70000}
+.badge-green{background:#e7f8ee;color:#0a7f3c}
+.badge-blue{background:#eaf3ff;color:#155bc4}
+.badge-amber{background:#fff4dc;color:#a76500}
+.badge-dark{background:#eef0f4;color:#323844}
+.badge-wa{background:#e7faef;color:#08793c}
+.scenario-card{position:relative;overflow:hidden}
+.scenario-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--uao-red)}
+.scenario-card.paid:before{background:#2478ff}
+.flow-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.flow-node{
+  padding:8px 9px;background:#f8f9fb;border:1px solid var(--uao-line);border-radius:9px;
+  font-size:10.5px;font-weight:700;text-align:center
+}
+.arrow{font-size:13px;color:#9ca3af}
+.callout{
+  margin-top:14px;border-radius:11px;padding:11px 12px;background:#fff4f4;border:1px solid #ffd0d0;
+  color:#8f1111;font-size:11.5px;line-height:1.5
+}
+.kpi{padding:16px;background:#fff;border:1px solid var(--uao-line);border-radius:16px;box-shadow:var(--shadow)}
+.kpi .v{font-size:26px;font-weight:900;letter-spacing:-.7px}.kpi .l{font-size:11px;color:var(--uao-gray);margin-top:4px}
+.kpi .t{font-size:10.5px;margin-top:7px;font-weight:800}.up{color:var(--green)}
+.presentation-grid{display:grid;grid-template-columns:minmax(520px,1.22fr) minmax(320px,.78fr);gap:16px}
+.phone-shell{
+  background:#111318;border-radius:28px;padding:9px;box-shadow:var(--shadow-lg);max-width:680px;margin:0 auto;width:100%
+}
+.phone{
+  background:#efeae2;border-radius:21px;overflow:hidden;min-height:670px;display:flex;flex-direction:column
+}
+.wa-top{
+  background:var(--wa-dark);color:#fff;padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px
+}
+.wa-person{display:flex;align-items:center;gap:10px}
+.uao-avatar{
+  width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden
+}
+.uao-avatar img{width:30px;height:30px;object-fit:contain}
+.wa-name{font-size:13px;font-weight:800}.wa-status{font-size:10px;opacity:.75;margin-top:2px}
+.wa-actions{display:flex;gap:12px;font-size:15px}
+.wa-wallpaper{
+  flex:1;min-height:500px;max-height:540px;overflow-y:auto;padding:15px 13px 18px;
+  background-color:#efeae2;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(7,94,84,.035) 0 2px, transparent 2.6px),
+    radial-gradient(circle at 80% 60%, rgba(7,94,84,.03) 0 2px, transparent 2.6px);
+  background-size:36px 36px;
+}
+.msg{display:flex;margin-bottom:8px;animation:rise .2s ease}
+@keyframes rise{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.msg.bot{justify-content:flex-start}.msg.user{justify-content:flex-end}.msg.system{justify-content:center}
+.bubble{
+  max-width:82%;padding:9px 10px 6px;border-radius:9px;font-size:12px;line-height:1.48;box-shadow:0 1px 2px rgba(0,0,0,.08)
+}
+.msg.bot .bubble{background:#fff;border-top-left-radius:2px}
+.msg.user .bubble{background:var(--wa-light);border-top-right-radius:2px}
+.msg.system .bubble{background:#dfe8df;color:#53605b;font-size:10.5px;max-width:92%;text-align:center;padding:6px 10px;border-radius:7px}
+.time{font-size:9px;color:#8b9490;text-align:right;margin-top:3px}
+.quick{
+  display:flex;flex-direction:column;gap:6px;margin-top:8px
+}
+.quick button{
+  border:1px solid #e4e6e8;background:#fff;color:#02785d;border-radius:8px;padding:8px 9px;font-size:11px;font-weight:800
+}
+.quick button:hover{background:#f5fffb}
+.quick button:disabled{opacity:.48;cursor:not-allowed;background:#f3f4f5;color:#7f878d}
+.quick button.selected{opacity:1;background:#e8fff3;color:#056947;border-color:#aee8ca}
+.wa-menu{
+  display:flex;gap:5px;overflow-x:auto;padding:8px;background:#f6f6f6;border-top:1px solid #dedede
+}
+.wa-menu button{
+  border:1px solid #dedede;background:#fff;border-radius:999px;padding:6px 9px;font-size:9.8px;font-weight:800;white-space:nowrap;color:#495057
+}
+.wa-inputbar{display:flex;align-items:center;gap:7px;background:#f0f2f5;padding:8px}
+.wa-inputbar input{flex:1;border:0;background:#fff;border-radius:999px;padding:10px 13px;font-size:12px;outline:none}
+.send{
+  width:36px;height:36px;border-radius:50%;border:0;background:var(--wa);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900
+}
+.demo-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.demo-toolbar select{
+  border:1px solid var(--uao-line);background:white;border-radius:10px;padding:9px 11px;font-size:11.5px;font-weight:700;color:#3e4654
+}
+.side-stack{display:flex;flex-direction:column;gap:14px}
+.live-card{background:#fff;border:1px solid var(--uao-line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.live-card h3{font-size:13px;margin-bottom:10px}
+.data-grid{display:grid;grid-template-columns:120px 1fr;gap:7px;font-size:11.5px}
+.data-grid dt{color:#7a8494}.data-grid dd{font-weight:700;overflow-wrap:anywhere}
+.score-wrap{display:flex;align-items:center;gap:12px}
+.score-circle{
+  width:62px;height:62px;border-radius:50%;background:conic-gradient(var(--uao-red) 0deg,#eee 0deg);
+  display:grid;place-items:center;position:relative
+}
+.score-circle:before{content:"";position:absolute;width:48px;height:48px;border-radius:50%;background:#fff}
+.score-circle span{position:relative;font-size:15px;font-weight:900;color:var(--uao-red)}
+.progress{height:7px;border-radius:999px;background:#edf0f2;overflow:hidden}.progress>span{display:block;height:100%;background:linear-gradient(90deg,#ff5d5d,var(--uao-red));width:0;transition:.25s}
+.event-log{max-height:250px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.event{display:grid;grid-template-columns:46px 1fr;gap:8px;font-size:10.5px;align-items:flex-start}
+.event-time{color:#87909e;font-variant-numeric:tabular-nums}
+.event-text{padding-left:9px;border-left:2px solid #eceff2;line-height:1.45}
+.sf-panel{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sf-record{border:1px solid #d9e8f5;background:#f7fbff;border-radius:14px;padding:15px}
+.sf-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}.sf-cloud{color:var(--sf);font-size:24px}.sf-title{font-weight:900;font-size:13px}
+.sf-row{display:grid;grid-template-columns:132px 1fr;gap:8px;padding:7px 0;border-bottom:1px dashed #d9e4ee;font-size:11px}
+.sf-row:last-child{border-bottom:0}.sf-row .k{color:#688096}.sf-row .v{font-weight:800;overflow-wrap:anywhere}
+.tree-wrap{overflow:auto;padding-bottom:6px}
+.tree{min-width:1080px;display:flex;align-items:center;gap:8px;padding:8px 4px}
+.tree-node{
+  width:140px;min-height:84px;border:1px solid var(--uao-line);background:white;border-radius:13px;padding:12px;text-align:center;box-shadow:0 4px 14px rgba(17,19,24,.05)
+}
+.tree-node strong{display:block;font-size:11.5px;margin-top:4px}.tree-node span{font-size:9.8px;color:var(--uao-gray);line-height:1.35;display:block;margin-top:4px}
+.tree-node.active{border:2px solid var(--uao-red);box-shadow:0 8px 24px rgba(255,0,0,.12);background:#fff9f9}
+.tree-arrow{font-size:18px;color:#a2a8b1}
+.branch-box{display:flex;flex-direction:column;gap:6px}
+.branch{background:#fafbfc;border:1px solid var(--uao-line);border-radius:8px;padding:6px;font-size:9.5px;font-weight:800}
+.arch{
+  display:grid;grid-template-columns:repeat(9,auto);gap:8px;align-items:center;justify-content:center;overflow:auto;padding:16px 4px
+}
+.arch-node{min-width:130px;padding:13px;border-radius:13px;text-align:center;background:#fff;border:1px solid var(--uao-line)}
+
+.architecture-lanes{display:grid;grid-template-columns:1fr;gap:18px;margin-top:12px}
+.arch-lane{
+  border:1px solid var(--uao-line);border-radius:18px;padding:16px;background:#fafbfc;overflow:auto
+}
+.arch-lane.paid{border-left:5px solid #2478ff}
+.arch-lane.organic{border-left:5px solid var(--wa)}
+.arch-lane-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.arch-lane-head h3{font-size:14px}
+.arch-lane-head p{font-size:11px;color:var(--uao-gray);line-height:1.5;margin-top:4px}
+.arch-flow{
+  display:flex;align-items:center;gap:8px;min-width:1180px;padding:8px 0
+}
+.arch-flow .arch-node{min-width:150px}
+.arch-flow .tree-arrow{flex:0 0 auto}
+.arch-convergence{
+  margin-top:18px;border:2px dashed #d6dbe3;border-radius:18px;padding:16px;background:#fff
+}
+.arch-convergence h3{font-size:14px;margin-bottom:6px}
+.arch-convergence p{font-size:11px;color:var(--uao-gray);line-height:1.55;margin-bottom:12px}
+.arch-shared-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.arch-shared-box{
+  border:1px solid var(--uao-line);border-radius:12px;padding:12px;background:#f8f9fb
+}
+.arch-shared-box b{display:block;font-size:11.5px;margin-bottom:5px}
+.arch-shared-box span{display:block;font-size:10px;color:var(--uao-gray);line-height:1.45}
+.arch-diff-note{
+  margin-top:14px;padding:12px 14px;border-radius:12px;background:#fff7e8;border:1px solid #ffe0a8;
+  font-size:11px;line-height:1.55;color:#7a5200
+}
+@media(max-width:900px){
+  .arch-shared-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:620px){
+  .arch-shared-grid{grid-template-columns:1fr}
+}
+
+.arch-node i{font-style:normal;font-size:22px;display:block;margin-bottom:5px}.arch-node b{font-size:11.5px;display:block}.arch-node span{font-size:9.5px;color:var(--uao-gray);margin-top:3px;display:block}
+.arch-node.red{border-color:#ffb3b3;background:#fff5f5}.arch-node.green{border-color:#a9eec3;background:#f3fff7}.arch-node.blue{border-color:#a9d4f5;background:#f5fbff}
+.section-label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#7a8494;margin:6px 0 12px}
+.calendar-wrap{display:grid;grid-template-columns:1fr .85fr;gap:16px}
+.calendar{background:#fff;border:1px solid var(--uao-line);border-radius:16px;padding:16px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.cal-head b{font-size:13px}
+.icon-btn{width:32px;height:32px;border:1px solid var(--uao-line);background:#fff;border-radius:8px;font-weight:900;color:#555}
+.cal-week,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal-week div{text-align:center;font-size:9.5px;font-weight:800;color:#8992a0;padding:5px}
+.day{padding:9px 3px;border-radius:8px;text-align:center;font-size:11px;cursor:pointer;border:1px solid transparent}
+.day:hover:not(.disabled){background:#fff0f0}.day.selected{background:var(--uao-red);color:#fff;font-weight:900}.day.disabled{color:#d0d4da;cursor:default}.day.today{border-color:#ff9292;color:#d90000;font-weight:900}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.slot{border:1px solid var(--uao-line);background:#fff;border-radius:9px;padding:9px 6px;text-align:center;font-size:10.5px;font-weight:800}.slot:hover{border-color:#ff9999}.slot.selected{background:#fff0f0;border-color:var(--uao-red);color:var(--uao-red)}.slot.full{color:#c5c9cf;text-decoration:line-through;cursor:not-allowed}
+.handoff-summary{
+  border:1px solid #ffd0d0;background:#fffafa;border-radius:15px;padding:15px
+}
+.handoff-row{display:grid;grid-template-columns:130px 1fr;gap:8px;font-size:11px;padding:6px 0}.handoff-row span:first-child{color:#737d8b}.handoff-row b{overflow-wrap:anywhere}
+.notice{padding:12px;border-radius:11px;font-size:11px;line-height:1.55}
+.notice.red{background:#fff0f0;color:#8e1515;border:1px solid #ffd3d3}
+.notice.green{background:#effbf4;color:#126334;border:1px solid #ccefdc}
+.notice.blue{background:#f0f7ff;color:#1c5187;border:1px solid #d2e8ff}
+.timeline{display:flex;flex-direction:column;gap:11px}
+.tline{display:grid;grid-template-columns:58px 1fr;gap:10px}.tline .when{background:#17191f;color:#fff;border-radius:8px;padding:6px;text-align:center;font-size:10px;font-weight:900;height:max-content}.tline .copy{font-size:11px;line-height:1.5;padding-top:2px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.filters button{border:1px solid var(--uao-line);background:#fff;border-radius:999px;padding:7px 10px;font-size:10.5px;font-weight:800}.filters button.active{background:var(--uao-red);border-color:var(--uao-red);color:#fff}
+.table{width:100%;border-collapse:collapse;font-size:10.5px}.table th{background:#f7f8fa;color:#677181;text-align:left;padding:9px}.table td{padding:9px;border-bottom:1px solid #edf0f2}.table td:last-child,.table th:last-child{text-align:right}
+.footer{padding:24px;text-align:center;font-size:10.5px;color:#7b8492}
+.toast{
+  position:fixed;right:20px;bottom:20px;z-index:1000;background:#17191f;color:white;border-radius:12px;padding:11px 14px;
+  font-size:11.5px;box-shadow:var(--shadow-lg);opacity:0;transform:translateY(15px);pointer-events:none;transition:.2s
+}
+.toast.show{opacity:1;transform:none}
+
+.process-alert{
+  display:none;
+  margin:0 0 16px;
+  border-radius:16px;
+  padding:15px 17px;
+  border:1px solid #ccefdc;
+  background:linear-gradient(135deg,#effbf4,#f8fffb);
+  box-shadow:var(--shadow);
+}
+.process-alert.show{display:block}
+.process-alert.manual{border-color:#ffd2d2;background:linear-gradient(135deg,#fff1f1,#fffafa)}
+.process-alert.schedule{border-color:#cfe2ff;background:linear-gradient(135deg,#f1f7ff,#fbfdff)}
+.process-alert.afterhours{border-color:#ffe0a8;background:linear-gradient(135deg,#fff7e8,#fffdf8)}
+.process-alert-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.process-alert-main{display:flex;align-items:flex-start;gap:11px}
+.process-alert-icon{font-size:25px;line-height:1}
+.process-alert-title{font-size:13px;font-weight:900;margin-bottom:4px}
+.process-alert-copy{font-size:11.5px;color:#596273;line-height:1.55}
+.process-alert-meta{font-size:10.5px;color:#737d8b;margin-top:5px;font-weight:700}
+.process-status{
+  display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 9px;
+  font-size:10px;font-weight:900;background:#fff;border:1px solid rgba(0,0,0,.08);white-space:nowrap
+}
+
+.process-alert-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.process-alert-actions button{
+  border:1px solid rgba(0,0,0,.10);background:#fff;border-radius:9px;
+  padding:7px 10px;font-size:10px;font-weight:900;color:#394250
+}
+.process-alert-actions button:hover{transform:translateY(-1px)}
+.demo-mode-note{
+  display:inline-flex;align-items:center;gap:6px;background:#fff7e8;color:#8b5b00;
+  border:1px solid #ffe0a8;border-radius:999px;padding:7px 10px;font-size:10.5px;font-weight:800
+}
+.journey-list{display:flex;flex-direction:column;gap:7px}
+.journey-step{
+  display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:center;
+  padding:8px 9px;border-radius:9px;background:#f7f8fa;border:1px solid #edf0f2
+}
+.journey-step .jicon{
+  width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  font-size:10px;font-weight:900;background:#eceff3;color:#7d8794
+}
+.journey-step b{font-size:10.7px}
+.journey-step span{font-size:9.5px;color:#8a94a2}
+.journey-step.done{background:#f1fbf5;border-color:#d3efdf}
+.journey-step.done .jicon{background:#dff6e8;color:#087a3c}
+.journey-step.current{background:#fff4f4;border-color:#ffd2d2}
+.journey-step.current .jicon{background:#ffe0e0;color:#c80000}
+
+
+.empty{color:#8993a2;font-size:11px;text-align:center;padding:18px 8px}
+
+.flow-builder{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px
+}
+.flow-canvas{
+  background:#f7f8fb;border:1px solid var(--uao-line);border-radius:18px;padding:18px;overflow:auto
+}
+.flow-title{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px
+}
+.flow-map{
+  min-width:520px;display:grid;gap:14px
+}
+.flow-row-block{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.fb-block{
+  width:190px;background:#fff;border:1px solid var(--uao-line);border-radius:14px;padding:12px;box-shadow:0 4px 14px rgba(17,19,24,.05);position:relative
+}
+.fb-block.start{border-color:#b9efc9;background:#f4fff7}
+.fb-block.trigger{border-color:#ffd0d0;background:#fff6f6}
+.fb-block.crm{border-color:#cfe6ff;background:#f6fbff}
+.fb-block.bot{border-color:#ead8ff;background:#fbf8ff}
+.fb-block.handoff{border-color:#ffe2b8;background:#fffaf3}
+.fb-block h4{font-size:12px;margin-bottom:6px}
+.fb-block p{font-size:10.5px;color:var(--uao-gray);line-height:1.45}
+.fb-options{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
+.fb-opt{font-size:9.5px;font-weight:800;background:#f5f6f8;border:1px solid var(--uao-line);border-radius:999px;padding:4px 7px}
+.fb-arrow{
+  display:flex;align-items:center;justify-content:center;font-size:18px;color:#a2a8b1;height:100%;padding-top:34px
+}
+.fb-note{
+  margin-top:10px;padding:10px 12px;background:#fff;border:1px dashed #d8dde6;border-radius:11px;font-size:10.5px;color:#596273;line-height:1.5
+}
+@media(max-width:1100px){
+  .flow-builder{grid-template-columns:1fr}
+}
+
+@media(max-width:1100px){
+  .hero,.presentation-grid,.calendar-wrap{grid-template-columns:1fr}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .sf-panel{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  .shell{padding:12px}.header-main{padding:10px 12px}.brand img{width:105px}.brand-divider{height:35px}.brand-title{font-size:14px}.brand-sub{font-size:10px}
+  .demo-pill{display:none}.status-pill{padding:6px 8px;font-size:10px}.nav{padding:0 6px}.nav button{padding:11px 12px;font-size:11px}
+  .hero-main{padding:20px}.hero-main h1{font-size:24px}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .phone{min-height:620px}.wa-wallpaper{min-height:450px;max-height:485px}.data-grid{grid-template-columns:105px 1fr}
+  .slots{grid-template-columns:repeat(2,1fr)}.arch{justify-content:flex-start}
+}
+
+/* ===== V13 · Presentation polish ===== */
+.presentation-launch{
+  border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.12);color:#fff;
+  border-radius:10px;padding:8px 11px;font-size:10.5px;font-weight:900;cursor:pointer
+}
+.presentation-launch:hover{background:rgba(255,255,255,.20)}
+.presentation-dock{
+  position:fixed;right:18px;bottom:18px;width:min(390px,calc(100vw - 24px));
+  background:#111318;color:#fff;border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;box-shadow:0 18px 55px rgba(0,0,0,.28);z-index:9999;
+  padding:15px;display:none
+}
+.presentation-dock.show{display:block}
+.presentation-dock-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.presentation-dock .ey{font-size:9px;font-weight:900;letter-spacing:.09em;color:#ff8686;text-transform:uppercase}
+.presentation-dock h3{font-size:14px;margin-top:3px}
+.presentation-dock p{font-size:10.5px;line-height:1.5;color:#c7cbd2;margin-top:5px}
+.presentation-stepbar{height:5px;background:#2b2f36;border-radius:999px;overflow:hidden;margin:12px 0}
+.presentation-stepbar span{display:block;height:100%;background:#ff0000;width:0;transition:.25s}
+.presentation-dock-actions{display:flex;gap:7px;flex-wrap:wrap}
+.presentation-dock-actions button{
+  border:1px solid #343943;background:#20242b;color:#fff;border-radius:9px;
+  padding:7px 10px;font-size:10px;font-weight:900
+}
+.presentation-dock-actions button.primary{background:#ff0000;border-color:#ff0000}
+.presentation-close{border:0;background:transparent;color:#b8bec8;font-size:18px;cursor:pointer}
+
+.stage-strip{
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;margin:0 0 16px
+}
+.stage-item{
+  background:#fff;border:1px solid var(--uao-line);border-radius:12px;padding:9px 8px;
+  text-align:center;min-height:58px;display:flex;flex-direction:column;justify-content:center
+}
+.stage-item b{font-size:9.5px}
+.stage-item span{font-size:8.8px;color:#8d96a2;margin-top:2px}
+.stage-item.done{background:#f2fbf6;border-color:#d3efdf}
+.stage-item.current{background:#fff2f2;border-color:#ffcaca;box-shadow:inset 0 0 0 1px #ffb6b6}
+.stage-item.current b{color:#bd0000}
+
+.executive-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+.executive-box{border:1px solid var(--uao-line);border-radius:15px;padding:14px;background:#fff}
+.executive-box .eicon{font-size:20px;margin-bottom:7px}
+.executive-box b{display:block;font-size:12px;margin-bottom:4px}
+.executive-box span{font-size:10.5px;color:var(--uao-gray);line-height:1.5}
+
+.sf-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sf-compare-card{border:1px solid var(--uao-line);border-radius:15px;overflow:hidden;background:#fff}
+.sf-compare-head{padding:11px 13px;font-size:11px;font-weight:900;background:#f6f7f9;border-bottom:1px solid var(--uao-line)}
+.sf-compare-head.after{background:#f1fbf5;color:#08763b}
+.sf-compare-list{padding:10px 13px;display:grid;gap:7px}
+.sf-compare-row{display:grid;grid-template-columns:145px 1fr;gap:8px;font-size:9.8px;line-height:1.4}
+.sf-compare-row span{color:#808997}
+.sf-compare-row b{font-weight:800;word-break:break-word}
+.sf-value-new{background:#effaf4;border:1px solid #d5efdf;border-radius:6px;padding:3px 6px;color:#08763b}
+
+.funnel-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.funnel-card{border:1px solid var(--uao-line);border-radius:16px;padding:14px;background:#fff}
+.funnel-card h3{font-size:13px}
+.funnel-card .sub{margin-top:3px}
+.funnel{display:grid;gap:7px;margin-top:12px}
+.funnel-row{display:grid;grid-template-columns:120px 1fr 50px;gap:8px;align-items:center}
+.funnel-row label{font-size:9.7px;font-weight:800}
+.funnel-track{height:10px;background:#eef0f3;border-radius:999px;overflow:hidden}
+.funnel-fill{height:100%;background:#15181d;border-radius:999px}
+.funnel-card.paid .funnel-fill{background:#2478ff}
+.funnel-card.organic .funnel-fill{background:#13a05b}
+.funnel-row strong{text-align:right;font-size:9.5px}
+
+.handoff-checklist{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.handoff-mini{
+  border:1px solid var(--uao-line);border-radius:13px;padding:12px;background:#f9fafb
+}
+.handoff-mini h4{font-size:11px;margin-bottom:7px}
+.handoff-mini ul{margin:0;padding-left:17px;font-size:9.8px;line-height:1.65;color:#5d6673}
+.handoff-mini.no-repeat{background:#fff6f6;border-color:#ffd6d6}
+.handoff-mini.no-repeat h4{color:#a30000}
+
+.governance{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px
+}
+.governance .gbox{padding:12px;border-radius:12px;border:1px solid var(--uao-line);background:#fafbfc}
+.governance b{display:block;font-size:10.8px;margin-bottom:4px}
+.governance span{font-size:9.8px;color:#727c89;line-height:1.45}
+
+@media(max-width:900px){
+  .stage-strip{grid-template-columns:repeat(3,1fr)}
+  .executive-grid,.sf-compare,.funnel-grid{grid-template-columns:1fr}
+  .governance{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .stage-strip{grid-template-columns:repeat(2,1fr)}
+  .handoff-checklist{grid-template-columns:1fr}
+  .sf-compare-row{grid-template-columns:110px 1fr}
+}
+
+
+/* =========================================================
+   V15 · UAO VISUAL PREMIUM · NIVEL MEDIO
+   Capa visual únicamente: no modifica lógica de negocio.
+   ========================================================= */
+
+:root{
+  --uao-red:#f50012;
+  --uao-red-dark:#b9000c;
+  --uao-red-deep:#8d0009;
+  --uao-red-soft:#fff1f2;
+  --uao-black:#101216;
+  --uao-ink:#20242d;
+  --uao-gray:#687383;
+  --uao-line:#e7e9ee;
+  --uao-bg:#f4f5f7;
+  --surface:#ffffff;
+  --surface-glass:rgba(255,255,255,.82);
+  --surface-dark:#16191f;
+  --shadow-soft:0 10px 30px rgba(20,24,34,.07);
+  --shadow-float:0 18px 46px rgba(20,24,34,.12);
+  --shadow-red:0 14px 34px rgba(245,0,18,.16);
+  --radius:20px;
+}
+
+body{
+  background:
+    radial-gradient(circle at 8% 2%, rgba(245,0,18,.055), transparent 28%),
+    radial-gradient(circle at 94% 18%, rgba(15,18,24,.045), transparent 24%),
+    linear-gradient(180deg,#f8f9fb 0%,#f4f5f7 55%,#f7f8fa 100%);
+  background-attachment:fixed;
+  position:relative;
+}
+
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background-image:
+    linear-gradient(rgba(16,18,22,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(16,18,22,.018) 1px,transparent 1px);
+  background-size:38px 38px;
+  mask-image:linear-gradient(to bottom,black 0%,transparent 70%);
+}
+
+.header{
+  background:
+    radial-gradient(circle at 16% -70%,rgba(255,255,255,.24),transparent 38%),
+    linear-gradient(112deg,#ff0016 0%,#e70012 54%,#b6000d 100%);
+  box-shadow:0 10px 30px rgba(164,0,12,.20);
+  border-bottom:1px solid rgba(255,255,255,.16);
+  backdrop-filter:blur(14px);
+}
+
+.header-main{padding-top:15px;padding-bottom:15px}
+
+.brand-title{
+  font-size:20.5px;
+  letter-spacing:-.35px;
+  text-shadow:0 1px 12px rgba(0,0,0,.10);
+}
+
+.brand-sub{opacity:.92;letter-spacing:.08px}
+
+.status-pill,.demo-pill,.presentation-launch{
+  background:rgba(255,255,255,.12);
+  border-color:rgba(255,255,255,.28);
+  backdrop-filter:blur(10px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.status-dot{
+  box-shadow:
+    0 0 0 4px rgba(37,211,102,.16),
+    0 0 14px rgba(37,211,102,.52);
+}
+
+.nav{
+  background:rgba(255,255,255,.91);
+  backdrop-filter:blur(16px);
+  box-shadow:0 8px 22px rgba(15,18,24,.05);
+}
+
+.nav button{
+  position:relative;
+  transition:color .2s ease,background .2s ease,transform .2s ease;
+}
+
+.nav button:hover{transform:translateY(-1px)}
+
+.nav button.active{
+  background:linear-gradient(180deg,#fff9f9,#fff3f4);
+  box-shadow:inset 0 -1px 0 rgba(245,0,18,.08);
+}
+
+.shell{padding-top:26px;padding-bottom:40px}
+
+.stage-strip{
+  padding:8px;
+  background:rgba(255,255,255,.72);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.82);
+  border-radius:18px;
+  box-shadow:var(--shadow-soft);
+}
+
+.stage-item{
+  border-color:#eceef2;
+  transition:.2s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+.stage-item:before{
+  content:"";
+  position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:transparent;
+}
+
+.stage-item.done:before{background:#12a150}
+.stage-item.current:before{background:var(--uao-red)}
+
+.stage-item.current{
+  box-shadow:0 8px 18px rgba(245,0,18,.08),inset 0 0 0 1px rgba(245,0,18,.08);
+}
+
+.hero{
+  gap:20px;
+  margin-bottom:20px;
+}
+
+.hero-main{
+  border-radius:28px;
+  padding:32px;
+  min-height:250px;
+  background:
+    linear-gradient(118deg,rgba(255,255,255,.035),transparent 42%),
+    radial-gradient(circle at 92% 12%,rgba(255,0,24,.32),transparent 30%),
+    linear-gradient(135deg,#111319 0%,#20242d 53%,#121419 100%);
+  box-shadow:0 24px 60px rgba(16,18,22,.18);
+  border:1px solid rgba(255,255,255,.05);
+}
+
+.hero-main:before{
+  content:"UAO";
+  position:absolute;
+  right:24px;bottom:-38px;
+  font-size:150px;font-weight:1000;letter-spacing:-12px;
+  color:rgba(255,255,255,.026);
+  pointer-events:none;
+}
+
+.hero-main:after{
+  width:390px;height:390px;right:-120px;top:-145px;
+  background:radial-gradient(circle,rgba(245,0,18,.50),rgba(245,0,18,0) 67%);
+  animation:uaoAmbient 7s ease-in-out infinite alternate;
+}
+
+@keyframes uaoAmbient{
+  from{transform:translate3d(-6px,-5px,0) scale(.96)}
+  to{transform:translate3d(10px,8px,0) scale(1.05)}
+}
+
+.eyebrow{
+  display:inline-flex;
+  padding:6px 9px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:999px;
+  background:rgba(255,255,255,.055);
+  color:#ffc4c8;
+}
+
+.hero-main h1{
+  font-size:34px;
+  letter-spacing:-1.1px;
+  max-width:860px;
+}
+
+.hero-main p{font-size:14.5px;color:#dfe3e9}
+
+.hero-actions .btn{
+  min-height:40px;
+  box-shadow:0 8px 24px rgba(0,0,0,.10);
+}
+
+.hero-side{
+  border-radius:28px;
+  border-color:rgba(222,225,231,.9);
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.86));
+  backdrop-filter:blur(12px);
+  box-shadow:var(--shadow-float);
+}
+
+.mini-step{
+  padding:9px;
+  border-radius:12px;
+  transition:.2s ease;
+}
+
+.mini-step:hover{background:#fafbfc;transform:translateX(2px)}
+
+.card,.live-card,.kpi,.calendar{
+  border-color:rgba(224,227,233,.95);
+  box-shadow:var(--shadow-soft);
+}
+
+.card{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(255,255,255,.94));
+}
+
+.card:after{
+  content:"";
+  position:absolute;
+  left:18px;right:18px;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent);
+  pointer-events:none;
+}
+
+.card:hover{
+  box-shadow:0 14px 36px rgba(20,24,34,.09);
+}
+
+.card-icon{
+  border:1px solid rgba(245,0,18,.08);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+}
+
+.scenario-card{
+  border-top:1px solid #eceef2;
+}
+
+.scenario-card:before{
+  width:5px;
+  box-shadow:4px 0 18px rgba(245,0,18,.08);
+}
+
+.flow-node{
+  background:linear-gradient(180deg,#fbfcfd,#f5f6f8);
+  border-color:#e7e9ed;
+  box-shadow:0 3px 10px rgba(18,22,30,.035);
+}
+
+.callout,.notice{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.68);
+}
+
+.kpi{
+  position:relative;
+  overflow:hidden;
+  transition:.22s ease;
+}
+
+.kpi:before{
+  content:"";
+  position:absolute;left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,var(--uao-red),#ff6b75);
+}
+
+.kpi:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-float);
+}
+
+.kpi .v{
+  font-size:30px;
+  letter-spacing:-1.1px;
+}
+
+.presentation-grid{gap:19px}
+
+.phone-shell{
+  padding:10px;
+  border-radius:34px;
+  background:
+    linear-gradient(145deg,#1d2026,#090a0d);
+  border:1px solid #2b2f36;
+  box-shadow:
+    0 30px 65px rgba(14,16,21,.28),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  position:relative;
+}
+
+.phone-shell:before{
+  content:"";
+  position:absolute;z-index:3;
+  top:7px;left:50%;transform:translateX(-50%);
+  width:82px;height:5px;border-radius:999px;
+  background:#020304;
+  box-shadow:0 1px 0 rgba(255,255,255,.08);
+}
+
+.phone{
+  border-radius:26px;
+  border:1px solid rgba(255,255,255,.03);
+}
+
+.wa-top{
+  background:
+    linear-gradient(120deg,#075e54,#0d6d61 62%,#07584f);
+  padding-top:14px;
+  box-shadow:0 5px 14px rgba(7,94,84,.18);
+}
+
+.uao-avatar{
+  box-shadow:0 0 0 2px rgba(255,255,255,.18);
+}
+
+.wa-wallpaper{
+  background-color:#eee9e1;
+  background-image:
+    radial-gradient(circle at 20% 20%,rgba(7,94,84,.035) 0 2px,transparent 2.6px),
+    radial-gradient(circle at 80% 60%,rgba(7,94,84,.028) 0 2px,transparent 2.6px),
+    linear-gradient(135deg,rgba(255,255,255,.24),transparent 45%);
+}
+
+.bubble{
+  box-shadow:0 2px 7px rgba(17,21,25,.075);
+}
+
+.msg.bot .bubble{border:1px solid rgba(0,0,0,.025)}
+.msg.user .bubble{background:linear-gradient(180deg,#dcf8c6,#d5f5be)}
+
+.quick button{
+  transition:.18s ease;
+  box-shadow:0 2px 7px rgba(7,94,84,.045);
+}
+
+.quick button:not(:disabled):hover{
+  transform:translateY(-1px);
+  border-color:#acdaca;
+  box-shadow:0 6px 12px rgba(7,94,84,.07);
+}
+
+.wa-menu{
+  background:rgba(246,246,246,.94);
+  backdrop-filter:blur(10px);
+}
+
+.wa-menu button{
+  box-shadow:0 2px 7px rgba(16,20,28,.04);
+}
+
+.wa-inputbar{
+  background:#f4f5f6;
+  box-shadow:0 -4px 14px rgba(20,24,30,.035);
+}
+
+.wa-inputbar input{
+  box-shadow:inset 0 0 0 1px #eceef0;
+}
+
+.send{
+  box-shadow:0 6px 14px rgba(37,211,102,.22);
+}
+
+.live-card{
+  background:rgba(255,255,255,.9);
+  backdrop-filter:blur(10px);
+  transition:.2s ease;
+}
+
+.live-card:hover{box-shadow:0 13px 28px rgba(20,24,34,.085)}
+
+.score-circle{
+  box-shadow:0 8px 20px rgba(245,0,18,.09);
+}
+
+.progress>span{
+  background:linear-gradient(90deg,#ff6b74,#f50012 65%,#bc000d);
+  box-shadow:0 0 12px rgba(245,0,18,.20);
+}
+
+.event-text{
+  border-left-color:#e7e9ed;
+}
+
+.sf-record{
+  background:
+    linear-gradient(180deg,rgba(247,251,255,.97),rgba(243,249,254,.92));
+  border-color:#cee3f4;
+  box-shadow:0 12px 26px rgba(11,143,217,.06);
+}
+
+.sf-row{
+  transition:.15s ease;
+}
+
+.sf-row:hover{
+  background:rgba(255,255,255,.56);
+  border-radius:6px;
+}
+
+.tree-node,.fb-block,.arch-node{
+  transition:.2s ease;
+}
+
+.tree-node:hover,.fb-block:hover,.arch-node:hover{
+  transform:translateY(-2px);
+  box-shadow:0 11px 25px rgba(20,24,34,.08);
+}
+
+.tree-node.active{
+  box-shadow:0 12px 30px rgba(245,0,18,.13);
+}
+
+.flow-canvas,.arch-lane{
+  background:
+    linear-gradient(180deg,rgba(250,251,252,.98),rgba(247,248,250,.95));
+}
+
+.arch-lane.paid{
+  box-shadow:inset 6px 0 20px rgba(36,120,255,.035);
+}
+
+.arch-lane.organic{
+  box-shadow:inset 6px 0 20px rgba(37,211,102,.035);
+}
+
+.arch-node.red{
+  background:linear-gradient(180deg,#fffafa,#fff3f4);
+}
+.arch-node.green{
+  background:linear-gradient(180deg,#f8fff9,#f0fff5);
+}
+.arch-node.blue{
+  background:linear-gradient(180deg,#f9fcff,#f0f8ff);
+}
+
+.calendar{
+  background:rgba(255,255,255,.93);
+  backdrop-filter:blur(10px);
+}
+
+.day{
+  transition:.16s ease;
+}
+
+.day:hover:not(.disabled){
+  transform:translateY(-1px);
+  box-shadow:0 5px 10px rgba(245,0,18,.06);
+}
+
+.slot{
+  transition:.18s ease;
+}
+
+.slot:hover:not(.full){
+  transform:translateY(-1px);
+  box-shadow:0 6px 13px rgba(245,0,18,.06);
+}
+
+.handoff-summary{
+  background:
+    linear-gradient(180deg,#fffafa,#fff6f7);
+  box-shadow:0 12px 28px rgba(245,0,18,.05);
+}
+
+.process-alert{
+  box-shadow:0 14px 34px rgba(17,22,28,.08);
+  backdrop-filter:blur(10px);
+}
+
+.presentation-dock{
+  background:
+    radial-gradient(circle at 95% 0%,rgba(245,0,18,.20),transparent 32%),
+    linear-gradient(155deg,#15181e,#0f1115);
+  box-shadow:0 24px 70px rgba(0,0,0,.35);
+  border-color:rgba(255,255,255,.10);
+}
+
+.executive-box,.sf-compare-card,.funnel-card,.handoff-mini,.gbox{
+  box-shadow:0 6px 18px rgba(17,21,27,.045);
+}
+
+.executive-box{
+  position:relative;
+  overflow:hidden;
+}
+
+.executive-box:before{
+  content:"";
+  position:absolute;left:0;top:0;width:4px;height:100%;
+  background:linear-gradient(180deg,var(--uao-red),rgba(245,0,18,.18));
+}
+
+.sf-compare-head.after{
+  background:linear-gradient(90deg,#effbf4,#f8fffb);
+}
+
+.funnel-track{
+  box-shadow:inset 0 1px 2px rgba(17,20,25,.04);
+}
+
+.funnel-fill{
+  position:relative;
+  overflow:hidden;
+}
+
+.funnel-fill:after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);
+  transform:translateX(-100%);
+  animation:funnelShine 5.5s ease-in-out infinite;
+}
+
+@keyframes funnelShine{
+  0%,70%{transform:translateX(-100%)}
+  88%,100%{transform:translateX(100%)}
+}
+
+.footer{
+  color:#7d8794;
+  border-top:1px solid rgba(222,225,231,.9);
+  padding-top:18px;
+}
+
+.tab.active{
+  animation:tabReveal .22s ease;
+}
+
+@keyframes tabReveal{
+  from{opacity:.3;transform:translateY(5px)}
+  to{opacity:1;transform:none}
+}
+
+@media(max-width:760px){
+  .hero-main{padding:24px}
+  .hero-main h1{font-size:27px}
+  .header{backdrop-filter:none}
+  .nav{backdrop-filter:none}
+  .phone-shell{border-radius:28px}
+  .stage-strip{padding:6px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-main">
+    <div class="brand">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIABAMAAAAGVsnJAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAGFBMVEVHcEz/AAD/AAD/AAD/AAD/AAD/AAD/AACWTGGnAAAAB3RSTlMAEy9UhcXtWBDe6AAACKxJREFUeNrt3U1X4soWxvFKwHlQOGNE4U5tVJz6BkzbF8j4KlDzezD19e/p07QL3ZVKhSzSZa//b/WotRbWk52dUCFBAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+BFHv5KTX2nn0cW/YO07UVxWfj2ez+Wo2e747VqW1fo5ezmb3w5aqU9Talvj9XIouUvPu7TaxjlZ5Djejs/fh9bmcbbtRn53Otj0pq/h0bj5YDH/OoTnb1s2b/tx8NLutrwqmZtuD+qxvtq3tMxhrbT5a3iX/BmC2ZGfK5mSszWer5+MvFMDRXFumcOcZwOk8M0K2Wn4LMoCFkhrzzFhkt14BnGpjlb19C7QC5PY3dm83xQFE7/OXRAJhBhBPTJ5ltzCAdmoEkUDQu0B0aXJlr0UBNObGZdENvwLaxiG7cQcQTY3baxJ6AEepcVm0nQGI6pGNNPAAoolxG7sCaGtT5O0syB7gP4WVCMDdPmUbCboCotR4kwH0vcZchxxA31QIIPZLb5GEG0CcVglgZPw8hNsDOqZCAA3f9JZJqBUQpVUC6HuPugk1gLapEECJ3WeRhBlANKkSQKfMsDB7QENXCCCaGn+vYVZA31QIoFR6b90gA0irBHBpyrgOMYCmqRBAyfReQ+wBA5NLFwbQLDc264ZTAe4utlrOflzeKAxgZB28ms9WK2sCN+EE4Opi2eyud9xq9c7HK3cAUWobfD/s9Xon93MjvYYXQMdId78u7LVOU0cA1vSyzeAkOhnbjgPB9YCRnMJjot4dpq4AZHrZbSKWGcXIkCpAFnH2JJY7c6cxkuEVLLQ+hBZAw3z2nIjFIhlAXnpPScFa0d+hBdCxXAPYKC7khlz+LlprfUsC6wGj4gNVnOYF0CkcLM+zz8KqgGjq8Za1IwOwp7dQxek9hBVAnHosXcYTEYBIL7fF98XqcFABNLQsAKkvA5DpycH2XwqpB8jFoEdlE2trAE2v89yROBUKqQL+EjOzGll/re01taYYG1IAV7I+/SfR9zrPj1LRZQIKIPVr0XEqApDpiZnZ329/D6oHaM/ynNp+byr2AJ/y+W9IFRD7nqb1bQGktpoqLJ//hRRA0/fdetMSQKTNluxFCdaTrXWgAbirM9YygIbsHz7HkLeQekDHd9E2mooAZFXYyFfJklAqQB7IuirXlZzsgdd6p0yqG1AAI++3qgMZQMdr15at9izQANzt6UAGMPBd6Yi02NFC6QET3zmopiMAcXRzHwa+B1IBMoAXla8hA7jyfp8fZgByzKMrAC0DENPy66AP4QQQiTG5YhnA1HvPHoiXCaQHxB/GZN9dAaSyArwD6ItCC7MCXAFEMoDp1w8g9p9DqyiAsz+gAq4DqICQe8CfXwFeAVSvgJdQe0BW8TD49SugZABX+mufB8gAXkqdCUZXfg1EnjSHdCpc4c2QmNZXDGBS5e3wyLd8InGw+YILIp0q6wFpsOsBo/JLYtVXhK4DqoCB9582LVwTTLzX1AMKoOO7sh3rKqvC4S6KHnhfGMkcAbjKR+5omdoDn9WdS9EDxBzWiedGPBNV4ToM1H1lSP45uSvADeNZnSNbuWsRqc+1wb/rCUBW85UlgEgbr0N0lFa8Olz/xdGFXyGmfk2gYSp8PuCvOj4mJrdw4t6ICzHIdSo0kAHI/33xqh5zXUMAoiBly1qLmTk2T5xaA+gYn32gLcbuyX/cV+CaxhbAgdetfW0T/KfEZADfxY9tATTk1KRoIn7LVlRm7VM960TtycD9iUzxeUUxh80w6UjbA4hSj/Q6td0z0nH2s4bYWtY5mOxbbgHImV6JJ4UUFoB5rCUAuUf2jb1cR6awC5zqvAAGxbdH9+u7dbBpn2LOll7n3jb6ILehDEC+pH0Hb+j6bpxrOopZznMhRolx4qPiIoBYl75jZK32RYa96IobN+QfEmv3c5/iseumqam8ZyxxD37ZYwD5N/Aczk3ulpgaYXmbbD1fzxVAX6b3lGzNX9fwKBXXvvrU3Wz/LD+AjpGyp+PNE9JS942TbW2E9wcIHk3qvXc2mhhhdn9+fjFOtREWaqOpjcXy+f4fc23cAcSpbez9ea/XuxindT9EYmSkbLVaGZu1PD5Ime+9w/Lm4ZyXfVR71DclrD/lJmkjyAA69p9nZmWsztQeNY3bPp4fEGlT9lVrOw66LUTzLBWAqJ8gnqWU7rYtRlUCaOty4/ZqsFsATV0+AFE/QTxO7GC3AKK0QgBqEM4eoGJdsgds9CsEUKbzLLtqv6Lpbv04TisEUKKFPKp9G+wWQNSvEkBTB/AYpfLluBbvo3bu5pNgCkBFk7I9YOOySgBNXWcBuHV2PCdrVHqm6GUYBSCPaP4BqH6FAPziWyeqDv0dA4jnxm3mCED19e98nKT3xtCWHuB7Srs8FQGU6z1PSqi7BJapqADxrJhcj01HAGLNUVp3VQ3cJzW3zgBUPHXuwCIA99VDudJcA3ctL1vuAFRj7mp6MgBHG6i3AYha1sbi7TpKCz7Q0s5LIHtUIgDHywqru0TVKJ5Y13mT6FMFSKebBORYEYA7ePl8tVrFc+s7cUcA4nsyxMPFouIA1KXOmb+qW2OizQfZoquU3AWkI7kQnj13fb9n6FSONtlyqOp3ONbyy46i8Ww2W/7695w3cv6pd9x11Q/N7cF5b+yPxlpcXzhWv0PrYi6+K0r1hsNh79e/YyXJr4vKnofJZr86Oen13scnyi7ajBbD6xedzvRm+q2y9XMx15vK+ZaocpLofXS23Dxc87eJT87Pz3erwMMfQ3s7Rv9z9LDL1zYCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA6/R+6rFYvQeyiXwAAAABJRU5ErkJggg==" alt="UAO - Universidad Autónoma de Occidente">
+      <div class="brand-divider"></div>
+      <div class="brand-copy">
+        <div class="brand-title">Sistema de Marketing y Automatización por WhatsApp</div>
+        <div class="brand-sub">Prototipo comercial · Pregrado · Posgrado · Educación Continua</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="presentation-launch" onclick="startPresentation()">🎬 Modo presentación</button>
+      <div class="demo-pill">● PROTOTIPO FUNCIONAL · VISUAL PREMIUM</div>
+      <div class="status-pill"><span class="status-dot"></span>Sistema activo</div>
+    </div>
+  </div>
+  <nav class="nav" id="mainNav">
+    <button class="active" data-tab="overview">⌘ Flujo general</button>
+    <button data-tab="simulator">💬 Simulador</button>
+    <button data-tab="visualflows">🧩 Flujos visuales</button>
+    <button data-tab="tree">⤴ Árbol de decisión</button>
+    <button data-tab="salesforce">☁ Salesforce</button>
+    <button data-tab="calendar">▣ Agendamiento</button>
+    <button data-tab="handoff">👤 Handoff</button>
+    <button data-tab="recovery">↻ Recuperación</button>
+    <button data-tab="kpis">▥ KPIs</button>
+    <button data-tab="architecture">⌁ Arquitectura y rutas</button>
+  </nav>
+</header>
+
+<main class="shell">
+<div class="stage-strip" id="commercialStageStrip">
+  <div class="stage-item" data-commercial-stage="capture"><b>1 · Captación</b><span>Origen del lead</span></div>
+  <div class="stage-item" data-commercial-stage="conversation"><b>2 · Conversación</b><span>Necesidad + valor</span></div>
+  <div class="stage-item" data-commercial-stage="qualification"><b>3 · Calificación</b><span>Score + intención</span></div>
+  <div class="stage-item" data-commercial-stage="crm"><b>4 · Salesforce</b><span>Registro enriquecido</span></div>
+  <div class="stage-item" data-commercial-stage="action"><b>5 · Acción</b><span>Agenda / asesor</span></div>
+  <div class="stage-item" data-commercial-stage="close"><b>6 · Cierre</b><span>Humano / seguimiento</span></div>
+</div>
+<div class="process-alert" id="globalProcessAlert">
+  <div class="process-alert-inner">
+    <div class="process-alert-main">
+      <div class="process-alert-icon" id="globalProcessIcon">✅</div>
+      <div>
+        <div class="process-alert-title" id="globalProcessTitle">Proceso automático completado</div>
+        <div class="process-alert-copy" id="globalProcessCopy">La automatización terminó y el caso requiere ejecución humana.</div>
+        <div class="process-alert-meta" id="globalProcessMeta"></div>
+        <div class="process-alert-actions" id="globalProcessActions">
+          <button onclick="openTab('salesforce')">☁ Ver en Salesforce</button>
+          <button id="globalProcessSecondary" onclick="openProcessSecondary()">👤 Ver gestión</button>
+        </div>
+      </div>
+    </div>
+    <span class="process-status" id="globalProcessStatus">Gestión humana</span>
+  </div>
+</div>
+
+<section class="tab active" id="tab-overview">
+  <div class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">UAO · Experiencia conversacional comercial</div>
+      <h1>De una conversación de WhatsApp a una siguiente mejor acción comercial.</h1>
+      <p>Demo interactiva para mostrar al equipo de Mercadeo cómo un asistente UAO puede atender, orientar, capturar o reconocer datos, calificar intención, actualizar Salesforce, agendar una llamada y transferir contexto al asesor.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="goDemo('organic')">▶ Probar lead orgánico</button>
+        <button class="btn btn-white" onclick="goDemo('paid')">⚡ Probar lead de pauta</button>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:15px;position:relative;z-index:1">
+        <span style="font-size:9.5px;font-weight:800;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.05);color:#dfe3e9">WhatsApp</span>
+        <span style="font-size:9.5px;font-weight:800;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.05);color:#dfe3e9">Salesforce CRM</span>
+        <span style="font-size:9.5px;font-weight:800;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.05);color:#dfe3e9">Marketing Cloud</span>
+        <span style="font-size:9.5px;font-weight:800;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.05);color:#dfe3e9">Automatización comercial</span>
+      </div>
+    </div>
+    <div class="hero-side">
+      <h3>Qué demuestra este prototipo</h3>
+      <div class="mini-flow">
+        <div class="mini-step"><div class="n">1</div><div><b>Entrada diferenciada</b><span>Orgánico captura datos; pauta reutiliza los datos que ya están en Salesforce.</span></div></div>
+        <div class="mini-step"><div class="n">2</div><div><b>Conversación comercial</b><span>Precios, becas, programa, modalidad, fechas, inscripción, asesor.</span></div></div>
+        <div class="mini-step"><div class="n">3</div><div><b>Scoring + trazabilidad</b><span>La intención cambia en vivo y cada evento queda simulado en el registro.</span></div></div>
+        <div class="mini-step"><div class="n">4</div><div><b>Conversión asistida</b><span>Agenda, transferencia humana, seguimiento o recuperación automática.</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="executive-grid">
+    <div class="executive-box"><div class="eicon">⚡</div><b>Qué automatiza</b><span>Primer contacto, orientación, captura progresiva, calificación, actualización CRM, agendamiento, recuperación y transferencia de contexto.</span></div>
+    <div class="executive-box"><div class="eicon">👤</div><b>Cuándo interviene una persona</b><span>Cuando el prospecto solicita asesor, confirma una cita o una regla comercial exige ejecución humana. El asesor recibe el contexto y no repite preguntas.</span></div>
+    <div class="executive-box"><div class="eicon">☁</div><b>Qué queda trazado</b><span>Origen, campaña, datos capturados, información consultada, observaciones, score, intención, cita, acción final y estado comercial.</span></div>
+  </div>
+
+  <div class="grid grid-2">
+    <article class="card scenario-card">
+      <div class="card-header">
+        <div class="card-title-wrap"><div class="card-icon">🌱</div><div><h3>Escenario A — Lead orgánico</h3><div class="sub">WhatsApp, web, redes, QR, referidos o canal propio sin formulario previo. El disparador es el inicio de la conversación por parte del usuario.</div></div></div>
+        <span class="badge badge-red">Captura progresiva</span>
+      </div>
+      <div class="flow-row">
+        <span class="flow-node">Bienvenida</span><span class="arrow">→</span>
+        <span class="flow-node">Línea / categoría</span><span class="arrow">→</span><span class="flow-node">Facultad / modalidad</span><span class="arrow">→</span>
+        <span class="flow-node">Entrega valor</span><span class="arrow">→</span>
+        <span class="flow-node">Datos faltantes</span><span class="arrow">→</span>
+        <span class="flow-node">Salesforce</span><span class="arrow">→</span>
+        <span class="flow-node">Score</span><span class="arrow">→</span>
+        <span class="flow-node">Agenda / asesor</span>
+      </div>
+      <div class="callout"><strong>Clave:</strong> la captura se hace de forma conversacional: nombre, apellido, documento, teléfono, correo y ciudad, sin convertir el chat en un formulario interminable.</div>
+    </article>
+
+    <article class="card scenario-card paid">
+      <div class="card-header">
+        <div class="card-title-wrap"><div class="card-icon" style="background:#eef5ff;color:#2478ff">📣</div><div><h3>Escenario B — Lead de pauta digital</h3><div class="sub">Meta Ads · Formulario instantáneo → Salesforce Marketing Cloud Lead Capture → Data Extension → Journey Builder → campaña en Salesforce CRM → WhatsApp.</div></div></div>
+        <span class="badge badge-blue">Datos precargados</span>
+      </div>
+      <div class="flow-row">
+        <span class="flow-node">Meta Instant Form</span><span class="arrow">→</span>
+        <span class="flow-node">Lead Capture</span><span class="arrow">→</span>
+        <span class="flow-node">Data Extension</span><span class="arrow">→</span>
+        <span class="flow-node">Journey Builder</span><span class="arrow">→</span>
+        <span class="flow-node">Campaña Salesforce</span><span class="arrow">→</span>
+        <span class="flow-node">WhatsApp</span><span class="arrow">→</span>
+        <span class="flow-node">Conversación</span>
+      </div>
+      <div class="callout" style="background:#f2f7ff;border-color:#d7e8ff;color:#24547d"><strong>Regla crítica:</strong> nunca volver a pedir información ya capturada en el formulario. El bot reutiliza nombre, programa, fuente, campaña, ciudad, correo y teléfono.<br><br><strong>Flujo técnico del disparador:</strong> el lead entra desde el formulario instantáneo de Meta a <strong>Salesforce Marketing Cloud Lead Capture</strong>; la información se almacena/actualiza en la <strong>Data Extension de la campaña</strong>; esa Data Extension alimenta un <strong>Journey Builder</strong> configurado con sus actividades/tareas; el registro queda asociado a la <strong>campaña correspondiente en Salesforce CRM</strong>; y desde ese proceso se dispara el primer WhatsApp usando el número celular del prospecto.</div>
+    </article>
+  </div>
+
+  <div class="section-label" style="margin-top:20px">Indicadores que se podrían monitorear</div>
+  <div class="grid grid-4">
+    <div class="kpi"><div class="v">248</div><div class="l">Leads recibidos</div><div class="t up">↑ 24% vs. periodo anterior</div></div>
+    <div class="kpi"><div class="v">&lt; 30 s</div><div class="l">Tiempo a primer contacto</div><div class="t up">Automatización inmediata</div></div>
+    <div class="kpi"><div class="v">132</div><div class="l">Leads calificados</div><div class="t up">Score conversacional</div></div>
+    <div class="kpi"><div class="v">76</div><div class="l">Citas agendadas</div><div class="t up">Demo / datos ficticios</div></div>
+  </div>
+</section>
+
+<section class="tab" id="tab-simulator">
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-header">
+      <div class="card-title-wrap"><div class="card-icon">💬</div><div><h2>Simulador conversacional</h2><div class="sub">Haz clic en las opciones o escribe libremente. El panel derecho muestra qué estaría pasando detrás del chat. Recuerda: orgánico se activa cuando el usuario inicia la conversación; pauta comienza con el formulario instantáneo de Meta y pasa por Lead Capture → Data Extension → Journey Builder → campaña Salesforce CRM antes de disparar WhatsApp.</div></div></div>
+      <span class="badge badge-dark">Datos simulados · anti-repetición · cierre controlado</span>
+    </div>
+    <div class="demo-toolbar">
+      <select id="scenarioSelect" onchange="startSelectedScenario()">
+        <option value="organic">Lead orgánico</option>
+        <option value="paid">Lead de pauta / formulario</option>
+      </select>
+      <select id="lineSelect" onchange="startSelectedScenario()">
+        <option value="pregrado">Pregrado</option>
+        <option value="posgrado" selected>Posgrado</option>
+        <option value="continua">Educación Continua</option>
+      </select>
+      <select id="timeModeSelect" onchange="setDemoTimeMode(this.value)" title="Permite demostrar reglas de horario sin depender de la hora real">
+        <option value="auto">Horario: automático</option>
+        <option value="office">Simular dentro de horario</option>
+        <option value="after">Simular después de 6:30 p. m.</option>
+      </select>
+      <span class="demo-mode-note" id="demoTimeStatus">🕒 Usa hora real</span>
+      <button class="btn btn-outline btn-sm" onclick="resetDemo()">↻ Reiniciar</button>
+      <button class="btn btn-outline btn-sm" onclick="openTab('visualflows')">🧩 Ver flujos</button>
+    </div>
+  </div>
+
+  <div class="presentation-grid">
+    <div>
+      <div class="phone-shell">
+        <div class="phone">
+          <div class="wa-top">
+            <div class="wa-person">
+              <div class="uao-avatar"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIABAMAAAAGVsnJAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAGFBMVEVHcEz/AAD/AAD/AAD/AAD/AAD/AAD/AACWTGGnAAAAB3RSTlMAEy9UhcXtWBDe6AAACKxJREFUeNrt3U1X4soWxvFKwHlQOGNE4U5tVJz6BkzbF8j4KlDzezD19e/p07QL3ZVKhSzSZa//b/WotRbWk52dUCFBAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+BFHv5KTX2nn0cW/YO07UVxWfj2ez+Wo2e747VqW1fo5ezmb3w5aqU9Talvj9XIouUvPu7TaxjlZ5Djejs/fh9bmcbbtRn53Otj0pq/h0bj5YDH/OoTnb1s2b/tx8NLutrwqmZtuD+qxvtq3tMxhrbT5a3iX/BmC2ZGfK5mSszWer5+MvFMDRXFumcOcZwOk8M0K2Wn4LMoCFkhrzzFhkt14BnGpjlb19C7QC5PY3dm83xQFE7/OXRAJhBhBPTJ5ltzCAdmoEkUDQu0B0aXJlr0UBNObGZdENvwLaxiG7cQcQTY3baxJ6AEepcVm0nQGI6pGNNPAAoolxG7sCaGtT5O0syB7gP4WVCMDdPmUbCboCotR4kwH0vcZchxxA31QIIPZLb5GEG0CcVglgZPw8hNsDOqZCAA3f9JZJqBUQpVUC6HuPugk1gLapEECJ3WeRhBlANKkSQKfMsDB7QENXCCCaGn+vYVZA31QIoFR6b90gA0irBHBpyrgOMYCmqRBAyfReQ+wBA5NLFwbQLDc264ZTAe4utlrOflzeKAxgZB28ms9WK2sCN+EE4Opi2eyud9xq9c7HK3cAUWobfD/s9Xon93MjvYYXQMdId78u7LVOU0cA1vSyzeAkOhnbjgPB9YCRnMJjot4dpq4AZHrZbSKWGcXIkCpAFnH2JJY7c6cxkuEVLLQ+hBZAw3z2nIjFIhlAXnpPScFa0d+hBdCxXAPYKC7khlz+LlprfUsC6wGj4gNVnOYF0CkcLM+zz8KqgGjq8Za1IwOwp7dQxek9hBVAnHosXcYTEYBIL7fF98XqcFABNLQsAKkvA5DpycH2XwqpB8jFoEdlE2trAE2v89yROBUKqQL+EjOzGll/re01taYYG1IAV7I+/SfR9zrPj1LRZQIKIPVr0XEqApDpiZnZ329/D6oHaM/ynNp+byr2AJ/y+W9IFRD7nqb1bQGktpoqLJ//hRRA0/fdetMSQKTNluxFCdaTrXWgAbirM9YygIbsHz7HkLeQekDHd9E2mooAZFXYyFfJklAqQB7IuirXlZzsgdd6p0yqG1AAI++3qgMZQMdr15at9izQANzt6UAGMPBd6Yi02NFC6QET3zmopiMAcXRzHwa+B1IBMoAXla8hA7jyfp8fZgByzKMrAC0DENPy66AP4QQQiTG5YhnA1HvPHoiXCaQHxB/GZN9dAaSyArwD6ItCC7MCXAFEMoDp1w8g9p9DqyiAsz+gAq4DqICQe8CfXwFeAVSvgJdQe0BW8TD49SugZABX+mufB8gAXkqdCUZXfg1EnjSHdCpc4c2QmNZXDGBS5e3wyLd8InGw+YILIp0q6wFpsOsBo/JLYtVXhK4DqoCB9582LVwTTLzX1AMKoOO7sh3rKqvC4S6KHnhfGMkcAbjKR+5omdoDn9WdS9EDxBzWiedGPBNV4ToM1H1lSP45uSvADeNZnSNbuWsRqc+1wb/rCUBW85UlgEgbr0N0lFa8Olz/xdGFXyGmfk2gYSp8PuCvOj4mJrdw4t6ICzHIdSo0kAHI/33xqh5zXUMAoiBly1qLmTk2T5xaA+gYn32gLcbuyX/cV+CaxhbAgdetfW0T/KfEZADfxY9tATTk1KRoIn7LVlRm7VM960TtycD9iUzxeUUxh80w6UjbA4hSj/Q6td0z0nH2s4bYWtY5mOxbbgHImV6JJ4UUFoB5rCUAuUf2jb1cR6awC5zqvAAGxbdH9+u7dbBpn2LOll7n3jb6ILehDEC+pH0Hb+j6bpxrOopZznMhRolx4qPiIoBYl75jZK32RYa96IobN+QfEmv3c5/iseumqam8ZyxxD37ZYwD5N/Aczk3ulpgaYXmbbD1fzxVAX6b3lGzNX9fwKBXXvvrU3Wz/LD+AjpGyp+PNE9JS942TbW2E9wcIHk3qvXc2mhhhdn9+fjFOtREWaqOpjcXy+f4fc23cAcSpbez9ea/XuxindT9EYmSkbLVaGZu1PD5Ime+9w/Lm4ZyXfVR71DclrD/lJmkjyAA69p9nZmWsztQeNY3bPp4fEGlT9lVrOw66LUTzLBWAqJ8gnqWU7rYtRlUCaOty4/ZqsFsATV0+AFE/QTxO7GC3AKK0QgBqEM4eoGJdsgds9CsEUKbzLLtqv6Lpbv04TisEUKKFPKp9G+wWQNSvEkBTB/AYpfLluBbvo3bu5pNgCkBFk7I9YOOySgBNXWcBuHV2PCdrVHqm6GUYBSCPaP4BqH6FAPziWyeqDv0dA4jnxm3mCED19e98nKT3xtCWHuB7Srs8FQGU6z1PSqi7BJapqADxrJhcj01HAGLNUVp3VQ3cJzW3zgBUPHXuwCIA99VDudJcA3ctL1vuAFRj7mp6MgBHG6i3AYha1sbi7TpKCz7Q0s5LIHtUIgDHywqru0TVKJ5Y13mT6FMFSKebBORYEYA7ePl8tVrFc+s7cUcA4nsyxMPFouIA1KXOmb+qW2OizQfZoquU3AWkI7kQnj13fb9n6FSONtlyqOp3ONbyy46i8Ww2W/7695w3cv6pd9x11Q/N7cF5b+yPxlpcXzhWv0PrYi6+K0r1hsNh79e/YyXJr4vKnofJZr86Oen13scnyi7ajBbD6xedzvRm+q2y9XMx15vK+ZaocpLofXS23Dxc87eJT87Pz3erwMMfQ3s7Rv9z9LDL1zYCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA6/R+6rFYvQeyiXwAAAABJRU5ErkJggg==" alt="UAO"></div>
+              <div><div class="wa-name">UAO · Asistente académico</div><div class="wa-status">en línea · respuesta automática</div></div>
+            </div>
+            <div class="wa-actions">⌕  ⋮</div>
+          </div>
+          <div class="wa-wallpaper" id="chat"></div>
+          <div class="wa-menu">
+            <button onclick="intentAction('menu')">🏠 Menú</button>
+            <button onclick="intentAction('price')">💰 Precios</button>
+            <button onclick="intentAction('scholarship')">🎓 Becas</button>
+            <button onclick="intentAction('program')">📚 Oferta</button>
+            <button onclick="intentAction('dates')">📆 Fechas</button>
+            <button onclick="intentAction('advisor')">📞 Asesor</button>
+            <button onclick="intentAction('schedule')">📅 Agendar</button>
+          </div>
+          <div class="wa-inputbar">
+            <span>☺</span>
+            <input id="chatInput" placeholder="Escribe un mensaje..." onkeydown="if(event.key==='Enter')sendFreeText()">
+            <button class="send" onclick="sendFreeText()">➤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="side-stack">
+      <div class="live-card">
+        <div class="card-header" style="margin-bottom:11px"><div><h3>Estado y calificación del lead</h3><div class="sub">Se actualiza con la conversación.</div></div><span id="intentBadge" class="badge badge-dark">Exploratorio</span></div>
+        <div class="score-wrap">
+          <div class="score-circle" id="scoreCircle"><span id="scoreNumber">0</span></div>
+          <div style="flex:1"><div style="display:flex;justify-content:space-between;font-size:10.5px;margin-bottom:6px"><b>Score comercial</b><span id="scoreLabel">0 / 100</span></div><div class="progress"><span id="scoreBar"></span></div><div class="sub" id="nextActionText" style="margin-top:8px">Siguiente acción: identificar interés.</div></div>
+        </div>
+      </div>
+
+      <div class="live-card">
+        <div class="card-header" style="margin-bottom:10px"><div><h3>Datos del contacto</h3><div class="sub">Campos reconocidos o capturados.</div></div><span class="badge badge-blue" id="originBadge">Orgánico</span></div>
+        <dl class="data-grid" id="leadData"></dl>
+      </div>
+
+      <div class="live-card">
+        <div class="card-header" style="margin-bottom:10px"><div><h3>Ruta del proceso</h3><div class="sub">Permite explicar qué ya ocurrió y qué falta.</div></div><span class="badge badge-dark">Journey</span></div>
+        <div class="journey-list" id="journeySteps"></div>
+      </div>
+
+      <div class="live-card">
+        <div class="card-header" style="margin-bottom:10px"><div><h3>Eventos del sistema</h3><div class="sub">Trazabilidad de la demo.</div></div><span class="badge badge-green">En vivo</span></div>
+        <div class="event-log" id="eventLog"></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+
+<section class="tab" id="tab-visualflows">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-wrap"><div class="card-icon">🧩</div><div><h2>Flujos visuales por origen del lead</h2><div class="sub">Vista tipo constructor de flujo, inspirada en herramientas visuales, para explicar las etapas, opciones y disparadores.</div></div></div>
+      <span class="badge badge-red">Orgánico ≠ Pauta</span>
+    </div>
+
+    <div class="flow-builder">
+      <div class="flow-canvas">
+        <div class="flow-title">
+          <div>
+            <h3 style="font-size:14px">Escenario A — Lead orgánico</h3>
+            <div class="sub">El mensaje se dispara cuando la persona inicia la conversación por WhatsApp, webchat, redes, QR o sitio web.</div>
+          </div>
+          <span class="badge badge-green">Trigger por inicio de conversación</span>
+        </div>
+
+        <div class="flow-map">
+          <div class="flow-row-block">
+            <div class="fb-block start">
+              <h4>1. Inicio</h4>
+              <p>La persona escribe primero o abre el canal y activa el flujo orgánico.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Hola</span><span class="fb-opt">Quiero información</span><span class="fb-opt">Vengo de QR</span>
+              </div>
+            </div>
+            <div class="fb-arrow">→</div>
+            <div class="fb-block bot">
+              <h4>2. Bienvenida UAO</h4>
+              <p>El asistente presenta las líneas académicas y comienza la identificación de necesidad.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Pregrado</span><span class="fb-opt">Posgrado</span><span class="fb-opt">Educación Continua</span>
+              </div>
+            </div>
+            <div class="fb-arrow">→</div>
+            <div class="fb-block bot">
+              <h4>3. Descubrimiento</h4>
+              <p>Según la línea: facultad o tipo de oferta; después modalidad y, si es orgánico, una observación opcional sobre el programa que mencione.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Facultad</span><span class="fb-opt">Modalidad</span><span class="fb-opt">Observación de programa</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-row-block">
+            <div class="fb-block bot">
+              <h4>4. Entrega de valor</h4>
+              <p>El usuario elige qué quiere conocer primero.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Precios</span><span class="fb-opt">Becas</span><span class="fb-opt">Oferta</span><span class="fb-opt">Fechas</span><span class="fb-opt">Asesor</span>
+              </div>
+            </div>
+            <div class="fb-arrow">→</div>
+            <div class="fb-block crm">
+              <h4>5. Captura del lead</h4>
+              <p>Si aún no existe registro suficiente, el bot captura datos faltantes de forma conversacional.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Nombre</span><span class="fb-opt">Documento</span><span class="fb-opt">Teléfono</span><span class="fb-opt">Correo</span>
+              </div>
+            </div>
+            <div class="fb-arrow">→</div>
+            <div class="fb-block crm">
+              <h4>6. Salesforce</h4>
+              <p>Búsqueda de duplicados y creación/actualización del lead, con resumen e intención.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Deduplicar</span><span class="fb-opt">Guardar</span><span class="fb-opt">Actualizar estado</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-row-block">
+            <div class="fb-block bot">
+              <h4>7. Calificación</h4>
+              <p>La conversación suma score y define la siguiente mejor acción comercial.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Exploratorio</span><span class="fb-opt">Media intención</span><span class="fb-opt">Alta intención</span>
+              </div>
+            </div>
+            <div class="fb-arrow">→</div>
+            <div class="fb-block handoff">
+              <h4>8. Siguiente paso</h4>
+              <p>El agendamiento ocurre dentro del mismo chat: 4 horarios máximos y una quinta salida directa a asesor si ninguno funciona.</p>
+              <div class="fb-options">
+                <span class="fb-opt">9:00 a. m.</span><span class="fb-opt">11:00 a. m.</span><span class="fb-opt">2:00 p. m.</span><span class="fb-opt">4:00 p. m.</span><span class="fb-opt">Asesor</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fb-note"><strong>Disparador del orgánico:</strong> el flujo arranca desde el momento en que el usuario inicia la conversación. No requiere que exista previamente un registro completo en Salesforce; el sistema va capturando o completando la información durante el diálogo.<br><br><strong>Regla CRM:</strong> si el prospecto menciona el nombre de un programa durante esta etapa exploratoria, se registra como <strong>Observación</strong> en Salesforce y no como <strong>Programa de preferencia</strong>.</div>
+      </div>
+
+      <div class="flow-canvas">
+        <div class="flow-title">
+          <div>
+            <h3 style="font-size:14px">Escenario B — Lead de pauta / formulario instantáneo</h3>
+            <div class="sub">El contacto comienza en Meta Ads, pasa por la arquitectura de Marketing Cloud y Salesforce CRM, y solo después se inicia la conversación por WhatsApp.</div>
+          </div>
+          <span class="badge badge-blue">Trigger por Journey</span>
+        </div>
+
+        <div class="flow-map">
+          <div class="flow-row-block">
+            <div class="fb-block start">
+              <h4>1. Meta Ads · Formulario instantáneo</h4>
+              <p>El prospecto diligencia el formulario de la campaña. Aquí se capturan los campos definidos para la estrategia.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Nombre</span><span class="fb-opt">Celular</span><span class="fb-opt">Correo</span><span class="fb-opt">Programa</span>
+              </div>
+            </div>
+            <div class="fb-arrow">→</div>
+
+            <div class="fb-block crm">
+              <h4>2. Marketing Cloud · Lead Capture</h4>
+              <p>La conexión de Meta Ads recibe cada lead capturado y lo incorpora al flujo de Marketing Cloud.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Lead Capture</span><span class="fb-opt">Campaign mapping</span>
+              </div>
+            </div>
+            <div class="fb-arrow">→</div>
+
+            <div class="fb-block crm">
+              <h4>3. Data Extension de campaña</h4>
+              <p>Los datos del formulario se alojan o actualizan en la Data Extension configurada específicamente para esa campaña.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Subscriber / Contact Key</span><span class="fb-opt">Celular</span><span class="fb-opt">Fuente</span><span class="fb-opt">Campaña</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-row-block">
+            <div class="fb-block trigger">
+              <h4>4. Journey Builder</h4>
+              <p>La Data Extension funciona como fuente de entrada del Journey. El Journey contiene las actividades y tareas necesarias para procesar el lead.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Entry Source</span><span class="fb-opt">Validaciones</span><span class="fb-opt">Tareas</span><span class="fb-opt">Automatización</span>
+              </div>
+            </div>
+            <div class="fb-arrow">→</div>
+
+            <div class="fb-block crm">
+              <h4>5. Campaña en Salesforce CRM</h4>
+              <p>La información del lead se registra/asocia a la campaña correspondiente en Salesforce para mantener trazabilidad comercial.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Lead / Contacto</span><span class="fb-opt">Campaign Member</span><span class="fb-opt">Estado</span>
+              </div>
+            </div>
+            <div class="fb-arrow">→</div>
+
+            <div class="fb-block trigger">
+              <h4>6. Actividad de salida a WhatsApp</h4>
+              <p>El Journey utiliza el número celular capturado para ejecutar el mensaje de primer contacto por el canal de WhatsApp configurado.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Celular</span><span class="fb-opt">Plantilla / mensaje</span><span class="fb-opt">Trigger</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-row-block">
+            <div class="fb-block bot">
+              <h4>7. Inicia conversación UAO</h4>
+              <p>El asistente saluda de forma personalizada usando los datos ya capturados. No vuelve a pedir la misma información.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Valor</span><span class="fb-opt">Becas</span><span class="fb-opt">Plan</span><span class="fb-opt">Inicio</span>
+              </div>
+            </div>
+            <div class="fb-arrow">→</div>
+
+            <div class="fb-block handoff">
+              <h4>8. Resultado comercial</h4>
+              <p>La conversación actualiza Salesforce y puede finalizar en agendamiento, asesor, seguimiento o proceso de inscripción.</p>
+              <div class="fb-options">
+                <span class="fb-opt">Score</span><span class="fb-opt">Agenda</span><span class="fb-opt">Asesor</span><span class="fb-opt">Seguimiento</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fb-note"><strong>Disparador real del lead de pauta:</strong> no se considera que el proceso empiece simplemente “cuando aparece un lead en Salesforce”. Primero el formulario instantáneo de Meta alimenta <strong>Marketing Cloud Lead Capture</strong>; la información entra a la <strong>Data Extension de la campaña</strong>; esa Data Extension activa el <strong>Journey Builder</strong>; el Journey procesa las actividades/tareas, mantiene la asociación con la <strong>campaña de Salesforce CRM</strong> y utiliza el celular del prospecto para iniciar el contacto por WhatsApp. A partir de la respuesta del prospecto comienza el flujo conversacional desarrollado en este prototipo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="tab-tree">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-wrap"><div class="card-icon">⤴</div><div><h2>Árbol de decisiones general</h2><div class="sub">Representación de la ruta comercial desde la entrada hasta conversión.</div></div></div>
+      <span class="badge badge-red">El nodo activo sigue la demo</span>
+    </div>
+    <div class="tree-wrap">
+      <div class="tree" id="treeDiagram">
+        <div class="tree-node" data-stage="entry">🚪<strong>Entrada</strong><span>WhatsApp / web / redes / pauta</span></div>
+        <div class="tree-arrow">→</div>
+        <div class="tree-node" data-stage="origin">🧭<strong>Origen</strong><span>Orgánico vs. pauta digital</span></div>
+        <div class="tree-arrow">→</div>
+        <div class="tree-node" data-stage="identify">🎓<strong>Identificación</strong><span>Línea → tipo/nivel → facultad → modalidad → observación de programa (orgánico)</span></div>
+        <div class="tree-arrow">→</div>
+        <div class="tree-node" data-stage="value">💡<strong>Información</strong><span>Precio, becas, plan, fechas, requisitos</span></div>
+        <div class="tree-arrow">→</div>
+        <div class="tree-node" data-stage="capture">🪪<strong>Datos</strong><span>Capturar faltantes / reutilizar Salesforce</span></div>
+        <div class="tree-arrow">→</div>
+        <div class="tree-node" data-stage="score">🎯<strong>Calificación</strong><span>Alta · media · exploratoria</span></div>
+        <div class="tree-arrow">→</div>
+        <div class="tree-node" data-stage="crm">☁<strong>Salesforce</strong><span>Crear / actualizar / deduplicar</span></div>
+        <div class="tree-arrow">→</div>
+        <div class="branch-box">
+          <div class="branch">📅 Agenda</div>
+          <div class="branch">👤 Asesor</div>
+          <div class="branch">↻ Nurturing</div>
+        </div>
+        <div class="tree-arrow">→</div>
+        <div class="tree-node" data-stage="conversion">✓<strong>Conversión</strong><span>Inscripción / matrícula / cierre</span></div>
+      </div>
+    </div>
+    <div class="notice red" style="margin-top:14px"><strong>Principio de diseño:</strong> el usuario no debe sentir que llena un formulario. La tecnología debe recordar lo que ya sabe y pedir únicamente lo que falte.<br><br><strong>Agendamiento:</strong> debe resolverse dentro del chat con máximo 5 opciones visibles: 4 franjas horarias y una opción final de contacto con asesor si ninguna hora le funciona. <strong>Desde las 6:30 p. m.</strong> esa salida no transfiere directamente: se convierte en agendamiento/seguimiento para la siguiente jornada.</div>
+  </div>
+
+  <div class="grid grid-3" style="margin-top:16px">
+    <div class="card"><h3>Pregrado</h3><div class="sub" style="margin-top:8px;line-height:1.7">Facultad → modalidad → observación sobre programa mencionado (opcional en orgánico) → información → captura / Salesforce → score → agenda / asesor.</div></div>
+    <div class="card"><h3>Posgrado</h3><div class="sub" style="margin-top:8px;line-height:1.7">Especializaciones / Maestrías / Doctorados → facultad → modalidad → observación sobre programa mencionado (opcional en orgánico) → información → agenda / asesor.</div></div>
+    <div class="card"><h3>Educación Continua</h3><div class="sub" style="margin-top:8px;line-height:1.7">Microcredenciales / Diplomados / Cursos / Seminarios → facultad → modalidad → observación sobre programa mencionado (opcional en orgánico) → información → pago / asesor.</div></div>
+  </div>
+</section>
+
+<section class="tab" id="tab-salesforce">
+  <div class="process-alert" id="sfProcessAlert" style="margin-bottom:16px">
+    <div class="process-alert-inner">
+      <div class="process-alert-main">
+        <div class="process-alert-icon" id="sfProcessIcon">✅</div>
+        <div>
+          <div class="process-alert-title" id="sfProcessTitle">Estado de automatización</div>
+          <div class="process-alert-copy" id="sfProcessCopy">La información aparecerá cuando el prospecto complete una acción final.</div>
+          <div class="process-alert-meta" id="sfProcessMeta"></div>
+        </div>
+      </div>
+      <span class="process-status" id="sfProcessStatus">En proceso</span>
+    </div>
+  </div>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-header"><div class="card-title-wrap"><div class="card-icon" style="color:var(--sf);background:#eef8ff">☁</div><div><h2>Salesforce · Registro simulado</h2><div class="sub">Vista conceptual de los datos que el chat consultaría y actualizaría.</div></div></div><span class="badge badge-blue">MOCK</span></div>
+      <div class="sf-record">
+        <div class="sf-head"><span class="sf-cloud">☁</span><div><div class="sf-title">Lead / contacto UAO</div><div class="sub" id="sfRecordId">Registro temporal</div></div></div>
+        <div id="sfFields"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title-wrap"><div class="card-icon">⚡</div><div><h2>Eventos CRM simulados</h2><div class="sub">Ejemplo de lo que quedaría registrado detrás de la conversación.</div></div></div></div>
+      <div class="event-log" id="sfEventLog" style="max-height:510px"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-header">
+      <div class="card-title-wrap"><div class="card-icon">◫</div><div><h2>Salesforce · Antes vs. después de la conversación</h2><div class="sub">Visualiza el enriquecimiento que aporta la automatización al registro comercial.</div></div></div>
+      <span class="badge badge-green">Valor agregado al CRM</span>
+    </div>
+    <div class="sf-compare">
+      <div class="sf-compare-card">
+        <div class="sf-compare-head">ANTES · al entrar al ecosistema</div>
+        <div class="sf-compare-list" id="sfBefore"></div>
+      </div>
+      <div class="sf-compare-card">
+        <div class="sf-compare-head after">DESPUÉS · conversación y siguiente acción</div>
+        <div class="sf-compare-list" id="sfAfter"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-header"><div class="card-title-wrap"><div class="card-icon">⇄</div><div><h2>Sincronización por origen del lead</h2><div class="sub">La escritura y lectura se mantienen, pero el punto de entrada no es el mismo para pauta y orgánico.</div></div></div></div>
+    <div class="sf-panel">
+      <div class="notice blue"><strong>Lead de pauta:</strong><br>Meta Instant Form → Marketing Cloud Lead Capture → Data Extension → Journey Builder → campaña/Campaign Member en Salesforce CRM → disparo de WhatsApp. El chat reutiliza la información capturada y no la vuelve a solicitar.</div>
+      <div class="notice green"><strong>Lead orgánico:</strong><br>el prospecto encuentra el número o enlace de WhatsApp en Instagram, Facebook, sitio web UAO, notas web, medios aliados, piezas, QR, referidos u otros puntos de contacto y <strong>él mismo inicia la conversación</strong>. Luego el bot identifica la necesidad y captura únicamente los datos faltantes → Salesforce crea/actualiza Lead o Contacto → Marketing Cloud puede intervenir posteriormente en seguimiento, nurturing o journeys. La observación del programa se conserva como <strong>Observación</strong>, no como Programa de preferencia.</div>
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="tab-calendar">
+  <div class="calendar-wrap">
+    <div class="calendar">
+      <div class="card-header"><div class="card-title-wrap"><div class="card-icon">▣</div><div><h2>Agendamiento simulado</h2><div class="sub">Vista complementaria. En el flujo principal, el usuario agenda dentro del mismo chat con 4 horarios y una quinta opción para solicitar asesor directo.</div></div></div></div>
+      <div class="cal-head">
+        <button class="icon-btn" onclick="changeMonth(-1)">‹</button>
+        <b id="monthLabel"></b>
+        <button class="icon-btn" onclick="changeMonth(1)">›</button>
+      </div>
+      <div class="cal-week"><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div></div>
+      <div class="cal-grid" id="calendarGrid"></div>
+      <div class="section-label" style="margin-top:16px">Horarios disponibles</div>
+      <div class="slots" id="timeSlots"></div>
+      <button class="btn btn-primary" id="confirmSchedule" style="width:100%;margin-top:14px" onclick="confirmAppointment()" disabled>Confirmar cita</button>
+    </div>
+
+    <div class="side-stack">
+      <div class="card">
+        <div class="card-header"><div class="card-title-wrap"><div class="card-icon">📞</div><div><h3>Opciones de contacto</h3><div class="sub">El prospecto puede elegir el camino que prefiera.</div></div></div></div>
+        <div class="grid" style="gap:9px">
+          <button class="btn btn-outline" style="justify-content:flex-start" onclick="simulateImmediateContact()">⚡ Contacto inmediato</button>
+          <button class="btn btn-outline" style="justify-content:flex-start" onclick="toast('Selecciona fecha y hora en el calendario.')">📅 Agendar llamada</button>
+          <button class="btn btn-outline" style="justify-content:flex-start" onclick="openTab('simulator')">💬 Continuar por WhatsApp</button>
+        </div>
+      </div>
+      <div class="notice red"><strong>Regla operativa de horario:</strong> desde las <strong>6:30 p. m.</strong> no se realiza transferencia directa a un asesor. El bot debe convertir la solicitud en <strong>agendamiento</strong> para la siguiente jornada disponible y dejar el registro en Salesforce.</div>
+      <div class="notice green" id="appointmentSummary"><strong>Estado:</strong> todavía no hay una cita seleccionada.</div>
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="tab-handoff">
+  <div class="process-alert manual" id="handoffProcessAlert" style="margin-bottom:16px">
+    <div class="process-alert-inner">
+      <div class="process-alert-main">
+        <div class="process-alert-icon">👤</div>
+        <div>
+          <div class="process-alert-title">Ejecución humana / manual</div>
+          <div class="process-alert-copy" id="handoffProcessCopy">Cuando el prospecto solicite asesor, aquí aparecerá la instrucción operativa para el equipo.</div>
+          <div class="process-alert-meta" id="handoffProcessMeta"></div>
+        </div>
+      </div>
+      <span class="process-status" id="handoffProcessStatus">Pendiente</span>
+    </div>
+  </div>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-header"><div class="card-title-wrap"><div class="card-icon">👤</div><div><h2>Tarjeta para el asesor</h2><div class="sub">El asesor recibe contexto y no tiene que volver a empezar.</div></div></div><span class="badge badge-red" id="handoffBadge">Exploratorio</span></div>
+      <div class="handoff-summary" id="handoffSummary"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="handoffActionBtn" onclick="transferToAdvisor()">➤ Transferir a asesor</button>
+        <button class="btn btn-wa" onclick="openTab('simulator')">💬 Volver al chat</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title-wrap"><div class="card-icon">⚙</div><div><h2>Reglas de traspaso</h2><div class="sub">Cuándo debe intervenir una persona.</div></div></div></div>
+      <div class="timeline">
+        <div class="tline"><div class="when">AUTO</div><div class="copy"><strong>Traspaso automático:</strong> alta intención, solicitud explícita de asesor, negociación, consulta compleja o error que requiere revisión.</div></div>
+        <div class="tline"><div class="when">CTX</div><div class="copy"><strong>Resumen:</strong> datos capturados + origen + campaña + programa + preguntas + score + próxima acción.</div></div>
+        <div class="tline"><div class="when">SLA</div><div class="copy"><strong>Priorización:</strong> alta intención primero; media a siguiente disponible; exploratoria puede seguir en nurturing.</div></div>
+        <div class="tline"><div class="when">OFF</div><div class="copy"><strong>Sin asesor disponible:</strong> informar, agendar o crear tarea de seguimiento sin dejar al prospecto bloqueado.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-header">
+      <div class="card-title-wrap"><div class="card-icon">✓</div><div><h3>Entrega operacional al asesor</h3><div class="sub">El objetivo es que la gestión humana continúe desde donde terminó la automatización.</div></div></div>
+      <span class="badge badge-red">Sin repetir preguntas</span>
+    </div>
+    <div class="handoff-checklist">
+      <div class="handoff-mini">
+        <h4>El asesor recibe</h4>
+        <ul id="advisorReceives">
+          <li>Datos de contacto disponibles</li>
+          <li>Origen y campaña</li>
+          <li>Necesidad académica</li>
+          <li>Información consultada</li>
+          <li>Score y nivel de intención</li>
+          <li>Observaciones y acción pendiente</li>
+        </ul>
+      </div>
+      <div class="handoff-mini no-repeat">
+        <h4>El asesor NO debe volver a preguntar</h4>
+        <ul id="advisorNoRepeat">
+          <li>Datos que ya estén completos en Salesforce</li>
+          <li>Programa mencionado u observación ya registrada</li>
+          <li>Información que el bot ya explicó</li>
+          <li>Si ya solicitó asesor o agendó una cita</li>
+          <li>Origen/campaña ya trazados</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="tab-recovery">
+  <div class="grid grid-3">
+    <div class="card">
+      <div class="card-header"><div class="card-title-wrap"><div class="card-icon">↻</div><div><h3>Sin respuesta</h3><div class="sub">Secuencia configurable y no invasiva.</div></div></div></div>
+      <div class="timeline">
+        <div class="tline"><div class="when">1 h</div><div class="copy">Recordatorio suave sobre el programa consultado.</div></div>
+        <div class="tline"><div class="when">24 h</div><div class="copy">Contenido de valor o respuesta a la duda principal.</div></div>
+        <div class="tline"><div class="when">72 h</div><div class="copy">Invitación a resolver dudas o agendar asesoría.</div></div>
+        <div class="tline"><div class="when">7 d</div><div class="copy">Cierre respetuoso del ciclo y opción de recibir futuras novedades.</div></div>
+      </div>
+      <button class="btn btn-outline btn-sm" style="width:100%;margin-top:14px" onclick="simulateRecovery('Sin respuesta · seguimiento 24 h')">Simular seguimiento 24 h</button>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title-wrap"><div class="card-icon">📄</div><div><h3>Pidió información</h3><div class="sub">Retomar interés sin repetir lo ya conversado.</div></div></div></div>
+      <div class="timeline">
+        <div class="tline"><div class="when">4 h</div><div class="copy">“¿Pude resolver tus dudas sobre el programa?”</div></div>
+        <div class="tline"><div class="when">48 h</div><div class="copy">Invitación a charla, open house o sesión informativa.</div></div>
+        <div class="tline"><div class="when">5 d</div><div class="copy">Contenido de valor, historia o diferenciador del programa.</div></div>
+      </div>
+      <button class="btn btn-outline btn-sm" style="width:100%;margin-top:14px" onclick="simulateRecovery('Información enviada · seguimiento 48 h')">Simular seguimiento</button>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title-wrap"><div class="card-icon">▣</div><div><h3>Cita agendada</h3><div class="sub">Reducir ausencias y facilitar reagendamiento.</div></div></div></div>
+      <div class="timeline">
+        <div class="tline"><div class="when">-24 h</div><div class="copy">Confirmar cita y ofrecer opción de reagendar.</div></div>
+        <div class="tline"><div class="when">-30 m</div><div class="copy">Recordatorio puntual con hora y asesor.</div></div>
+        <div class="tline"><div class="when">+2 h</div><div class="copy">Seguimiento posterior y próximos pasos.</div></div>
+      </div>
+      <button class="btn btn-outline btn-sm" style="width:100%;margin-top:14px" onclick="simulateRecovery('Recordatorio de cita · -30 min')">Simular recordatorio</button>
+    </div>
+  </div>
+  <div class="notice red" style="margin-top:16px"><strong>Regla de detención:</strong> parar automatizaciones cuando la persona responda, pida no recibir más mensajes, ya esté matriculada, haya sido cerrada comercialmente o esté siendo atendida por un asesor.</div>
+</section>
+
+<section class="tab" id="tab-kpis">
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-header">
+      <div class="card-title-wrap"><div class="card-icon">▽</div><div><h2>Embudo por origen del lead</h2><div class="sub">Ejemplo de cómo deberían medirse pauta y orgánico sin mezclar sus puntos de entrada.</div></div></div>
+      <span class="badge badge-dark">DATOS FICTICIOS · DEMO</span>
+    </div>
+    <div class="funnel-grid">
+      <div class="funnel-card paid">
+        <h3>📣 Pauta / formulario</h3>
+        <div class="sub">Comienza en la captura del formulario y mide el contacto automático.</div>
+        <div class="funnel">
+          <div class="funnel-row"><label>Leads capturados</label><div class="funnel-track"><div class="funnel-fill" style="width:100%"></div></div><strong>1.000</strong></div>
+          <div class="funnel-row"><label>WhatsApp enviados</label><div class="funnel-track"><div class="funnel-fill" style="width:96%"></div></div><strong>960</strong></div>
+          <div class="funnel-row"><label>Respondieron</label><div class="funnel-track"><div class="funnel-fill" style="width:61%"></div></div><strong>610</strong></div>
+          <div class="funnel-row"><label>Calificados</label><div class="funnel-track"><div class="funnel-fill" style="width:39%"></div></div><strong>390</strong></div>
+          <div class="funnel-row"><label>Citas / asesor</label><div class="funnel-track"><div class="funnel-fill" style="width:24%"></div></div><strong>240</strong></div>
+          <div class="funnel-row"><label>Conversión</label><div class="funnel-track"><div class="funnel-fill" style="width:8%"></div></div><strong>80</strong></div>
+        </div>
+      </div>
+      <div class="funnel-card organic">
+        <h3>🌱 Orgánico / conversación</h3>
+        <div class="sub">Comienza cuando la persona inicia WhatsApp y mide la captura progresiva.</div>
+        <div class="funnel">
+          <div class="funnel-row"><label>Conversaciones</label><div class="funnel-track"><div class="funnel-fill" style="width:100%"></div></div><strong>700</strong></div>
+          <div class="funnel-row"><label>Datos capturados</label><div class="funnel-track"><div class="funnel-fill" style="width:78%"></div></div><strong>546</strong></div>
+          <div class="funnel-row"><label>Leads en CRM</label><div class="funnel-track"><div class="funnel-fill" style="width:72%"></div></div><strong>504</strong></div>
+          <div class="funnel-row"><label>Calificados</label><div class="funnel-track"><div class="funnel-fill" style="width:48%"></div></div><strong>336</strong></div>
+          <div class="funnel-row"><label>Citas / asesor</label><div class="funnel-track"><div class="funnel-fill" style="width:29%"></div></div><strong>203</strong></div>
+          <div class="funnel-row"><label>Conversión</label><div class="funnel-track"><div class="funnel-fill" style="width:10%"></div></div><strong>70</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-header"><div class="card-title-wrap"><div class="card-icon">▥</div><div><h2>Indicadores del sistema</h2><div class="sub">Valores ficticios para mostrar cómo se visualizaría el desempeño por línea.</div></div></div><span class="badge badge-dark">DEMO</span></div>
+    <div class="filters" id="kpiFilters">
+      <button class="active" onclick="setKpiLine('all',this)">General</button>
+      <button onclick="setKpiLine('pregrado',this)">Pregrado</button>
+      <button onclick="setKpiLine('posgrado',this)">Posgrado</button>
+      <button onclick="setKpiLine('continua',this)">Educación Continua</button>
+    </div>
+    <div class="grid grid-4" id="kpiCards"></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title-wrap"><div class="card-icon">↗</div><div><h3>Rendimiento de demostración</h3><div class="sub">Ejemplo de lectura por fuente / campaña.</div></div></div></div>
+    <div style="overflow:auto">
+      <table class="table">
+        <thead><tr><th>Fuente</th><th>Leads</th><th>Respuesta</th><th>Alta intención</th><th>Citas</th><th>Conversión</th></tr></thead>
+        <tbody id="kpiTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="tab-architecture">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-wrap">
+        <div class="card-icon">⌁</div>
+        <div>
+          <h2>Arquitectura diferenciada por tipo de lead</h2>
+          <div class="sub">La infraestructura de WhatsApp, Marketing Cloud y Salesforce puede ser compartida, pero el proceso de captación y la forma en que inicia la operación son diferentes para un lead de pauta y un lead orgánico.</div>
+        </div>
+      </div>
+      <span class="badge badge-red">Dos rutas · un mismo ecosistema</span>
+    </div>
+
+    <div class="architecture-lanes">
+
+      <!-- PAUTA -->
+      <div class="arch-lane paid">
+        <div class="arch-lane-head">
+          <div>
+            <h3>Ruta A — Lead de pauta / formulario instantáneo de Meta</h3>
+            <p>El prospecto todavía no inicia una conversación. Primero entrega sus datos en el formulario de Meta y la automatización prepara el contacto por WhatsApp.</p>
+          </div>
+          <span class="badge badge-blue">Captación automática</span>
+        </div>
+
+        <div class="arch-flow">
+          <div class="arch-node red"><i>📣</i><b>Meta Ads</b><span>Campaña + formulario instantáneo</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node blue"><i>📥</i><b>Marketing Cloud Lead Capture</b><span>Recibe cada lead capturado desde Meta</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node blue"><i>🗃</i><b>Data Extension de campaña</b><span>Guarda/actualiza la información del formulario</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node red"><i>⚡</i><b>Journey Builder</b><span>Entry Source + actividades + tareas</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node blue"><i>☁</i><b>Campaña Salesforce CRM</b><span>Lead/Contacto + Campaign Member + trazabilidad</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node green"><i>💬</i><b>WhatsApp</b><span>El Journey dispara el primer mensaje usando el celular capturado</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node red"><i>🤖</i><b>Conversación UAO</b><span>No repite datos ya capturados; resuelve, califica y conduce</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node"><i>📅</i><b>Resultado comercial</b><span>Agenda · asesor · seguimiento · inscripción</span></div>
+        </div>
+
+        <div class="notice blue" style="margin-top:10px">
+          <strong>Qué caracteriza esta ruta:</strong> la captación ocurre <strong>antes</strong> de la conversación. El lead entra por Meta, pasa por Lead Capture, Data Extension y Journey Builder; luego se asocia a la campaña en Salesforce CRM y desde allí se ejecuta el primer contacto por WhatsApp.
+        </div>
+      </div>
+
+      <!-- ORGANICO -->
+      <div class="arch-lane organic">
+        <div class="arch-lane-head">
+          <div>
+            <h3>Ruta B — Lead orgánico / conversación iniciada por el prospecto</h3>
+            <p>El prospecto es quien abre la conversación. No existe un formulario de Meta previo ni una Data Extension de campaña como condición para iniciar el contacto.</p>
+          </div>
+          <span class="badge badge-green">Inicio por conversación</span>
+        </div>
+
+        <div class="arch-flow">
+          <div class="arch-node green"><i>👤</i><b>Prospecto</b><span>Inicia conversación usando el número de WhatsApp publicado por la UAO o por un medio aliado, sin diligenciar formulario previo</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node green"><i>💬</i><b>WhatsApp conectado al ecosistema UAO</b><span>Canal operado mediante la integración disponible con Marketing Cloud / Salesforce</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node red"><i>🤖</i><b>Motor conversacional UAO</b><span>Identifica línea, tipo, facultad, modalidad e intención</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node"><i>🪪</i><b>Captura progresiva</b><span>Solicita únicamente los datos faltantes de manera conversacional</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node blue"><i>☁</i><b>Salesforce CRM</b><span>Busca coincidencias y crea/actualiza Lead o Contacto</span></div>
+          <div class="tree-arrow">⇄</div>
+
+          <div class="arch-node blue"><i>🗃</i><b>Marketing Cloud</b><span>Puede recibir/sincronizar el contacto para journeys, seguimiento o nurturing posterior</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node red"><i>🎯</i><b>Calificación</b><span>Score + interés + información consultada + próxima acción</span></div>
+          <div class="tree-arrow">→</div>
+
+          <div class="arch-node"><i>📅</i><b>Resultado comercial</b><span>Agenda · asesor · seguimiento · inscripción</span></div>
+        </div>
+
+        <div class="notice green" style="margin-top:10px">
+          <strong>Qué caracteriza esta ruta:</strong> la conversación ocurre <strong>antes o al mismo tiempo que la captura</strong>. El bot identifica la necesidad, solicita solo los datos que faltan y luego crea o actualiza el registro en Salesforce. Marketing Cloud y la conexión de WhatsApp siguen haciendo parte del ecosistema, pero <strong>no cumplen el mismo papel de captación inicial que en el lead de pauta</strong>.
+        </div>
+
+        <div class="card" style="margin-top:12px;background:#f8fffb;border-color:#d8f3e2">
+          <h3 style="font-size:13px">Posibles orígenes del lead orgánico por WhatsApp</h3>
+          <div class="sub" style="margin-top:7px;line-height:1.65">
+            Se considera <strong>orgánico</strong> cuando la persona inicia la conversación directamente con el número de WhatsApp de la UAO, sin haber diligenciado previamente un formulario de captación. El origen puede venir de cualquier punto de contacto donde ese número o enlace a WhatsApp esté publicado.
+          </div>
+          <div class="arch-shared-grid" style="margin-top:12px">
+            <div class="arch-shared-box"><b>📱 Instagram</b><span>Biografía, historias, destacados, publicaciones o botón/enlace a WhatsApp.</span></div>
+            <div class="arch-shared-box"><b>📘 Facebook</b><span>Biografía, publicaciones, botón de contacto, Messenger derivado a WhatsApp o enlaces directos.</span></div>
+            <div class="arch-shared-box"><b>🌐 Sitio web UAO</b><span>Páginas de programas, landing informativa sin formulario, botón flotante o CTA que abre WhatsApp.</span></div>
+            <div class="arch-shared-box"><b>📰 Notas web UAO</b><span>Artículos, noticias, comunicados o contenidos institucionales con enlace o número de WhatsApp.</span></div>
+            <div class="arch-shared-box"><b>📺 Medios aliados</b><span>Ejemplo: 90 Minutos u otros medios que publiquen el número o un enlace para iniciar conversación.</span></div>
+            <div class="arch-shared-box"><b>📣 Piezas y medios propios</b><span>Volantes, afiches, pantallas, códigos QR, firmas, correos, presentaciones o materiales institucionales.</span></div>
+            <div class="arch-shared-box"><b>🤝 Referidos / aliados</b><span>Personas, empresas, instituciones, ferias o aliados que compartan directamente el número de WhatsApp.</span></div>
+            <div class="arch-shared-box"><b>🔗 Cualquier enlace directo</b><span>wa.me, QR o hipervínculo que abra WhatsApp sin pasar por un formulario de lead.</span></div>
+          </div>
+          <div class="arch-diff-note" style="margin-top:12px">
+            <strong>Regla de clasificación:</strong> si el usuario llega por un enlace o número de WhatsApp y <strong>él mismo inicia la conversación</strong>, se trata como lead orgánico. Si primero diligencia un formulario de Meta u otro formulario de captación que alimenta Marketing Cloud/Salesforce y luego se le contacta automáticamente, se trata como lead de pauta.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CONVERGENCIA -->
+    <div class="arch-convergence">
+      <h3>Capa compartida después de la captación</h3>
+      <p>Una vez que el prospecto ya está dentro del ecosistema conversacional, ambas rutas convergen. A partir de aquí la lógica comercial puede ser común, aunque los datos de origen y trazabilidad deben conservarse por separado.</p>
+
+      <div class="arch-shared-grid">
+        <div class="arch-shared-box">
+          <b>💬 WhatsApp</b>
+          <span>Canal de conversación, respuesta y seguimiento.</span>
+        </div>
+        <div class="arch-shared-box">
+          <b>☁ Salesforce CRM</b>
+          <span>Lead/Contacto, campaña, estado comercial, observaciones, score, agenda y resumen.</span>
+        </div>
+        <div class="arch-shared-box">
+          <b>⚡ Marketing Cloud</b>
+          <span>Automatizaciones, Data Extensions, Journeys, comunicaciones y seguimiento cuando corresponda.</span>
+        </div>
+        <div class="arch-shared-box">
+          <b>👤 Ejecución humana</b>
+          <span>Asesor recibe contexto completo cuando termina la automatización o llega una cita.</span>
+        </div>
+      </div>
+
+      <div class="arch-diff-note">
+        <strong>Diferencia central para explicar en la presentación:</strong><br>
+        <strong>Pauta:</strong> Meta Ads → captura de datos → Marketing Cloud Lead Capture → Data Extension → Journey Builder → campaña Salesforce → WhatsApp → conversación.<br>
+        <strong>Orgánico:</strong> Instagram / Facebook / sitio web UAO / notas web / medios aliados / QR / piezas propias / referidos → prospecto inicia WhatsApp → conversación → identificación y captura progresiva → Salesforce → Marketing Cloud/seguimientos posteriores → resultado comercial.
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-3" style="margin-top:16px">
+    <div class="card">
+      <h3>Captación</h3>
+      <div class="sub" style="line-height:1.7;margin-top:8px">
+        <strong>Pauta:</strong> la fuente inicial es el formulario instantáneo de Meta.<br>
+        <strong>Orgánico:</strong> la fuente inicial es la conversación iniciada por el prospecto.
+      </div>
+    </div>
+    <div class="card">
+      <h3>Automatización</h3>
+      <div class="sub" style="line-height:1.7;margin-top:8px">
+        <strong>Pauta:</strong> Journey Builder prepara y dispara el primer contacto.<br>
+        <strong>Orgánico:</strong> el motor conversacional responde al mensaje entrante y captura información faltante.
+      </div>
+    </div>
+    <div class="card">
+      <h3>CRM y seguimiento</h3>
+      <div class="sub" style="line-height:1.7;margin-top:8px">
+        En ambos casos Salesforce y Marketing Cloud mantienen trazabilidad, pero deben conservar <strong>origen, campaña, ruta de captación y eventos</strong> para no mezclar los dos procesos.
+      </div>
+    </div>
+  </div>
+
+  <div class="notice red" style="margin-top:16px">
+    <strong>Importante para la demostración:</strong> ambos procesos utilizan el ecosistema WhatsApp + Marketing Cloud + Salesforce, pero no deben representarse como si tuvieran el mismo punto de entrada. La diferencia está en <strong>cómo nace el lead, cuándo se capturan sus datos y qué automatización dispara el primer contacto</strong>.
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-header">
+      <div class="card-title-wrap"><div class="card-icon">🔒</div><div><h3>Gobierno de datos y alcance</h3><div class="sub">Controles mínimos que deben acompañar una implementación productiva.</div></div></div>
+      <span class="badge badge-dark">PROTOTIPO</span>
+    </div>
+    <div class="governance">
+      <div class="gbox"><b>Tratamiento de datos</b><span>Registrar consentimiento, origen, fecha y finalidad de uso según las políticas institucionales aplicables.</span></div>
+      <div class="gbox"><b>Seguridad e integración</b><span>Credenciales, tokens, números, APIs y secretos deben permanecer en backend; nunca embebidos en el frontend.</span></div>
+      <div class="gbox"><b>Datos de demostración</b><span>Los nombres, IDs, campañas, Data Extensions, KPIs y registros usados aquí son simulados para explicar la experiencia futura.</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="presentation-dock" id="presentationDock">
+  <div class="presentation-dock-head">
+    <div>
+      <div class="ey">Presentación guiada</div>
+      <h3 id="presentationTitle">1 · Visión ejecutiva</h3>
+      <p id="presentationCopy">Explica el problema, las dos rutas de captación y el objetivo comercial.</p>
+    </div>
+    <button class="presentation-close" onclick="closePresentation()">×</button>
+  </div>
+  <div class="presentation-stepbar"><span id="presentationProgress"></span></div>
+  <div class="presentation-dock-actions">
+    <button onclick="presentationPrev()">← Anterior</button>
+    <button class="primary" onclick="presentationNext()">Siguiente →</button>
+    <button onclick="togglePresentationScenario()" id="presentationScenarioBtn">Escenario: Orgánico</button>
+  </div>
+</div>
+
+<div class="footer">UAO · Prototipo funcional para presentación interna de Mercadeo · Datos y métricas de ejemplo.</div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const FACULTIES = [
+  'Facultad de Ingeniería y Ciencias Básicas',
+  'Facultad de Arquitectura, Urbanismo y Diseño',
+  'Facultad de Ciencias Empresariales y Jurídicas',
+  'Facultad de Comunicación Social, Humanidades y Artes'
+];
+
+const PROGRAMS = {
+  pregrado:{
+    label:'Pregrado',
+    faculties:FACULTIES,
+    modalities:['Presencial','Virtual','Híbrida'],
+    defaultProgram:'Programa por definir',
+    info:{
+      price:'La inversión depende de la carrera, modalidad y periodo académico. En la implementación real el bot consultaría el valor vigente antes de responder.',
+      scholarship:'En Pregrado, el prospecto puede acceder a beneficios de hasta un <strong>30% de beca</strong>, sujeto a las condiciones, convocatoria y programa aplicable.',
+      program:'Puedo ayudarte a explorar la oferta desde la facultad seleccionada y luego mostrar duración, plan de estudios, perfil profesional, modalidad, jornada y diferenciales de la carrera que te interese.',
+      dates:'Puedo consultar próximo periodo académico, fechas de inscripción, eventos y visitas al campus.'
+    }
+  },
+  posgrado:{
+    label:'Posgrado',
+    levels:['Especializaciones','Maestrías','Doctorados'],
+    faculties:FACULTIES,
+    modalities:['Presencial','Virtual','Híbrida'],
+    defaultProgram:'Posgrado por definir',
+    info:{
+      price:'Puedo mostrar el valor vigente, descuentos, beneficios para egresados y alternativas de financiación según el tipo de posgrado que estés explorando.',
+      scholarship:'En Posgrados pueden existir descuentos de hasta un <strong>20%</strong> según el programa. Además, si eres <strong>egresado UAO</strong>, puedes acceder a un beneficio de hasta <strong>40%</strong>, dependiendo del programa y las condiciones vigentes.',
+      program:'Puedo ayudarte a explorar Especializaciones, Maestrías o Doctorados por facultad y modalidad, y después profundizar en el programa que elijas.',
+      dates:'Puedo indicar fechas de inicio, admisiones, próximos eventos y disponibilidad para agendar una asesoría.'
+    }
+  },
+  continua:{
+    label:'Educación Continua',
+    offeringTypes:['Microcredenciales','Diplomados','Cursos','Seminarios'],
+    faculties:FACULTIES,
+    modalities:['Presencial','Virtual','Híbrida'],
+    defaultProgram:'Oferta por definir',
+    info:{
+      price:'Puedo mostrar la inversión vigente según el tipo de oferta de Educación Continua, además de descuentos o convenios cuando apliquen.',
+      scholarship:'En Educación Continua los descuentos dependen del tipo de oferta y sus condiciones. Si eres <strong>egresado UAO</strong> y estás interesado en un <strong>Diplomado</strong>, aplica un beneficio del <strong>40%</strong>, sujeto a las condiciones vigentes.',
+      program:'Puedo ayudarte a explorar Microcredenciales, Diplomados, Cursos y Seminarios por facultad y modalidad, y luego profundizar en la opción que te interese.',
+      dates:'Puedo mostrar fecha de inicio, horario, cupos y próximas cohortes.'
+    }
+  }
+};
+
+const PAID_LEADS = {
+  pregrado:{
+    firstName:'Daniela',
+    lastName:'Rojas',
+    docType:'Cédula de ciudadanía',
+    docNumber:'1.111.222.333',
+    phone:'+57 300 555 0142',
+    email:'daniela.rojas@email.com',
+    city:'Cali',
+    line:'Pregrado',
+    faculty:'Facultad de Ingeniería y Ciencias Básicas',
+    program:'Ingeniería Industrial',
+    modality:'Híbrida',
+    origin:'Meta Ads',
+    source:'Instagram Ads',
+    campaign:'Ingeniería Industrial 2027-1S',
+    utmSource:'instagram',
+    utmMedium:'paid_social',
+    utmCampaign:'pregrado_ingenieria_industrial_2027_1s',
+    utmContent:'formulario_leads_v1',
+    adSet:'Cali · 17-24 · Intereses',
+    ad:'Ingeniería Industrial · Formulario V1',
+    form:'Formulario Pregrado 2027-1S',
+    consentStatus:'Capturado en formulario',
+    duplicateCheck:'Registro encontrado en Salesforce',
+    leadCaptureSource:'Meta Instant Forms → Marketing Cloud Lead Capture',
+    dataExtension:'DE_META_PREGRADO_2027_1S',
+    journeyName:'JRNY_Meta_Pregrado_2027_1S',
+    journeyStatus:'Activo · Entry Source: Data Extension',
+    journeyActivities:'Validación → tarea CRM → asociación campaña → salida WhatsApp',
+    salesforceCampaign:'Pregrado 2027-1S · Meta Leads',
+    campaignMemberStatus:'Nuevo · Contacto automático pendiente',
+    whatsappTrigger:'Journey Builder · actividad de primer contacto',
+    crmId:'00Q-UAO-DEMO-PRE-1027'
+  },
+  posgrado:{
+    firstName:'Laura',
+    lastName:'Gómez',
+    docType:'Cédula de ciudadanía',
+    docNumber:'1.114.567.890',
+    phone:'+57 315 555 0188',
+    email:'laura.gomez@email.com',
+    city:'Cali',
+    line:'Posgrado',
+    academicLevel:'Maestrías',
+    faculty:'Facultad de Ciencias Empresariales y Jurídicas',
+    program:'MBA',
+    modality:'Híbrida',
+    origin:'Meta Ads',
+    source:'Instagram Ads',
+    campaign:'MBA 2027-1S',
+    utmSource:'instagram',
+    utmMedium:'paid_social',
+    utmCampaign:'mba_2027_1s',
+    utmContent:'lead_ad_mba_v2',
+    adSet:'Profesionales · Cali + Jamundí',
+    ad:'MBA · Beneficios · V2',
+    form:'Formulario MBA 2027-1S',
+    consentStatus:'Capturado en formulario',
+    duplicateCheck:'Registro encontrado en Salesforce',
+    leadCaptureSource:'Meta Instant Forms → Marketing Cloud Lead Capture',
+    dataExtension:'DE_META_MBA_2027_1S',
+    journeyName:'JRNY_Meta_MBA_2027_1S',
+    journeyStatus:'Activo · Entry Source: Data Extension',
+    journeyActivities:'Validación → tarea CRM → asociación campaña → salida WhatsApp',
+    salesforceCampaign:'MBA 2027-1S · Meta Leads',
+    campaignMemberStatus:'Nuevo · Contacto automático pendiente',
+    whatsappTrigger:'Journey Builder · actividad de primer contacto',
+    crmId:'00Q-UAO-DEMO-POS-1027'
+  },
+  continua:{
+    firstName:'Andrés',
+    lastName:'Martínez',
+    docType:'Cédula de ciudadanía',
+    docNumber:'1.100.987.654',
+    phone:'+57 301 555 0199',
+    email:'andres.martinez@email.com',
+    city:'Palmira',
+    line:'Educación Continua',
+    offeringType:'Diplomados',
+    faculty:'Facultad de Ciencias Empresariales y Jurídicas',
+    program:'Diplomado IA Aplicada para Negocios',
+    modality:'Presencial',
+    origin:'Meta Ads',
+    source:'Facebook Ads',
+    campaign:'Diplomado IA Aplicada 2026',
+    utmSource:'facebook',
+    utmMedium:'paid_social',
+    utmCampaign:'eduvida_ia_negocios_2026',
+    utmContent:'formulario_diplomado_v1',
+    adSet:'Profesionales · Valle del Cauca',
+    ad:'IA Aplicada · Estático V1',
+    form:'Formulario Educación Continua',
+    consentStatus:'Capturado en formulario',
+    duplicateCheck:'Registro encontrado en Salesforce',
+    leadCaptureSource:'Meta Instant Forms → Marketing Cloud Lead Capture',
+    dataExtension:'DE_META_EDUVIDA_IA_2026',
+    journeyName:'JRNY_Meta_Eduvida_IA_2026',
+    journeyStatus:'Activo · Entry Source: Data Extension',
+    journeyActivities:'Validación → tarea CRM → asociación campaña → salida WhatsApp',
+    salesforceCampaign:'Eduvida IA Aplicada 2026 · Meta Leads',
+    campaignMemberStatus:'Nuevo · Contacto automático pendiente',
+    whatsappTrigger:'Journey Builder · actividad de primer contacto',
+    crmId:'00Q-UAO-DEMO-EC-1027'
+  }
+};
+
+const state = {
+  scenario:'organic',
+  line:'posgrado',
+  stage:'entry',
+  score:0,
+  intent:'Exploratorio',
+  pending:null,
+  captureQueue:[],
+  events:[],
+  contact:{},
+  selectedDate:null,
+  selectedTime:null,
+  appointment:null,
+  transferred:false,
+  flowClosed:false,
+  flowStatus:'Conversación activa',
+  afterCapture:null,
+  consentGiven:false,
+  chatScheduleDate:null,
+  viewedInfo:[],
+  scoredActions:{},
+  manualAction:null,
+  processCompletedAt:null,
+  advisorCutoff:'18:30',
+  demoTimeMode:'auto',
+  firstContactAt:null,
+  lastInteractionAt:null,
+  userResponded:false,
+  sessionId:0
+};
+
+const kpiData = {
+  all:{cards:[['248','Leads recibidos'],['< 30 s','Primer contacto'],['78%','Tasa de respuesta'],['132','Leads calificados'],['94','Solicitudes asesor'],['76','Citas agendadas'],['31%','Alta intención'],['12%','Conversión demo']],rows:[['Meta Ads',112,'81%','36%','38','13%'],['Orgánico / WhatsApp',74,'76%','29%','21','11%'],['Google Ads',39,'72%','27%','11','10%'],['Otros',23,'65%','18%','6','7%']]},
+  pregrado:{cards:[['101','Leads recibidos'],['< 35 s','Primer contacto'],['80%','Tasa de respuesta'],['49','Leads calificados'],['38','Solicitudes asesor'],['27','Citas agendadas'],['28%','Alta intención'],['10%','Conversión demo']],rows:[['Meta Ads',51,'83%','31%','15','11%'],['Orgánico / WhatsApp',29,'78%','27%','8','10%'],['Google Ads',15,'73%','22%','3','8%'],['Otros',6,'61%','16%','1','5%']]},
+  posgrado:{cards:[['89','Leads recibidos'],['< 25 s','Primer contacto'],['82%','Tasa de respuesta'],['55','Leads calificados'],['37','Solicitudes asesor'],['31','Citas agendadas'],['38%','Alta intención'],['16%','Conversión demo']],rows:[['Meta Ads',41,'85%','42%','17','18%'],['Orgánico / WhatsApp',26,'81%','37%','9','15%'],['Google Ads',16,'76%','33%','4','13%'],['Otros',6,'69%','21%','1','8%']]},
+  continua:{cards:[['58','Leads recibidos'],['< 40 s','Primer contacto'],['70%','Tasa de respuesta'],['28','Leads calificados'],['19','Solicitudes asesor'],['18','Citas agendadas'],['24%','Alta intención'],['9%','Conversión demo']],rows:[['Meta Ads',20,'73%','25%','6','9%'],['Orgánico / WhatsApp',19,'68%','22%','4','8%'],['Google Ads',8,'67%','19%','2','7%'],['Otros',11,'64%','14%','2','5%']]}
+};
+
+function nowTime(){
+  return new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+}
+function getDemoNow(){
+  const d=new Date();
+  if(state.demoTimeMode==='office'){
+    d.setHours(10,0,0,0);
+  }else if(state.demoTimeMode==='after'){
+    d.setHours(19,0,0,0);
+  }
+  return d;
+}
+function setDemoTimeMode(mode){
+  state.demoTimeMode=mode;
+  const el=document.getElementById('demoTimeStatus');
+  if(el){
+    el.textContent=mode==='office'
+      ? '🟢 Simulación: dentro de horario'
+      : mode==='after'
+        ? '🌙 Simulación: después de 6:30 p. m.'
+        : '🕒 Usa hora real';
+  }
+  renderCalendar();
+  toast(mode==='auto'?'Modo horario automático':mode==='office'?'Simulando atención dentro de horario':'Simulando atención fuera de horario');
+}
+function openProcessSecondary(){
+  if(state.manualAction?.type==='Cita agendada' || state.manualAction?.type==='Agendamiento fuera de horario'){
+    openTab('calendar');
+  }else{
+    openTab('handoff');
+  }
+}
+function toast(text){
+  const t=document.getElementById('toast');t.textContent=text;t.classList.add('show');
+  clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove('show'),2400);
+}
+function escapeHtml(s){
+  return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+function openTab(name){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  const target=document.getElementById('tab-'+name);if(target)target.classList.add('active');
+  document.querySelectorAll('#mainNav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===name));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='salesforce') renderSalesforce();
+  if(name==='handoff') renderHandoff();
+  if(name==='calendar') renderCalendar();
+
+  renderCommercialStage();
+  if(name==='salesforce') renderSalesforceComparison();
+}
+document.querySelectorAll('#mainNav button').forEach(btn=>btn.addEventListener('click',()=>openTab(btn.dataset.tab)));
+
+function logEvent(text,type='system'){
+  const t=nowTime();
+  const e={time:t,text,type};
+  state.events.push(e);
+  renderEvents();
+  renderSalesforce();
+}
+function setStage(stage){
+  state.stage=stage;
+  document.querySelectorAll('.tree-node').forEach(n=>n.classList.toggle('active',n.dataset.stage===stage));
+}
+function addScore(points,reason){
+  state.score=Math.min(100,Math.max(0,state.score+points));
+  state.intent=state.score>=70?'Alta intención':state.score>=40?'Intención media':'Exploratorio';
+  if(reason) logEvent(`${reason} · +${points} pts`,'score');
+  renderLeadPanel();
+}
+function scoreOnce(key,points,reason){
+  if(state.scoredActions[key]) return false;
+  state.scoredActions[key]=true;
+  addScore(points,reason);
+  return true;
+}
+function browserTimeLabel(){
+  return new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+}
+function isAdvisorCutoff(){
+  const d=getDemoNow();
+  const [cutHour,cutMinute]=state.advisorCutoff.split(':').map(Number);
+  return d.getHours()>cutHour || (d.getHours()===cutHour && d.getMinutes()>=cutMinute);
+}
+function nextAdvisorBusinessDate(){
+  const d=getDemoNow();
+  d.setDate(d.getDate()+1);
+  while(d.getDay()===0 || d.getDay()===6) d.setDate(d.getDate()+1);
+  return d;
+}
+function setManualAction(type, detail, status='Pendiente de ejecución humana', extra={}){
+  if(state.scenario==='paid' && state.contact.campaignMemberStatus){
+    state.contact.campaignMemberStatus=type==='Cita agendada' || type==='Agendamiento fuera de horario'
+      ? 'Cita programada'
+      : 'Asesor solicitado';
+  }
+  state.manualAction={
+    type,
+    detail,
+    status,
+    createdAt:nowTime(),
+    requiresHuman:true,
+    ...extra
+  };
+  state.processCompletedAt=nowTime();
+  renderProcessAlerts();
+}
+function clearManualAction(){
+  state.manualAction=null;
+  state.processCompletedAt=null;
+  renderProcessAlerts();
+}
+function renderProcessAlerts(){
+  const a=state.manualAction;
+  const global=document.getElementById('globalProcessAlert');
+  const sf=document.getElementById('sfProcessAlert');
+  const handoff=document.getElementById('handoffProcessAlert');
+
+  const apply=(el,kind,title,copy,meta,status,icon)=>{
+    if(!el) return;
+    el.className='process-alert show '+kind;
+    const prefix=el.id==='sfProcessAlert'?'sf':'global';
+    const iconEl=document.getElementById(prefix+'ProcessIcon');
+    const titleEl=document.getElementById(prefix+'ProcessTitle');
+    const copyEl=document.getElementById(prefix+'ProcessCopy');
+    const metaEl=document.getElementById(prefix+'ProcessMeta');
+    const statusEl=document.getElementById(prefix+'ProcessStatus');
+    if(iconEl) iconEl.textContent=icon;
+    if(titleEl) titleEl.textContent=title;
+    if(copyEl) copyEl.textContent=copy;
+    if(metaEl) metaEl.textContent=meta;
+    if(statusEl) statusEl.textContent=status;
+  };
+
+  if(!a){
+    if(global) global.className='process-alert';
+    if(sf) sf.className='process-alert';
+    if(handoff) handoff.className='process-alert manual';
+    const hs=document.getElementById('handoffProcessStatus');
+    if(hs) hs.textContent='Pendiente';
+    return;
+  }
+
+  let kind='manual', icon='👤';
+  if(a.type==='Cita agendada'){kind='schedule';icon='📅'}
+  if(a.type==='Agendamiento fuera de horario'){kind='afterhours';icon='🌙'}
+
+  const title=a.type==='Cita agendada'
+    ? 'Proceso automático completado · cita registrada'
+    : a.type==='Agendamiento fuera de horario'
+      ? 'Proceso automático completado · atención programada'
+      : 'Proceso automático completado · inicia ejecución humana';
+
+  const copy=a.detail;
+  const meta=`Registrado ${a.createdAt}${a.when?` · ${a.when}`:''}${a.assignee?` · ${a.assignee}`:''}`;
+  apply(global,kind,title,copy,meta,a.status,icon);
+  apply(sf,kind,title,copy,meta,a.status,icon);
+  const secondary=document.getElementById('globalProcessSecondary');
+  if(secondary){
+    secondary.textContent=(a.type==='Cita agendada' || a.type==='Agendamiento fuera de horario')
+      ? '📅 Ver agendamiento'
+      : '👤 Ver handoff';
+  }
+
+  if(handoff){
+    handoff.className='process-alert manual show';
+    const hc=document.getElementById('handoffProcessCopy');
+    const hm=document.getElementById('handoffProcessMeta');
+    const hs=document.getElementById('handoffProcessStatus');
+    if(hc) hc.textContent=copy;
+    if(hm) hm.textContent=meta;
+    if(hs) hs.textContent=a.status;
+  }
+}
+function discountMessage(){
+  const c=state.contact;
+  if(state.line==='pregrado'){
+    c.discountInfo='Pregrado: hasta 30% de beca, sujeto a condiciones y programa.';
+    return `🎓 En <strong>Pregrado</strong> puedes acceder a beneficios de hasta un <strong>30% de beca</strong>, sujeto a las condiciones, convocatoria y programa aplicable.`;
+  }
+  if(state.line==='posgrado'){
+    c.discountInfo='Posgrados: hasta 20%; egresados UAO hasta 40% dependiendo del programa.';
+    return `🎓 En <strong>Posgrados</strong> pueden existir descuentos de hasta un <strong>20%</strong> según el programa.<br><br>Si eres <strong>egresado UAO</strong>, puedes acceder a un beneficio de hasta <strong>40%</strong>, dependiendo del programa y las condiciones vigentes.`;
+  }
+  const isDiploma=(c.offeringType||'').toLowerCase().includes('diplom');
+  if(isDiploma){
+    c.discountInfo='Educación Continua / Diplomado: egresado UAO 40%, sujeto a condiciones.';
+    return `🎓 En <strong>Educación Continua</strong> los descuentos dependen del tipo de oferta. Para <strong>Diplomados</strong>, los <strong>egresados UAO</strong> cuentan con un beneficio del <strong>40%</strong>, sujeto a las condiciones vigentes.`;
+  }
+  c.discountInfo='Educación Continua: descuento depende del tipo de programa; 40% para egresados UAO en diplomados.';
+  return `🎓 En <strong>Educación Continua</strong> los descuentos dependen del tipo de programa y sus condiciones.<br><br>Si eres <strong>egresado UAO</strong>, ten presente que en <strong>Diplomados</strong> existe un beneficio del <strong>40%</strong>, sujeto a condiciones vigentes.`;
+}
+function askGraduateStatusIfRelevant(){
+  if(state.line==='pregrado') return false;
+  if(state.contact.uaoGraduate!==undefined) return false;
+  const applicable=state.line==='posgrado' || (state.line==='continua' && (state.contact.offeringType||'').toLowerCase().includes('diplom'));
+  if(!applicable) return false;
+  bot('Para orientarte mejor con este beneficio: <strong>¿eres egresado de la UAO?</strong>',[
+    {label:'Sí, soy egresado UAO',action:()=>setGraduateStatus(true)},
+    {label:'No',action:()=>setGraduateStatus(false)}
+  ]);
+  return true;
+}
+function setGraduateStatus(value){
+  state.contact.uaoGraduate=value;
+  logEvent(`Egresado UAO: ${value?'Sí':'No'}`,'interaction');
+  if(state.line==='posgrado'){
+    state.contact.discountInfo=value
+      ? 'Egresado UAO: hasta 40% de descuento en Posgrados, dependiendo del programa.'
+      : 'Posgrados: hasta 20% de descuento según programa.';
+    bot(value
+      ? '✅ Perfecto. Lo registraré en tu contexto: como <strong>egresado UAO</strong>, puedes acceder a un beneficio de hasta <strong>40%</strong> en Posgrados, dependiendo del programa y las condiciones vigentes.'
+      : 'Entendido. Para Posgrados pueden existir descuentos de hasta un <strong>20%</strong>, dependiendo del programa y las condiciones vigentes.');
+  }else if(state.line==='continua'){
+    state.contact.discountInfo=value
+      ? 'Egresado UAO: 40% de descuento en Diplomados de Educación Continua, sujeto a condiciones.'
+      : 'Educación Continua: descuentos según tipo de programa y condiciones.';
+    bot(value
+      ? '✅ Perfecto. Para <strong>Diplomados de Educación Continua</strong>, registraré que eres egresado UAO y que aplica un beneficio del <strong>40%</strong>, sujeto a las condiciones vigentes.'
+      : 'Entendido. Los descuentos de Educación Continua dependen del tipo de programa y sus condiciones vigentes.');
+  }
+  renderAll();
+  later(()=>bot('¿Cómo quieres continuar?',[
+    {label:'📆 Ver fechas',action:()=>intentAction('dates')},
+    {label:'📅 Agendar llamada',action:()=>intentAction('schedule')},
+    {label:'📞 Hablar con asesor',action:()=>intentAction('advisor')}
+  ]),250);
+}
+
+function nextAction(){
+  if(state.appointment) return 'cita confirmada; esperar contacto del asesor.';
+  if(state.transferred) return 'asesor recibe el contexto y continúa la atención.';
+  if(state.flowClosed) return 'proceso cerrado según la elección del prospecto.';
+  if(state.score>=70) return 'priorizar asesor o agendamiento.';
+  if(state.score>=40) return 'resolver barreras e invitar a asesoría.';
+  return 'seguir orientando y detectar necesidad.';
+}
+function reopenConversation(reason='Nueva consulta'){
+  if(!state.flowClosed) return;
+  state.flowClosed=false;
+  state.flowStatus=state.appointment
+    ? 'Nueva consulta · cita vigente'
+    : state.transferred
+      ? 'Nueva consulta · asesor ya solicitado'
+      : 'Nueva consulta';
+  logEvent(`${reason} después de un cierre previo`,'interaction');
+  renderAll();
+}
+function disableActiveChatOptions(){
+  document.querySelectorAll('#chat .quick button:not([disabled])').forEach(btn=>btn.disabled=true);
+}
+function message(text,from='bot',buttons=[]){
+  const root=document.getElementById('chat');
+  // Cuando aparece un nuevo conjunto de decisiones, las opciones anteriores
+  // quedan como historial visual y ya no pueden volver a ejecutar ramas.
+  if(from==='bot' && buttons.length) disableActiveChatOptions();
+  const row=document.createElement('div');row.className='msg '+from;
+  const b=document.createElement('div');b.className='bubble';b.innerHTML=text.replace(/\n/g,'<br>');
+  if(buttons.length){
+    const q=document.createElement('div');q.className='quick';
+    buttons.forEach(opt=>{
+      const bt=document.createElement('button');bt.textContent=opt.label;
+      bt.onclick=()=>{
+        Array.from(q.querySelectorAll('button')).forEach(x=>x.disabled=true);
+        bt.classList.add('selected');
+        userMessage(opt.label);
+        opt.action();
+      };
+      q.appendChild(bt);
+    });
+    b.appendChild(q);
+  }
+  if(from!=='system'){
+    const tm=document.createElement('div');tm.className='time';tm.textContent=nowTime();b.appendChild(tm);
+  }
+  row.appendChild(b);root.appendChild(row);root.scrollTop=root.scrollHeight;
+}
+function userMessage(text){
+  state.userResponded=true;
+  state.lastInteractionAt=nowTime();
+  if(state.scenario==='paid' && state.contact.campaignMemberStatus){
+    state.contact.campaignMemberStatus='Conversación iniciada · prospecto respondió';
+  }
+  message(escapeHtml(text),'user');
+  renderJourney();
+  renderSalesforce();
+}
+function later(fn,ms){
+  const sid=state.sessionId;
+  setTimeout(()=>{if(sid===state.sessionId)fn();},ms);
+}
+function bot(text,buttons=[]){later(()=>message(text,'bot',buttons),250);}
+function system(text){message(text,'system');}
+
+function resetState(){
+  state.sessionId=(state.sessionId||0)+1;
+  state.score=0;
+  state.intent='Exploratorio';
+  state.pending=null;
+  state.captureQueue=[];
+  state.events=[];
+  state.contact={};
+  state.selectedDate=null;
+  state.selectedTime=null;
+  state.appointment=null;
+  state.transferred=false;
+  state.flowClosed=false;
+  state.flowStatus='Conversación activa';
+  state.afterCapture=null;
+  state.consentGiven=false;
+  state.chatScheduleDate=null;
+  state.viewedInfo=[];
+  state.scoredActions={};
+  state.manualAction=null;
+  state.processCompletedAt=null;
+  state.firstContactAt=null;
+  state.lastInteractionAt=null;
+  state.userResponded=false;
+  setStage('entry');
+}
+function startSelectedScenario(){
+  state.scenario=document.getElementById('scenarioSelect').value;
+  state.line=document.getElementById('lineSelect').value;
+  startDemo();
+}
+function resetDemo(){startDemo();}
+function goDemo(type){
+  openTab('simulator');
+  document.getElementById('scenarioSelect').value=type;
+  if(type==='paid' && !document.getElementById('lineSelect').value){
+    document.getElementById('lineSelect').value='posgrado';
+  }
+  startSelectedScenario();
+}
+function startDemo(){
+  resetState();
+  const timeSelect=document.getElementById('timeModeSelect');
+  if(timeSelect) timeSelect.value=state.demoTimeMode;
+  document.getElementById('chat').innerHTML='';
+  if(state.scenario==='paid') startPaid();
+  else startOrganic();
+  renderAll();
+}
+function startOrganic(){
+  state.contact={
+    origin:'Orgánico · conversación iniciada por el prospecto',
+    source:'Origen orgánico por definir',
+    organicTouchpoint:'Canal con número/enlace a WhatsApp',
+    channel:'WhatsApp',
+    line:PROGRAMS[state.line].label,
+    consentStatus:'Pendiente',
+    duplicateCheck:'Pendiente'
+  };
+  state.firstContactAt=nowTime();
+  state.lastInteractionAt=state.firstContactAt;
+  state.userResponded=true;
+  setStage('origin');
+  logEvent('Conversación orgánica iniciada');
+
+  bot('👋 Hola, soy el asistente virtual de la <strong>Universidad Autónoma de Occidente</strong>.<br><br>Antes de continuar, ¿desde dónde encontraste nuestro WhatsApp?',[
+    {label:'📱 Instagram',action:()=>setOrganicSource('Instagram')},
+    {label:'📘 Facebook',action:()=>setOrganicSource('Facebook')},
+    {label:'🌐 Página web UAO',action:()=>setOrganicSource('Página web UAO')},
+    {label:'📰 Nota web / medio aliado',action:()=>setOrganicSource('Nota web / medio aliado')},
+    {label:'🔗 Otro medio / enlace directo',action:()=>setOrganicSource('Otro medio / enlace directo')}
+  ]);
+}
+
+function setOrganicSource(source){
+  state.contact.source=source;
+  state.contact.organicTouchpoint=source;
+  logEvent(`Origen orgánico identificado: ${source}`,'interaction');
+  bot('Perfecto. ¿Qué te interesa estudiar?',[
+    {label:'Pregrado',action:()=>chooseLine('pregrado')},
+    {label:'Posgrado',action:()=>chooseLine('posgrado')},
+    {label:'Educación Continua',action:()=>chooseLine('continua')}
+  ]);
+  renderAll();
+}
+function chooseLine(line){
+  state.line=line;
+  state.contact.line=PROGRAMS[line].label;
+  setStage('identify');
+  logEvent(`Línea seleccionada: ${PROGRAMS[line].label}`,'interaction');
+
+  if(line==='pregrado'){
+    askFaculty();
+    return;
+  }
+  if(line==='posgrado'){
+    bot('Perfecto. Veamos opciones de <strong>Posgrado</strong>.<br>¿Qué tipo de formación estás buscando?',[
+      ...PROGRAMS.posgrado.levels.map(level=>({label:level,action:()=>chooseAcademicLevel(level)})),
+      {label:'Aún no lo tengo claro',action:()=>chooseAcademicLevel('Por definir')}
+    ]);
+    return;
+  }
+  if(line==='continua'){
+    bot('Perfecto. Veamos opciones de <strong>Educación Continua</strong>.<br>¿Qué tipo de formación te interesa?',[
+      ...PROGRAMS.continua.offeringTypes.map(type=>({label:type,action:()=>chooseOfferingType(type)})),
+      {label:'Aún no lo tengo claro',action:()=>chooseOfferingType('Por definir')}
+    ]);
+  }
+}
+
+function chooseAcademicLevel(level){
+  state.contact.academicLevel=level;
+  logEvent(`Tipo de posgrado: ${level}`,'interaction');
+  askFaculty();
+}
+
+function chooseOfferingType(type){
+  state.contact.offeringType=type;
+  logEvent(`Tipo de Educación Continua: ${type}`,'interaction');
+  askFaculty();
+}
+
+function askFaculty(){
+  const label = state.line==='pregrado'
+    ? '¿Con cuál <strong>facultad</strong> te gustaría comenzar a explorar?'
+    : state.line==='posgrado'
+      ? 'Ahora, ¿en cuál <strong>facultad</strong> te gustaría explorar la oferta de posgrados?'
+      : 'Ahora, ¿en cuál <strong>facultad</strong> te gustaría explorar la oferta de Educación Continua?';
+
+  bot(label,[
+    ...PROGRAMS[state.line].faculties.map(f=>({label:f,action:()=>chooseFaculty(f)})),
+    {label:'Aún no lo tengo claro',action:()=>chooseFaculty('Por definir')}
+  ]);
+}
+
+function chooseFaculty(faculty){
+  state.contact.faculty=faculty;
+  logEvent(`Facultad: ${faculty}`,'interaction');
+  const mods=PROGRAMS[state.line].modalities;
+  bot(`Perfecto. ¿Qué <strong>modalidad</strong> prefieres?`,[
+    ...mods.map(m=>({label:m,action:()=>chooseModality(m)})),
+    {label:'Aún no lo he decidido',action:()=>chooseModality('Por definir')}
+  ]);
+}
+
+function chooseModality(m){
+  state.contact.modality=m;
+  logEvent(`Modalidad: ${m}`,'interaction');
+
+  // Solo para orgánicos preguntamos el nombre del programa.
+  // Es opcional: el usuario puede continuar aunque no lo tenga claro.
+  if(state.scenario==='organic'){
+    askOptionalProgram();
+  }else{
+    showValueMenu();
+  }
+}
+
+function askOptionalProgram(){
+  state.pending='programObservation';
+  bot('Antes de continuar: <strong>¿hay algún programa que te interese o cuyo nombre quieras mencionar?</strong><br><br>Puedes escribirlo aquí. Este dato se guardará como una <strong>observación</strong> en Salesforce, no como programa de preferencia. Si todavía no lo tienes claro, puedes continuar sin problema.',[
+    {label:'Aún no lo tengo claro',action:()=>skipOptionalProgramObservation()},
+    {label:'Continuar sin mencionarlo',action:()=>skipOptionalProgramObservation()}
+  ]);
+}
+
+function skipOptionalProgramObservation(){
+  state.contact.programObservation=state.contact.programObservation||'No especifica programa';
+  state.pending=null;
+  logEvent('Observación de programa: no especificado','interaction');
+  renderAll();
+  showValueMenu();
+}
+
+function setOrganicProgramObservation(name){
+  const clean=String(name||'').trim();
+  if(!clean){skipOptionalProgramObservation();return;}
+  state.contact.programObservation=`Programa mencionado por el prospecto: ${clean}`;
+  state.pending=null;
+  logEvent(`Observación guardada en Salesforce: programa mencionado = ${clean}`,'interaction');
+  renderAll();
+  bot(`Perfecto. Guardaré <strong>${escapeHtml(clean)}</strong> como una <strong>observación</strong> para que el equipo comercial tenga ese contexto.`);
+  later(()=>showValueMenu(),260);
+}
+
+function showValueMenu(){
+  setStage('value');
+  bot('¿Qué te gustaría conocer primero?',[
+    {label:'💰 Precios / inversión',action:()=>intentAction('price')},
+    {label:'🎓 Becas / descuentos',action:()=>intentAction('scholarship')},
+    {label:'📚 Oferta / plan de estudios',action:()=>intentAction('program')},
+    {label:'📆 Fechas',action:()=>intentAction('dates')},
+    {label:'📞 Hablar con asesor',action:()=>intentAction('advisor')}
+  ]);
+}
+function startPaid(){
+  const profile=PAID_LEADS[state.line] || PAID_LEADS.posgrado;
+  Object.assign(state.contact,JSON.parse(JSON.stringify(profile)));
+  state.contact.channel='WhatsApp · Journey Builder';
+  state.score=18;
+  state.consentGiven=true;
+  setStage('value');
+
+  system(`📣 Meta Instant Form → Salesforce Marketing Cloud Lead Capture → Data Extension → Journey Builder → campaña Salesforce CRM → WhatsApp`);
+  logEvent(`1. Lead capturado en formulario instantáneo de Meta · ${profile.form}`,'crm');
+  logEvent(`2. Marketing Cloud Lead Capture recibe el lead de ${profile.source}`,'crm');
+  logEvent(`3. Upsert en Data Extension: ${profile.dataExtension}`,'crm');
+  logEvent(`4. Entry Event del Journey: ${profile.journeyName}`,'crm');
+  logEvent(`5. Journey ejecuta actividades: ${profile.journeyActivities}`,'crm');
+  logEvent(`6. Lead asociado a campaña Salesforce CRM: ${profile.salesforceCampaign}`,'crm');
+  logEvent(`7. Campaign Member: ${profile.campaignMemberStatus}`,'crm');
+  state.firstContactAt=nowTime();
+  state.contact.campaignMemberStatus='Contactado automáticamente · WhatsApp enviado';
+  logEvent(`8. Salida WhatsApp disparada al celular ${profile.phone}`,'system');
+
+  bot(`👋 Hola, <strong>${profile.firstName}</strong>. Soy el asistente virtual de la Universidad Autónoma de Occidente.<br><br>Recibimos tu solicitud de información sobre <strong>${profile.program}</strong>. Puedo ayudarte ahora mismo.<br><br>¿Qué información te gustaría conocer primero?`,[
+    {label:'💰 Valor',action:()=>intentAction('price')},
+    {label:'🎓 Becas / descuentos',action:()=>intentAction('scholarship')},
+    {label:'📚 Plan / información',action:()=>intentAction('program')},
+    {label:'📆 Inicio',action:()=>intentAction('dates')},
+    {label:'📞 Asesor',action:()=>intentAction('advisor')},
+    {label:'📅 Agendar llamada',action:()=>intentAction('schedule')}
+  ]);
+  renderAll();
+}
+function infoText(kind){
+  const p=PROGRAMS[state.line];
+  return p.info[kind] || 'Puedo ayudarte con esa información.';
+}
+function intentAction(kind){
+  if(state.flowClosed && kind!=='menu'){
+    bot('✅ Este proceso ya quedó <strong>cerrado</strong> según la acción que elegiste. Para evitar repetir preguntas o generar una segunda gestión, no volveré a ejecutar esta rama.<br><br>Si necesitas consultar otro tema, usa <strong>🏠 Menú principal</strong> para iniciar una nueva consulta.');
+    return;
+  }
+  if(state.flowClosed && kind==='menu'){
+    reopenConversation('Nueva consulta desde menú principal');
+  }
+
+  if(kind==='menu'){
+    setStage('value');
+    bot('Puedes iniciar una nueva consulta desde estas opciones:',[
+      {label:'💰 Precios',action:()=>intentAction('price')},
+      {label:'🎓 Becas / descuentos',action:()=>intentAction('scholarship')},
+      {label:'📚 Oferta',action:()=>intentAction('program')},
+      {label:'📆 Fechas',action:()=>intentAction('dates')},
+      {label:'📞 Asesor',action:()=>intentAction('advisor')}
+    ]);
+    return;
+  }
+
+  if(kind==='price'){
+    setStage('value');
+    const first=!state.viewedInfo.includes('price');
+    if(first){state.viewedInfo.push('price');scoreOnce('info_price',15,'Consultó precios / inversión');}
+    if(!first){
+      bot('Ya revisamos la información de <strong>precios / inversión</strong>. Para no repetirte lo mismo, puedes continuar con otro tema o cerrar con asesoría.',[
+        {label:'🎓 Ver descuentos',action:()=>intentAction('scholarship')},
+        {label:'📆 Ver fechas',action:()=>intentAction('dates')},
+        {label:'📞 Hablar con asesor',action:()=>intentAction('advisor')}
+      ]);
+      return;
+    }
+    bot(`💰 ${infoText('price')}<br><br>¿Cuál sería tu siguiente paso?`,[
+      {label:'🎓 Ver descuentos',action:()=>intentAction('scholarship')},
+      {label:'📞 Hablar con asesor',action:()=>intentAction('advisor')},
+      {label:'Continuar',action:()=>afterValue()}
+    ]);
+    return;
+  }
+
+  if(kind==='scholarship'){
+    setStage('value');
+    const first=!state.viewedInfo.includes('scholarship');
+    if(first){state.viewedInfo.push('scholarship');scoreOnce('info_scholarship',12,'Consultó becas / descuentos');}
+    if(!first){
+      bot('La información de <strong>becas / descuentos</strong> ya fue revisada. Para evitar repetirla, puedes avanzar a fechas, asesoría o agendamiento.',[
+        {label:'📆 Ver fechas',action:()=>intentAction('dates')},
+        {label:'📅 Agendar llamada',action:()=>intentAction('schedule')},
+        {label:'📞 Hablar con asesor',action:()=>intentAction('advisor')}
+      ]);
+      return;
+    }
+    bot(`${discountMessage()}`);
+    renderAll();
+    if(askGraduateStatusIfRelevant()) return;
+    later(()=>bot('¿Cómo quieres continuar?',[
+      {label:'📆 Ver fechas',action:()=>intentAction('dates')},
+      {label:'📅 Agendar llamada',action:()=>intentAction('schedule')},
+      {label:'📞 Hablar con asesor',action:()=>intentAction('advisor')}
+    ]),250);
+    return;
+  }
+
+  if(kind==='program'){
+    setStage('value');
+    const first=!state.viewedInfo.includes('program');
+    if(first){state.viewedInfo.push('program');scoreOnce('info_program',10,'Consultó oferta / plan de estudios');}
+    if(!first){
+      bot('Ya revisamos la <strong>oferta / plan de estudios</strong>. Para no duplicar información, puedes revisar fechas o pasar a asesoría.',[
+        {label:'📆 Ver fechas',action:()=>intentAction('dates')},
+        {label:'📞 Hablar con asesor',action:()=>intentAction('advisor')},
+        {label:'📅 Agendar llamada',action:()=>intentAction('schedule')}
+      ]);
+      return;
+    }
+    bot(`📚 ${infoText('program')}<br><br>En una implementación real, esta respuesta se alimentaría de información institucional vigente.`,[
+      {label:'📆 Ver fechas',action:()=>intentAction('dates')},
+      {label:'📞 Hablar con asesor',action:()=>intentAction('advisor')},
+      {label:'Continuar',action:()=>afterValue()}
+    ]);
+    return;
+  }
+
+  if(kind==='dates'){
+    setStage('value');
+    const first=!state.viewedInfo.includes('dates');
+    if(first){state.viewedInfo.push('dates');scoreOnce('info_dates',14,'Consultó fechas de inicio');}
+    if(!first){
+      bot('Las <strong>fechas</strong> ya fueron revisadas. El siguiente paso puede ser agendar o solicitar asesoría.',[
+        {label:'📅 Agendar llamada',action:()=>intentAction('schedule')},
+        {label:'📞 Hablar con asesor',action:()=>intentAction('advisor')}
+      ]);
+      return;
+    }
+    bot(`📆 ${infoText('dates')}<br><br>Si quieres avanzar, puedes elegir una de estas dos opciones.`,[
+      {label:'📅 Agendar llamada',action:()=>intentAction('schedule')},
+      {label:'📞 Hablar con asesor',action:()=>intentAction('advisor')}
+    ]);
+    return;
+  }
+
+  if(kind==='advisor'){
+    setStage('score');
+    scoreOnce('request_advisor',30,'Solicitó hablar con un asesor');
+
+    if(isAdvisorCutoff()){
+      logEvent('Solicitud de asesor recibida desde las 6:30 p. m. · se convierte en agendamiento','calendar');
+      bot('🌙 En este momento ya pasó la hora de transferencia directa a asesores (<strong>6:30 p. m.</strong>). Para no dejar tu solicitud pendiente, te ayudaré a <strong>agendar el contacto</strong> para la siguiente jornada disponible.');
+      if(state.scenario==='organic' && !hasRequiredData()){
+        beginCapture('schedule');
+      }else{
+        later(()=>showChatSchedulingOptions(true),300);
+      }
+      return;
+    }
+
+    if(state.scenario==='organic' && !hasRequiredData()){
+      bot('Claro. Para que el asesor reciba el contexto completo, solo completaré los datos que todavía faltan.');
+      beginCapture('advisor');
+    }else{
+      requestAdvisorHandoff('Solicitud directa del prospecto');
+    }
+    return;
+  }
+
+  if(kind==='schedule'){
+    setStage('score');
+    scoreOnce('request_schedule',25,'Solicitó agendar llamada');
+    if(state.appointment){
+      bot(`Ya tienes una cita registrada para <strong>${escapeHtml(state.appointment.date)}</strong> a las <strong>${escapeHtml(state.appointment.time)}</strong>. No volveré a pedirte el horario.`);
+      return;
+    }
+    if(state.scenario==='organic' && !hasRequiredData()){
+      bot('Perfecto. Para registrar la cita solo completaré los datos que todavía faltan.');
+      beginCapture('schedule');
+    }else{
+      showChatSchedulingOptions();
+    }
+    return;
+  }
+}
+
+function requestAdvisorHandoff(reason='Solicitud de asesor'){
+  if(isAdvisorCutoff()){
+    logEvent('Transferencia humana bloqueada por horario · se activa agendamiento','calendar');
+    bot('🌙 La transferencia directa ya no está disponible después de las <strong>6:30 p. m.</strong>. Te mostraré opciones de agendamiento para la siguiente jornada.');
+    later(()=>showChatSchedulingOptions(true),300);
+    return;
+  }
+  state.pending=null;
+  state.afterCapture=null;
+  state.transferred=true;
+  state.flowClosed=true;
+  state.flowStatus='Cerrado · Transferido a asesor';
+  setStage('conversion');
+  logEvent(`${reason} · contexto preparado y enviado al asesor`,'handoff');
+  setManualAction(
+    'Asesor solicitado',
+    'La automatización completó la captura y calificación. El asesor debe revisar el contexto y continuar manualmente la atención.',
+    'Iniciar gestión humana',
+    {assignee:'Asesor UAO · pendiente de asignación'}
+  );
+  renderAll();
+  bot('✅ <strong>Proceso automático completado.</strong><br><br>La solicitud fue enviada al equipo de asesores. A partir de este punto inicia la <strong>gestión humana / manual</strong>.<br><br>El asesor recibe los datos disponibles, la ruta recorrida, la observación del programa si existe, el nivel de intención y el resumen de esta conversación.');
+}
+
+const CONTACT_SLOTS=[
+  {label:'9:00 a. m.',minutes:9*60},
+  {label:'11:00 a. m.',minutes:11*60},
+  {label:'2:00 p. m.',minutes:14*60},
+  {label:'4:00 p. m.',minutes:16*60}
+];
+function availableSlotsForDate(date){
+  const now=getDemoNow();
+  const sameDay=date.getFullYear()===now.getFullYear() &&
+    date.getMonth()===now.getMonth() &&
+    date.getDate()===now.getDate();
+
+  if(!sameDay) return CONTACT_SLOTS.slice();
+
+  const currentMinutes=now.getHours()*60+now.getMinutes();
+  return CONTACT_SLOTS.filter(slot=>slot.minutes>currentMinutes+15);
+}
+function nextBusinessDate(){
+  const now=getDemoNow();
+  const d=new Date(now);
+  d.setHours(0,0,0,0);
+
+  const weekend=d.getDay()===0 || d.getDay()===6;
+  if(isAdvisorCutoff() || weekend || availableSlotsForDate(d).length===0){
+    d.setDate(d.getDate()+1);
+    while(d.getDay()===0 || d.getDay()===6) d.setDate(d.getDate()+1);
+  }
+  return d;
+}
+
+function formatChatDate(d){
+  return d.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});
+}
+
+function dateIsoLocal(d){
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+function showChatSchedulingOptions(afterHours=false){
+  const d=nextBusinessDate();
+  state.chatScheduleDate=dateIsoLocal(d);
+  setStage('score');
+  logEvent(`Opciones de agendamiento mostradas en el chat para ${state.chatScheduleDate}`,'calendar');
+
+  const intro=afterHours
+    ? `🌙 Como la solicitud llegó después de las <strong>6:30 p. m.</strong>, programaremos el contacto para <strong>${formatChatDate(d)}</strong>.`
+    : `📅 Perfecto. Para <strong>${formatChatDate(d)}</strong> tengo estas opciones de contacto.`;
+
+  const slots=availableSlotsForDate(d).slice(0,4);
+  const buttons=slots.map(slot=>({
+    label:`🕐 ${slot.label}`,
+    action:()=>confirmChatAppointment(slot.label)
+  }));
+
+  buttons.push({
+    label:afterHours?'👤 No tengo disponibilidad · Dejar seguimiento':'👤 No tengo disponibilidad · Asesor',
+    action:()=>noAvailabilityDirectAdvisor()
+  });
+
+  bot(`${intro}<br><br>¿A qué hora prefieres que te contacten?<br><br><small>Se muestran máximo 4 franjas horarias y una quinta salida alternativa.</small>`,buttons);
+}
+
+function confirmChatAppointment(time){
+  const date=state.chatScheduleDate || dateIsoLocal(nextBusinessDate());
+  state.selectedDate=date;
+  state.selectedTime=time;
+  state.appointment={date,time,channel:'WhatsApp · llamada de asesor'};
+  setStage('conversion');
+  logEvent(`Cita programada desde el chat: ${date} · ${time}`,'calendar');
+  scoreOnce('appointment_confirmed',25,'Cita confirmada desde WhatsApp');
+  state.flowClosed=true;
+  state.flowStatus='Cerrado · Cita programada';
+
+  const afterHours=isAdvisorCutoff();
+  setManualAction(
+    afterHours?'Agendamiento fuera de horario':'Cita agendada',
+    afterHours
+      ? `La automatización cerró el proceso fuera de horario. El asesor debe ejecutar el contacto en la cita programada: ${date} · ${time}.`
+      : `La automatización completó el agendamiento. El asesor debe ejecutar manualmente el contacto en la fecha y hora seleccionadas: ${date} · ${time}.`,
+    'Esperar fecha de contacto',
+    {when:`${date} · ${time}`,assignee:'Asesor UAO · pendiente de asignación'}
+  );
+
+  bot(`✅ <strong>Proceso automático completado.</strong><br><br>📅 Fecha: ${escapeHtml(date)}<br>🕐 Hora: ${escapeHtml(time)}<br>📞 Medio: llamada de un asesor UAO<br><br>La cita queda registrada en Salesforce (simulado). A partir de este punto queda pendiente la <strong>ejecución humana</strong> en la fecha y hora seleccionadas.`);
+  renderAll();
+}
+
+function noAvailabilityDirectAdvisor(){
+  if(isAdvisorCutoff()){
+    const d=nextAdvisorBusinessDate();
+    const date=dateIsoLocal(d);
+    state.appointment={date,time:'Horario por acordar',channel:'Seguimiento programado'};
+    state.flowClosed=true;
+    state.flowStatus='Cerrado · Seguimiento programado';
+    logEvent(`Sin disponibilidad de franjas · seguimiento programado para ${date}`,'calendar');
+    scoreOnce('afterhours_followup',20,'Seguimiento fuera de horario');
+    setManualAction(
+      'Agendamiento fuera de horario',
+      `El prospecto no tuvo disponibilidad en las franjas ofrecidas. Se programó seguimiento para ${date}; el asesor deberá acordar manualmente la hora.`,
+      'Seguimiento próximo día hábil',
+      {when:`${date} · horario por acordar`,assignee:'Asesor UAO · pendiente de asignación'}
+    );
+    bot(`✅ <strong>Proceso automático completado.</strong><br><br>Como ninguno de los horarios te funciona y ya pasó la hora de transferencia directa, dejaré el seguimiento programado para <strong>${formatChatDate(d)}</strong>. Un asesor acordará contigo el horario.`);
+    renderAll();
+    return;
+  }
+  logEvent('Sin disponibilidad en los horarios propuestos · deriva a asesor directo','handoff');
+  scoreOnce('no_availability_advisor',20,'No tiene disponibilidad · deriva a asesor');
+  bot('Entendido. Como ninguno de esos horarios te funciona, pasaré directamente la solicitud al equipo de asesores para que acuerden contigo otro momento.');
+  later(()=>requestAdvisorHandoff('Sin disponibilidad en las franjas propuestas'),350);
+}
+function showNextStepOptions(){
+  bot('Para cerrar este paso, puedes elegir cómo continuar:',[
+    {label:'📅 Agendar llamada',action:()=>intentAction('schedule')},
+    {label:'📞 Hablar con asesor',action:()=>intentAction('advisor')},
+    {label:'💬 Nueva consulta',action:()=>intentAction('menu')}
+  ]);
+}
+function afterValue(){
+  if(state.scenario==='organic' && !hasRequiredData()){
+    bot('Para continuar con acompañamiento comercial, completaré únicamente los datos que todavía faltan.');
+    beginCapture('postInfo');
+  }else{
+    showNextStepOptions();
+  }
+}
+function requiredFields(){
+  return [
+    ['firstName','nombre'],
+    ['lastName','apellido'],
+    ['docType','tipo de documento'],
+    ['docNumber','número de documento'],
+    ['phone','teléfono'],
+    ['email','correo electrónico'],
+    ['city','ciudad de residencia']
+  ];
+}
+function hasRequiredData(){return requiredFields().every(([k])=>state.contact[k]);}
+function beginCapture(after){
+  setStage('capture');
+  state.pending=null;
+  state.afterCapture=after||'postInfo';
+  const missing=requiredFields().filter(([k])=>!state.contact[k]).map(([k])=>k);
+  state.captureQueue=missing;
+  if(!missing.length){
+    if(state.contact.crmId || state.consentGiven){
+      continueAfterCapture();
+    }else{
+      finishCapture();
+    }
+    return;
+  }
+  askNextCapture();
+}
+function askNextCapture(){
+  const field=state.captureQueue[0];state.pending=field;
+  const prompts={
+    firstName:'¿Cuál es tu <strong>nombre</strong>?',
+    lastName:'Gracias. ¿Cuál es tu <strong>apellido</strong>?',
+    docType:'¿Qué <strong>tipo de documento</strong> tienes?',
+    docNumber:'¿Cuál es tu <strong>número de documento</strong>?',
+    phone:'¿Cuál es tu <strong>número de teléfono</strong>?',
+    email:'¿Cuál es tu <strong>correo electrónico</strong>?',
+    city:'¿En qué <strong>ciudad resides</strong>?'
+  };
+  if(field==='docType'){
+    bot(prompts[field],[
+      {label:'Cédula de ciudadanía',action:()=>captureAnswer('Cédula de ciudadanía')},
+      {label:'Cédula de extranjería',action:()=>captureAnswer('Cédula de extranjería')},
+      {label:'Pasaporte',action:()=>captureAnswer('Pasaporte')},
+      {label:'Otro',action:()=>captureAnswer('Otro')}
+    ]);
+  }else bot(prompts[field]);
+}
+function captureAnswer(value){
+  const field=state.pending;if(!field)return;
+  const clean=String(value).trim();
+  if(field==='email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)){bot('Ese correo parece incompleto. ¿Puedes revisarlo y escribirlo nuevamente?');return;}
+  if(field==='phone' && clean.replace(/\D/g,'').length<7){bot('Ese número parece corto. Escríbelo nuevamente incluyendo indicativo si aplica.');return;}
+  if(field==='docNumber' && clean.replace(/\D/g,'').length<5){bot('El número de documento parece incompleto. ¿Puedes revisarlo?');return;}
+  state.contact[field]=clean;logEvent(`Dato capturado: ${field}`,'capture');
+  state.captureQueue.shift();state.pending=null;renderAll();
+  if(state.captureQueue.length) askNextCapture(); else finishCapture();
+}
+function finishCapture(){
+  state.pending=null;
+  setStage('crm');
+  if(state.consentGiven){continueAfterCapture();return;}
+  bot('Antes de guardar la información, la solución productiva debe solicitar y registrar la aceptación de la política de tratamiento de datos.',[
+    {label:'Acepto y continuar',action:()=>saveLead()},
+    {label:'Prefiero hablar con una persona',action:()=>requestAdvisorHandoff('Solicita atención humana antes de persistir el registro')}
+  ]);
+}
+function continueAfterCapture(){
+  const goal=state.afterCapture||'postInfo';
+  state.afterCapture=null;
+  renderAll();
+  if(goal==='schedule'){
+    bot('✅ Datos completos. Continuemos directamente con el horario de contacto.');
+    later(()=>showChatSchedulingOptions(),320);
+    return;
+  }
+  if(goal==='advisor'){
+    bot('✅ Datos completos. Continuemos directamente con el asesor, sin repetir preguntas.');
+    later(()=>requestAdvisorHandoff('Datos completados para transferencia'),320);
+    return;
+  }
+  bot('✅ Datos completos y contexto actualizado. No volveré a solicitar estos datos dentro de esta conversación.');
+  later(()=>showNextStepOptions(),320);
+}
+function saveLead(){
+  state.consentGiven=true;
+  state.contact.consentStatus='Aceptado en conversación';
+  logEvent('Consentimiento registrado · demo','crm');
+  system('☁ Salesforce: búsqueda de coincidencias por documento → correo → teléfono');
+  later(()=>{
+    state.contact.duplicateCheck='Sin duplicado crítico';
+    logEvent('Sin duplicado crítico · registro creado/actualizado','crm');
+    state.contact.crmId=state.contact.crmId||'00Q-UAO-DEMO-'+Math.floor(1000+Math.random()*8999);
+    scoreOnce('crm_capture_complete',8,'Captura completa / registro CRM');
+    renderAll();
+    continueAfterCapture();
+  },650);
+}
+function sendFreeText(){
+  const inp=document.getElementById('chatInput');const text=inp.value.trim();if(!text)return;inp.value='';
+  disableActiveChatOptions();
+  userMessage(text);
+  if(state.flowClosed){
+    bot('✅ Tu proceso anterior ya quedó cerrado. Para no duplicar gestiones ni repetir preguntas, usa <strong>🏠 Menú principal</strong> si deseas iniciar una consulta adicional.');
+    return;
+  }
+  if(state.pending==='programObservation'){setOrganicProgramObservation(text);return;}
+  if(state.pending){captureAnswer(text);return;}
+  const s=text.toLowerCase();
+  if(/precio|vale|cuesta|inversi|valor/.test(s)){intentAction('price');return;}
+  if(/beca|descuento|financia/.test(s)){intentAction('scholarship');return;}
+  if(/plan|pensum|materia|programa|contenido/.test(s)){intentAction('program');return;}
+  if(/fecha|inicia|comienza|cuando/.test(s)){intentAction('dates');return;}
+  if(/asesor|persona|humano|alguien|llam/.test(s)){intentAction('advisor');return;}
+  if(/agend|cita|mañana|hora/.test(s)){intentAction('schedule');return;}
+  if(/inscrib|matricul|pagar|pago|documentos/.test(s)){
+    scoreOnce('signup_intent',30,'Intención de inscripción / matrícula');
+    bot('🔥 Esa intención indica un interés alto. Para cerrar este paso puedes elegir asesoría o agendamiento.',[
+      {label:'Hablar con asesor',action:()=>intentAction('advisor')},
+      {label:'Agendar llamada',action:()=>intentAction('schedule')}
+    ]);
+    return;
+  }
+  if(/no interesado|no me interesa|no quiero/.test(s)){
+    state.score=Math.max(0,state.score-20);
+    state.intent='Exploratorio';
+    state.flowClosed=true;
+    state.flowStatus='Cerrado · No interesado';
+    logEvent('Usuario manifestó no estar interesado · automatizaciones detenidas','interaction');
+    bot('Entendido. Este proceso queda cerrado y se detendrían los seguimientos automáticos asociados a este interés.');
+    renderAll();
+    return;
+  }
+  bot('Puedo ayudarte con precios, becas, plan de estudios, fechas, inscripción, agendamiento o contacto con un asesor. También puedes usar el menú inferior.');
+}
+function requestedInfoLabel(){
+  const map={price:'Precios / inversión',scholarship:'Becas / descuentos',program:'Oferta / plan',dates:'Fechas'};
+  return state.viewedInfo.length ? state.viewedInfo.map(x=>map[x]||x).join(' · ') : '—';
+}
+function conversationSummary(){
+  const c=state.contact;
+  const parts=[
+    c.line,
+    c.academicLevel||c.offeringType,
+    c.faculty,
+    c.modality,
+    c.program ? `Programa: ${c.program}` : null,
+    c.programObservation ? `Obs.: ${c.programObservation}` : null,
+    requestedInfoLabel()!=='—' ? `Consultó: ${requestedInfoLabel()}` : null,
+    `Intención: ${state.intent} (${state.score}/100)`,
+    state.manualAction ? `Acción final: ${state.manualAction.type}` : null
+  ].filter(Boolean);
+  return parts.join(' | ');
+}
+function renderJourney(){
+  const root=document.getElementById('journeySteps');
+  if(!root) return;
+  const c=state.contact;
+
+  let items;
+  if(state.scenario==='paid'){
+    items=[
+      ['Meta Instant Form',!!c.form],
+      ['Marketing Cloud Lead Capture',!!c.leadCaptureSource],
+      ['Data Extension',!!c.dataExtension],
+      ['Journey Builder',!!c.journeyName],
+      ['Campaña Salesforce CRM',!!c.salesforceCampaign],
+      ['WhatsApp disparado',state.events.some(e=>e.text.includes('Salida WhatsApp'))],
+      ['Prospecto respondió',state.userResponded],
+      ['Conversación activa',state.userResponded],
+      ['Acción final',!!state.manualAction]
+    ];
+  }else{
+    items=[
+      ['Origen',state.events.length>0],
+      ['Identificación',!!(c.line && c.faculty)],
+      ['Contexto académico',!!(c.modality || c.programObservation)],
+      ['Datos del contacto',hasRequiredData()],
+      ['Salesforce',!!c.crmId],
+      ['Acción final',!!state.manualAction]
+    ];
+  }
+
+  const firstPending=items.findIndex(x=>!x[1]);
+  root.innerHTML=items.map(([label,done],i)=>{
+    const current=!done && i===firstPending;
+    return `<div class="journey-step ${done?'done':current?'current':''}"><div class="jicon">${done?'✓':i+1}</div><b>${escapeHtml(label)}</b><span>${done?'Completado':current?'En curso':'Pendiente'}</span></div>`;
+  }).join('');
+}
+
+function renderLeadPanel(){
+  const score=state.score;
+  document.getElementById('scoreNumber').textContent=score;
+  document.getElementById('scoreLabel').textContent=`${score} / 100`;
+  document.getElementById('scoreBar').style.width=score+'%';
+  document.getElementById('scoreCircle').style.background=`conic-gradient(var(--uao-red) ${score*3.6}deg,#eee ${score*3.6}deg)`;
+  const b=document.getElementById('intentBadge');b.textContent=state.intent;b.className='badge '+(score>=70?'badge-red':score>=40?'badge-amber':'badge-blue');
+  document.getElementById('nextActionText').textContent='Siguiente acción: '+nextAction();
+  document.getElementById('originBadge').textContent=state.scenario==='paid'?'Pauta / Meta Ads':'Orgánico';
+}
+function renderLeadData(){
+  const c=state.contact;
+  const fields=[
+    ['Nombre',[c.firstName,c.lastName].filter(Boolean).join(' ')||'—'],
+    ['Línea',c.line||PROGRAMS[state.line].label],
+    ['Tipo / nivel',c.academicLevel||c.offeringType||'—'],
+    ['Facultad',c.faculty||'—'],
+    ['Programa de preferencia',c.program||'—'],
+    ['Observación',c.programObservation||'—'],
+    ['Modalidad',c.modality||'—'],
+    ['Origen',c.origin||c.source||'—'],
+    ['Punto de entrada',c.organicTouchpoint||c.source||'—'],
+    ['Ruta de captación',state.scenario==='paid'
+      ? 'Pauta · Meta Form → Lead Capture → Data Extension → Journey'
+      : 'Orgánico · canal con enlace/número WhatsApp → conversación entrante → captura progresiva'],
+    ['Campaña',c.campaign||'—'],
+    ['Data Extension',c.dataExtension||'—'],
+    ['Journey',c.journeyName||'—'],
+    ['Campaña Salesforce',c.salesforceCampaign||'—'],
+    ['Teléfono',c.phone||'—'],
+    ['Correo',c.email||'—'],
+    ['Ciudad',c.city||'—'],
+    ['Egresado UAO',c.uaoGraduate===undefined?'—':(c.uaoGraduate?'Sí':'No')],
+    ['Beneficio / descuento',c.discountInfo||'—'],
+    ['Salesforce',c.crmId||'Pendiente'],
+    ['Última interacción',state.lastInteractionAt||'—'],
+    ['Estado conversación',state.flowStatus||'Conversación activa'],
+    ['Acción final',state.manualAction?state.manualAction.type:'—']
+  ];
+  document.getElementById('leadData').innerHTML=fields.map(([k,v])=>{
+    const isObs=k==='Observación' && v!=='—';
+    const style=isObs?'style="background:#fff4f4;border:1px solid #ffd0d0;border-radius:8px;padding:7px 9px;color:#8f1111"':'';
+    return `<dt>${k}</dt><dd ${style}>${escapeHtml(v)}</dd>`;
+  }).join('');
+}
+function renderEvents(){
+  const el=document.getElementById('eventLog');if(!el)return;
+  if(!state.events.length){el.innerHTML='<div class="empty">Aún no hay eventos.</div>';return;}
+  el.innerHTML=state.events.slice().reverse().map(e=>`<div class="event"><div class="event-time">${e.time}</div><div class="event-text">${escapeHtml(e.text)}</div></div>`).join('');
+  const sf=document.getElementById('sfEventLog');if(sf)sf.innerHTML=state.events.slice().reverse().map(e=>`<div class="event"><div class="event-time">${e.time}</div><div class="event-text">${escapeHtml(e.text)}</div></div>`).join('');
+}
+function renderSalesforce(){
+  const c=state.contact;
+  const root=document.getElementById('sfFields');
+  if(!root)return;
+  document.getElementById('sfRecordId').textContent=c.crmId||'Registro temporal / aún no persistido';
+
+  const rows=[
+    ['Nombre',[c.firstName,c.lastName].filter(Boolean).join(' ')||'—'],
+    ['Documento',[c.docType,c.docNumber].filter(Boolean).join(' · ')||'—'],
+    ['Teléfono',c.phone||'—'],
+    ['Correo',c.email||'—'],
+    ['Ciudad',c.city||'—'],
+    ['Línea',c.line||PROGRAMS[state.line].label],
+    ['Tipo / nivel',c.academicLevel||c.offeringType||'—'],
+    ['Facultad',c.faculty||'—'],
+    ['Programa de preferencia',c.program||'—'],
+    ['Observación',c.programObservation||'—'],
+    ['Modalidad',c.modality||'—'],
+    ['Canal',c.channel||'WhatsApp'],
+    ['Fuente / origen',c.origin||c.source||'—'],
+    ['Punto de entrada orgánico',c.organicTouchpoint||'—'],
+    ['Ruta de captación',state.scenario==='paid'
+      ? 'Pauta · Meta Instant Form → Marketing Cloud → Data Extension → Journey → Salesforce'
+      : 'Orgánico · medio con número/enlace WhatsApp → conversación entrante → captura progresiva → Salesforce'],
+    ['Campaña Meta / captación',c.campaign||'—'],
+    ['Lead Capture',c.leadCaptureSource||'—'],
+    ['Data Extension',c.dataExtension||'—'],
+    ['Journey Builder',c.journeyName||'—'],
+    ['Estado Journey',c.journeyStatus||'—'],
+    ['Actividades Journey',c.journeyActivities||'—'],
+    ['Campaña Salesforce CRM',c.salesforceCampaign||'—'],
+    ['Campaign Member Status',c.campaignMemberStatus||'—'],
+    ['Disparador WhatsApp',c.whatsappTrigger||'—'],
+    ['UTM source',c.utmSource||'—'],
+    ['UTM medium',c.utmMedium||'—'],
+    ['UTM campaign',c.utmCampaign||'—'],
+    ['UTM content',c.utmContent||'—'],
+    ['Conjunto de anuncios',c.adSet||'—'],
+    ['Anuncio',c.ad||'—'],
+    ['Formulario',c.form||'—'],
+    ['Tratamiento de datos',c.consentStatus||'—'],
+    ['Control de duplicados',c.duplicateCheck||'—'],
+    ['Primera interacción',state.firstContactAt||'—'],
+    ['Última interacción',state.lastInteractionAt||'—'],
+    ['Información solicitada',requestedInfoLabel()],
+    ['Nivel de intención',state.intent],
+    ['Score',state.score+' / 100'],
+    ['Egresado UAO',c.uaoGraduate===undefined?'—':(c.uaoGraduate?'Sí':'No')],
+    ['Beneficio / descuento comunicado',c.discountInfo||'—'],
+    ['Cita',state.appointment?`${state.appointment.date} · ${state.appointment.time}`:'—'],
+    ['Canal de cita',state.appointment?.channel||'—'],
+    ['Acción final solicitada',state.manualAction?.type||'—'],
+    ['Gestión humana requerida',state.manualAction?.requiresHuman?'Sí':'No'],
+    ['Estado ejecución humana',state.manualAction?.status||'—'],
+    ['Asesor / asignación',state.manualAction?.assignee||'—'],
+    ['Fecha/hora acción',state.manualAction?.when||'—'],
+    ['Próxima acción',nextAction()],
+    ['Resumen de conversación',conversationSummary()],
+    ['Estado conversación',state.flowStatus||'Conversación activa'],
+    ['Estado comercial',state.transferred?'Asesor asignado':state.appointment?'Cita programada':state.events.length?'Conversación iniciada':'Nuevo']
+  ];
+  root.innerHTML=rows.map(([k,v])=>`<div class="sf-row"><div class="k">${k}</div><div class="v">${escapeHtml(v)}</div></div>`).join('');
+  renderEvents();
+  renderProcessAlerts();
+}
+function renderHandoff(){
+  const c=state.contact;
+  const name=[c.firstName,c.lastName].filter(Boolean).join(' ')||'Prospecto sin nombre completo';
+  const summary=conversationSummary();
+  document.getElementById('handoffBadge').textContent=state.intent;
+  document.getElementById('handoffSummary').innerHTML=[
+    ['Nombre',name],
+    ['Línea',c.line||PROGRAMS[state.line].label],
+    ['Tipo / nivel',c.academicLevel||c.offeringType||'—'],
+    ['Facultad',c.faculty||'—'],
+    ['Programa de preferencia',c.program||'—'],
+    ['Observación',c.programObservation||'—'],
+    ['Modalidad',c.modality||'—'],
+    ['Origen',c.origin||c.source||'—'],
+    ['Campaña',c.campaign||'—'],
+    ['Teléfono',c.phone||'—'],
+    ['Correo',c.email||'—'],
+    ['Egresado UAO',c.uaoGraduate===undefined?'—':(c.uaoGraduate?'Sí':'No')],
+    ['Beneficio / descuento',c.discountInfo||'—'],
+    ['Interés',`${state.intent} · ${state.score}/100`],
+    ['Acción final',state.manualAction?.type||'—'],
+    ['Ejecución humana',state.manualAction?.status||'Pendiente de definición'],
+    ['Asignación',state.manualAction?.assignee||'—'],
+    ['Siguiente acción',state.appointment?'Ejecutar contacto en la cita':state.transferred?'Iniciar gestión del asesor':'Contacto asesor / agendamiento']
+  ].map(([k,v])=>`<div class="handoff-row"><span>${k}</span><b>${escapeHtml(v)}</b></div>`).join('')+
+  `<div class="notice red" style="margin-top:10px"><strong>Resumen automático:</strong> ${escapeHtml(summary)}</div>`;
+
+  const btn=document.getElementById('handoffActionBtn');
+  if(btn){
+    if(state.transferred){
+      btn.textContent='✓ Transferencia registrada';
+      btn.disabled=true;
+    }else if(state.appointment){
+      btn.textContent='📅 Cita ya programada';
+      btn.disabled=true;
+    }else{
+      btn.textContent=isAdvisorCutoff()?'🌙 Agendar atención':'➤ Transferir a asesor';
+      btn.disabled=false;
+    }
+  }
+}
+function transferToAdvisor(){
+  if(state.transferred){
+    toast('La transferencia ya fue registrada; no se duplica el proceso.');
+    return;
+  }
+  if(isAdvisorCutoff()){
+    toast('Fuera de horario: la solicitud pasa a agendamiento.');
+    openTab('simulator');
+    bot('🌙 La transferencia directa no está disponible después de las <strong>6:30 p. m.</strong>. Te mostraré opciones para programar el contacto.');
+    later(()=>showChatSchedulingOptions(true),300);
+    return;
+  }
+  state.transferred=true;
+  state.flowClosed=true;
+  state.flowStatus='Cerrado · Transferido a asesor';
+  setStage('conversion');
+  logEvent('Conversación transferida a asesor con resumen','handoff');
+  scoreOnce('handoff_complete',10,'Handoff comercial');
+  setManualAction(
+    'Asesor solicitado',
+    'La automatización completó el proceso. El asesor debe revisar el contexto y continuar manualmente la atención.',
+    'Iniciar gestión humana',
+    {assignee:'Asesor UAO · pendiente de asignación'}
+  );
+  renderAll();
+  toast('Transferencia simulada completada.');
+}
+
+function renderCommercialStage(){
+  const nodes=Array.from(document.querySelectorAll('[data-commercial-stage]'));
+  if(!nodes.length) return;
+
+  const c=state.contact||{};
+  const done={
+    capture: state.scenario==='paid'
+      ? !!(c.form && c.dataExtension && c.journeyName)
+      : !!(c.organicTouchpoint && state.events.length),
+    conversation: state.scenario==='paid' ? state.userResponded : state.events.length>1,
+    qualification: state.viewedInfo.length>0 || state.score>=18,
+    crm: !!c.crmId,
+    action: !!(state.appointment || state.transferred || state.manualAction),
+    close: !!state.flowClosed
+  };
+
+  const order=['capture','conversation','qualification','crm','action','close'];
+  const firstPending=order.find(x=>!done[x]);
+
+  nodes.forEach(n=>{
+    const key=n.dataset.commercialStage;
+    n.classList.toggle('done',!!done[key]);
+    n.classList.toggle('current',key===firstPending);
+  });
+}
+
+function renderSalesforceComparison(){
+  const before=document.getElementById('sfBefore');
+  const after=document.getElementById('sfAfter');
+  if(!before || !after) return;
+
+  const c=state.contact||{};
+  const beforeRows=state.scenario==='paid'
+    ? [
+        ['Origen',c.source||'Meta Ads'],
+        ['Nombre',[c.firstName,c.lastName].filter(Boolean).join(' ')||'—'],
+        ['Celular',c.phone||'—'],
+        ['Correo',c.email||'—'],
+        ['Programa',c.program||'—'],
+        ['Campaña',c.campaign||'—'],
+        ['Data Extension',c.dataExtension||'—'],
+        ['Journey',c.journeyName||'—']
+      ]
+    : [
+        ['Origen',c.organicTouchpoint||'Conversación WhatsApp'],
+        ['Nombre','Aún no capturado al inicio'],
+        ['Celular','Disponible por el canal / pendiente de normalizar'],
+        ['Correo','Pendiente'],
+        ['Programa preferencia','No definido'],
+        ['Observación','Pendiente'],
+        ['Score','0 / 100'],
+        ['Estado','Conversación iniciada']
+      ];
+
+  const afterRows=[
+    ['Nombre',[c.firstName,c.lastName].filter(Boolean).join(' ')||'—'],
+    ['Origen',c.source||c.organicTouchpoint||'—'],
+    ['Observación',c.programObservation||'—'],
+    ['Información consultada',requestedInfoLabel()],
+    ['Egresado UAO',c.uaoGraduate===undefined?'—':(c.uaoGraduate?'Sí':'No')],
+    ['Beneficio',c.discountInfo||'—'],
+    ['Score / intención',`${state.score}/100 · ${state.intent}`],
+    ['Cita',state.appointment?`${state.appointment.date} · ${state.appointment.time}`:'—'],
+    ['Acción final',state.manualAction?.type||'—'],
+    ['Estado',state.flowStatus||'Conversación activa'],
+    ['Próxima acción',nextAction()]
+  ];
+
+  before.innerHTML=beforeRows.map(([k,v])=>`<div class="sf-compare-row"><span>${escapeHtml(k)}</span><b>${escapeHtml(v)}</b></div>`).join('');
+  after.innerHTML=afterRows.map(([k,v])=>`<div class="sf-compare-row"><span>${escapeHtml(k)}</span><b class="${v!=='—'?'sf-value-new':''}">${escapeHtml(v)}</b></div>`).join('');
+}
+
+const PRESENTATION_STEPS=[
+  {tab:'overview',title:'1 · Visión ejecutiva',copy:'Presenta el objetivo: reducir fricción, capturar contexto y llevar cada prospecto a la siguiente mejor acción.'},
+  {tab:'simulator',title:'2 · Experiencia del prospecto',copy:'Demuestra la conversación. Cambia entre orgánico y pauta para explicar que el punto de entrada es diferente.'},
+  {tab:'visualflows',title:'3 · Lógica y automatización',copy:'Explica las ramas, disparadores y condiciones sin entrar todavía en detalle técnico de integración.'},
+  {tab:'salesforce',title:'4 · Enriquecimiento de Salesforce',copy:'Muestra el antes vs. después: la conversación no solo responde; también enriquece el CRM y deja trazabilidad.'},
+  {tab:'handoff',title:'5 · Ejecución humana',copy:'Señala dónde termina la automatización, qué recibe el asesor y qué información no debe volver a preguntar.'},
+  {tab:'kpis',title:'6 · Medición',copy:'Diferencia el embudo de pauta del embudo orgánico. Sus puntos de entrada no son equivalentes.'},
+  {tab:'architecture',title:'7 · Arquitectura y cierre',copy:'Cierra explicando las dos rutas de captación, la convergencia del ecosistema y los controles para producción.'}
+];
+let presentationIndex=0;
+let presentationScenario='organic';
+
+function startPresentation(){
+  presentationIndex=0;
+  presentationScenario='organic';
+  document.getElementById('presentationDock')?.classList.add('show');
+  applyPresentationStep();
+}
+function closePresentation(){
+  document.getElementById('presentationDock')?.classList.remove('show');
+}
+function presentationNext(){
+  presentationIndex=Math.min(PRESENTATION_STEPS.length-1,presentationIndex+1);
+  applyPresentationStep();
+}
+function presentationPrev(){
+  presentationIndex=Math.max(0,presentationIndex-1);
+  applyPresentationStep();
+}
+function togglePresentationScenario(){
+  presentationScenario=presentationScenario==='organic'?'paid':'organic';
+  const btn=document.getElementById('presentationScenarioBtn');
+  if(btn)btn.textContent=`Escenario: ${presentationScenario==='organic'?'Orgánico':'Pauta'}`;
+  const scenario=document.getElementById('scenarioSelect');
+  if(scenario){
+    scenario.value=presentationScenario;
+    if(PRESENTATION_STEPS[presentationIndex].tab==='simulator'){
+      startSelectedScenario();
+    }
+  }
+}
+function applyPresentationStep(){
+  const step=PRESENTATION_STEPS[presentationIndex];
+  openTab(step.tab);
+  const title=document.getElementById('presentationTitle');
+  const copy=document.getElementById('presentationCopy');
+  const progress=document.getElementById('presentationProgress');
+  const btn=document.getElementById('presentationScenarioBtn');
+
+  if(title)title.textContent=step.title;
+  if(copy)copy.textContent=step.copy;
+  if(progress)progress.style.width=`${((presentationIndex+1)/PRESENTATION_STEPS.length)*100}%`;
+  if(btn)btn.textContent=`Escenario: ${presentationScenario==='organic'?'Orgánico':'Pauta'}`;
+
+  if(step.tab==='simulator'){
+    const scenario=document.getElementById('scenarioSelect');
+    if(scenario && scenario.value!==presentationScenario){
+      scenario.value=presentationScenario;
+      startSelectedScenario();
+    }
+  }
+}
+
+function renderAll(){renderLeadPanel();renderLeadData();renderJourney();renderEvents();renderSalesforce();renderSalesforceComparison();renderHandoff();renderCommercialStage();renderProcessAlerts();}
+
+const initialCal=getDemoNow();
+let calYear=initialCal.getFullYear(),calMonth=initialCal.getMonth();
+const MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function renderCalendar(){
+  const label=document.getElementById('monthLabel');if(!label)return;
+  label.textContent=MONTHS[calMonth]+' '+calYear;
+  const root=document.getElementById('calendarGrid');root.innerHTML='';
+  const first=new Date(calYear,calMonth,1);
+  let offset=first.getDay();offset=offset===0?6:offset-1;
+  const days=new Date(calYear,calMonth+1,0).getDate();
+  for(let i=0;i<offset;i++){
+    const d=document.createElement('div');d.className='day disabled';root.appendChild(d);
+  }
+
+  const today=getDemoNow();
+  today.setHours(0,0,0,0);
+
+  for(let day=1;day<=days;day++){
+    const date=new Date(calYear,calMonth,day);
+    const dow=date.getDay();
+    const d=document.createElement('div');
+    d.className='day';
+    d.textContent=day;
+
+    const past=date<today;
+    const weekend=dow===0 || dow===6;
+    const disabled=past || weekend;
+
+    if(disabled)d.classList.add('disabled');
+    if(date.toDateString()===today.toDateString())d.classList.add('today');
+
+    const iso=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    if(state.selectedDate===iso)d.classList.add('selected');
+
+    if(!disabled){
+      d.onclick=()=>{
+        state.selectedDate=iso;
+        state.selectedTime=null;
+        renderCalendar();
+        updateConfirmButton();
+      };
+    }
+    root.appendChild(d);
+  }
+
+  const selectedForSlots=state.selectedDate
+    ? new Date(state.selectedDate+'T00:00:00')
+    : nextBusinessDate();
+  const slots=availableSlotsForDate(selectedForSlots);
+  document.getElementById('timeSlots').innerHTML=slots.length
+    ? slots.map(slot=>`<button class="slot ${state.selectedTime===slot.label?'selected':''}" onclick="selectSlot('${slot.label}')">${slot.label}</button>`).join('')
+    : '<div class="empty" style="grid-column:1/-1">No quedan franjas disponibles para este día. Selecciona otra fecha.</div>';
+  updateConfirmButton();
+}
+function selectSlot(s){state.selectedTime=s;renderCalendar();}
+function changeMonth(dir){calMonth+=dir;if(calMonth<0){calMonth=11;calYear--}if(calMonth>11){calMonth=0;calYear++}state.selectedDate=null;state.selectedTime=null;renderCalendar();}
+function updateConfirmButton(){
+  const b=document.getElementById('confirmSchedule');if(!b)return;
+  b.disabled=!(state.selectedDate&&state.selectedTime);
+  b.textContent=state.selectedDate&&state.selectedTime?`Confirmar · ${state.selectedDate} · ${state.selectedTime}`:'Confirmar cita';
+}
+function confirmAppointment(){
+  if(!(state.selectedDate&&state.selectedTime))return;
+  state.appointment={date:state.selectedDate,time:state.selectedTime,channel:'Llamada de asesor UAO'};
+  setStage('conversion');
+  state.flowClosed=true;
+  state.flowStatus='Cerrado · Cita programada';
+  logEvent(`Cita programada: ${state.selectedDate} · ${state.selectedTime}`,'calendar');
+  scoreOnce('appointment_confirmed',25,'Cita confirmada');
+  setManualAction(
+    'Cita agendada',
+    `La automatización completó el agendamiento. El asesor debe realizar el contacto manualmente el ${state.selectedDate} a las ${state.selectedTime}.`,
+    'Esperar fecha de contacto',
+    {when:`${state.selectedDate} · ${state.selectedTime}`,assignee:'Asesor UAO · pendiente de asignación'}
+  );
+  document.getElementById('appointmentSummary').innerHTML=`<strong>✅ Cita confirmada</strong><br>Fecha: ${escapeHtml(state.selectedDate)}<br>Hora: ${escapeHtml(state.selectedTime)}<br>Programa de preferencia: ${escapeHtml(state.contact.program||'No definido')}<br>Observación: ${escapeHtml(state.contact.programObservation||'—')}<br><br>En producción se registraría una tarea/cita en Salesforce y se programarían recordatorios por WhatsApp.`;
+  renderAll();toast('Cita registrada en la demo.');
+}
+function simulateImmediateContact(){
+  scoreOnce('immediate_contact',25,'Solicitó contacto inmediato');
+  if(isAdvisorCutoff()){
+    logEvent('Contacto inmediato solicitado después de 6:30 p. m. · se redirige a agenda','calendar');
+    openTab('simulator');
+    bot('🌙 Después de las <strong>6:30 p. m.</strong> no enviamos la conversación directamente a un asesor. Te mostraré horarios para agendar la siguiente atención.');
+    later(()=>showChatSchedulingOptions(true),300);
+    return;
+  }
+  logEvent('Solicitud de contacto inmediato · SLA comercial','handoff');
+  requestAdvisorHandoff('Solicitud de contacto inmediato');
+  openTab('handoff');
+  renderHandoff();
+}
+function simulateRecovery(label){logEvent(label,'recovery');toast('Evento de recuperación agregado al historial.');}
+function setKpiLine(key,btn){
+  document.querySelectorAll('#kpiFilters button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderKpis(key);
+}
+function renderKpis(key='all'){
+  const d=kpiData[key];
+  document.getElementById('kpiCards').innerHTML=d.cards.map(([v,l])=>`<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div><div class="t up">Demo / referencia visual</div></div>`).join('');
+  document.getElementById('kpiTable').innerHTML=d.rows.map(r=>`<tr>${r.map((v,i)=>`<td>${v}</td>`).join('')}</tr>`).join('');
+}
+
+window.addEventListener('load',()=>{
+  renderKpis('all');
+  setDemoTimeMode(state.demoTimeMode);
+  renderCalendar();
+  startDemo();
+  renderCommercialStage();
+  renderSalesforceComparison();
+  renderProcessAlerts();
+});
+</script>
+</body>
+</html>
