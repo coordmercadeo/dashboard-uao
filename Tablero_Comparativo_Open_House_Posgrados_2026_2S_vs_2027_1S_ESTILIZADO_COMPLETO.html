@@ -1,1344 +1,783 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Open House Posgrados · Comparativo 2026-2S vs 2027-1S</title>
 <style>
-:root {
-  --bg:#f4f6f8; --panel:#ffffff; --ink:#111318; --muted:#69707d; --line:#e8ebef;
-  --red:#b11226; --red2:#e21d3a; --wine:#6f1020; --dark:#16181d; --green:#14804a;
-  --amber:#b86b00; --blue:#3157c8; --shadow:0 18px 50px rgba(17,19,24,.08);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:
-radial-gradient(circle at top right,rgba(177,18,38,.08),transparent 28%),
-linear-gradient(180deg,#fafafa 0,#f4f6f8 38%,#eef1f4 100%);color:var(--ink)}
-.wrap{max-width:1280px;margin:auto;padding:26px}
-.hero{position:relative;overflow:hidden;background:linear-gradient(120deg,#111318 0%,#25151a 58%,#7a1020 100%);color:white;border-radius:26px;padding:34px 36px;box-shadow:var(--shadow)}
-.hero:after{content:"";position:absolute;width:330px;height:330px;border-radius:50%;right:-90px;top:-150px;background:rgba(255,255,255,.07)}
-.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#ffbec7}
-.hero h1{font-size:38px;line-height:1.05;margin:9px 0 12px;max-width:850px}
-.hero p{color:#e4e6ea;max-width:880px;line-height:1.6;margin:0}
-.hero-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-.hero-tag{font-size:12px;padding:7px 10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);border-radius:999px}
-.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:16px}
-.kpi{background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.7);border-radius:18px;padding:17px;box-shadow:0 8px 25px rgba(17,19,24,.05)}
-.kpi .value{font-size:29px;font-weight:850;letter-spacing:-.04em}
-.kpi .label{font-size:12px;font-weight:750;color:#343942;margin-top:5px}
-.kpi .sub{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.35}
-.section{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;margin-top:18px;box-shadow:0 10px 34px rgba(17,19,24,.04)}
-.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:18px}
-.section h2{margin:0;font-size:23px;letter-spacing:-.02em}
-.section-head p{margin:4px 0 0;color:var(--muted);font-size:13px;max-width:760px;line-height:1.5}
-.summary-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
-.story{background:linear-gradient(145deg,#fbfbfc,#f5f6f8);border:1px solid var(--line);border-radius:18px;padding:22px}
-.story .bigline{font-size:21px;line-height:1.5;margin:0}
-.story strong{color:var(--red)}
-.callout{margin-top:14px;background:#fff7f0;border:1px solid #f3dfc8;border-left:4px solid #e58a1f;border-radius:12px;padding:13px 14px;font-size:13px;line-height:1.55}
-.leaders{border:1px solid var(--line);border-radius:18px;padding:16px}
-.leader-row{display:grid;grid-template-columns:30px 1fr 46px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
-.leader-row:last-child{border-bottom:0}
-.leader-row>span{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#f2e9eb;color:var(--red);font-weight:800;font-size:12px}
-.leader-row b{font-size:12px;display:block}
-.leader-row small{font-size:11px;color:var(--muted)}
-.leader-row strong{text-align:right;font-size:18px}
-.mix-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.mix-card{padding:16px;border:1px solid var(--line);border-radius:16px;background:#fafbfc}
-.mix-card>span{font-size:12px;color:var(--muted);font-weight:750}
-.mix-values{display:flex;align-items:center;gap:9px;margin:8px 0 4px}
-.mix-values b{font-size:23px}
-.mix-values em{font-style:normal;color:#9aa0aa}
-.mix-card small{font-size:11px;color:var(--muted)}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.search{min-width:280px;flex:1;position:relative}
-.search input{width:100%;padding:12px 14px 12px 39px;border:1px solid var(--line);border-radius:12px;background:#fafbfc;font-size:13px;outline:none}
-.search:before{content:"⌕";position:absolute;left:14px;top:7px;font-size:22px;color:#8a9099}
-select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:13px}
-.result-count{font-size:12px;color:var(--muted);white-space:nowrap}
-.program-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
-.program-card{border:1px solid var(--line);border-radius:18px;padding:18px;background:linear-gradient(180deg,#fff,#fcfcfd);transition:.2s ease}
-.program-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(17,19,24,.07)}
-.program-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.program-rank{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800}
-.program-card h3{font-size:15px;line-height:1.3;margin:4px 0 0;max-width:470px}
-.badge{display:inline-flex;padding:6px 8px;border-radius:999px;font-size:10px;font-weight:800;white-space:nowrap}
-.badge.new{background:#e9f2ff;color:#3157c8} .badge.up{background:#eaf8f0;color:#14804a}
-.badge.down{background:#fff0f1;color:#ad2035} .badge.even{background:#f1f2f4;color:#505761}
-.badge.hist{background:#f4efe8;color:#8b5b23}
-.pair-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}
-.pair-kpis>div{background:#f7f8fa;border-radius:12px;padding:10px}
-.pair-kpis span{display:block;font-size:10px;color:var(--muted);font-weight:750}
-.pair-kpis strong{display:block;font-size:20px;margin-top:4px}
-.pair-kpis small{display:block;font-size:10px;color:var(--muted);margin-top:3px;line-height:1.35}
-.pos{color:var(--green)} .neg{color:var(--red)}
-.bar-compare{margin-top:14px}
-.bar-row{display:grid;grid-template-columns:42px 1fr 34px;gap:8px;align-items:center;margin-top:7px;font-size:11px}
-.track{height:8px;border-radius:999px;background:#edf0f3;overflow:hidden}
-.fill{height:100%;border-radius:999px;min-width:2px}
-.fill.old{background:#b7bdc8} .fill.current{background:linear-gradient(90deg,var(--red),var(--red2))}
-.program-foot{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:11px;color:var(--muted)}
-.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:16px;margin-top:16px}
-table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;min-width:1000px}
-thead th{position:sticky;top:0;background:#181a1f;color:#fff;padding:12px 10px;text-align:left;z-index:1}
-tbody td{padding:11px 10px;border-bottom:1px solid var(--line);background:#fff}
-tbody tr:nth-child(even) td{background:#fafbfc}
-tbody tr:hover td{background:#fff7f8}
-.program-name{min-width:320px;font-weight:700}
-.num{text-align:right;font-variant-numeric:tabular-nums}
-.strong{font-weight:850;color:var(--red)}
-.positive{color:var(--green);font-weight:800} .negative{color:var(--red);font-weight:800}
-.pill{display:inline-flex;padding:5px 8px;border-radius:999px;background:#f1f3f5;color:#4b515a;font-size:10px;font-weight:800}
-.status{font-size:10px;font-weight:750;color:#626974}
-.scenario-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.scenario{border:1px solid var(--line);border-radius:15px;padding:15px;background:#fafbfc}
-.scenario span,.scenario small{display:block;color:var(--muted);font-size:11px}
-.scenario b{display:block;font-size:20px;margin:5px 0}
-.footer-note{font-size:11px;color:var(--muted);line-height:1.55}
+:root{--bg:#f4f6f8;--panel:#fff;--ink:#111318;--muted:#6b7280;--line:#e7e9ee;--red:#b11226;--red2:#e51d3f;--dark:#17191e;--green:#14804a;--blue:#3157c8}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at 90% 0,rgba(177,18,38,.09),transparent 25%),linear-gradient(#fafafa,#f1f3f6)}
+.wrap{max-width:1320px;margin:auto;padding:28px}
+.hero{background:linear-gradient(120deg,#111318,#27171b 60%,#7f1022);color:#fff;border-radius:28px;padding:38px;box-shadow:0 18px 60px rgba(17,19,24,.15);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:380px;height:380px;border-radius:50%;background:rgba(255,255,255,.06);right:-100px;top:-210px}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.13em;font-weight:800;color:#ffc3cc} .hero h1{font-size:40px;margin:9px 0 12px;line-height:1.05} .hero p{max-width:930px;color:#e6e7ea;line-height:1.6;margin:0}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px} .tag{font-size:11px;padding:7px 9px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);border-radius:999px}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:16px} .kpi{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:0 8px 26px rgba(17,19,24,.05)} .kpi b{display:block;font-size:29px;letter-spacing:-.04em} .kpi span{font-size:12px;font-weight:750} .kpi small{display:block;color:var(--muted);font-size:10.5px;line-height:1.35;margin-top:6px}
+.section{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px;margin-top:18px;box-shadow:0 10px 35px rgba(17,19,24,.04)} .head{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:18px} .head h2{margin:0;font-size:23px} .head p{margin:5px 0 0;color:var(--muted);font-size:12.5px;line-height:1.5;max-width:850px}
+.exec{display:grid;grid-template-columns:1.2fr .8fr;gap:16px} .story{padding:22px;background:linear-gradient(145deg,#fbfbfc,#f5f6f8);border:1px solid var(--line);border-radius:17px} .story p{font-size:20px;line-height:1.5;margin:0} .story strong{color:var(--red)} .warning{margin-top:14px;border-left:4px solid #e99125;background:#fff8ef;padding:13px 14px;border-radius:10px;font-size:12.5px;line-height:1.55}
+.source-summary{display:grid;grid-template-columns:1fr 1fr;gap:12px} .source-stat{background:#fafbfc;border:1px solid var(--line);border-radius:15px;padding:15px} .source-stat b{display:block;font-size:24px} .source-stat span{font-size:11px;color:var(--muted)}
+.compare-strip{display:grid;grid-template-columns:1fr 60px 1fr;gap:12px;align-items:stretch} .cohort-panel{border:1px solid var(--line);border-radius:18px;padding:18px;background:#fbfbfc} .cohort-panel.current{background:linear-gradient(145deg,#fff,#fff5f6);border-color:#f2ccd3} .vs{display:grid;place-items:center;font-weight:900;color:#8b919b}
+.source-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px} .source-card{border:1px solid var(--line);border-radius:16px;padding:15px;background:#fff} .source-top{display:flex;justify-content:space-between;gap:12px} .source-top span{font-size:9px;text-transform:uppercase;color:var(--muted);font-weight:800;letter-spacing:.08em} .source-top h3{font-size:14px;margin:4px 0 0} .source-top strong{font-size:24px} .source-share{font-size:10.5px;color:var(--muted);margin-top:7px} .source-bar{height:7px;border-radius:999px;background:#eef0f3;overflow:hidden;margin:10px 0} .source-bar i{display:block;height:100%;background:#aeb4bf;border-radius:999px} .source-bar.current-source i{background:linear-gradient(90deg,var(--red),var(--red2))} .source-metrics{display:grid;grid-template-columns:1fr 1fr;gap:7px} .source-metrics>div{background:#f7f8fa;border-radius:10px;padding:8px} .source-metrics b{display:block;font-size:15px} .source-metrics span{font-size:9.5px;color:var(--muted)} .top-program{border-top:1px dashed var(--line);margin-top:9px;padding-top:8px} .top-program span{display:block;font-size:9px;color:var(--muted)} .top-program b{font-size:10.5px;line-height:1.35;display:block;margin-top:3px}
+.insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px} .insight{border-radius:16px;padding:17px;border:1px solid var(--line);background:#fafbfc} .insight b{display:block;font-size:18px;margin-bottom:5px} .insight p{margin:0;font-size:11px;line-height:1.5;color:var(--muted)}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .search{flex:1;min-width:260px} .search input,select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:12px} select{width:auto}
+.program-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin-top:16px} .program-card{border:1px solid var(--line);border-radius:17px;padding:17px;background:linear-gradient(#fff,#fcfcfd)} .program-head{display:flex;justify-content:space-between;gap:10px} .program-rank{font-size:9px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.08em} .program-card h3{font-size:14px;line-height:1.3;margin:4px 0 0} .badge{font-size:9px;padding:5px 7px;border-radius:999px;font-weight:800;white-space:nowrap} .badge.new{background:#eaf2ff;color:var(--blue)} .badge.up{background:#e8f7ef;color:var(--green)} .badge.down{background:#fff0f2;color:var(--red)} .badge.even{background:#f0f2f4;color:#555}
+.pair-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:13px} .pair-kpis>div{background:#f7f8fa;border-radius:11px;padding:9px} .pair-kpis span{font-size:9px;color:var(--muted);display:block} .pair-kpis strong{font-size:19px;display:block;margin-top:3px} .pair-kpis small{font-size:9px;color:var(--muted);line-height:1.3;display:block} .pos,.positive{color:var(--green)} .neg,.negative{color:var(--red)}
+.bar-row{display:grid;grid-template-columns:40px 1fr 32px;gap:7px;align-items:center;margin-top:7px;font-size:10px} .track{height:7px;background:#edf0f3;border-radius:999px;overflow:hidden} .fill{height:100%;border-radius:999px;min-width:2px} .old{background:#b8bdc6} .current{background:linear-gradient(90deg,var(--red),var(--red2))}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:15px;margin-top:14px} table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px;min-width:900px} th{background:#181a1f;color:white;padding:10px;text-align:left;position:sticky;top:0} td{padding:10px;border-bottom:1px solid var(--line)} tbody tr:nth-child(even) td{background:#fafbfc} .num{text-align:right;font-variant-numeric:tabular-nums} .strong{font-weight:900;color:var(--red)} .program-name{min-width:320px;font-weight:700} .pill{font-size:9px;padding:5px 7px;background:#f0f2f4;border-radius:999px}
+.dual-tables{display:grid;grid-template-columns:1fr 1fr;gap:14px} .mini-table{border:1px solid var(--line);border-radius:15px;overflow:hidden} .mini-table h3{font-size:13px;margin:0;padding:13px 14px;background:#fafbfc;border-bottom:1px solid var(--line)} .mini-table table{min-width:0}
+.scenarios{display:grid;grid-template-columns:repeat(4,1fr);gap:11px} .scenario{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fafbfc} .scenario span,.scenario small{font-size:10px;color:var(--muted);display:block} .scenario b{font-size:19px;display:block;margin:5px 0} .note{font-size:10.5px;color:var(--muted);line-height:1.55}
 .hidden{display:none!important}
-@media(max-width:1050px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.summary-grid{grid-template-columns:1fr}}
-@media(max-width:760px){.wrap{padding:14px}.hero{padding:25px 22px;border-radius:20px}.hero h1{font-size:29px}.kpi-grid{grid-template-columns:repeat(2,1fr)}.mix-grid{grid-template-columns:repeat(2,1fr)}.program-grid{grid-template-columns:1fr}.scenario-grid{grid-template-columns:repeat(2,1fr)}}
-@media print{body{background:white}.toolbar{display:none}.program-card:hover{transform:none}.section,.hero,.kpi{box-shadow:none}}
+@media(max-width:1050px){.kpis{grid-template-columns:repeat(3,1fr)}.exec,.compare-strip{grid-template-columns:1fr}.vs{min-height:30px}.source-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.wrap{padding:13px}.hero{padding:25px 21px}.hero h1{font-size:29px}.kpis{grid-template-columns:repeat(2,1fr)}.program-grid,.dual-tables,.insight-grid{grid-template-columns:1fr}.source-grid{grid-template-columns:1fr}.scenarios{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
-<body>
-<div class="wrap">
-  <header class="hero">
-    <div class="eyebrow">Universidad Autónoma de Occidente · Posgrados</div>
-    <h1>Open House 2026-2S vs. 2027-1S</h1>
-    <p>Comparativo ejecutivo entre el primer Open House de Posgrados 2026-2S y el estado actual del Open House 2027-1S. Para 2026-2S se usa la base comparable existente hasta el día del evento, 30 de mayo de 2026. El corte 2027-1S corresponde al 5 de octubre de 2026.</p>
-    <div class="hero-tags">
-      <span class="hero-tag">QA validado contra ambas bases</span>
-      <span class="hero-tag">39 programas en el universo comparado</span>
-      <span class="hero-tag">26 programas presentes en ambas cohortes</span>
-    </div>
-  </header>
+<body><div class="wrap">
+<header class="hero">
+<div class="eyebrow">Universidad Autónoma de Occidente · Posgrados</div>
+<h1>Open House 2026-2S vs. 2027-1S</h1>
+<p>Comparativo de captación, programas, fuentes de origen y desempeño comercial. El 2026-2S se analiza con los registros creados hasta el día del evento; el 2027-1S corresponde al corte del 5 de octubre de 2026.</p>
+<div class="tags"><span class="tag">QA validado contra ambas bases</span><span class="tag">39 programas en el universo</span><span class="tag">Origen comparado con homologación metodológica</span></div>
+</header>
 
-  <section class="kpi-grid">
-    <div class="kpi"><div class="value">391</div><div class="label">Registros 2026-2S</div><div class="sub">Hasta el día del evento · 5 registros posteriores excluidos del benchmark</div></div>
-    <div class="kpi"><div class="value">155</div><div class="label">Registros 2027-1S</div><div class="sub">39.6% del volumen comparable anterior</div></div>
-    <div class="kpi"><div class="value">98</div><div class="label">Asistentes 2026-2S</div><div class="sub">25.1% de conversión histórica</div></div>
-    <div class="kpi"><div class="value">81</div><div class="label">Con seguimiento 2027-1S</div><div class="sub">52.3% de la base actual</div></div>
-    <div class="kpi"><div class="value">30</div><div class="label">Programas con inscritos 2027-1S</div><div class="sub">4 sin base comparable en 2026-2S</div></div>
-    <div class="kpi"><div class="value">60</div><div class="label">Registros última semana</div><div class="sub">+62.2% vs. semana anterior</div></div>
-  </section>
+<section class="kpis">
+<div class="kpi"><b>391</b><span>Registros 2026-2S</span><small>Base comparable hasta el 30 de mayo.</small></div>
+<div class="kpi"><b>155</b><span>Registros 2027-1S</span><small>39.6% del volumen comparable anterior.</small></div>
+<div class="kpi"><b>98</b><span>Asistentes comparables 2026</span><small>25.1% de conversión. La base histórica completa marca 100 asistentes.</small></div>
+<div class="kpi"><b>81</b><span>Con seguimiento 2027</span><small>52.3% de la base actual.</small></div>
+<div class="kpi"><b>103</b><span>Origen identificable 2027</span><small>66.5% de la base actual.</small></div>
+<div class="kpi"><b>60</b><span>Última semana</span><small>+62.2% vs. semana anterior.</small></div>
+</section>
 
-  <section class="section">
-    <div class="section-head">
-      <div><h2>Lectura ejecutiva</h2><p>Qué dice el avance actual frente al primer Open House.</p></div>
-    </div>
-    <div class="summary-grid">
-      <div class="story">
-        <p class="bigline">El Open House 2027-1S acumula <strong>155 registros</strong>, equivalentes al <strong>39.6%</strong> del volumen comparable alcanzado por el 2026-2S antes o durante el día del evento. La captación reciente se acelera: <strong>60 registros</strong> en la última semana completa, frente a 37 en la anterior.</p>
-        <div class="callout">El benchmark de asistencia de 2026-2S es <b>25.1%</b>. Aplicado únicamente como referencia matemática a la base actual, los 155 registros equivaldrían a aproximadamente <b>39 asistentes</b>. No es un pronóstico.</div>
-      </div>
-      <div class="leaders">
-        <div class="eyebrow" style="color:var(--red);margin-bottom:4px">Top actual</div>
-        <div class="leader-row"><span>1</span><div><b>Maestría En Inteligencia Artificial Y Ciencia De Datos</b>
-    <small>50 en 2026-2S · 18 en 2027-1S</small></div><strong>18</strong></div><div class="leader-row"><span>2</span><div><b>Especialización En Inteligencia Artificial</b>
-    <small>29 en 2026-2S · 13 en 2027-1S</small></div><strong>13</strong></div><div class="leader-row"><span>3</span><div><b>Especialización En Gerencia De Proyectos</b>
-    <small>26 en 2026-2S · 11 en 2027-1S</small></div><strong>11</strong></div><div class="leader-row"><span>4</span><div><b>Doctorado En Ingeniería</b>
-    <small>1 en 2026-2S · 11 en 2027-1S</small></div><strong>11</strong></div><div class="leader-row"><span>5</span><div><b>Especialización En Finanzas</b>
-    <small>27 en 2026-2S · 10 en 2027-1S</small></div><strong>10</strong></div>
-      </div>
-    </div>
-  </section>
+<section class="section">
+<div class="head"><div><h2>Lectura ejecutiva</h2><p>Estado del Open House actual frente al primer evento comparable.</p></div></div>
+<div class="exec">
+<div class="story"><p>El Open House 2027-1S acumula <strong>155 registros</strong>, equivalentes al <strong>39.6%</strong> del volumen comparable del 2026-2S. La última semana completa produjo <strong>60 registros</strong>, frente a 37 la semana anterior.</p>
+<div class="warning">Corrección QA: para la conversión histórica se utilizan <b>98 asistentes entre 391 registros creados hasta el día del evento = 25.1%</b>. La base histórica completa contiene 100 asistentes, pero 2 de ellos tienen fecha de creación posterior al 30 de mayo.</div></div>
+<div class="source-summary">
+<div class="source-stat"><b>10.2%</b><span>2026-2S con canal específico identificable (IG/FB)</span></div>
+<div class="source-stat"><b>66.5%</b><span>2027-1S con origen identificable</span></div>
+<div class="source-stat"><b>87</b><span>registros actuales desde Facebook pauta</span></div>
+<div class="source-stat"><b>56.1%</b><span>participación de Facebook pauta en 2027-1S</span></div>
+</div></div>
+</section>
 
-  <section class="section">
-    <div class="section-head">
-      <div><h2>Mix por nivel académico</h2><p>Participación de especializaciones, maestrías y doctorados en cada cohorte.</p></div>
+<section class="section" id="origenes">
+<div class="head"><div><h2>Origen de los registros: ¿qué está funcionando?</h2><p>Se separa volumen, trazabilidad y resultado. En 2026-2S la medición por fuente fue limitada; en 2027-1S la atribución es mucho más clara.</p></div></div>
+<div class="compare-strip">
+<div class="cohort-panel"><div class="eyebrow" style="color:var(--red)">Cohorte 2026-2S</div><h3>Origen homologado</h3><p class="note">Solo IG y FB permiten identificar claramente el canal. “Open House Posgrados 2026 2s” y vacíos se agrupan como “Sin canal identificable”.</p>
+<div class="source-grid">
+    <div class="source-card">
+      <div class="source-top"><div><span>2026-2S</span><h3>Sin canal identificable</h3></div><strong>351</strong></div>
+      <div class="source-share">89.8% del total comparable</div>
+      <div class="source-bar"><i style="width:100.0%"></i></div>
+      <div class="source-metrics"><div><b>95</b><span>asistentes</span></div><div><b>27.1%</b><span>conv. asistencia</span></div></div>
     </div>
-    <div class="mix-grid">
-      <div class="mix-card">
-        <span>Especialización</span>
-        <div class="mix-values"><b>280</b><em>→</em><b>109</b></div>
-        <small>71.6% del 2026 · 70.3% del 2027</small>
-      </div>
-    
-      <div class="mix-card">
-        <span>Maestría</span>
-        <div class="mix-values"><b>97</b><em>→</em><b>33</b></div>
-        <small>24.8% del 2026 · 21.3% del 2027</small>
-      </div>
-    
-      <div class="mix-card">
-        <span>Doctorado</span>
-        <div class="mix-values"><b>8</b><em>→</em><b>13</b></div>
-        <small>2.0% del 2026 · 8.4% del 2027</small>
-      </div>
-    
-      <div class="mix-card">
-        <span>Otro</span>
-        <div class="mix-values"><b>6</b><em>→</em><b>0</b></div>
-        <small>1.5% del 2026 · 0.0% del 2027</small>
-      </div>
+    <div class="source-card">
+      <div class="source-top"><div><span>2026-2S</span><h3>Instagram</h3></div><strong>28</strong></div>
+      <div class="source-share">7.2% del total comparable</div>
+      <div class="source-bar"><i style="width:8.0%"></i></div>
+      <div class="source-metrics"><div><b>2</b><span>asistentes</span></div><div><b>7.1%</b><span>conv. asistencia</span></div></div>
     </div>
-  </section>
+    <div class="source-card">
+      <div class="source-top"><div><span>2026-2S</span><h3>Facebook</h3></div><strong>12</strong></div>
+      <div class="source-share">3.1% del total comparable</div>
+      <div class="source-bar"><i style="width:3.4%"></i></div>
+      <div class="source-metrics"><div><b>1</b><span>asistentes</span></div><div><b>8.3%</b><span>conv. asistencia</span></div></div>
+    </div></div></div>
+<div class="vs">VS.</div>
+<div class="cohort-panel current"><div class="eyebrow" style="color:var(--red)">Cohorte 2027-1S</div><h3>Origen homologado</h3><p class="note">La estructura actual permite diferenciar pauta, comercial, email, LinkedIn, orgánico y QR.</p>
+<div class="source-grid">
+    <div class="source-card">
+      <div class="source-top"><div><span>2027-1S</span><h3>Facebook pauta</h3></div><strong>87</strong></div>
+      <div class="source-share">56.1% del total actual</div>
+      <div class="source-bar current-source"><i style="width:100.0%"></i></div>
+      <div class="source-metrics"><div><b>29</b><span>con seguimiento</span></div><div><b>33.3%</b><span>cobertura</span></div></div>
+      <div class="top-program"><span>Programa líder</span><b>Doctorado En Ingeniería (10)</b></div>
+    </div>
+    <div class="source-card">
+      <div class="source-top"><div><span>2027-1S</span><h3>Sin canal identificable</h3></div><strong>52</strong></div>
+      <div class="source-share">33.5% del total actual</div>
+      <div class="source-bar current-source"><i style="width:59.8%"></i></div>
+      <div class="source-metrics"><div><b>41</b><span>con seguimiento</span></div><div><b>78.8%</b><span>cobertura</span></div></div>
+      <div class="top-program"><span>Programa líder</span><b>Especialización En Inteligencia Artificial (7)</b></div>
+    </div>
+    <div class="source-card">
+      <div class="source-top"><div><span>2027-1S</span><h3>Comercial</h3></div><strong>9</strong></div>
+      <div class="source-share">5.8% del total actual</div>
+      <div class="source-bar current-source"><i style="width:10.3%"></i></div>
+      <div class="source-metrics"><div><b>7</b><span>con seguimiento</span></div><div><b>77.8%</b><span>cobertura</span></div></div>
+      <div class="top-program"><span>Programa líder</span><b>Especialización En Finanzas - Virtual (2)</b></div>
+    </div>
+    <div class="source-card">
+      <div class="source-top"><div><span>2027-1S</span><h3>Email</h3></div><strong>2</strong></div>
+      <div class="source-share">1.3% del total actual</div>
+      <div class="source-bar current-source"><i style="width:2.3%"></i></div>
+      <div class="source-metrics"><div><b>2</b><span>con seguimiento</span></div><div><b>100.0%</b><span>cobertura</span></div></div>
+      <div class="top-program"><span>Programa líder</span><b>Especialización En Comunicación Estratégica (1)</b></div>
+    </div>
+    <div class="source-card">
+      <div class="source-top"><div><span>2027-1S</span><h3>LinkedIn CPC</h3></div><strong>2</strong></div>
+      <div class="source-share">1.3% del total actual</div>
+      <div class="source-bar current-source"><i style="width:2.3%"></i></div>
+      <div class="source-metrics"><div><b>2</b><span>con seguimiento</span></div><div><b>100.0%</b><span>cobertura</span></div></div>
+      <div class="top-program"><span>Programa líder</span><b>Especialización En Ciberseguridad (1)</b></div>
+    </div>
+    <div class="source-card">
+      <div class="source-top"><div><span>2027-1S</span><h3>Orgánico</h3></div><strong>2</strong></div>
+      <div class="source-share">1.3% del total actual</div>
+      <div class="source-bar current-source"><i style="width:2.3%"></i></div>
+      <div class="source-metrics"><div><b>0</b><span>con seguimiento</span></div><div><b>0.0%</b><span>cobertura</span></div></div>
+      <div class="top-program"><span>Programa líder</span><b>Maestría En Inteligencia Artificial Y Ciencia De Datos (2)</b></div>
+    </div>
+    <div class="source-card">
+      <div class="source-top"><div><span>2027-1S</span><h3>QR / pantallas</h3></div><strong>1</strong></div>
+      <div class="source-share">0.6% del total actual</div>
+      <div class="source-bar current-source"><i style="width:1.1%"></i></div>
+      <div class="source-metrics"><div><b>0</b><span>con seguimiento</span></div><div><b>0.0%</b><span>cobertura</span></div></div>
+      <div class="top-program"><span>Programa líder</span><b>Especialización En Analítica De Big Data (1)</b></div>
+    </div></div></div>
+</div>
 
-  <section class="section" id="programas">
-    <div class="section-head">
-      <div>
-        <h2>Comparación visual por programa</h2>
-        <p>Se muestran <b>todos los programas con inscritos en el Open House 2027-1S</b>, comparados contra el volumen equivalente del 2026-2S.</p>
-      </div>
-      <div class="result-count" id="cardCount">30 programas visibles</div>
-    </div>
-    <div class="toolbar">
-      <div class="search"><input id="searchPrograms" type="search" placeholder="Buscar programa…"></div>
-      <select id="levelFilter">
-        <option value="">Todos los niveles</option>
-        <option>Especialización</option>
-        <option>Maestría</option>
-        <option>Doctorado</option>
-        <option>Otro</option>
-      </select>
-    </div>
-    <div class="program-grid" id="programGrid">
+<div class="insight-grid">
+<div class="insight"><b>Facebook pauta lidera volumen</b><p>Con 87 registros, aporta 56,1% del Open House 2027-1S. Es la fuente con mayor capacidad de adquisición en el corte actual.</p></div>
+<div class="insight"><b>La atribución mejoró</b><p>El porcentaje con canal identificable pasa de 10,2% en la base comparable 2026-2S a 66,5% en 2027-1S. Esto hace mucho más útil el análisis actual.</p></div>
+<div class="insight"><b>No confundir volumen con calidad</b><p>Facebook pauta solo muestra 33,3% de cobertura de seguimiento. Comercial tiene 77,8%; Email y LinkedIn 100%, pero con apenas 2 registros cada uno. Todavía no hay asistencia 2027 para medir conversión final por canal.</p></div>
+</div>
+</section>
+
+<section class="section">
+<div class="head"><div><h2>Origen exacto registrado en cada base</h2><p>Vista sin homologar para conservar la trazabilidad original de Salesforce.</p></div></div>
+<div class="dual-tables">
+<div class="mini-table"><h3>Open House 2026-2S · origen original</h3><table><thead><tr><th>Valor en la base</th><th>Registros</th><th>Participación</th></tr></thead><tbody><tr><td>Open House Posgrados 2026 2s</td><td class='num'>317</td><td class='num'>81.1%</td></tr><tr><td>Vacío</td><td class='num'>34</td><td class='num'>8.7%</td></tr><tr><td>ig</td><td class='num'>28</td><td class='num'>7.2%</td></tr><tr><td>fb</td><td class='num'>12</td><td class='num'>3.1%</td></tr></tbody></table></div>
+<div class="mini-table"><h3>Open House 2027-1S · origen original</h3><table><thead><tr><th>Valor en la base</th><th>Registros</th><th>Participación</th></tr></thead><tbody><tr><td>facebookpauta</td><td class='num'>87</td><td class='num'>56.1%</td></tr><tr><td>Sin origen</td><td class='num'>50</td><td class='num'>32.3%</td></tr><tr><td>Comercial1</td><td class='num'>9</td><td class='num'>5.8%</td></tr><tr><td>Email</td><td class='num'>2</td><td class='num'>1.3%</td></tr><tr><td>organico</td><td class='num'>2</td><td class='num'>1.3%</td></tr><tr><td>Vacío</td><td class='num'>2</td><td class='num'>1.3%</td></tr><tr><td>Linkedin_CPC</td><td class='num'>2</td><td class='num'>1.3%</td></tr><tr><td>QR_pantallas</td><td class='num'>1</td><td class='num'>0.6%</td></tr></tbody></table></div>
+</div>
+</section>
+
+<section class="section">
+<div class="head"><div><h2>Comparación visual por programa</h2><p>Todos los programas con inscritos en 2027-1S frente a su volumen comparable del 2026-2S.</p></div><div id="cardCount" class="note">30 programas visibles</div></div>
+<div class="toolbar"><div class="search"><input id="searchPrograms" type="search" placeholder="Buscar programa…"></div><select id="levelFilter"><option value="">Todos los niveles</option><option>Especialización</option><option>Maestría</option><option>Doctorado</option><option>Otro</option></select></div>
+<div class="program-grid" id="programGrid">
     <article class="program-card searchable" data-name="maestría en inteligencia artificial y ciencia de datos" data-level="Maestría">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#01 · Maestría</div>
-          <h3>Maestría En Inteligencia Artificial Y Ciencia De Datos</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#01 · Maestría</div><h3>Maestría En Inteligencia Artificial Y Ciencia De Datos</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>50</strong><small>27 asistentes</small></div>
-        <div><span>2027-1S</span><strong>18</strong><small>11.6% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-32</strong><small>36.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>50</strong><small>27 asistentes · 54.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>18</strong><small>11.6% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-32</strong><small>36.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:100.00%"></div></div><b>50</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:36.00%"></div></div><b>18</b></div>
       </div>
-      <div class="program-foot">54.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en inteligencia artificial" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#02 · Especialización</div>
-          <h3>Especialización En Inteligencia Artificial</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#02 · Especialización</div><h3>Especialización En Inteligencia Artificial</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>29</strong><small>3 asistentes</small></div>
-        <div><span>2027-1S</span><strong>13</strong><small>8.4% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-16</strong><small>44.8% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>29</strong><small>3 asistentes · 10.3% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>13</strong><small>8.4% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-16</strong><small>44.8% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:58.00%"></div></div><b>29</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:26.00%"></div></div><b>13</b></div>
       </div>
-      <div class="program-foot">10.3% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en gerencia de proyectos" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#03 · Especialización</div>
-          <h3>Especialización En Gerencia De Proyectos</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#03 · Especialización</div><h3>Especialización En Gerencia De Proyectos</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>26</strong><small>7 asistentes</small></div>
-        <div><span>2027-1S</span><strong>11</strong><small>7.1% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-15</strong><small>42.3% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>26</strong><small>7 asistentes · 26.9% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>11</strong><small>7.1% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-15</strong><small>42.3% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:52.00%"></div></div><b>26</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:22.00%"></div></div><b>11</b></div>
       </div>
-      <div class="program-foot">26.9% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="doctorado en ingeniería" data-level="Doctorado">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#04 · Doctorado</div>
-          <h3>Doctorado En Ingeniería</h3>
-        </div>
-        <span class="badge up">Mayor que 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#04 · Doctorado</div><h3>Doctorado En Ingeniería</h3></div><span class="badge up">Supera 2026</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>1</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>11</strong><small>7.1% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="pos">+10</strong><small>1100.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>1</strong><small>0 asistentes · 0.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>11</strong><small>7.1% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="pos">+10</strong><small>1100.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:2.00%"></div></div><b>1</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:22.00%"></div></div><b>11</b></div>
       </div>
-      <div class="program-foot">0.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en finanzas" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#05 · Especialización</div>
-          <h3>Especialización En Finanzas</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#05 · Especialización</div><h3>Especialización En Finanzas</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>27</strong><small>8 asistentes</small></div>
-        <div><span>2027-1S</span><strong>10</strong><small>6.5% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-17</strong><small>37.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>27</strong><small>8 asistentes · 29.6% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>10</strong><small>6.5% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-17</strong><small>37.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:54.00%"></div></div><b>27</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:20.00%"></div></div><b>10</b></div>
       </div>
-      <div class="program-foot">29.6% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en analítica de big data" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#06 · Especialización</div>
-          <h3>Especialización En Analítica De Big Data</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#06 · Especialización</div><h3>Especialización En Analítica De Big Data</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>25</strong><small>4 asistentes</small></div>
-        <div><span>2027-1S</span><strong>10</strong><small>6.5% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-15</strong><small>40.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>25</strong><small>4 asistentes · 16.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>10</strong><small>6.5% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-15</strong><small>40.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:50.00%"></div></div><b>25</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:20.00%"></div></div><b>10</b></div>
       </div>
-      <div class="program-foot">16.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en comunicación estratégica" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#07 · Especialización</div>
-          <h3>Especialización En Comunicación Estratégica</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#07 · Especialización</div><h3>Especialización En Comunicación Estratégica</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>20</strong><small>4 asistentes</small></div>
-        <div><span>2027-1S</span><strong>8</strong><small>5.2% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-12</strong><small>40.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>20</strong><small>4 asistentes · 20.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>8</strong><small>5.2% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-12</strong><small>40.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:40.00%"></div></div><b>20</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:16.00%"></div></div><b>8</b></div>
       </div>
-      <div class="program-foot">20.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="maestría en gerencia de ingeniería" data-level="Maestría">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#08 · Maestría</div>
-          <h3>Maestría En Gerencia De Ingeniería</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#08 · Maestría</div><h3>Maestría En Gerencia De Ingeniería</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>18</strong><small>2 asistentes</small></div>
-        <div><span>2027-1S</span><strong>7</strong><small>4.5% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-11</strong><small>38.9% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>18</strong><small>2 asistentes · 11.1% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>7</strong><small>4.5% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-11</strong><small>38.9% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:36.00%"></div></div><b>18</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:14.00%"></div></div><b>7</b></div>
       </div>
-      <div class="program-foot">11.1% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en finanzas - virtual" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#09 · Especialización</div>
-          <h3>Especialización En Finanzas - Virtual</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#09 · Especialización</div><h3>Especialización En Finanzas - Virtual</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>15</strong><small>3 asistentes</small></div>
-        <div><span>2027-1S</span><strong>7</strong><small>4.5% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-8</strong><small>46.7% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>15</strong><small>3 asistentes · 20.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>7</strong><small>4.5% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-8</strong><small>46.7% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:30.00%"></div></div><b>15</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:14.00%"></div></div><b>7</b></div>
       </div>
-      <div class="program-foot">20.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en comercio exterior" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#10 · Especialización</div>
-          <h3>Especialización En Comercio Exterior</h3>
-        </div>
-        <span class="badge up">Mayor que 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#10 · Especialización</div><h3>Especialización En Comercio Exterior</h3></div><span class="badge up">Supera 2026</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>4</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>7</strong><small>4.5% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="pos">+3</strong><small>175.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>4</strong><small>0 asistentes · 0.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>7</strong><small>4.5% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="pos">+3</strong><small>175.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:8.00%"></div></div><b>4</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:14.00%"></div></div><b>7</b></div>
       </div>
-      <div class="program-foot">0.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en ciberseguridad" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#11 · Especialización</div>
-          <h3>Especialización En Ciberseguridad</h3>
-        </div>
-        <span class="badge new">Nuevo en 2027-1S</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#11 · Especialización</div><h3>Especialización En Ciberseguridad</h3></div><span class="badge new">Nuevo en 2027-1S</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>0</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>6</strong><small>3.9% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="pos">+6</strong><small>Programa sin base 2026 comparable</small></div>
+        <div><span>Reg. 2026-2S</span><strong>0</strong><small>0 asistentes · — conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>6</strong><small>3.9% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="pos">+6</strong><small>Nuevo vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:0.00%"></div></div><b>0</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:12.00%"></div></div><b>6</b></div>
       </div>
-      <div class="program-foot">Sin benchmark histórico</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en mercadeo" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#12 · Especialización</div>
-          <h3>Especialización En Mercadeo</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#12 · Especialización</div><h3>Especialización En Mercadeo</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>16</strong><small>7 asistentes</small></div>
-        <div><span>2027-1S</span><strong>5</strong><small>3.2% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-11</strong><small>31.2% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>16</strong><small>7 asistentes · 43.8% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>5</strong><small>3.2% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-11</strong><small>31.2% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:32.00%"></div></div><b>16</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:10.00%"></div></div><b>5</b></div>
       </div>
-      <div class="program-foot">43.8% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en seguridad y salud en el trabajo - virtual" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#13 · Especialización</div>
-          <h3>Especialización En Seguridad Y Salud En El Trabajo - Virtual</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#13 · Especialización</div><h3>Especialización En Seguridad Y Salud En El Trabajo - Virtual</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>6</strong><small>1 asistentes</small></div>
-        <div><span>2027-1S</span><strong>5</strong><small>3.2% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-1</strong><small>83.3% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>6</strong><small>1 asistentes · 16.7% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>5</strong><small>3.2% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-1</strong><small>83.3% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:12.00%"></div></div><b>6</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:10.00%"></div></div><b>5</b></div>
       </div>
-      <div class="program-foot">16.7% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en eficiencia energética" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#14 · Especialización</div>
-          <h3>Especialización En Eficiencia Energética</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#14 · Especialización</div><h3>Especialización En Eficiencia Energética</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>11</strong><small>4 asistentes</small></div>
-        <div><span>2027-1S</span><strong>4</strong><small>2.6% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-7</strong><small>36.4% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>11</strong><small>4 asistentes · 36.4% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>4</strong><small>2.6% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-7</strong><small>36.4% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:22.00%"></div></div><b>11</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:8.00%"></div></div><b>4</b></div>
       </div>
-      <div class="program-foot">36.4% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="maestría en administración de empresas" data-level="Maestría">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#15 · Maestría</div>
-          <h3>Maestría En Administración De Empresas</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#15 · Maestría</div><h3>Maestría En Administración De Empresas</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>9</strong><small>2 asistentes</small></div>
-        <div><span>2027-1S</span><strong>4</strong><small>2.6% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-5</strong><small>44.4% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>9</strong><small>2 asistentes · 22.2% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>4</strong><small>2.6% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-5</strong><small>44.4% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:18.00%"></div></div><b>9</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:8.00%"></div></div><b>4</b></div>
       </div>
-      <div class="program-foot">22.2% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en diseño publicitario en contenidos digitales" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#16 · Especialización</div>
-          <h3>Especialización En Diseño Publicitario En Contenidos Digitales</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#16 · Especialización</div><h3>Especialización En Diseño Publicitario En Contenidos Digitales</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>9</strong><small>1 asistentes</small></div>
-        <div><span>2027-1S</span><strong>4</strong><small>2.6% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-5</strong><small>44.4% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>9</strong><small>1 asistentes · 11.1% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>4</strong><small>2.6% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-5</strong><small>44.4% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:18.00%"></div></div><b>9</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:8.00%"></div></div><b>4</b></div>
       </div>
-      <div class="program-foot">11.1% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en gerencia de mantenimiento y confiabilidad" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#17 · Especialización</div>
-          <h3>Especialización En Gerencia De Mantenimiento Y Confiabilidad</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#17 · Especialización</div><h3>Especialización En Gerencia De Mantenimiento Y Confiabilidad</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>6</strong><small>1 asistentes</small></div>
-        <div><span>2027-1S</span><strong>3</strong><small>1.9% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-3</strong><small>50.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>6</strong><small>1 asistentes · 16.7% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>3</strong><small>1.9% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-3</strong><small>50.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:12.00%"></div></div><b>6</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:6.00%"></div></div><b>3</b></div>
       </div>
-      <div class="program-foot">16.7% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en energías renovables" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#18 · Especialización</div>
-          <h3>Especialización En Energías Renovables</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#18 · Especialización</div><h3>Especialización En Energías Renovables</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>5</strong><small>2 asistentes</small></div>
-        <div><span>2027-1S</span><strong>3</strong><small>1.9% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-2</strong><small>60.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>5</strong><small>2 asistentes · 40.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>3</strong><small>1.9% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-2</strong><small>60.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:10.00%"></div></div><b>5</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:6.00%"></div></div><b>3</b></div>
       </div>
-      <div class="program-foot">40.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especializacion en derechos humanos y territorios" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#19 · Especialización</div>
-          <h3>Especializacion En Derechos Humanos Y Territorios</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#19 · Especialización</div><h3>Especializacion En Derechos Humanos Y Territorios</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>4</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>3</strong><small>1.9% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-1</strong><small>75.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>4</strong><small>0 asistentes · 0.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>3</strong><small>1.9% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-1</strong><small>75.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:8.00%"></div></div><b>4</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:6.00%"></div></div><b>3</b></div>
       </div>
-      <div class="program-foot">0.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en estrategia publicitaria de marca en entornos digitales" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#20 · Especialización</div>
-          <h3>Especialización En Estrategia Publicitaria De Marca En Entornos Digitales</h3>
-        </div>
-        <span class="badge new">Nuevo en 2027-1S</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#20 · Especialización</div><h3>Especialización En Estrategia Publicitaria De Marca En Entornos Digitales</h3></div><span class="badge new">Nuevo en 2027-1S</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>0</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>3</strong><small>1.9% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="pos">+3</strong><small>Programa sin base 2026 comparable</small></div>
+        <div><span>Reg. 2026-2S</span><strong>0</strong><small>0 asistentes · — conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>3</strong><small>1.9% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="pos">+3</strong><small>Nuevo vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:0.00%"></div></div><b>0</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:6.00%"></div></div><b>3</b></div>
       </div>
-      <div class="program-foot">Sin benchmark histórico</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en gerencia del talento humano" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#21 · Especialización</div>
-          <h3>Especialización En Gerencia Del Talento Humano</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#21 · Especialización</div><h3>Especialización En Gerencia Del Talento Humano</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>20</strong><small>2 asistentes</small></div>
-        <div><span>2027-1S</span><strong>2</strong><small>1.3% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-18</strong><small>10.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>20</strong><small>2 asistentes · 10.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>2</strong><small>1.3% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-18</strong><small>10.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:40.00%"></div></div><b>20</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:4.00%"></div></div><b>2</b></div>
       </div>
-      <div class="program-foot">10.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en seguridad y salud en el trabajo" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#22 · Especialización</div>
-          <h3>Especialización En Seguridad Y Salud En El Trabajo</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#22 · Especialización</div><h3>Especialización En Seguridad Y Salud En El Trabajo</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>11</strong><small>3 asistentes</small></div>
-        <div><span>2027-1S</span><strong>2</strong><small>1.3% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-9</strong><small>18.2% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>11</strong><small>3 asistentes · 27.3% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>2</strong><small>1.3% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-9</strong><small>18.2% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:22.00%"></div></div><b>11</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:4.00%"></div></div><b>2</b></div>
       </div>
-      <div class="program-foot">27.3% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="maestría en seguridad y salud en el trabajo" data-level="Maestría">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#23 · Maestría</div>
-          <h3>Maestría En Seguridad Y Salud En El Trabajo</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#23 · Maestría</div><h3>Maestría En Seguridad Y Salud En El Trabajo</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>5</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>2</strong><small>1.3% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-3</strong><small>40.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>5</strong><small>0 asistentes · 0.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>2</strong><small>1.3% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-3</strong><small>40.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:10.00%"></div></div><b>5</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:4.00%"></div></div><b>2</b></div>
       </div>
-      <div class="program-foot">0.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="maestría en comunicación digital" data-level="Maestría">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#24 · Maestría</div>
-          <h3>Maestría En Comunicación Digital</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#24 · Maestría</div><h3>Maestría En Comunicación Digital</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>15</strong><small>3 asistentes</small></div>
-        <div><span>2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-14</strong><small>6.7% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>15</strong><small>3 asistentes · 20.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-14</strong><small>6.7% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:30.00%"></div></div><b>15</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:2.00%"></div></div><b>1</b></div>
       </div>
-      <div class="program-foot">20.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en logística" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#25 · Especialización</div>
-          <h3>Especialización En Logística</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#25 · Especialización</div><h3>Especialización En Logística</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>7</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-6</strong><small>14.3% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>7</strong><small>0 asistentes · 0.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-6</strong><small>14.3% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:14.00%"></div></div><b>7</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:2.00%"></div></div><b>1</b></div>
       </div>
-      <div class="program-foot">0.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="doctorado en sosteniblidad" data-level="Doctorado">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#26 · Doctorado</div>
-          <h3>Doctorado En Sosteniblidad</h3>
-        </div>
-        <span class="badge down">Debajo de 2026</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#26 · Doctorado</div><h3>Doctorado En Sosteniblidad</h3></div><span class="badge down">Aún debajo</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>6</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="neg">-5</strong><small>16.7% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>6</strong><small>0 asistentes · 0.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="neg">-5</strong><small>16.7% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:12.00%"></div></div><b>6</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:2.00%"></div></div><b>1</b></div>
       </div>
-      <div class="program-foot">0.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en interculturalidad y estudios de género" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#27 · Especialización</div>
-          <h3>Especialización En Interculturalidad Y Estudios De Género</h3>
-        </div>
-        <span class="badge even">Igual volumen</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#27 · Especialización</div><h3>Especialización En Interculturalidad Y Estudios De Género</h3></div><span class="badge even">Igual volumen</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>1</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="">0</strong><small>100.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>1</strong><small>0 asistentes · 0.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="">0</strong><small>100.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:2.00%"></div></div><b>1</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:2.00%"></div></div><b>1</b></div>
       </div>
-      <div class="program-foot">0.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="doctorado en bioingeniería" data-level="Doctorado">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#28 · Doctorado</div>
-          <h3>Doctorado En Bioingeniería</h3>
-        </div>
-        <span class="badge even">Igual volumen</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#28 · Doctorado</div><h3>Doctorado En Bioingeniería</h3></div><span class="badge even">Igual volumen</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>1</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="">0</strong><small>100.0% del volumen 2026</small></div>
+        <div><span>Reg. 2026-2S</span><strong>1</strong><small>0 asistentes · 0.0% conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="">0</strong><small>100.0% vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:2.00%"></div></div><b>1</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:2.00%"></div></div><b>1</b></div>
       </div>
-      <div class="program-foot">0.0% asistencia histórica</div>
     </article>
-    
     <article class="program-card searchable" data-name="maestría en sistemas energéticos" data-level="Maestría">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#29 · Maestría</div>
-          <h3>Maestría En Sistemas Energéticos</h3>
-        </div>
-        <span class="badge new">Nuevo en 2027-1S</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#29 · Maestría</div><h3>Maestría En Sistemas Energéticos</h3></div><span class="badge new">Nuevo en 2027-1S</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>0</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="pos">+1</strong><small>Programa sin base 2026 comparable</small></div>
+        <div><span>Reg. 2026-2S</span><strong>0</strong><small>0 asistentes · — conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="pos">+1</strong><small>Nuevo vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:0.00%"></div></div><b>0</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:2.00%"></div></div><b>1</b></div>
       </div>
-      <div class="program-foot">Sin benchmark histórico</div>
     </article>
-    
     <article class="program-card searchable" data-name="especialización en ingeniería clínica" data-level="Especialización">
-      <div class="program-head">
-        <div>
-          <div class="program-rank">#30 · Especialización</div>
-          <h3>Especialización En Ingeniería Clínica</h3>
-        </div>
-        <span class="badge new">Nuevo en 2027-1S</span>
-      </div>
+      <div class="program-head"><div><div class="program-rank">#30 · Especialización</div><h3>Especialización En Ingeniería Clínica</h3></div><span class="badge new">Nuevo en 2027-1S</span></div>
       <div class="pair-kpis">
-        <div><span>2026-2S</span><strong>0</strong><small>0 asistentes</small></div>
-        <div><span>2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
-        <div><span>Diferencia</span><strong class="pos">+1</strong><small>Programa sin base 2026 comparable</small></div>
+        <div><span>Reg. 2026-2S</span><strong>0</strong><small>0 asistentes · — conv.</small></div>
+        <div><span>Reg. 2027-1S</span><strong>1</strong><small>0.6% del total actual</small></div>
+        <div><span>Diferencia</span><strong class="pos">+1</strong><small>Nuevo vs. 2026</small></div>
       </div>
       <div class="bar-compare">
         <div class="bar-row"><span>2026</span><div class="track"><div class="fill old" style="width:0.00%"></div></div><b>0</b></div>
         <div class="bar-row"><span>2027</span><div class="track"><div class="fill current" style="width:2.00%"></div></div><b>1</b></div>
       </div>
-      <div class="program-foot">Sin benchmark histórico</div>
-    </article>
-    </div>
-  </section>
+    </article></div>
+</section>
 
-  <section class="section">
-    <div class="section-head">
-      <div>
-        <h2>Matriz completa de programas</h2>
-        <p>Incluye <b>todo programa con al menos un registro en cualquiera de las dos cohortes</b>: 35 con registros comparables en 2026-2S y 30 en 2027-1S. Así no se ocultan programas históricos que hoy todavía no tienen inscritos.</p>
-      </div>
-      <div class="result-count" id="tableCount">39 programas en total</div>
-    </div>
-    <div class="toolbar">
-      <div class="search"><input id="searchTable" type="search" placeholder="Filtrar la matriz completa…"></div>
-      <select id="tableLevelFilter">
-        <option value="">Todos los niveles</option>
-        <option>Especialización</option>
-        <option>Maestría</option>
-        <option>Doctorado</option>
-        <option>Otro</option>
-      </select>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Programa</th><th>Nivel</th><th>Reg. 2026-2S</th><th>Asist. 2026-2S</th><th>Conv. 2026</th>
-            <th>Reg. 2027-1S</th><th>Δ registros</th><th>Avance vs. 2026</th><th>Estado comparativo</th>
-          </tr>
-        </thead>
-        <tbody id="programTable">
-      <tr class="searchable" data-name="maestría en inteligencia artificial y ciencia de datos" data-level="Maestría">
-        <td class="program-name">Maestría En Inteligencia Artificial Y Ciencia De Datos</td>
-        <td><span class="pill level">Maestría</span></td>
-        <td class="num">50</td>
-        <td class="num">27</td>
-        <td class="num">54.0%</td>
-        <td class="num strong">18</td>
-        <td class="num negative">-32</td>
-        <td class="num">36.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en inteligencia artificial" data-level="Especialización">
-        <td class="program-name">Especialización En Inteligencia Artificial</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">29</td>
-        <td class="num">3</td>
-        <td class="num">10.3%</td>
-        <td class="num strong">13</td>
-        <td class="num negative">-16</td>
-        <td class="num">44.8%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en gerencia de proyectos" data-level="Especialización">
-        <td class="program-name">Especialización En Gerencia De Proyectos</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">26</td>
-        <td class="num">7</td>
-        <td class="num">26.9%</td>
-        <td class="num strong">11</td>
-        <td class="num negative">-15</td>
-        <td class="num">42.3%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="doctorado en ingeniería" data-level="Doctorado">
-        <td class="program-name">Doctorado En Ingeniería</td>
-        <td><span class="pill level">Doctorado</span></td>
-        <td class="num">1</td>
-        <td class="num">0</td>
-        <td class="num">0.0%</td>
-        <td class="num strong">11</td>
-        <td class="num positive">+10</td>
-        <td class="num">1100.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en finanzas" data-level="Especialización">
-        <td class="program-name">Especialización En Finanzas</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">27</td>
-        <td class="num">8</td>
-        <td class="num">29.6%</td>
-        <td class="num strong">10</td>
-        <td class="num negative">-17</td>
-        <td class="num">37.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en analítica de big data" data-level="Especialización">
-        <td class="program-name">Especialización En Analítica De Big Data</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">25</td>
-        <td class="num">4</td>
-        <td class="num">16.0%</td>
-        <td class="num strong">10</td>
-        <td class="num negative">-15</td>
-        <td class="num">40.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en comunicación estratégica" data-level="Especialización">
-        <td class="program-name">Especialización En Comunicación Estratégica</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">20</td>
-        <td class="num">4</td>
-        <td class="num">20.0%</td>
-        <td class="num strong">8</td>
-        <td class="num negative">-12</td>
-        <td class="num">40.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="maestría en gerencia de ingeniería" data-level="Maestría">
-        <td class="program-name">Maestría En Gerencia De Ingeniería</td>
-        <td><span class="pill level">Maestría</span></td>
-        <td class="num">18</td>
-        <td class="num">2</td>
-        <td class="num">11.1%</td>
-        <td class="num strong">7</td>
-        <td class="num negative">-11</td>
-        <td class="num">38.9%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en finanzas - virtual" data-level="Especialización">
-        <td class="program-name">Especialización En Finanzas - Virtual</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">15</td>
-        <td class="num">3</td>
-        <td class="num">20.0%</td>
-        <td class="num strong">7</td>
-        <td class="num negative">-8</td>
-        <td class="num">46.7%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en comercio exterior" data-level="Especialización">
-        <td class="program-name">Especialización En Comercio Exterior</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">4</td>
-        <td class="num">0</td>
-        <td class="num">0.0%</td>
-        <td class="num strong">7</td>
-        <td class="num positive">+3</td>
-        <td class="num">175.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en ciberseguridad" data-level="Especialización">
-        <td class="program-name">Especialización En Ciberseguridad</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">0</td>
-        <td class="num">0</td>
-        <td class="num">—</td>
-        <td class="num strong">6</td>
-        <td class="num positive">+6</td>
-        <td class="num">Nuevo</td>
-        <td><span class="status">Nuevo 2027-1S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en mercadeo" data-level="Especialización">
-        <td class="program-name">Especialización En Mercadeo</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">16</td>
-        <td class="num">7</td>
-        <td class="num">43.8%</td>
-        <td class="num strong">5</td>
-        <td class="num negative">-11</td>
-        <td class="num">31.2%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en seguridad y salud en el trabajo - virtual" data-level="Especialización">
-        <td class="program-name">Especialización En Seguridad Y Salud En El Trabajo - Virtual</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">6</td>
-        <td class="num">1</td>
-        <td class="num">16.7%</td>
-        <td class="num strong">5</td>
-        <td class="num negative">-1</td>
-        <td class="num">83.3%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en eficiencia energética" data-level="Especialización">
-        <td class="program-name">Especialización En Eficiencia Energética</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">11</td>
-        <td class="num">4</td>
-        <td class="num">36.4%</td>
-        <td class="num strong">4</td>
-        <td class="num negative">-7</td>
-        <td class="num">36.4%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="maestría en administración de empresas" data-level="Maestría">
-        <td class="program-name">Maestría En Administración De Empresas</td>
-        <td><span class="pill level">Maestría</span></td>
-        <td class="num">9</td>
-        <td class="num">2</td>
-        <td class="num">22.2%</td>
-        <td class="num strong">4</td>
-        <td class="num negative">-5</td>
-        <td class="num">44.4%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en diseño publicitario en contenidos digitales" data-level="Especialización">
-        <td class="program-name">Especialización En Diseño Publicitario En Contenidos Digitales</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">9</td>
-        <td class="num">1</td>
-        <td class="num">11.1%</td>
-        <td class="num strong">4</td>
-        <td class="num negative">-5</td>
-        <td class="num">44.4%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en gerencia de mantenimiento y confiabilidad" data-level="Especialización">
-        <td class="program-name">Especialización En Gerencia De Mantenimiento Y Confiabilidad</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">6</td>
-        <td class="num">1</td>
-        <td class="num">16.7%</td>
-        <td class="num strong">3</td>
-        <td class="num negative">-3</td>
-        <td class="num">50.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en energías renovables" data-level="Especialización">
-        <td class="program-name">Especialización En Energías Renovables</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">5</td>
-        <td class="num">2</td>
-        <td class="num">40.0%</td>
-        <td class="num strong">3</td>
-        <td class="num negative">-2</td>
-        <td class="num">60.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especializacion en derechos humanos y territorios" data-level="Especialización">
-        <td class="program-name">Especializacion En Derechos Humanos Y Territorios</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">4</td>
-        <td class="num">0</td>
-        <td class="num">0.0%</td>
-        <td class="num strong">3</td>
-        <td class="num negative">-1</td>
-        <td class="num">75.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en estrategia publicitaria de marca en entornos digitales" data-level="Especialización">
-        <td class="program-name">Especialización En Estrategia Publicitaria De Marca En Entornos Digitales</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">0</td>
-        <td class="num">0</td>
-        <td class="num">—</td>
-        <td class="num strong">3</td>
-        <td class="num positive">+3</td>
-        <td class="num">Nuevo</td>
-        <td><span class="status">Nuevo 2027-1S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en gerencia del talento humano" data-level="Especialización">
-        <td class="program-name">Especialización En Gerencia Del Talento Humano</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">20</td>
-        <td class="num">2</td>
-        <td class="num">10.0%</td>
-        <td class="num strong">2</td>
-        <td class="num negative">-18</td>
-        <td class="num">10.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en seguridad y salud en el trabajo" data-level="Especialización">
-        <td class="program-name">Especialización En Seguridad Y Salud En El Trabajo</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">11</td>
-        <td class="num">3</td>
-        <td class="num">27.3%</td>
-        <td class="num strong">2</td>
-        <td class="num negative">-9</td>
-        <td class="num">18.2%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="maestría en seguridad y salud en el trabajo" data-level="Maestría">
-        <td class="program-name">Maestría En Seguridad Y Salud En El Trabajo</td>
-        <td><span class="pill level">Maestría</span></td>
-        <td class="num">5</td>
-        <td class="num">0</td>
-        <td class="num">0.0%</td>
-        <td class="num strong">2</td>
-        <td class="num negative">-3</td>
-        <td class="num">40.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="maestría en comunicación digital" data-level="Maestría">
-        <td class="program-name">Maestría En Comunicación Digital</td>
-        <td><span class="pill level">Maestría</span></td>
-        <td class="num">15</td>
-        <td class="num">3</td>
-        <td class="num">20.0%</td>
-        <td class="num strong">1</td>
-        <td class="num negative">-14</td>
-        <td class="num">6.7%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en logística" data-level="Especialización">
-        <td class="program-name">Especialización En Logística</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">7</td>
-        <td class="num">0</td>
-        <td class="num">0.0%</td>
-        <td class="num strong">1</td>
-        <td class="num negative">-6</td>
-        <td class="num">14.3%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="doctorado en sosteniblidad" data-level="Doctorado">
-        <td class="program-name">Doctorado En Sosteniblidad</td>
-        <td><span class="pill level">Doctorado</span></td>
-        <td class="num">6</td>
-        <td class="num">0</td>
-        <td class="num">0.0%</td>
-        <td class="num strong">1</td>
-        <td class="num negative">-5</td>
-        <td class="num">16.7%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en interculturalidad y estudios de género" data-level="Especialización">
-        <td class="program-name">Especialización En Interculturalidad Y Estudios De Género</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">1</td>
-        <td class="num">0</td>
-        <td class="num">0.0%</td>
-        <td class="num strong">1</td>
-        <td class="num ">0</td>
-        <td class="num">100.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="doctorado en bioingeniería" data-level="Doctorado">
-        <td class="program-name">Doctorado En Bioingeniería</td>
-        <td><span class="pill level">Doctorado</span></td>
-        <td class="num">1</td>
-        <td class="num">0</td>
-        <td class="num">0.0%</td>
-        <td class="num strong">1</td>
-        <td class="num ">0</td>
-        <td class="num">100.0%</td>
-        <td><span class="status">Comparable</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="maestría en sistemas energéticos" data-level="Maestría">
-        <td class="program-name">Maestría En Sistemas Energéticos</td>
-        <td><span class="pill level">Maestría</span></td>
-        <td class="num">0</td>
-        <td class="num">0</td>
-        <td class="num">—</td>
-        <td class="num strong">1</td>
-        <td class="num positive">+1</td>
-        <td class="num">Nuevo</td>
-        <td><span class="status">Nuevo 2027-1S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en ingeniería clínica" data-level="Especialización">
-        <td class="program-name">Especialización En Ingeniería Clínica</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">0</td>
-        <td class="num">0</td>
-        <td class="num">—</td>
-        <td class="num strong">1</td>
-        <td class="num positive">+1</td>
-        <td class="num">Nuevo</td>
-        <td><span class="status">Nuevo 2027-1S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en comunicación estratégica de marca en entornos digitales" data-level="Especialización">
-        <td class="program-name">Especialización En Comunicación Estratégica De Marca En Entornos Digitales</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">17</td>
-        <td class="num">5</td>
-        <td class="num">29.4%</td>
-        <td class="num strong">0</td>
-        <td class="num negative">-17</td>
-        <td class="num">0.0%</td>
-        <td><span class="status">Solo 2026-2S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en contratación estatal y su gestión" data-level="Especialización">
-        <td class="program-name">Especialización En Contratación Estatal Y Su Gestión</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">6</td>
-        <td class="num">0</td>
-        <td class="num">0.0%</td>
-        <td class="num strong">0</td>
-        <td class="num negative">-6</td>
-        <td class="num">0.0%</td>
-        <td><span class="status">Solo 2026-2S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en comunicación y periodismo con inteligencia artificial - virtual" data-level="Especialización">
-        <td class="program-name">Especialización En Comunicación Y Periodismo Con Inteligencia Artificial - Virtual</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">6</td>
-        <td class="num">1</td>
-        <td class="num">16.7%</td>
-        <td class="num strong">0</td>
-        <td class="num negative">-6</td>
-        <td class="num">0.0%</td>
-        <td><span class="status">Solo 2026-2S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en derecho aduanero y del comercio exterior" data-level="Especialización">
-        <td class="program-name">Especialización En Derecho Aduanero Y Del Comercio Exterior</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">5</td>
-        <td class="num">0</td>
-        <td class="num">0.0%</td>
-        <td class="num strong">0</td>
-        <td class="num negative">-5</td>
-        <td class="num">0.0%</td>
-        <td><span class="status">Solo 2026-2S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="" data-level="Otro">
-        <td class="program-name"></td>
-        <td><span class="pill level">Otro</span></td>
-        <td class="num">4</td>
-        <td class="num">4</td>
-        <td class="num">100.0%</td>
-        <td class="num strong">0</td>
-        <td class="num negative">-4</td>
-        <td class="num">0.0%</td>
-        <td><span class="status">Solo 2026-2S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="programas de posgrado" data-level="Otro">
-        <td class="program-name">Programas De Posgrado</td>
-        <td><span class="pill level">Otro</span></td>
-        <td class="num">2</td>
-        <td class="num">2</td>
-        <td class="num">100.0%</td>
-        <td class="num strong">0</td>
-        <td class="num negative">-2</td>
-        <td class="num">0.0%</td>
-        <td><span class="status">Solo 2026-2S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en logística - virtual" data-level="Especialización">
-        <td class="program-name">Especialización En Logística - Virtual</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">2</td>
-        <td class="num">0</td>
-        <td class="num">0.0%</td>
-        <td class="num strong">0</td>
-        <td class="num negative">-2</td>
-        <td class="num">0.0%</td>
-        <td><span class="status">Solo 2026-2S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en logística - convenio cc buga" data-level="Especialización">
-        <td class="program-name">Especialización En Logística - Convenio Cc Buga</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">1</td>
-        <td class="num">1</td>
-        <td class="num">100.0%</td>
-        <td class="num strong">0</td>
-        <td class="num negative">-1</td>
-        <td class="num">0.0%</td>
-        <td><span class="status">Solo 2026-2S</span></td>
-      </tr>
-    
-      <tr class="searchable" data-name="especialización en gerencia de proyectos - virtual" data-level="Especialización">
-        <td class="program-name">Especialización En Gerencia De Proyectos - Virtual</td>
-        <td><span class="pill level">Especialización</span></td>
-        <td class="num">1</td>
-        <td class="num">1</td>
-        <td class="num">100.0%</td>
-        <td class="num strong">0</td>
-        <td class="num negative">-1</td>
-        <td class="num">0.0%</td>
-        <td><span class="status">Solo 2026-2S</span></td>
-      </tr>
-    </tbody>
-      </table>
-    </div>
-  </section>
+<section class="section">
+<div class="head"><div><h2>Matriz completa de programas</h2><p>35 programas con registros comparables en 2026-2S, 30 en 2027-1S y 39 en el universo combinado. Se incluyen también programas históricos que todavía no tienen registros actuales.</p></div><div id="tableCount" class="note">39 programas</div></div>
+<div class="toolbar"><div class="search"><input id="searchTable" type="search" placeholder="Filtrar matriz…"></div><select id="tableLevelFilter"><option value="">Todos los niveles</option><option>Especialización</option><option>Maestría</option><option>Doctorado</option><option>Otro</option></select></div>
+<div class="table-wrap"><table><thead><tr><th>Programa</th><th>Nivel</th><th>Reg. 2026</th><th>Asist. 2026</th><th>Conv. 2026</th><th>Reg. 2027</th><th>Δ</th><th>Avance</th><th>Estado</th></tr></thead><tbody id="programTable">
+    <tr class="searchable" data-name="maestría en inteligencia artificial y ciencia de datos" data-level="Maestría">
+      <td class="program-name">Maestría En Inteligencia Artificial Y Ciencia De Datos</td><td><span class="pill">Maestría</span></td>
+      <td class="num">50</td><td class="num">27</td><td class="num">54.0%</td>
+      <td class="num strong">18</td><td class="num negative">-32</td>
+      <td class="num">36.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en inteligencia artificial" data-level="Especialización">
+      <td class="program-name">Especialización En Inteligencia Artificial</td><td><span class="pill">Especialización</span></td>
+      <td class="num">29</td><td class="num">3</td><td class="num">10.3%</td>
+      <td class="num strong">13</td><td class="num negative">-16</td>
+      <td class="num">44.8%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en gerencia de proyectos" data-level="Especialización">
+      <td class="program-name">Especialización En Gerencia De Proyectos</td><td><span class="pill">Especialización</span></td>
+      <td class="num">26</td><td class="num">7</td><td class="num">26.9%</td>
+      <td class="num strong">11</td><td class="num negative">-15</td>
+      <td class="num">42.3%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="doctorado en ingeniería" data-level="Doctorado">
+      <td class="program-name">Doctorado En Ingeniería</td><td><span class="pill">Doctorado</span></td>
+      <td class="num">1</td><td class="num">0</td><td class="num">0.0%</td>
+      <td class="num strong">11</td><td class="num positive">+10</td>
+      <td class="num">1100.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en finanzas" data-level="Especialización">
+      <td class="program-name">Especialización En Finanzas</td><td><span class="pill">Especialización</span></td>
+      <td class="num">27</td><td class="num">8</td><td class="num">29.6%</td>
+      <td class="num strong">10</td><td class="num negative">-17</td>
+      <td class="num">37.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en analítica de big data" data-level="Especialización">
+      <td class="program-name">Especialización En Analítica De Big Data</td><td><span class="pill">Especialización</span></td>
+      <td class="num">25</td><td class="num">4</td><td class="num">16.0%</td>
+      <td class="num strong">10</td><td class="num negative">-15</td>
+      <td class="num">40.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en comunicación estratégica" data-level="Especialización">
+      <td class="program-name">Especialización En Comunicación Estratégica</td><td><span class="pill">Especialización</span></td>
+      <td class="num">20</td><td class="num">4</td><td class="num">20.0%</td>
+      <td class="num strong">8</td><td class="num negative">-12</td>
+      <td class="num">40.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="maestría en gerencia de ingeniería" data-level="Maestría">
+      <td class="program-name">Maestría En Gerencia De Ingeniería</td><td><span class="pill">Maestría</span></td>
+      <td class="num">18</td><td class="num">2</td><td class="num">11.1%</td>
+      <td class="num strong">7</td><td class="num negative">-11</td>
+      <td class="num">38.9%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en finanzas - virtual" data-level="Especialización">
+      <td class="program-name">Especialización En Finanzas - Virtual</td><td><span class="pill">Especialización</span></td>
+      <td class="num">15</td><td class="num">3</td><td class="num">20.0%</td>
+      <td class="num strong">7</td><td class="num negative">-8</td>
+      <td class="num">46.7%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en comercio exterior" data-level="Especialización">
+      <td class="program-name">Especialización En Comercio Exterior</td><td><span class="pill">Especialización</span></td>
+      <td class="num">4</td><td class="num">0</td><td class="num">0.0%</td>
+      <td class="num strong">7</td><td class="num positive">+3</td>
+      <td class="num">175.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en ciberseguridad" data-level="Especialización">
+      <td class="program-name">Especialización En Ciberseguridad</td><td><span class="pill">Especialización</span></td>
+      <td class="num">0</td><td class="num">0</td><td class="num">—</td>
+      <td class="num strong">6</td><td class="num positive">+6</td>
+      <td class="num">Nuevo</td><td>Nuevo 2027-1S</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en mercadeo" data-level="Especialización">
+      <td class="program-name">Especialización En Mercadeo</td><td><span class="pill">Especialización</span></td>
+      <td class="num">16</td><td class="num">7</td><td class="num">43.8%</td>
+      <td class="num strong">5</td><td class="num negative">-11</td>
+      <td class="num">31.2%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en seguridad y salud en el trabajo - virtual" data-level="Especialización">
+      <td class="program-name">Especialización En Seguridad Y Salud En El Trabajo - Virtual</td><td><span class="pill">Especialización</span></td>
+      <td class="num">6</td><td class="num">1</td><td class="num">16.7%</td>
+      <td class="num strong">5</td><td class="num negative">-1</td>
+      <td class="num">83.3%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en eficiencia energética" data-level="Especialización">
+      <td class="program-name">Especialización En Eficiencia Energética</td><td><span class="pill">Especialización</span></td>
+      <td class="num">11</td><td class="num">4</td><td class="num">36.4%</td>
+      <td class="num strong">4</td><td class="num negative">-7</td>
+      <td class="num">36.4%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="maestría en administración de empresas" data-level="Maestría">
+      <td class="program-name">Maestría En Administración De Empresas</td><td><span class="pill">Maestría</span></td>
+      <td class="num">9</td><td class="num">2</td><td class="num">22.2%</td>
+      <td class="num strong">4</td><td class="num negative">-5</td>
+      <td class="num">44.4%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en diseño publicitario en contenidos digitales" data-level="Especialización">
+      <td class="program-name">Especialización En Diseño Publicitario En Contenidos Digitales</td><td><span class="pill">Especialización</span></td>
+      <td class="num">9</td><td class="num">1</td><td class="num">11.1%</td>
+      <td class="num strong">4</td><td class="num negative">-5</td>
+      <td class="num">44.4%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en gerencia de mantenimiento y confiabilidad" data-level="Especialización">
+      <td class="program-name">Especialización En Gerencia De Mantenimiento Y Confiabilidad</td><td><span class="pill">Especialización</span></td>
+      <td class="num">6</td><td class="num">1</td><td class="num">16.7%</td>
+      <td class="num strong">3</td><td class="num negative">-3</td>
+      <td class="num">50.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en energías renovables" data-level="Especialización">
+      <td class="program-name">Especialización En Energías Renovables</td><td><span class="pill">Especialización</span></td>
+      <td class="num">5</td><td class="num">2</td><td class="num">40.0%</td>
+      <td class="num strong">3</td><td class="num negative">-2</td>
+      <td class="num">60.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especializacion en derechos humanos y territorios" data-level="Especialización">
+      <td class="program-name">Especializacion En Derechos Humanos Y Territorios</td><td><span class="pill">Especialización</span></td>
+      <td class="num">4</td><td class="num">0</td><td class="num">0.0%</td>
+      <td class="num strong">3</td><td class="num negative">-1</td>
+      <td class="num">75.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en estrategia publicitaria de marca en entornos digitales" data-level="Especialización">
+      <td class="program-name">Especialización En Estrategia Publicitaria De Marca En Entornos Digitales</td><td><span class="pill">Especialización</span></td>
+      <td class="num">0</td><td class="num">0</td><td class="num">—</td>
+      <td class="num strong">3</td><td class="num positive">+3</td>
+      <td class="num">Nuevo</td><td>Nuevo 2027-1S</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en gerencia del talento humano" data-level="Especialización">
+      <td class="program-name">Especialización En Gerencia Del Talento Humano</td><td><span class="pill">Especialización</span></td>
+      <td class="num">20</td><td class="num">2</td><td class="num">10.0%</td>
+      <td class="num strong">2</td><td class="num negative">-18</td>
+      <td class="num">10.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en seguridad y salud en el trabajo" data-level="Especialización">
+      <td class="program-name">Especialización En Seguridad Y Salud En El Trabajo</td><td><span class="pill">Especialización</span></td>
+      <td class="num">11</td><td class="num">3</td><td class="num">27.3%</td>
+      <td class="num strong">2</td><td class="num negative">-9</td>
+      <td class="num">18.2%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="maestría en seguridad y salud en el trabajo" data-level="Maestría">
+      <td class="program-name">Maestría En Seguridad Y Salud En El Trabajo</td><td><span class="pill">Maestría</span></td>
+      <td class="num">5</td><td class="num">0</td><td class="num">0.0%</td>
+      <td class="num strong">2</td><td class="num negative">-3</td>
+      <td class="num">40.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="maestría en comunicación digital" data-level="Maestría">
+      <td class="program-name">Maestría En Comunicación Digital</td><td><span class="pill">Maestría</span></td>
+      <td class="num">15</td><td class="num">3</td><td class="num">20.0%</td>
+      <td class="num strong">1</td><td class="num negative">-14</td>
+      <td class="num">6.7%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en logística" data-level="Especialización">
+      <td class="program-name">Especialización En Logística</td><td><span class="pill">Especialización</span></td>
+      <td class="num">7</td><td class="num">0</td><td class="num">0.0%</td>
+      <td class="num strong">1</td><td class="num negative">-6</td>
+      <td class="num">14.3%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="doctorado en sosteniblidad" data-level="Doctorado">
+      <td class="program-name">Doctorado En Sosteniblidad</td><td><span class="pill">Doctorado</span></td>
+      <td class="num">6</td><td class="num">0</td><td class="num">0.0%</td>
+      <td class="num strong">1</td><td class="num negative">-5</td>
+      <td class="num">16.7%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en interculturalidad y estudios de género" data-level="Especialización">
+      <td class="program-name">Especialización En Interculturalidad Y Estudios De Género</td><td><span class="pill">Especialización</span></td>
+      <td class="num">1</td><td class="num">0</td><td class="num">0.0%</td>
+      <td class="num strong">1</td><td class="num ">0</td>
+      <td class="num">100.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="doctorado en bioingeniería" data-level="Doctorado">
+      <td class="program-name">Doctorado En Bioingeniería</td><td><span class="pill">Doctorado</span></td>
+      <td class="num">1</td><td class="num">0</td><td class="num">0.0%</td>
+      <td class="num strong">1</td><td class="num ">0</td>
+      <td class="num">100.0%</td><td>Comparable</td>
+    </tr>
+    <tr class="searchable" data-name="maestría en sistemas energéticos" data-level="Maestría">
+      <td class="program-name">Maestría En Sistemas Energéticos</td><td><span class="pill">Maestría</span></td>
+      <td class="num">0</td><td class="num">0</td><td class="num">—</td>
+      <td class="num strong">1</td><td class="num positive">+1</td>
+      <td class="num">Nuevo</td><td>Nuevo 2027-1S</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en ingeniería clínica" data-level="Especialización">
+      <td class="program-name">Especialización En Ingeniería Clínica</td><td><span class="pill">Especialización</span></td>
+      <td class="num">0</td><td class="num">0</td><td class="num">—</td>
+      <td class="num strong">1</td><td class="num positive">+1</td>
+      <td class="num">Nuevo</td><td>Nuevo 2027-1S</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en comunicación estratégica de marca en entornos digitales" data-level="Especialización">
+      <td class="program-name">Especialización En Comunicación Estratégica De Marca En Entornos Digitales</td><td><span class="pill">Especialización</span></td>
+      <td class="num">17</td><td class="num">5</td><td class="num">29.4%</td>
+      <td class="num strong">0</td><td class="num negative">-17</td>
+      <td class="num">0.0%</td><td>Solo 2026-2S</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en contratación estatal y su gestión" data-level="Especialización">
+      <td class="program-name">Especialización En Contratación Estatal Y Su Gestión</td><td><span class="pill">Especialización</span></td>
+      <td class="num">6</td><td class="num">0</td><td class="num">0.0%</td>
+      <td class="num strong">0</td><td class="num negative">-6</td>
+      <td class="num">0.0%</td><td>Solo 2026-2S</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en comunicación y periodismo con inteligencia artificial - virtual" data-level="Especialización">
+      <td class="program-name">Especialización En Comunicación Y Periodismo Con Inteligencia Artificial - Virtual</td><td><span class="pill">Especialización</span></td>
+      <td class="num">6</td><td class="num">1</td><td class="num">16.7%</td>
+      <td class="num strong">0</td><td class="num negative">-6</td>
+      <td class="num">0.0%</td><td>Solo 2026-2S</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en derecho aduanero y del comercio exterior" data-level="Especialización">
+      <td class="program-name">Especialización En Derecho Aduanero Y Del Comercio Exterior</td><td><span class="pill">Especialización</span></td>
+      <td class="num">5</td><td class="num">0</td><td class="num">0.0%</td>
+      <td class="num strong">0</td><td class="num negative">-5</td>
+      <td class="num">0.0%</td><td>Solo 2026-2S</td>
+    </tr>
+    <tr class="searchable" data-name="" data-level="Otro">
+      <td class="program-name"></td><td><span class="pill">Otro</span></td>
+      <td class="num">4</td><td class="num">4</td><td class="num">100.0%</td>
+      <td class="num strong">0</td><td class="num negative">-4</td>
+      <td class="num">0.0%</td><td>Solo 2026-2S</td>
+    </tr>
+    <tr class="searchable" data-name="programas de posgrado" data-level="Otro">
+      <td class="program-name">Programas De Posgrado</td><td><span class="pill">Otro</span></td>
+      <td class="num">2</td><td class="num">2</td><td class="num">100.0%</td>
+      <td class="num strong">0</td><td class="num negative">-2</td>
+      <td class="num">0.0%</td><td>Solo 2026-2S</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en logística - virtual" data-level="Especialización">
+      <td class="program-name">Especialización En Logística - Virtual</td><td><span class="pill">Especialización</span></td>
+      <td class="num">2</td><td class="num">0</td><td class="num">0.0%</td>
+      <td class="num strong">0</td><td class="num negative">-2</td>
+      <td class="num">0.0%</td><td>Solo 2026-2S</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en logística - convenio cc buga" data-level="Especialización">
+      <td class="program-name">Especialización En Logística - Convenio Cc Buga</td><td><span class="pill">Especialización</span></td>
+      <td class="num">1</td><td class="num">1</td><td class="num">100.0%</td>
+      <td class="num strong">0</td><td class="num negative">-1</td>
+      <td class="num">0.0%</td><td>Solo 2026-2S</td>
+    </tr>
+    <tr class="searchable" data-name="especialización en gerencia de proyectos - virtual" data-level="Especialización">
+      <td class="program-name">Especialización En Gerencia De Proyectos - Virtual</td><td><span class="pill">Especialización</span></td>
+      <td class="num">1</td><td class="num">1</td><td class="num">100.0%</td>
+      <td class="num strong">0</td><td class="num negative">-1</td>
+      <td class="num">0.0%</td><td>Solo 2026-2S</td>
+    </tr></tbody></table></div>
+</section>
 
-  <section class="section">
-    <div class="section-head">
-      <div><h2>Benchmark de asistencia</h2><p>Escenarios calculados con la tasa histórica corregida de 25.1%.</p></div>
-    </div>
-    <div class="scenario-grid"><div class="scenario"><span>50 asistentes</span><b>200 registros</b><small>Brecha actual: +45</small></div><div class="scenario"><span>70 asistentes</span><b>280 registros</b><small>Brecha actual: +125</small></div><div class="scenario"><span>80 asistentes</span><b>320 registros</b><small>Brecha actual: +165</small></div><div class="scenario"><span>100 asistentes</span><b>399 registros</b><small>Brecha actual: +244</small></div></div>
-  </section>
+<section class="section">
+<div class="head"><div><h2>Benchmark de asistencia</h2><p>Escenarios construidos con la tasa comparable histórica de 25.1%.</p></div></div>
+<div class="scenarios"><div class='scenario'><span>50 asistentes</span><b>200 registros</b><small>Brecha vs. 155: +45</small></div><div class='scenario'><span>70 asistentes</span><b>280 registros</b><small>Brecha vs. 155: +125</small></div><div class='scenario'><span>80 asistentes</span><b>320 registros</b><small>Brecha vs. 155: +165</small></div><div class='scenario'><span>100 asistentes</span><b>399 registros</b><small>Brecha vs. 155: +244</small></div></div>
+</section>
 
-  <section class="section">
-    <div class="section-head"><div><h2>Notas de lectura</h2></div></div>
-    <div class="footer-note">
-      <b>Base comparable 2026-2S:</b> 391 registros creados hasta el 30 de mayo de 2026. La base histórica contiene 396 registros; 5 posteriores al evento se excluyen del denominador de conversión.<br>
-      <b>Base 2027-1S:</b> 155 registros al 5 de octubre de 2026. El estado de asistencia todavía no es comparable porque el evento actual sigue en proceso.<br>
-      <b>Avance vs. 2026:</b> Registros actuales 2027-1S ÷ registros comparables 2026-2S para el mismo programa. “Nuevo” significa que no existe volumen comparable previo en la base 2026-2S.<br>
-      <b>Diseño:</b> El contenido esencial es visible sin JavaScript. El script solo habilita búsqueda y filtros; no se usan librerías ni recursos externos.
-    </div>
-  </section>
+<section class="section"><div class="head"><div><h2>Cómo interpretar “qué funciona mejor”</h2></div></div>
+<p class="note"><b>Adquisición:</b> hoy Facebook pauta es claramente la fuente con más volumen en 2027-1S (87 registros). <b>Seguimiento:</b> Comercial presenta mejor cobertura que Facebook pauta (77,8% vs. 33,3%), aunque con mucho menor volumen. <b>Conversión final:</b> todavía no puede determinarse qué canal actual convierte mejor a asistencia porque el Open House 2027-1S no ha llegado a esa etapa. En 2026-2S la atribución por canal fue insuficiente: 89,8% de la base comparable no permite identificar una fuente específica, por lo que las tasas observadas para IG y FB no deben usarse como evidencia concluyente de superioridad entre canales.</p>
+</section>
 </div>
 
 <script>
 (function(){
-  function applyFilter(searchId, selectId, containerSelector, countId, label) {
-    const q = document.getElementById(searchId);
-    const s = document.getElementById(selectId);
-    const items = Array.from(document.querySelectorAll(containerSelector));
-    function run(){
-      const term = (q.value || "").trim().toLowerCase();
-      const level = s.value || "";
-      let visible = 0;
-      items.forEach(el => {
-        const name = (el.dataset.name || "");
-        const lvl = (el.dataset.level || "");
-        const ok = (!term || name.includes(term)) && (!level || lvl === level);
-        el.classList.toggle("hidden", !ok);
-        if(ok) visible++;
-      });
-      document.getElementById(countId).textContent = visible + " " + label;
-    }
-    q.addEventListener("input", run);
-    s.addEventListener("change", run);
-  }
-  applyFilter("searchPrograms","levelFilter","#programGrid .searchable","cardCount","programas visibles");
-  applyFilter("searchTable","tableLevelFilter","#programTable .searchable","tableCount","programas visibles");
+function bind(searchId,selectId,selector,countId,label){
+const q=document.getElementById(searchId),s=document.getElementById(selectId),items=[...document.querySelectorAll(selector)];
+function run(){let term=(q.value||"").trim().toLowerCase(),lv=s.value||"",v=0;items.forEach(el=>{let ok=(!term||(el.dataset.name||"").includes(term))&&(!lv||(el.dataset.level||"")===lv);el.classList.toggle("hidden",!ok);if(ok)v++;});document.getElementById(countId).textContent=v+" "+label;}
+q.addEventListener("input",run);s.addEventListener("change",run);
+}
+bind("searchPrograms","levelFilter","#programGrid .searchable","cardCount","programas visibles");
+bind("searchTable","tableLevelFilter","#programTable .searchable","tableCount","programas");
 })();
 </script>
-</body>
-</html>
+</body></html>
