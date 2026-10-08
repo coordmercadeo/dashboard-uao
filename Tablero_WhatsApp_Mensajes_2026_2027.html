@@ -218,6 +218,60 @@ tr.strong td{font-weight:700;background:var(--bg)}
 .sc dl div{display:flex;justify-content:space-between;gap:10px}
 .sc dt{color:var(--muted)}.sc dd{margin:0;font-weight:700}
 .dot{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--red);margin-right:6px}.dot.g{background:color-mix(in srgb,var(--red) 35%,var(--surface))}
+
+.live{position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);z-index:4;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:var(--bg);padding-block:8px}
+.lv{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0;box-shadow:0 6px 14px -10px rgba(0,0,0,.35)}
+.lv.mid{border-color:var(--red);box-shadow:0 0 0 1px var(--red),0 6px 14px -10px rgba(0,0,0,.35)}
+.ln{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lbig{font-size:clamp(18px,2.6vw,26px);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.lsub{font-size:12px;color:var(--muted)}
+.lv b{font:500 15px var(--mono)}
+.dl{font-size:11px;color:var(--muted)}.dl.up{color:var(--red-ink);font-weight:600}.dl.dn{color:var(--good);font-weight:600}
+@media(max-width:600px){.lv{padding:8px}.lsub,.dl{display:none}.lv b{font-size:13px}}
+.tfgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.tf{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.tf label{font-weight:700;font-size:14px}
+.tf.chg{border-color:var(--red);background:var(--red-soft)}
+.money{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px 4px 4px 12px}
+.money span{font:500 15px var(--mono);color:var(--muted)}
+.money input{border:0;background:none;font:500 22px var(--mono);padding:6px 4px;width:100%;min-width:0;outline:none}
+.money:focus-within{border-color:var(--red);box-shadow:0 0 0 2px var(--red-soft)}
+.money .tfstep,.stp{flex:none;width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:600 18px var(--font);cursor:pointer}
+.money .tfstep:hover{background:var(--red-soft);color:var(--red-ink);border-color:var(--red)}
+.tfn{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.linkbtn{background:none;border:0;color:var(--red-ink);font:600 12px var(--font);cursor:pointer;padding:2px 0;text-decoration:underline}
+.tfex{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:8px}
+.tfex div{background:var(--bg);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted)}
+.tfex b{font:500 16px var(--mono);color:var(--ink)}
+.grp{border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
+.grp:first-child{border-top:0;margin-top:0;padding-top:0}
+.gh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.gh h4{margin:0;font-size:15px;font-weight:800}
+.gh .gs{margin-left:auto;font:500 12px var(--mono);color:var(--red-ink)}
+.rr{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,92px) 30px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+.rr:last-child{border-bottom:0}
+.rr.rh{border:0;padding:0 0 2px;font:600 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.rr.rh span{text-align:center}
+.rr .lb{display:flex;flex-direction:column;min-width:0;font-size:14px}.rr .lb b{font-weight:600}.rr .lb small{color:var(--muted);font-size:12px}
+.cell{display:flex;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding-right:8px;min-width:0}
+.cell input{border:0;background:none;text-align:right;width:100%;min-width:0;padding:7px 4px 7px 8px;font:500 14px var(--mono);outline:none}
+.cell i{font:normal 11px var(--mono);color:var(--muted)}
+.cell:focus-within{border-color:var(--red);box-shadow:0 0 0 2px var(--red-soft)}
+.cell.chg{background:var(--red-soft);border-color:var(--red)}
+.cell input:focus-visible,.money input:focus-visible{outline:none}
+.rs{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;font-size:14px;visibility:hidden}
+.chgrow .rs{visibility:visible;color:var(--red-ink);border-color:var(--red)}
+@media(max-width:640px){.rr{grid-template-columns:repeat(3,1fr) 30px}.rr .lb{grid-column:1/-1}.rr.rh{grid-template-columns:repeat(3,1fr) 30px}.rr.rh span:first-child{display:none}}
+.fill.neg{background:var(--ink)}
+select,input[type=text],textarea{font:500 14px var(--font);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%;min-width:0}
+textarea{font-family:var(--mono);font-size:12px;resize:vertical}
+select:focus-visible,input[type=text]:focus-visible,textarea:focus-visible{outline:none;border-color:var(--red);box-shadow:0 0 0 2px var(--red-soft)}
+.cbig{display:flex;flex-direction:column;gap:2px;margin-bottom:12px}
+.cbig .l{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cbig b{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.02em;color:var(--red-ink)}
+.cbig small{color:var(--muted);font-size:13px}
+.kv{margin:0;display:flex;flex-direction:column}.kv div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}.kv div:last-child{border:0}.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:700}
+.fh{margin:6px 0 -4px;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--red-ink)}
 </style>
 
 <header class="hero">
@@ -232,7 +286,7 @@ tr.strong td{font-weight:700;background:var(--bg)}
 </header>
 
 <nav class="nav" aria-label="Secciones"><div class="wrap">
-  <a href="#resumen">Resumen</a><a href="#volumenes">Volúmenes</a><a href="#componentes">Componentes</a><a href="#modelo">Modelo</a><a href="#arquitectura">Arquitectura</a><a href="#journeys">Journeys</a><a href="#escenarios">Escenarios</a><a href="#distribucion">Líneas</a>
+  <a href="#resumen">Resumen</a><a href="#volumenes">Volúmenes</a><a href="#componentes">Componentes</a><a href="#modelo">Modelo</a><a href="#calculadora">Calculadora</a><a href="#campana">Campaña</a><a href="#escenarios">Escenarios</a><a href="#distribucion">Líneas</a><a href="#operacion">Operación</a><a href="#costos">Costos USD</a><a href="#arquitectura">Arquitectura</a><a href="#journeys">Journeys</a>
 </div></nav>
 
 <main class="wrap">
@@ -297,15 +351,9 @@ tr.strong td{font-weight:700;background:var(--bg)}
     </div>
   </div>
   <div class="panel" style="display:flex;flex-direction:column;gap:12px">
-    <div class="bar-top"><h3>C · Eventos y campañas</h3><span class="tag red">125.000 – 183.000</span></div>
-    <div class="tw"><table>
-      <tr><th>Evento</th><th>Frecuencia anual</th><th>Base por evento</th><th class="r">Total anual mín.</th><th class="r">Total anual máx.</th></tr>
-      <tr><td>Open House Pregrados</td><td>2</td><td class="num">10.000 – 14.000</td><td class="r num">20.000</td><td class="r num">28.000</td></tr>
-      <tr><td>Open House Posgrados</td><td>4 (2 presenciales, 2 virtuales)</td><td class="num">20.000 – 30.000</td><td class="r num">80.000</td><td class="r num">120.000</td></tr>
-      <tr><td>Financia UAO</td><td>2</td><td class="num">10.000 – 15.000</td><td class="r num">20.000</td><td class="r num">30.000</td></tr>
-      <tr><td>Otros eventos</td><td>Anual</td><td>Por definir</td><td class="r num">5.000</td><td class="r num">5.000</td></tr>
-      <tr class="total"><td>Total</td><td></td><td></td><td class="r num">125.000</td><td class="r num">183.000</td></tr>
-    </table></div>
+    <div class="bar-top"><h3>C · Eventos y campañas</h3><span class="tag red" id="cTag"></span></div>
+    <p class="fn" id="cNote" style="font-size:14px;color:var(--ink)"></p>
+    <div class="tw"><table id="cTable"></table></div>
     <p class="fn">Cada journey de evento sigue: invitación, refuerzo a no registrados, confirmación, recordatorios, logística, seguimiento y conversión. Los destinatarios de cada fase salen de tasas de elegibilidad, respuesta, registro, confirmación y asistencia.</p>
   </div>
 </section>
@@ -327,22 +375,73 @@ tr.strong td{font-weight:700;background:var(--bg)}
   </div>
 </section>
 
-<section id="arquitectura">
-  <div class="sec-head"><h2>Arquitectura de referencia</h2><p class="sub">WhatsApp opera mediante Salesforce. No se asume otro proveedor ni una contratación API independiente.</p></div>
-  <div class="grid g3">
-    <div class="panel arch"><div class="head"><div class="ic">1</div><h3>Salesforce CRM</h3></div>
-      <ul><li>Leads, interesados y aspirantes</li><li>Segmentación por programa</li><li>Estados del embudo y conversión</li></ul></div>
-    <div class="panel arch"><div class="head"><div class="ic">2</div><h3>Marketing Cloud Engagement</h3></div>
-      <ul><li>Contact Builder y Data Extensions</li><li>Journey Builder y disparadores</li><li>Personalización y medición</li></ul></div>
-    <div class="panel arch"><div class="head"><div class="ic">3</div><h3>WhatsApp Business Messaging</h3></div>
-      <ul><li>Plantillas autorizadas y categorías Meta</li><li>Ventanas de servicio y conversaciones entrantes</li><li>Respuestas automáticas, bots y escalamiento</li></ul></div>
+<section id="calculadora">
+  <div class="sec-head"><h2>Calculadora de mensajes y costos</h2><p class="sub">Cambia una tarifa o una tasa y mira de inmediato cómo se mueven los mensajes, el costo y las matrículas. Los mismos parámetros alimentan la calculadora de campaña de más abajo, para que sigan sirviendo después de este ejercicio.</p></div>
+  <div class="live" id="live" aria-live="polite"></div>
+  <div class="grid" style="grid-template-columns:1fr">
+    <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+      <div class="bar-top"><h3>Tarifa Meta por mensaje entregado</h3><span class="tag">USD · Colombia</span></div>
+      <div class="tfgrid">
+        <div class="tf" id="tf_usdMkt"><label for="f_usdMkt">Marketing</label>
+          <div class="money"><span>US$</span><input id="f_usdMkt" type="number" inputmode="decimal" step="0.0001" min="0"><button class="tfstep" data-k="usdMkt" data-d="-1" data-s="0.0005" type="button" aria-label="Bajar tarifa de marketing">−</button><button class="tfstep" data-k="usdMkt" data-d="1" data-s="0.0005" type="button" aria-label="Subir tarifa de marketing">+</button></div>
+          <div class="tfn"><small>Inicial US$ 0,0125</small><button class="tfreset linkbtn" data-k="usdMkt" type="button">Restablecer</button></div></div>
+        <div class="tf" id="tf_usdUtil"><label for="f_usdUtil">Utilidad</label>
+          <div class="money"><span>US$</span><input id="f_usdUtil" type="number" inputmode="decimal" step="0.0001" min="0"><button class="tfstep" data-k="usdUtil" data-d="-1" data-s="0.0001" type="button" aria-label="Bajar tarifa de utilidad">−</button><button class="tfstep" data-k="usdUtil" data-d="1" data-s="0.0001" type="button" aria-label="Subir tarifa de utilidad">+</button></div>
+          <div class="tfn"><small>Inicial US$ 0,0008</small><button class="tfreset linkbtn" data-k="usdUtil" type="button">Restablecer</button></div></div>
+      </div>
+      <div class="tfex" id="tfEx"></div>
+      <p class="fn">Valores para Colombia tomados de un sitio de terceros que cita la tarifa de Meta del 1 de octubre de 2026. No pude leer el tarifario oficial de Meta, así que conviene validarlos. Los mensajes de servicio dentro de la ventana de 24 h no se cobran. No incluye licencias ni créditos de Salesforce, ni impuestos.</p>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <h3>Reparto de mensajes en eventos (componente C)</h3>
+      <div class="tw"><table id="evInputs"></table></div>
+      <p class="fn" id="evCheck"></p>
+    </div>
   </div>
-  <div class="notice"><span aria-hidden="true">?</span><div><b>Por confirmar con el contrato vigente.</b> Identificar qué capacidades requieren Service Cloud, Digital Engagement, Unified Messaging, Agentforce o licencias adicionales. Solicitar SKU y saldos existentes.</div></div>
+  <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+    <div class="bar-top"><h3>Tasas por escenario</h3><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="tag" id="chgCount"></span><button class="btn" id="resetBtn" type="button">Restablecer todo</button></div></div>
+    <p class="fn">Son hipótesis de trabajo porque el documento no trae tasas históricas. Las celdas modificadas se marcan en rojo y cada fila se puede restablecer.</p>
+    <div id="rateGroups"></div>
+  </div>
+  <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+    <div class="bar-top"><h3>Qué supuesto pesa más</h3><div class="seg" id="segSens" role="group" aria-label="Métrica de sensibilidad"></div></div>
+    <div class="rows" id="sensRows"></div>
+    <p class="fn" id="sensNote"></p>
+  </div>
+  <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+    <h3>Guardar y llevar a otra herramienta</h3>
+    <p class="fn" id="saveState"></p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="cpJson" type="button">Copiar parámetros</button><button class="btn" id="cpCsv" type="button">Copiar resumen para Excel</button><button class="btn" id="loadBtn" type="button">Cargar parámetros pegados</button></div>
+    <textarea id="shareBox" rows="4" aria-label="Texto para copiar o pegar" placeholder="Aquí aparece el texto copiado. Para cargar parámetros guardados, pégalos aquí y usa Cargar parámetros pegados."></textarea>
+    <p class="fn" id="shareState" aria-live="polite"></p>
+  </div>
 </section>
 
-<section id="journeys">
-  <div class="sec-head"><h2>Inventario de journeys</h2><p class="sub">Cada journey tendrá evento de entrada, etapas, mensajes por fase, condiciones, esperas, criterio de salida, mensajes cobrables, créditos y costo. Por ahora quedan identificados y asignados a su componente.</p></div>
-  <div class="jgrid" id="jlist"></div>
+<section id="campana">
+  <div class="sec-head"><h2>Calculadora de campaña</h2><p class="sub">Herramienta para reutilizar. Con la tarifa y las tasas de arriba estima cualquier envío futuro: cuántos mensajes salen, cuánto cuesta y cuántas respuestas esperar.</p></div>
+  <div class="grid g2">
+    <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+      <h3>Datos de la campaña</h3>
+      <div class="fgrid">
+        <label class="fld"><span>Nombre</span><input id="c_name" type="text" value="Open House Pregrados" maxlength="60"></label>
+        <label class="fld"><span>Destinatarios</span><input id="c_n" type="number" inputmode="numeric" min="0" step="500" value="28000"></label>
+        <label class="fld"><span>Categoría de la plantilla</span><select id="c_cat"><option value="mkt">Marketing</option><option value="util">Utilidad</option></select></label>
+        <label class="fld"><span>Plantillas por destinatario</span><input id="c_k" type="number" inputmode="decimal" min="0" step="1" value="3"></label>
+        <label class="fld"><span>Escenario de tasas</span><select id="c_sc"><option value="0">Conservador</option><option value="1" selected>Esperado</option><option value="2">Intensivo</option></select></label>
+        <label class="fld"><span>Tasa de respuesta (%, opcional)</span><input id="c_resp" type="number" inputmode="decimal" min="0" max="100" step="1" placeholder=""></label>
+        <label class="fld"><span>Mensajes de servicio por conversación (opcional)</span><input id="c_svc" type="number" inputmode="decimal" min="0" step="1" placeholder=""></label>
+      </div>
+      <p class="fn">Deja vacíos los campos opcionales para usar las tasas del escenario elegido.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <div class="panel" id="campOut"></div>
+      <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+        <h3>Presupuesto a mensajes</h3>
+        <label class="fld"><span>Presupuesto disponible (US$)</span><input id="c_budget" type="number" inputmode="decimal" min="0" step="50" value="500"></label>
+        <div id="budOut"></div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section id="escenarios">
@@ -360,6 +459,46 @@ tr.strong td{font-weight:700;background:var(--bg)}
   </div>
 </section>
 
+<section id="operacion">
+  <div class="sec-head"><h2>Operación y métricas del canal</h2><p class="sub">Cómo se vería la operación de WhatsApp de punta a punta: desde la plantilla enviada hasta la matrícula. Las tasas son supuestos para validar con los primeros envíos reales.</p></div>
+  <div class="panel" style="display:flex;flex-direction:column;gap:16px">
+    <div class="bar-top"><div class="seg" role="group" aria-label="Escenario" id="segOp"></div><span class="fn">Ancho de barra en escala de raíz cuadrada para que los pasos finales se vean</span></div>
+    <div class="rows" id="opFunnel"></div>
+  </div>
+  <div class="panel tw"><table id="opTable"></table></div>
+  <p class="fn">Las referencias orientativas son rangos generales de la industria para mensajería de marketing por WhatsApp. No son datos de la UAO. Leads, inscripciones y matrículas son ilustrativos: sirven para dimensionar la operación y se reemplazan con los datos reales del CRM.</p>
+</section>
+
+<section id="costos">
+  <div class="sec-head"><h2>Costos de mensajería en dólares</h2><p class="sub">Costo de los mensajes cobrables con la tarifa Meta por mensaje entregado. Es el costo de la mensajería, sin licencias ni impuestos.</p></div>
+  <div class="grid g3" id="costCards"></div>
+  <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+    <div class="bar-top"><h3>Costo por línea</h3><div class="seg" role="group" aria-label="Escenario" id="segCost"></div></div>
+    <div class="tw"><table id="costTable"></table></div>
+  </div>
+  <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+    <h3>Costo unitario de la operación</h3>
+    <div class="tw"><table id="unitTable"></table></div>
+  </div>
+</section>
+
+<section id="arquitectura">
+  <div class="sec-head"><h2>Arquitectura de referencia</h2><p class="sub">WhatsApp opera mediante Salesforce. No se asume otro proveedor ni una contratación API independiente.</p></div>
+  <div class="grid g3">
+    <div class="panel arch"><div class="head"><div class="ic">1</div><h3>Salesforce CRM</h3></div>
+      <ul><li>Leads, interesados y aspirantes</li><li>Segmentación por programa</li><li>Estados del embudo y conversión</li></ul></div>
+    <div class="panel arch"><div class="head"><div class="ic">2</div><h3>Marketing Cloud Engagement</h3></div>
+      <ul><li>Contact Builder y Data Extensions</li><li>Journey Builder y disparadores</li><li>Personalización y medición</li></ul></div>
+    <div class="panel arch"><div class="head"><div class="ic">3</div><h3>WhatsApp Business Messaging</h3></div>
+      <ul><li>Plantillas autorizadas y categorías Meta</li><li>Ventanas de servicio y conversaciones entrantes</li><li>Respuestas automáticas, bots y escalamiento</li></ul></div>
+  </div>
+  <div class="notice"><span aria-hidden="true">?</span><div><b>Por confirmar con el contrato vigente.</b> Identificar qué capacidades requieren Service Cloud, Digital Engagement, Unified Messaging, Agentforce o licencias adicionales. Solicitar SKU y saldos existentes.</div></div>
+</section>
+
+<section id="journeys">
+  <div class="sec-head"><h2>Inventario de journeys</h2><p class="sub">Cada journey tendrá evento de entrada, etapas, mensajes por fase, condiciones, esperas, criterio de salida, mensajes cobrables, créditos y costo. Por ahora quedan identificados y asignados a su componente.</p></div>
+  <div class="jgrid" id="jlist"></div>
+</section>
 </main>
 
 <footer><div class="wrap">
@@ -368,53 +507,6 @@ tr.strong td{font-weight:700;background:var(--bg)}
 </div></footer>
 
 <script>
-const fmt=n=>n.toLocaleString("es-CO");
-const LINES=[
- {n:"Automatización: orgánicos",s:"Componente A",min:2000,max:2000},
- {n:"Automatización: posgrados",s:"Componente A · 8.000–10.000 por cohorte",min:16000,max:20000},
- {n:"Automatización: pregrados",s:"Componente A · 9.000–14.000 por cohorte",min:18000,max:28000},
- {n:"Automatización: Educ. Continua",s:"Componente A · 15.000–18.000 al año",min:15000,max:18000},
- {n:"Embudo de ventas",s:"Componente B",min:15000,max:15000},
- {n:"Open House Pregrados",s:"Componente C",min:20000,max:28000},
- {n:"Open House Posgrados",s:"Componente C",min:80000,max:120000},
- {n:"Financia UAO",s:"Componente C",min:20000,max:30000},
- {n:"Otros eventos",s:"Componente C",min:5000,max:5000}
-];
-const TMIN=LINES.reduce((a,l)=>a+l.min,0), TMAX=LINES.reduce((a,l)=>a+l.max,0);
-document.getElementById("kpiTotal").textContent=fmt(TMIN)+" – "+fmt(TMAX);
-let mode="min";
-function drawVol(){
-  const tot=mode==="min"?TMIN:TMAX, top=Math.max(...LINES.map(l=>l.max));
-  document.getElementById("vrows").innerHTML=LINES.map(l=>{
-    const v=mode==="min"?l.min:l.max, pc=(v/tot*100).toFixed(1).replace(".",",");
-    return `<div class="row"><div class="name">${l.n}<small>${l.s}</small></div>
-      <div class="track" aria-hidden="true"><div class="fill ext" style="width:${v/top*100}%"></div><div class="fill" style="width:${l.min/top*100}%"></div></div>
-      <div class="val num">${fmt(v)}<span class="pc">${pc} %</span></div></div>`}).join("");
-  document.getElementById("vtotal").textContent=fmt(tot);
-  document.getElementById("bMin").setAttribute("aria-pressed",mode==="min");
-  document.getElementById("bMax").setAttribute("aria-pressed",mode==="max");
-}
-document.getElementById("bMin").onclick=()=>{mode="min";drawVol()};
-document.getElementById("bMax").onclick=()=>{mode="max";drawVol()};
-drawVol();
-
-const JOURNEYS=[
- ["Captación orgánicos","Orgánicos","A","Dato orgánico que llega"],
- ["Captación pregrados","Pregrados","A","Dato que llega por orgánico o pauta"],
- ["Captación posgrados","Posgrados","A","Dato que llega por orgánico o pauta"],
- ["Captación Educación Continua","Educación Continua","A","Dato que llega por orgánico o pauta"],
- ["Embudo de ventas","Todas las líneas","B","Estado del lead en CRM"],
- ["Open House Pregrados","Pregrados","C","Apertura de inscripciones"],
- ["Open House Posgrados","Posgrados","C","Apertura de inscripciones"],
- ["Financia UAO","Financiación","C","Apertura de convocatoria"]
-];
-document.getElementById("jlist").innerHTML=JOURNEYS.map(j=>`<div class="j">
-  <div class="top"><h3>${j[0]}</h3><span class="tag red">${j[2]}</span></div>
-  <dl><dt>Línea</dt><dd>${j[1]}</dd><dt>Entrada</dt><dd>${j[3]}</dd></dl>
-  <div class="ph">Por definir: etapas, mensajes, esperas, salida y mensajes cobrables</div></div>`).join("")
-  +`<div class="j"><div class="top"><h3>Otros eventos</h3><span class="tag red">C</span></div><dl><dt>Línea</dt><dd>Por definir</dd><dt>Entrada</dt><dd>Por definir</dd></dl><div class="ph">Base anual de 5.000 registros</div></div>`;
-
-
 /* Modelo paramétrico WhatsApp UAO. Índice de escenario: 0 conservador, 1 esperado, 2 intensivo. Meses 0=ene ... 11=dic */
 const DEFAULTS = {
   // Bases de contactos (documento base). mid = promedio de min y max.
@@ -430,10 +522,10 @@ const DEFAULTS = {
     {id:"ec",  n:"Educación Continua", total:5000}
   ],
   C: [
-    {id:"ohpre", n:"Open House Pregrados",  ev:2, min:10000, max:14000, months:[2,8]},
-    {id:"ohpos", n:"Open House Posgrados",  ev:4, min:20000, max:30000, months:[1,4,7,10]},
-    {id:"fin",   n:"Financia UAO",          ev:2, min:10000, max:15000, months:[0,6]},
-    {id:"otros", n:"Otros eventos",         ev:1, min:5000,  max:5000,  months:[5]}
+    {id:"ohpre", n:"Open House Pregrados",  ev:2, min:28000, max:41000, months:[2,8]},
+    {id:"ohpos", n:"Open House Posgrados",  ev:4, min:9500,  max:13750, months:[1,4,7,10]},
+    {id:"fin",   n:"Financia UAO",          ev:2, min:9500,  max:13750, months:[0,6]},
+    {id:"otros", n:"Otros eventos",         ev:1, min:12000, max:18500, months:[5]}
   ],
   // Tasas por escenario [conservador, esperado, intensivo]
   r: {
@@ -456,6 +548,13 @@ const DEFAULTS = {
     conv:      [1,1,2],           // C: mensajes de conversión por asistente
     respC:     [0.20,0.30,0.40],
     svcMsgsC:  [3,4,5],
+    read:      [0.75,0.82,0.88],  // leídas / entregadas (tasa de apertura)
+    ctr:       [0.06,0.09,0.12],  // clic en botón o enlace / leídas
+    optout:    [0.010,0.015,0.025], // bajas sobre contactos
+    transfer:  [0.20,0.25,0.30],  // conversaciones transferidas a asesor
+    qual:      [0.20,0.25,0.30],  // conversaciones que terminan en lead calificado
+    insc:      [0.08,0.10,0.12],  // leads calificados que se inscriben
+    matr:      [0.50,0.55,0.60],  // inscritos que se matriculan
     inbound:   0.8                // mensajes recibidos por cada mensaje de servicio enviado
   },
   fin: { mMkt:1, mUtil:1, priceCOP:0, usdMkt:0.0125, usdUtil:0.0008, trm:4000, iva:0.19 },
@@ -474,13 +573,13 @@ function compute(P, s){
   P.A.forEach(l=>{
     const N=pick(l), out=N*r("outShare"), resp=N*(1-r("outShare"))+out*r("respOut");
     const ini=out, fu=N*r("fuA"), re=N*r("reactA"), svc=resp*r("svcMsgsA");
-    lines.push({c:"A",id:l.id,n:l.n,contacts:N,ini, seg:fu+re, evt:0, svc, mkt:ini+fu+re, util:0, w:cohortW(l.months)});
+    lines.push({c:"A",id:l.id,n:l.n,contacts:N,convs:resp,replies:out*r("respOut"),ini, seg:fu+re, evt:0, svc, mkt:ini+fu+re, util:0, w:cohortW(l.months)});
   });
   // ---- B
   const wA={}; P.A.forEach(l=>wA[l.id]=cohortW(l.months));
   P.B.forEach(l=>{
     const T=l.total*r("msgsB"), util=T*r("utilB"), mkt=T-util, svc=l.total*r("respB")*r("svcMsgsB");
-    lines.push({c:"B",id:l.id,n:l.n,contacts:l.total,ini:0,seg:T,evt:0,svc,mkt,util,w:wA[l.id]});
+    lines.push({c:"B",id:l.id,n:l.n,contacts:l.total,convs:l.total*r("respB"),replies:l.total*r("respB"),ini:0,seg:T,evt:0,svc,mkt,util,w:wA[l.id]});
   });
   // ---- C (cada evento calculado y ubicado en su mes)
   P.C.forEach(l=>{
@@ -490,7 +589,7 @@ function compute(P, s){
     const svc=regs*r("respC")*r("svcMsgsC");
     const mkt=inv+ref+fol+cnv, util=cf+rm+lg;
     const w=z12(); l.months.forEach(m=>w[m]+=1/l.months.length);
-    lines.push({c:"C",id:l.id,n:l.n,contacts:base*l.ev,ini:0,seg:0,evt:(mkt+util)*l.ev,svc:svc*l.ev,mkt:mkt*l.ev,util:util*l.ev,w,
+    lines.push({c:"C",id:l.id,n:l.n,contacts:base*l.ev,convs:regs*r("respC")*l.ev,replies:regs*r("respC")*l.ev,ini:0,seg:0,evt:(mkt+util)*l.ev,svc:svc*l.ev,mkt:mkt*l.ev,util:util*l.ev,w,
       perEvent:{base,rec,regs,att,inv,ref,fol,cnv,cf,rm,lg,mkt,util,svc}});
   });
   // ---- totales y mensual
@@ -506,23 +605,239 @@ function compute(P, s){
   const sumv=(arr,k)=>Array.from({length:12},(_,i)=>arr.reduce((a,l)=>a+l[k][i],0));
   const grp=(c)=>{const a=lines.filter(l=>l.c===c);return{contacts:sum(a,"contacts"),ini:sum(a,"ini"),seg:sum(a,"seg"),evt:sum(a,"evt"),svc:sum(a,"svc"),
     sent:sum(a,"sent"),recv:sum(a,"recv"),mkt:sum(a,"mkt"),util:sum(a,"util"),billable:sum(a,"billable"),credits:sum(a,"credits"),usd:sum(a,"usd"),cop:sum(a,"cop")}};
-  const T={contacts:sum(lines,"contacts"),ini:sum(lines,"ini"),seg:sum(lines,"seg"),evt:sum(lines,"evt"),svc:sum(lines,"svc"),sent:sum(lines,"sent"),recv:sum(lines,"recv"),
+  const T={convs:sum(lines,"convs"),replies:sum(lines,"replies"),contacts:sum(lines,"contacts"),ini:sum(lines,"ini"),seg:sum(lines,"seg"),evt:sum(lines,"evt"),svc:sum(lines,"svc"),sent:sum(lines,"sent"),recv:sum(lines,"recv"),
     mkt:sum(lines,"mkt"),util:sum(lines,"util"),billable:sum(lines,"billable"),bMkt:sum(lines,"bMkt"),bUtil:sum(lines,"bUtil"),credits:sum(lines,"credits"),usd:sum(lines,"usd"),cop:sum(lines,"cop"),
     mSent:sumv(lines,"mSent"),mBill:sumv(lines,"mBill"),mCred:sumv(lines,"mCred"),mCop:sumv(lines,"mCop")};
   return {lines,A:grp("A"),B:grp("B"),C:grp("C"),T};
 }
 if (typeof module!=="undefined") module.exports={DEFAULTS,compute};
 
-/* ===== Volúmenes de mensajes ===== */
 const P=JSON.parse(JSON.stringify(DEFAULTS));
-const SC=["Conservador","Esperado","Intensivo"];
+const JOURNEYS=[
+ ["Captación orgánicos","Orgánicos","A","Dato orgánico que llega"],
+ ["Captación pregrados","Pregrados","A","Dato que llega por orgánico o pauta"],
+ ["Captación posgrados","Posgrados","A","Dato que llega por orgánico o pauta"],
+ ["Captación Educación Continua","Educación Continua","A","Dato que llega por orgánico o pauta"],
+ ["Embudo de ventas","Todas las líneas","B","Estado del lead en CRM"],
+ ["Open House Pregrados","Pregrados","C","Apertura de inscripciones"],
+ ["Open House Posgrados","Posgrados","C","Apertura de inscripciones"],
+ ["Financia UAO","Financiación","C","Apertura de convocatoria"]
+];
+document.getElementById("jlist").innerHTML=JOURNEYS.map(j=>`<div class="j">
+  <div class="top"><h3>${j[0]}</h3><span class="tag red">${j[2]}</span></div>
+  <dl><dt>Línea</dt><dd>${j[1]}</dd><dt>Entrada</dt><dd>${j[3]}</dd></dl>
+  <div class="ph">Por definir: etapas, mensajes, esperas, salida y mensajes cobrables</div></div>`).join("")
+  +`<div class="j"><div class="top"><h3>Otros eventos</h3><span class="tag red">C</span></div><dl><dt>Línea</dt><dd>Por definir</dd><dt>Entrada</dt><dd>Por definir</dd></dl><div class="ph">Base anual de 12.000 a 18.500 registros</div></div>`;
+
+
+
+/* ===== Tablero: volúmenes, calculadora, campaña, operación y costos en USD ===== */
+const fmt=n=>n.toLocaleString("es-CO");
 const F=n=>fmt(Math.round(n)), pct=(n,d=1)=>(n*100).toFixed(d).replace(".",",")+" %";
+const USD=n=>"US$ "+fmt(Math.round(n));
+const USDu=n=>"US$ "+n.toLocaleString("es-CO",{minimumFractionDigits:n<1?4:2,maximumFractionDigits:n<1?4:2});
 const $=id=>document.getElementById(id);
-let R=[],selDist=1;
+const SC=["Conservador","Esperado","Intensivo"];
+const DOC_C={ohpre:"20.000 – 28.000",ohpos:"80.000 – 120.000",fin:"20.000 – 30.000",otros:"5.000"};
+const DOC_C_TOT=[125000,183000];
+const ANAME={org:"Automatización: orgánicos",pos:"Automatización: posgrados",pre:"Automatización: pregrados",ec:"Automatización: Educ. Continua"};
+const ASUB={org:"Todo el año",pos:"8.000–10.000 por cohorte",pre:"9.000–14.000 por cohorte",ec:"15.000–18.000 al año"};
+const KEY="uao-wa-calculadora-v2";
+let R=[],BASE=[],mode="min",selDist=1,selOp=1,selCost=1,selSens="usd";
+const clone=o=>JSON.parse(JSON.stringify(o));
+
+/* ---- Parámetros editables ---- */
+const FIN=[["usdMkt","Marketing"],["usdUtil","Utilidad"]];
+const GROUPS=[
+ ["canal","Canal de WhatsApp","Afectan a todos los mensajes",[
+  ["deliver","p","Entregadas sobre enviadas","Meta cobra solo lo entregado."],
+  ["read","p","Leídas sobre entregadas","Tasa de apertura de las plantillas."],
+  ["ctr","p","Clic en botón o enlace sobre leídas","CTR de botones y enlaces."],
+  ["optout","p","Bajas sobre contactos","Pasar de 2 % pone en riesgo la calidad de la cuenta."]]],
+ ["A","A · Automatización y captación","Orgánicos y pauta",[
+  ["outShare","p","Contactos que la UAO inicia con plantilla","El resto escribe primero y no necesita plantilla."],
+  ["respOut","p","Respuesta a la plantilla inicial","Abre la ventana gratuita de 24 h."],
+  ["svcMsgsA","n","Mensajes de servicio por conversación","Gratuitos, pero cuentan para la capacidad."],
+  ["fuA","n","Seguimientos con plantilla por contacto","Cada uno es un mensaje cobrable de marketing."],
+  ["reactA","p","Contactos que reciben reactivación","Plantilla extra para inactivos."]]],
+ ["B","B · Embudo de ventas","15.000 impactos",[
+  ["msgsB","n","Plantillas por impacto","Sin multiplicar por etapa del embudo."],
+  ["utilB","p","Parte que es de utilidad","Inscripción, documentos y matrícula."],
+  ["respB","p","Conversaciones que responden",""],
+  ["svcMsgsB","n","Mensajes de servicio por conversación",""]]],
+ ["C","C · Eventos y campañas","Invitación, recordatorios y seguimiento",[
+  ["elig","p","Base elegible por evento","No se envía a toda la base por defecto."],
+  ["reg","p","Registro sobre invitados",""],
+  ["reinf","p","No registrados que reciben refuerzo",""],
+  ["conf","p","Registrados que reciben logística",""],
+  ["remind","n","Recordatorios por registrado","Plantillas de utilidad."],
+  ["att","p","Asistencia sobre registrados",""],
+  ["conv","n","Mensajes de conversión por asistente",""],
+  ["respC","p","Registrados que conversan",""],
+  ["svcMsgsC","n","Mensajes de servicio por conversación",""]]],
+ ["conv","Conversión","De la conversación a la matrícula (ilustrativo)",[
+  ["transfer","p","Conversaciones transferidas a asesor",""],
+  ["qual","p","Conversaciones que terminan en lead calificado",""],
+  ["insc","p","Leads calificados que se inscriben",""],
+  ["matr","p","Inscritos que se matriculan",""]]]
+];
+const RATES=GROUPS.flatMap(g=>g[3]);
+const NAME={usdMkt:"Tarifa marketing",usdUtil:"Tarifa utilidad"};RATES.forEach(k=>NAME[k[0]]=k[2]);
+const dispR=(k,v)=>k[1]==="p"?+(v*100).toFixed(2):v;
+
+function params(){return {fin:{usdMkt:P.fin.usdMkt,usdUtil:P.fin.usdUtil},C:P.C.map(l=>({id:l.id,min:l.min,max:l.max})),r:clone(P.r)}}
+function applyParams(j){
+  try{
+    if(!j||typeof j!=="object")return false;
+    if(j.fin)["usdMkt","usdUtil"].forEach(k=>{if(isFinite(j.fin[k])&&j.fin[k]>=0)P.fin[k]=+j.fin[k]});
+    if(Array.isArray(j.C))j.C.forEach(c=>{const l=P.C.find(x=>x.id===c.id);if(l&&isFinite(c.min)&&isFinite(c.max)&&c.min>=0&&c.max>=0){l.min=+c.min;l.max=+c.max}});
+    if(j.r)RATES.forEach(k=>{const a=j.r[k[0]];if(Array.isArray(a)&&a.length===3&&a.every(v=>isFinite(v)&&v>=0))P.r[k[0]]=a.map(Number)});
+    return true;
+  }catch(e){return false}
+}
+function save(){
+  let ok=true;try{localStorage.setItem(KEY,JSON.stringify(params()))}catch(e){ok=false}
+  $("saveState").textContent=ok?"Tus cambios se guardan solos en este navegador.":"Este navegador no permite guardar. Usa Copiar parámetros para conservarlos.";
+}
+try{applyParams(JSON.parse(localStorage.getItem(KEY)||"null"))}catch(e){}
+
+/* ---- Volúmenes iniciales ---- */
+function volLines(){
+  return [...P.A.map(l=>({n:ANAME[l.id],s:"Componente A · "+ASUB[l.id],min:l.min,max:l.max})),
+    {n:"Embudo de ventas",s:"Componente B",min:15000,max:15000},
+    ...P.C.map(l=>({n:l.n,s:`Componente C · ${l.ev} ${l.ev>1?"eventos":"evento"} · base ${fmt(l.min)}–${fmt(l.max)} c/u`,min:l.min*l.ev,max:l.max*l.ev}))];
+}
+function drawVol(){
+  const L=volLines(), TMIN=L.reduce((a,l)=>a+l.min,0), TMAX=L.reduce((a,l)=>a+l.max,0), tot=mode==="min"?TMIN:TMAX, top=Math.max(...L.map(l=>l.max));
+  $("kpiTotal").textContent=fmt(TMIN)+" – "+fmt(TMAX);
+  $("vrows").innerHTML=L.map(l=>{const v=mode==="min"?l.min:l.max;
+    return `<div class="row"><div class="name">${l.n}<small>${l.s}</small></div>
+      <div class="track" aria-hidden="true"><div class="fill ext" style="width:${v/top*100}%"></div><div class="fill" style="width:${l.min/top*100}%"></div></div>
+      <div class="val num">${fmt(v)}<span class="pc">${pct(v/tot)}</span></div></div>`}).join("");
+  $("vtotal").textContent=fmt(tot);
+  $("bMin").setAttribute("aria-pressed",mode==="min");$("bMax").setAttribute("aria-pressed",mode==="max");
+}
+$("bMin").onclick=()=>{mode="min";drawVol()};$("bMax").onclick=()=>{mode="max";drawVol()};
+
+function renderC(){
+  const tmin=P.C.reduce((a,l)=>a+l.min*l.ev,0), tmax=P.C.reduce((a,l)=>a+l.max*l.ev,0);
+  $("cTag").textContent=fmt(tmin)+" – "+fmt(tmax);
+  const freq={ohpre:"2",ohpos:"4 (2 presenciales, 2 virtuales)",fin:"2",otros:"Anual"};
+  $("cTable").innerHTML=`<tr><th>Evento</th><th>Frecuencia anual</th><th>Base por evento</th><th class="r">Total mín.</th><th class="r">Total máx.</th><th class="r">% de C</th><th>Documento base</th></tr>`+
+   P.C.map(l=>`<tr><td>${l.n}</td><td>${freq[l.id]}</td><td class="num">${l.id==="otros"?"Total del año":fmt(l.min)+" – "+fmt(l.max)}</td><td class="r num">${fmt(l.min*l.ev)}</td><td class="r num">${fmt(l.max*l.ev)}</td><td class="r num">${(()=>{const p=pct(l.min*l.ev/tmin,0),q=pct(l.max*l.ev/tmax,0);return p===q?p:p+" – "+q})()}</td><td class="num fn">${DOC_C[l.id]}</td></tr>`).join("")+
+   `<tr class="total"><td>Total</td><td></td><td></td><td class="r num">${fmt(tmin)}</td><td class="r num">${fmt(tmax)}</td><td></td><td class="num">125.000 – 183.000</td></tr>`;
+  const same=tmin===DOC_C_TOT[0]&&tmax===DOC_C_TOT[1];
+  $("cNote").innerHTML=`<b>Redistribución propuesta.</b> En el documento, Open House Posgrados concentraba el 64 % de este componente. Se movieron mensajes hacia Open House Pregrados, que es la línea que más matrículas aporta, y hacia Financia UAO y Otros eventos. Posgrados conserva su lugar como segunda línea del negocio. ${same?"El total de C no cambia frente al documento.":`<b>Con los valores de la calculadora, el total de C difiere del documento base (${fmt(DOC_C_TOT[0])} – ${fmt(DOC_C_TOT[1])}).</b>`}`;
+}
+
+/* ---- Construcción de entradas ---- */
+function stepInput(el,step,min){
+  return `<button type="button" class="stp" data-t="${el}" data-d="-1" aria-label="Disminuir">−</button><button type="button" class="stp" data-t="${el}" data-d="1" aria-label="Aumentar">+</button>`;
+}
+function setField(id,v){const el=$(id);el.value=v;el.dispatchEvent(new Event("input",{bubbles:true}))}
+function buildInputs(){
+  FIN.forEach(f=>{$("f_"+f[0]).value=P.fin[f[0]];$("f_"+f[0]).oninput=e=>{const v=parseFloat(e.target.value);P.fin[f[0]]=isNaN(v)||v<0?0:v;run()}});
+  document.querySelectorAll(".tfstep").forEach(b=>b.onclick=()=>{const id="f_"+b.dataset.k,v=parseFloat($(id).value)||0;setField(id,Math.max(0,+(v+(+b.dataset.d)*(+b.dataset.s)).toFixed(4)))});
+  document.querySelectorAll(".tfreset").forEach(b=>b.onclick=()=>setField("f_"+b.dataset.k,DEFAULTS.fin[b.dataset.k]));
+  $("evInputs").innerHTML=`<tr><th>Evento</th><th class="r">Al año</th><th class="r">Base mín.</th><th class="r">Base máx.</th><th class="r">Total mín.</th><th class="r">Total máx.</th></tr>`+
+   P.C.map(l=>`<tr><td>${l.n}</td><td class="r num">${l.ev}</td><td class="r"><input class="cin" type="number" inputmode="numeric" id="e_${l.id}_min" min="0" step="500" value="${l.min}" aria-label="${l.n}, base mínima"></td><td class="r"><input class="cin" type="number" inputmode="numeric" id="e_${l.id}_max" min="0" step="500" value="${l.max}" aria-label="${l.n}, base máxima"></td><td class="r num" id="et_${l.id}_min"></td><td class="r num" id="et_${l.id}_max"></td></tr>`).join("");
+  P.C.forEach(l=>["min","max"].forEach(k=>$(`e_${l.id}_${k}`).oninput=e=>{const v=parseFloat(e.target.value);l[k]=isNaN(v)||v<0?0:v;run()}));
+  $("rateGroups").innerHTML=GROUPS.map(g=>`<div class="grp"><div class="gh"><h4>${g[1]}</h4><span class="fn">${g[2]}</span><span class="gs num" id="gs_${g[0]}"></span></div>
+   <div class="rr rh" aria-hidden="true"><span></span><span>Conserv.</span><span>Esperado</span><span>Intens.</span><span></span></div>
+   ${g[3].map(k=>`<div class="rr" id="rr_${k[0]}"><div class="lb"><b>${k[2]}</b>${k[3]?`<small>${k[3]}</small>`:""}</div>
+    ${[0,1,2].map(s=>`<label class="cell" id="rc_${k[0]}_${s}"><input type="number" inputmode="decimal" id="r_${k[0]}_${s}" step="${k[1]==="p"?(k[0]==="optout"?0.1:1):0.5}" min="0"${k[1]==="p"?' max="100"':""} value="${dispR(k,P.r[k[0]][s])}" aria-label="${k[2]}, ${SC[s]}"><i>${k[1]==="p"?"%":"msj"}</i></label>`).join("")}
+    <button type="button" class="rs" data-k="${k[0]}" title="Restablecer esta fila" aria-label="Restablecer ${k[2]}">↺</button></div>`).join("")}</div>`).join("");
+  RATES.forEach(k=>{[0,1,2].forEach(s=>$(`r_${k[0]}_${s}`).oninput=e=>{const v=parseFloat(e.target.value);P.r[k[0]][s]=isNaN(v)||v<0?0:(k[1]==="p"?Math.min(v,100)/100:v);run()});
+    document.querySelector(`#rr_${k[0]} .rs`).onclick=()=>{P.r[k[0]]=[...DEFAULTS.r[k[0]]];[0,1,2].forEach(s=>$(`r_${k[0]}_${s}`).value=dispR(k,P.r[k[0]][s]));run()}});
+  $("resetBtn").onclick=()=>{P.fin={...DEFAULTS.fin};P.C=clone(DEFAULTS.C);RATES.forEach(k=>P.r[k[0]]=[...DEFAULTS.r[k[0]]]);buildInputs();run()};
+}
+function markChanged(){
+  FIN.forEach(f=>{const ch=Math.abs(P.fin[f[0]]-DEFAULTS.fin[f[0]])>1e-12;$("tf_"+f[0]).classList.toggle("chg",ch)});
+  RATES.forEach(k=>{let any=false;[0,1,2].forEach(s=>{const ch=Math.abs(P.r[k[0]][s]-DEFAULTS.r[k[0]][s])>1e-12;any=any||ch;$(`rc_${k[0]}_${s}`).classList.toggle("chg",ch)});$("rr_"+k[0]).classList.toggle("chgrow",any)});
+  P.C.forEach(l=>["min","max"].forEach(k=>$(`e_${l.id}_${k}`).classList.toggle("chg",l[k]!==DEFAULTS.C.find(c=>c.id===l.id)[k])));
+  const n=document.querySelectorAll(".chgrow").length+document.querySelectorAll(".tf.chg").length;
+  $("chgCount").textContent=n?`${n} ${n>1?"parámetros modificados":"parámetro modificado"}`:"Valores iniciales";
+  $("chgCount").className="tag "+(n?"red":"");
+}
+function renderEvTotals(){
+  P.C.forEach(l=>{$(`et_${l.id}_min`).textContent=fmt(l.min*l.ev);$(`et_${l.id}_max`).textContent=fmt(l.max*l.ev)});
+  const tmin=P.C.reduce((a,l)=>a+l.min*l.ev,0), tmax=P.C.reduce((a,l)=>a+l.max*l.ev,0), ok=tmin===DOC_C_TOT[0]&&tmax===DOC_C_TOT[1];
+  $("evCheck").innerHTML=`Total de C: <b class="num">${fmt(tmin)} – ${fmt(tmax)}</b> · documento base ${fmt(DOC_C_TOT[0])} – ${fmt(DOC_C_TOT[1])} <span class="tag ${ok?"good":"warn"}">${ok?"Igual al documento":"Distinto del documento"}</span>`;
+}
 function seg(id,get,set){
   $(id).innerHTML=SC.map((s,i)=>`<button data-i="${i}" aria-pressed="${get()===i}">${s}</button>`).join("");
-  $(id).querySelectorAll("button").forEach(b=>b.onclick=()=>{set(+b.dataset.i);renderDist()});
+  $(id).querySelectorAll("button").forEach(b=>b.onclick=()=>{set(+b.dataset.i);renderViews()});
 }
+
+/* ---- Resultado en vivo y tarifa ---- */
+function delta(a,b){
+  const d=b?a/b-1:0; if(Math.abs(d)<0.0005)return `<span class="dl">Igual a los valores iniciales</span>`;
+  return `<span class="dl ${d>0?"up":"dn"}">${d>0?"▲ +":"▼ "}${(d*100).toFixed(1).replace(".",",")} % frente a los iniciales</span>`;
+}
+function renderLive(){
+  $("live").innerHTML=R.map((x,s)=>{const t=x.T,b=BASE[s].T;return `<div class="lv ${s===1?"mid":""}"><span class="ln">${SC[s]}</span>
+   <span class="lbig num">${F(t.sent)}</span><span class="lsub">mensajes · ${F(t.billable)} cobrables</span><b class="num">${USD(t.usd)}</b>${delta(t.usd,b.usd)}</div>`}).join("");
+}
+function renderTarifa(){
+  const f=P.fin,E=R[1].T;
+  $("tfEx").innerHTML=`<div><span>1.000 mensajes de marketing</span><b class="num">${USDu(1000*f.usdMkt)}</b></div><div><span>1.000 mensajes de utilidad</span><b class="num">${USDu(1000*f.usdUtil)}</b></div>
+   <div><span>Costo esperado del año</span><b class="num">${USD(E.usd)}</b></div><div><span>Parte que es marketing</span><b class="num">${E.usd?pct(E.bMkt*f.usdMkt/E.usd,0):"—"}</b></div>`;
+}
+
+/* ---- Sensibilidad ---- */
+function ops(x,s,PP=P){
+  const T=x.T, r=k=>PP.r[k][s], del=T.billable, rd=del*r("read"), clicks=rd*r("ctr"), replies=T.replies, inter=replies+clicks;
+  const leads=T.convs*r("qual"), insc=leads*r("insc"), matr=insc*r("matr");
+  return {sent:T.mkt+T.util, del, rd, replies, clicks, inter, convs:T.convs, first:T.convs-replies, transfers:T.convs*r("transfer"), leads, insc, matr, opt:T.contacts*r("optout"),
+    respRate:replies/rd, interRate:Math.min(1,inter/rd), svcPerConv:T.svc/T.convs, usd:T.usd};
+}
+function metric(PP){const x=compute(PP,1);return selSens==="usd"?x.T.usd:selSens==="billable"?x.T.billable:ops(x,1,PP).matr}
+function renderSens(){
+  const m0=metric(P), items=[];
+  FIN.forEach(f=>{if(P.fin[f[0]]>0){const Q=clone(P);Q.fin[f[0]]*=1.1;items.push([NAME[f[0]],metric(Q)/m0-1])}});
+  RATES.forEach(k=>{const v=P.r[k[0]][1],nv=Math.min(v*1.1,k[1]==="p"?1:Infinity);if(v>0&&nv>v){const Q=clone(P);Q.r[k[0]][1]=nv;items.push([NAME[k[0]],metric(Q)/m0-1])}});
+  const L=items.filter(i=>isFinite(i[1])&&Math.abs(i[1])>1e-9).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,8), mx=Math.max(...L.map(i=>Math.abs(i[1])),1e-9);
+  const lbl={usd:"el costo en USD",billable:"los mensajes cobrables",matr:"las matrículas estimadas"}[selSens];
+  $("sensRows").innerHTML=L.length?L.map(i=>`<div class="row"><div class="name">${i[0]}</div><div class="track" aria-hidden="true"><div class="fill ${i[1]<0?"neg":""}" style="width:${Math.abs(i[1])/mx*100}%"></div></div><div class="val num">${i[1]>0?"+":"−"}${(Math.abs(i[1])*100).toFixed(1).replace(".",",")} %</div></div>`).join(""):`<p class="fn">Sin parámetros con efecto.</p>`;
+  $("sensNote").textContent=`Si cada valor sube 10 % en el escenario esperado (las tasas no pasan de 100 %), así cambia ${lbl}. Sirve para decidir qué supuesto conviene medir primero con envíos reales.`;
+  $("segSens").innerHTML=[["usd","Costo USD"],["billable","Cobrables"],["matr","Matrículas"]].map(a=>`<button data-k="${a[0]}" aria-pressed="${selSens===a[0]}">${a[1]}</button>`).join("");
+  $("segSens").querySelectorAll("button").forEach(b=>b.onclick=()=>{selSens=b.dataset.k;renderSens()});
+}
+
+/* ---- Calculadora de campaña ---- */
+function readNum(id,d){const v=parseFloat($(id).value);return isNaN(v)||v<0?d:v}
+function renderCamp(){
+  const s=+$("c_sc").value, r=k=>P.r[k][s], mk=$("c_cat").value==="mkt", tar=mk?P.fin.usdMkt:P.fin.usdUtil;
+  const n=readNum("c_n",0), k=Math.max(0,readNum("c_k",1)), resp=$("c_resp").value===""?r("respOut"):Math.min(1,readNum("c_resp",0)/100), svcN=$("c_svc").value===""?r("svcMsgsA"):readNum("c_svc",0);
+  $("c_resp").placeholder=pct(r("respOut"),0).replace(" %","")+" (del escenario)";$("c_svc").placeholder=r("svcMsgsA")+" (del escenario)";
+  const sent=n*k, del=sent*r("deliver"), cost=del*tar, rd=del*r("read"), clicks=rd*r("ctr"), replies=n*resp, svc=replies*svcN, total=sent+svc;
+  const rows=[["Plantillas enviadas",F(sent)],["Entregadas (cobrables)",F(del)],["Leídas",F(rd)],["Clics en botones o enlaces",F(clicks)],["Respuestas (conversaciones abiertas)",F(replies)],
+   ["Mensajes de servicio gratuitos",F(svc)],["Total de mensajes de la campaña",F(total)],["Bajas estimadas",F(n*r("optout"))]];
+  $("campOut").innerHTML=`<div class="cbig"><span class="l">${$("c_name").value.trim()||"Campaña"} · costo de mensajería</span><b class="num">${USD(cost)}</b><small>${USDu(sent?cost/sent:0)} por mensaje enviado · ${USD(n?cost/n*1000:0)} por cada 1.000 destinatarios</small></div>
+   <dl class="kv">${rows.map(a=>`<div><dt>${a[0]}</dt><dd class="num">${a[1]}</dd></div>`).join("")}<div><dt>Costo por respuesta</dt><dd class="num">${replies?USDu(cost/replies):"—"}</dd></div></dl>`;
+  const budget=readNum("c_budget",0), perSend=tar*r("deliver"), maxSend=perSend?budget/perSend:0;
+  $("budOut").innerHTML=`<div class="cbig"><span class="l">Con ${USD(budget)} se pueden enviar</span><b class="num">${F(maxSend)}</b><small>plantillas de ${mk?"marketing":"utilidad"} · alcanzan para ${F(k?maxSend/k:0)} destinatarios con ${k} ${k===1?"plantilla":"plantillas"} cada uno</small></div>`;
+}
+
+/* ---- Guardar y compartir ---- */
+function summaryCSV(){
+  const head=["Escenario","Mensajes enviados","Cobrables marketing","Cobrables utilidad","Costo USD","Conversaciones","Leads calificados","Inscripciones","Matriculas"];
+  const rows=R.map((x,s)=>{const o=ops(x,s);return [SC[s],x.T.sent,x.T.bMkt,x.T.bUtil,x.T.usd,o.convs,o.leads,o.insc,o.matr].map((v,i)=>i?Math.round(i===4?v*100:v)/(i===4?100:1):v).join(",")});
+  return [head.join(","),...rows].join("\n");
+}
+function copyText(txt,msg){
+  const box=$("shareBox");box.value=txt;
+  const done=ok=>{$("shareState").textContent=ok?msg:"No se pudo copiar solo. El texto quedó seleccionado: usa Ctrl+C o copiar del menú.";if(!ok){box.focus();box.select()}};
+  try{navigator.clipboard.writeText(txt).then(()=>done(true),()=>done(false))}catch(e){done(false)}
+}
+function initShare(){
+  $("cpJson").onclick=()=>copyText(JSON.stringify(params(),null,1),"Parámetros copiados. Pégalos más adelante con Cargar parámetros.");
+  $("cpCsv").onclick=()=>copyText(summaryCSV(),"Resumen copiado. Pégalo en Excel o Google Sheets.");
+  $("loadBtn").onclick=()=>{let ok=false;try{ok=applyParams(JSON.parse($("shareBox").value))}catch(e){}
+    $("shareState").textContent=ok?"Parámetros cargados.":"El texto no es un JSON de parámetros válido. Pega aquí el que copiaste antes.";if(ok){buildInputs();run()}};
+}
+
+/* ---- Render principal ---- */
 function renderReco(){
   const T=R.map(x=>x.T), E=T[1], I=T[2], margin=E.billable*1.2, cover=margin/I.billable, gap=Math.max(0,I.billable-margin), top=I.sent;
   const card=(i,main)=>{const t=T[i];return `<div class="sc ${main?"mid":""}">
@@ -532,7 +847,8 @@ function renderReco(){
     <div class="stack" aria-hidden="true"><i style="width:${t.billable/top*100}%"></i><b style="width:${t.svc/top*100}%"></b></div>
     <dl><div><dt><i class="dot"></i>Cobrables por Meta</dt><dd class="num">${F(t.billable)}</dd></div>
     <div><dt><i class="dot g"></i>Gratuitos (respuestas en 24 h)</dt><dd class="num">${F(t.svc)}</dd></div>
-    <div><dt>Plantillas no entregadas</dt><dd class="num">${F(t.mkt+t.util-t.billable)}</dd></div></dl></div>`};
+    <div><dt>Plantillas no entregadas</dt><dd class="num">${F(t.mkt+t.util-t.billable)}</dd></div>
+    <div><dt>Costo de mensajería (tarifa Meta)</dt><dd class="num">${USD(t.usd)}</dd></div></dl></div>`};
   $("reco").innerHTML=`
    <div class="bar-top"><h3>Mensajes que necesitamos en 12 meses, por escenario</h3><span class="tag warn">Hipótesis de trabajo</span></div>
    <div class="grid g3">${card(0,0)+card(1,1)+card(2,0)}</div>
@@ -543,8 +859,9 @@ function renderReco(){
 function renderEsc(){
   const rows=[["Contactos o registros base",x=>x.T.contacts],["Mensajes iniciales (A)",x=>x.T.ini],["Seguimiento (A y B)",x=>x.T.seg],["Mensajes de eventos (C)",x=>x.T.evt],
    ["Respuestas y atención (servicio, sin costo)",x=>x.T.svc],["Total mensajes enviados",x=>x.T.sent,1],["Mensajes recibidos",x=>x.T.recv],
-   ["Cobrables por Meta",x=>x.T.billable,1],["· de marketing",x=>x.T.bMkt],["· de utilidad",x=>x.T.bUtil],["Promedio mensual de enviados",x=>x.T.sent/12]];
-  $("escTable").innerHTML=`<tr><th>Concepto</th>${SC.map(s=>`<th class="r">${s}</th>`).join("")}</tr>`+rows.map(r=>`<tr class="${r[2]?"strong":""}"><td>${r[0]}</td>${R.map(x=>`<td class="r num">${F(r[1](x))}</td>`).join("")}</tr>`).join("");
+   ["Cobrables por Meta",x=>x.T.billable,1],["· de marketing",x=>x.T.bMkt],["· de utilidad",x=>x.T.bUtil],["Promedio mensual de enviados",x=>x.T.sent/12],
+   ["Costo de mensajería, tarifa Meta (USD)",x=>x.T.usd,1,USD]];
+  $("escTable").innerHTML=`<tr><th>Concepto</th>${SC.map(s=>`<th class="r">${s}</th>`).join("")}</tr>`+rows.map(r=>`<tr class="${r[2]?"strong":""}"><td>${r[0]}</td>${R.map(x=>`<td class="r num">${(r[3]||F)(r[1](x))}</td>`).join("")}</tr>`).join("");
   const E=R[1],I=R[2],C=R[0];
   $("escNotes").innerHTML=[
    ["Peso de los eventos",`Los eventos (C) concentran ${pct(C.C.billable/C.T.billable,0)}, ${pct(E.C.billable/E.T.billable,0)} y ${pct(I.C.billable/I.T.billable,0)} de los cobrables en cada escenario.`],
@@ -553,14 +870,65 @@ function renderEsc(){
   ].map(n=>`<div class="panel"><h3>${n[0]}</h3><p class="fn" style="margin-top:6px;font-size:14px">${n[1]}</p></div>`).join("");
 }
 function renderDist(){
-  seg("segDist",()=>selDist,i=>selDist=i);
   const x=R[selDist], top=Math.max(...x.lines.map(l=>l.billable)), tot=x.T.billable;
   $("distRows").innerHTML=x.lines.map(l=>`<div class="row"><div class="name">${l.n}<small>Componente ${l.c}</small></div>
    <div class="track" aria-hidden="true"><div class="fill" style="width:${l.billable/top*100}%"></div></div>
    <div class="val num">${F(l.billable)}<span class="pc">${pct(l.billable/tot)}</span></div></div>`).join("");
   $("compKpis").innerHTML=["A","B","C"].map(c=>`<div class="kpi" style="background:var(--bg);border-radius:10px"><span class="l">Componente ${c}</span><span class="v num">${F(x[c].billable)}</span><span class="n">${pct(x[c].billable/tot,0)} de los cobrables · ${F(x[c].sent)} enviados</span></div>`).join("");
 }
-R=[0,1,2].map(s=>compute(P,s));renderReco();renderEsc();renderDist();
+function renderOps(){
+  const o=ops(R[selOp],selOp), O=R.map((x,s)=>ops(x,s));
+  const blk=(title,steps,note)=>{const top=steps[0][1];return `<h4 class="fh">${title}</h4>`+steps.map((s,i)=>`<div class="row"><div class="name">${s[0]}<small>${s[2]!==undefined?s[2]:(i?pct(s[1]/steps[i-1][1])+" del paso anterior":"Base")}</small></div>
+   <div class="track" aria-hidden="true"><div class="fill" style="width:${Math.max(1.5,Math.sqrt(s[1]/top)*100)}%"></div></div><div class="val num">${F(s[1])}</div></div>`).join("")};
+  $("opFunnel").innerHTML=blk("Mensajería",[["Plantillas enviadas",o.sent],["Entregadas",o.del],["Leídas",o.rd],["Interacciones (respuesta o clic)",o.inter]])+
+   blk("Conversión",[["Conversaciones abiertas",o.convs,`${F(o.replies)} respuestas a plantillas + ${F(o.first)} contactos que escribieron primero`],["Leads calificados",o.leads],["Inscripciones",o.insc],["Matrículas",o.matr]]);
+  const rows=[
+   ["Tasa de entrega","95 – 99 %",(x,s)=>P.r.deliver[s]],["Tasa de apertura (lectura)","70 – 90 %",(x,s)=>P.r.read[s]],
+   ["Tasa de respuesta, sobre leídas","3 – 10 %",(x,s)=>O[s].respRate],["CTR en botones o enlaces, sobre leídas","5 – 15 %",(x,s)=>P.r.ctr[s]],
+   ["Tasa de interacción (respuesta + clic)","10 – 25 %",(x,s)=>O[s].interRate],["Bajas (opt-out) sobre contactos","menos de 2 %",(x,s)=>P.r.optout[s]],
+   ["Transferencia a asesor, sobre conversaciones","según capacidad",(x,s)=>P.r.transfer[s]],["Lead calificado, sobre conversaciones","supuesto UAO",(x,s)=>P.r.qual[s]],
+   ["Inscripción, sobre leads calificados","supuesto UAO",(x,s)=>P.r.insc[s]],["Matrícula, sobre inscritos","supuesto UAO",(x,s)=>P.r.matr[s]]];
+  const cnt=[["Conversaciones abiertas",s=>O[s].convs],["Mensajes de servicio por conversación",s=>O[s].svcPerConv,1],["Transferencias a asesor",s=>O[s].transfers],["Bajas estimadas",s=>O[s].opt],["Leads calificados",s=>O[s].leads],["Inscripciones",s=>O[s].insc],["Matrículas",s=>O[s].matr]];
+  $("opTable").innerHTML=`<tr><th>Métrica</th><th>Referencia orientativa</th>${SC.map(s=>`<th class="r">${s}</th>`).join("")}</tr>`+
+   rows.map(r=>`<tr><td>${r[0]}</td><td class="fn">${r[1]}</td>${[0,1,2].map(s=>`<td class="r num">${pct(r[2](R[s],s))}</td>`).join("")}</tr>`).join("")+
+   `<tr class="strong"><td colspan="5">Volúmenes resultantes</td></tr>`+
+   cnt.map(c=>`<tr><td>${c[0]}</td><td></td>${[0,1,2].map(s=>`<td class="r num">${c[2]?c[1](s).toFixed(1).replace(".",","):F(c[1](s))}</td>`).join("")}</tr>`).join("");
+}
+function renderCosts(){
+  const card=(i,main)=>{const x=R[i],T=x.T,f=P.fin;return `<div class="sc ${main?"mid":""}">
+   <div class="bar-top"><h3>${SC[i]}</h3>${main?'<span class="tag red">Para planear</span>':""}</div>
+   <span class="l">Costo de mensajería, 12 meses</span><span class="big num">${USD(T.usd)}</span>
+   <dl><div><dt>Marketing: ${F(T.bMkt)} × ${USDu(f.usdMkt)}</dt><dd class="num">${USD(T.bMkt*f.usdMkt)}</dd></div>
+   <div><dt>Utilidad: ${F(T.bUtil)} × ${USDu(f.usdUtil)}</dt><dd class="num">${USD(T.bUtil*f.usdUtil)}</dd></div>
+   <div><dt>Componente A</dt><dd class="num">${USD(x.A.usd)}</dd></div><div><dt>Componente B</dt><dd class="num">${USD(x.B.usd)}</dd></div><div><dt>Componente C</dt><dd class="num">${USD(x.C.usd)}</dd></div>
+   <div><dt>Promedio mensual</dt><dd class="num">${USD(T.usd/12)}</dd></div></dl></div>`};
+  $("costCards").innerHTML=card(0,0)+card(1,1)+card(2,0);
+  const x=R[selCost], tot=x.T.usd;
+  $("costTable").innerHTML=`<tr><th>Línea</th><th>Componente</th><th class="r">Cobrables marketing</th><th class="r">Cobrables utilidad</th><th class="r">Costo USD</th><th class="r">% del costo</th></tr>`+
+   x.lines.map(l=>`<tr><td>${l.n}</td><td>${l.c}</td><td class="r num">${F(l.bMkt)}</td><td class="r num">${F(l.bUtil)}</td><td class="r num">${USD(l.usd)}</td><td class="r num">${tot?pct(l.usd/tot):"—"}</td></tr>`).join("")+
+   `<tr class="total"><td>Total</td><td></td><td class="r num">${F(x.T.bMkt)}</td><td class="r num">${F(x.T.bUtil)}</td><td class="r num">${USD(tot)}</td><td class="r num">100 %</td></tr>`;
+  const O=R.map((x,s)=>ops(x,s)), dv=(a,b)=>b?USDu(a/b):"—";
+  const u=[["Por mensaje cobrable",s=>dv(R[s].T.usd,R[s].T.billable)],["Por conversación abierta",s=>dv(R[s].T.usd,O[s].convs)],["Por lead calificado",s=>dv(R[s].T.usd,O[s].leads)],["Por inscripción",s=>dv(R[s].T.usd,O[s].insc)],["Por matrícula",s=>dv(R[s].T.usd,O[s].matr)]];
+  $("unitTable").innerHTML=`<tr><th>Costo de mensajería</th>${SC.map(s=>`<th class="r">${s}</th>`).join("")}</tr>`+u.map(r=>`<tr><td>${r[0]}</td>${[0,1,2].map(s=>`<td class="r num">${r[1](s)}</td>`).join("")}</tr>`).join("");
+}
+function renderGroupSummary(){
+  const E=R[1],o=ops(E,1);
+  $("gs_canal").textContent=`${F(E.T.mkt+E.T.util)} plantillas`;
+  ["A","B","C"].forEach(c=>$("gs_"+c).textContent=`${F(E[c].billable)} cobrables · ${USD(E[c].usd)}`);
+  $("gs_conv").textContent=`${F(o.matr)} matrículas esperadas`;
+}
+function renderViews(){
+  seg("segDist",()=>selDist,i=>selDist=i);seg("segOp",()=>selOp,i=>selOp=i);seg("segCost",()=>selCost,i=>selCost=i);
+  renderDist();renderOps();renderCosts();
+}
+function run(){
+  R=[0,1,2].map(s=>compute(P,s));
+  drawVol();renderC();renderEvTotals();renderLive();renderTarifa();renderGroupSummary();renderReco();renderEsc();renderViews();renderSens();renderCamp();markChanged();save();
+}
+BASE=[0,1,2].map(s=>compute(DEFAULTS,s));
+buildInputs();initShare();
+["c_name","c_n","c_cat","c_k","c_sc","c_resp","c_svc","c_budget"].forEach(id=>{$(id).oninput=renderCamp;$(id).onchange=renderCamp});
+run();
 </script>
 
 </body></html>
