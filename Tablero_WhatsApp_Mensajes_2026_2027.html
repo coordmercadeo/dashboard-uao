@@ -259,7 +259,7 @@ tr.strong td{font-weight:700;background:var(--bg)}
 .cell:focus-within{border-color:var(--red);box-shadow:0 0 0 2px var(--red-soft)}
 .cell.chg{background:var(--red-soft);border-color:var(--red)}
 .cell input:focus-visible,.money input:focus-visible{outline:none}
-.rs{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;font-size:14px;visibility:hidden}
+.rr.rres{border-bottom:0;padding-top:10px}.rres .lb b{color:var(--red-ink)}.rres .rv{display:flex;flex-direction:column;align-items:center;gap:1px;background:var(--red-soft);border-radius:8px;padding:6px 2px;font:600 13px var(--mono);color:var(--red-ink)}.rres .rv small{font:400 10px var(--mono);color:var(--muted)}.lm{font:600 12px var(--mono);color:var(--red-ink)}.rs{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;font-size:14px;visibility:hidden}
 .chgrow .rs{visibility:visible;color:var(--red-ink);border-color:var(--red)}
 @media(max-width:640px){.rr{grid-template-columns:repeat(3,1fr) 30px}.rr .lb{grid-column:1/-1}.rr.rh{grid-template-columns:repeat(3,1fr) 30px}.rr.rh span:first-child{display:none}}
 .fill.neg{background:var(--ink)}
@@ -400,11 +400,11 @@ select:focus-visible,input[type=text]:focus-visible,textarea:focus-visible{outli
   </div>
   <div class="panel" style="display:flex;flex-direction:column;gap:14px">
     <div class="bar-top"><h3>Tasas por escenario</h3><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="tag" id="chgCount"></span><button class="btn" id="resetBtn" type="button">Restablecer todo</button></div></div>
-    <p class="fn">Son hipótesis de trabajo porque el documento no trae tasas históricas. Las celdas modificadas se marcan en rojo y cada fila se puede restablecer.</p>
+    <p class="fn">Son hipótesis de trabajo porque el documento no trae tasas históricas. Cada columna mueve solo su escenario. El resultado de cada columna aparece al final de cada grupo y en la barra fija de arriba. Las celdas modificadas se marcan en rojo y cada fila se puede restablecer.</p>
     <div id="rateGroups"></div>
   </div>
   <div class="panel" style="display:flex;flex-direction:column;gap:14px">
-    <div class="bar-top"><h3>Qué supuesto pesa más</h3><div class="seg" id="segSens" role="group" aria-label="Métrica de sensibilidad"></div></div>
+    <div class="bar-top"><h3>Qué supuesto pesa más</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><div class="seg" id="segSensS" role="group" aria-label="Escenario"></div><div class="seg" id="segSens" role="group" aria-label="Métrica de sensibilidad"></div></div></div>
     <div class="rows" id="sensRows"></div>
     <p class="fn" id="sensNote"></p>
   </div>
@@ -643,7 +643,7 @@ const DOC_C_TOT=[125000,183000];
 const ANAME={org:"Automatización: orgánicos",pos:"Automatización: posgrados",pre:"Automatización: pregrados",ec:"Automatización: Educ. Continua"};
 const ASUB={org:"Todo el año",pos:"8.000–10.000 por cohorte",pre:"9.000–14.000 por cohorte",ec:"15.000–18.000 al año"};
 const KEY="uao-wa-calculadora-v2";
-let R=[],BASE=[],mode="min",selDist=1,selOp=1,selCost=1,selSens="usd";
+let R=[],BASE=[],mode="min",selDist=1,selOp=1,selCost=1,selSens="usd",selSensS=1;
 const clone=o=>JSON.parse(JSON.stringify(o));
 
 /* ---- Parámetros editables ---- */
@@ -742,11 +742,12 @@ function buildInputs(){
   $("evInputs").innerHTML=`<tr><th>Evento</th><th class="r">Al año</th><th class="r">Base mín.</th><th class="r">Base máx.</th><th class="r">Total mín.</th><th class="r">Total máx.</th></tr>`+
    P.C.map(l=>`<tr><td>${l.n}</td><td class="r num">${l.ev}</td><td class="r"><input class="cin" type="number" inputmode="numeric" id="e_${l.id}_min" min="0" step="500" value="${l.min}" aria-label="${l.n}, base mínima"></td><td class="r"><input class="cin" type="number" inputmode="numeric" id="e_${l.id}_max" min="0" step="500" value="${l.max}" aria-label="${l.n}, base máxima"></td><td class="r num" id="et_${l.id}_min"></td><td class="r num" id="et_${l.id}_max"></td></tr>`).join("");
   P.C.forEach(l=>["min","max"].forEach(k=>$(`e_${l.id}_${k}`).oninput=e=>{const v=parseFloat(e.target.value);l[k]=isNaN(v)||v<0?0:v;run()}));
-  $("rateGroups").innerHTML=GROUPS.map(g=>`<div class="grp"><div class="gh"><h4>${g[1]}</h4><span class="fn">${g[2]}</span><span class="gs num" id="gs_${g[0]}"></span></div>
+  $("rateGroups").innerHTML=GROUPS.map(g=>`<div class="grp"><div class="gh"><h4>${g[1]}</h4><span class="fn">${g[2]}</span></div>
    <div class="rr rh" aria-hidden="true"><span></span><span>Conserv.</span><span>Esperado</span><span>Intens.</span><span></span></div>
    ${g[3].map(k=>`<div class="rr" id="rr_${k[0]}"><div class="lb"><b>${k[2]}</b>${k[3]?`<small>${k[3]}</small>`:""}</div>
     ${[0,1,2].map(s=>`<label class="cell" id="rc_${k[0]}_${s}"><input type="number" inputmode="decimal" id="r_${k[0]}_${s}" step="${k[1]==="p"?(k[0]==="optout"?0.1:1):0.5}" min="0"${k[1]==="p"?' max="100"':""} value="${dispR(k,P.r[k[0]][s])}" aria-label="${k[2]}, ${SC[s]}"><i>${k[1]==="p"?"%":"msj"}</i></label>`).join("")}
-    <button type="button" class="rs" data-k="${k[0]}" title="Restablecer esta fila" aria-label="Restablecer ${k[2]}">↺</button></div>`).join("")}</div>`).join("");
+    <button type="button" class="rs" data-k="${k[0]}" title="Restablecer esta fila" aria-label="Restablecer ${k[2]}">↺</button></div>`).join("")}
+   <div class="rr rres"><div class="lb"><b>Resultado de este grupo</b><small id="resl_${g[0]}"></small></div>${[0,1,2].map(s=>`<span class="rv num" id="res_${g[0]}_${s}"></span>`).join("")}<span></span></div></div>`).join("");
   RATES.forEach(k=>{[0,1,2].forEach(s=>$(`r_${k[0]}_${s}`).oninput=e=>{const v=parseFloat(e.target.value);P.r[k[0]][s]=isNaN(v)||v<0?0:(k[1]==="p"?Math.min(v,100)/100:v);run()});
     document.querySelector(`#rr_${k[0]} .rs`).onclick=()=>{P.r[k[0]]=[...DEFAULTS.r[k[0]]];[0,1,2].forEach(s=>$(`r_${k[0]}_${s}`).value=dispR(k,P.r[k[0]][s]));run()}});
   $("resetBtn").onclick=()=>{P.fin={...DEFAULTS.fin};P.C=clone(DEFAULTS.C);RATES.forEach(k=>P.r[k[0]]=[...DEFAULTS.r[k[0]]]);buildInputs();run()};
@@ -775,8 +776,8 @@ function delta(a,b){
   return `<span class="dl ${d>0?"up":"dn"}">${d>0?"▲ +":"▼ "}${(d*100).toFixed(1).replace(".",",")} % frente a los iniciales</span>`;
 }
 function renderLive(){
-  $("live").innerHTML=R.map((x,s)=>{const t=x.T,b=BASE[s].T;return `<div class="lv ${s===1?"mid":""}"><span class="ln">${SC[s]}</span>
-   <span class="lbig num">${F(t.sent)}</span><span class="lsub">mensajes · ${F(t.billable)} cobrables</span><b class="num">${USD(t.usd)}</b>${delta(t.usd,b.usd)}</div>`}).join("");
+  $("live").innerHTML=R.map((x,s)=>{const t=x.T,b=BASE[s].T;const o=ops(x,s),ob=ops(BASE[s],s);return `<div class="lv ${s===1?"mid":""}"><span class="ln">${SC[s]}</span>
+   <span class="lbig num">${F(t.sent)}</span><span class="lsub">mensajes · ${F(t.billable)} cobrables</span><b class="num">${USD(t.usd)}</b><span class="lm num">${F(o.matr)} matrículas${Math.abs(o.matr-ob.matr)>0.5?` (${o.matr>ob.matr?"+":"−"}${F(Math.abs(o.matr-ob.matr))})`:""}</span>${delta(t.usd,b.usd)}</div>`}).join("");
 }
 function renderTarifa(){
   const f=P.fin,E=R[1].T;
@@ -791,17 +792,19 @@ function ops(x,s,PP=P){
   return {sent:T.mkt+T.util, del, rd, replies, clicks, inter, convs:T.convs, first:T.convs-replies, transfers:T.convs*r("transfer"), leads, insc, matr, opt:T.contacts*r("optout"),
     respRate:replies/rd, interRate:Math.min(1,inter/rd), svcPerConv:T.svc/T.convs, usd:T.usd};
 }
-function metric(PP){const x=compute(PP,1);return selSens==="usd"?x.T.usd:selSens==="billable"?x.T.billable:ops(x,1,PP).matr}
+function metric(PP){const x=compute(PP,selSensS);return selSens==="usd"?x.T.usd:selSens==="billable"?x.T.billable:ops(x,selSensS,PP).matr}
 function renderSens(){
   const m0=metric(P), items=[];
   FIN.forEach(f=>{if(P.fin[f[0]]>0){const Q=clone(P);Q.fin[f[0]]*=1.1;items.push([NAME[f[0]],metric(Q)/m0-1])}});
-  RATES.forEach(k=>{const v=P.r[k[0]][1],nv=Math.min(v*1.1,k[1]==="p"?1:Infinity);if(v>0&&nv>v){const Q=clone(P);Q.r[k[0]][1]=nv;items.push([NAME[k[0]],metric(Q)/m0-1])}});
+  RATES.forEach(k=>{const v=P.r[k[0]][selSensS],nv=Math.min(v*1.1,k[1]==="p"?1:Infinity);if(v>0&&nv>v){const Q=clone(P);Q.r[k[0]][selSensS]=nv;items.push([NAME[k[0]],metric(Q)/m0-1])}});
   const L=items.filter(i=>isFinite(i[1])&&Math.abs(i[1])>1e-9).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,8), mx=Math.max(...L.map(i=>Math.abs(i[1])),1e-9);
   const lbl={usd:"el costo en USD",billable:"los mensajes cobrables",matr:"las matrículas estimadas"}[selSens];
   $("sensRows").innerHTML=L.length?L.map(i=>`<div class="row"><div class="name">${i[0]}</div><div class="track" aria-hidden="true"><div class="fill ${i[1]<0?"neg":""}" style="width:${Math.abs(i[1])/mx*100}%"></div></div><div class="val num">${i[1]>0?"+":"−"}${(Math.abs(i[1])*100).toFixed(1).replace(".",",")} %</div></div>`).join(""):`<p class="fn">Sin parámetros con efecto.</p>`;
-  $("sensNote").textContent=`Si cada valor sube 10 % en el escenario esperado (las tasas no pasan de 100 %), así cambia ${lbl}. Sirve para decidir qué supuesto conviene medir primero con envíos reales.`;
+  $("sensNote").textContent=`Si cada valor sube 10 % en el escenario ${SC[selSensS].toLowerCase()} (las tasas no pasan de 100 %), así cambia ${lbl}. Sirve para decidir qué supuesto conviene medir primero con envíos reales.`;
   $("segSens").innerHTML=[["usd","Costo USD"],["billable","Cobrables"],["matr","Matrículas"]].map(a=>`<button data-k="${a[0]}" aria-pressed="${selSens===a[0]}">${a[1]}</button>`).join("");
   $("segSens").querySelectorAll("button").forEach(b=>b.onclick=()=>{selSens=b.dataset.k;renderSens()});
+  $("segSensS").innerHTML=SC.map((n,i)=>`<button data-i="${i}" aria-pressed="${selSensS===i}">${n}</button>`).join("");
+  $("segSensS").querySelectorAll("button").forEach(b=>b.onclick=()=>{selSensS=+b.dataset.i;renderSens()});
 }
 
 /* ---- Calculadora de campaña ---- */
@@ -857,11 +860,13 @@ function renderReco(){
    Los eventos generan ${pct(R[1].C.billable/E.billable,0)} de los mensajes cobrables esperados.</p>`;
 }
 function renderEsc(){
+  const OE=R.map((x,s)=>ops(x,s));
   const rows=[["Contactos o registros base",x=>x.T.contacts],["Mensajes iniciales (A)",x=>x.T.ini],["Seguimiento (A y B)",x=>x.T.seg],["Mensajes de eventos (C)",x=>x.T.evt],
    ["Respuestas y atención (servicio, sin costo)",x=>x.T.svc],["Total mensajes enviados",x=>x.T.sent,1],["Mensajes recibidos",x=>x.T.recv],
    ["Cobrables por Meta",x=>x.T.billable,1],["· de marketing",x=>x.T.bMkt],["· de utilidad",x=>x.T.bUtil],["Promedio mensual de enviados",x=>x.T.sent/12],
-   ["Costo de mensajería, tarifa Meta (USD)",x=>x.T.usd,1,USD]];
-  $("escTable").innerHTML=`<tr><th>Concepto</th>${SC.map(s=>`<th class="r">${s}</th>`).join("")}</tr>`+rows.map(r=>`<tr class="${r[2]?"strong":""}"><td>${r[0]}</td>${R.map(x=>`<td class="r num">${(r[3]||F)(r[1](x))}</td>`).join("")}</tr>`).join("");
+   ["Costo de mensajería, tarifa Meta (USD)",x=>x.T.usd,1,USD],
+   ["Conversaciones abiertas",(x,s)=>OE[s].convs],["Leads calificados",(x,s)=>OE[s].leads],["Inscripciones",(x,s)=>OE[s].insc],["Matrículas estimadas",(x,s)=>OE[s].matr,1]];
+  $("escTable").innerHTML=`<tr><th>Concepto</th>${SC.map(s=>`<th class="r">${s}</th>`).join("")}</tr>`+rows.map(r=>`<tr class="${r[2]?"strong":""}"><td>${r[0]}</td>${R.map((x,s)=>`<td class="r num">${(r[3]||F)(r[1](x,s))}</td>`).join("")}</tr>`).join("");
   const E=R[1],I=R[2],C=R[0];
   $("escNotes").innerHTML=[
    ["Peso de los eventos",`Los eventos (C) concentran ${pct(C.C.billable/C.T.billable,0)}, ${pct(E.C.billable/E.T.billable,0)} y ${pct(I.C.billable/I.T.billable,0)} de los cobrables en cada escenario.`],
@@ -912,10 +917,11 @@ function renderCosts(){
   $("unitTable").innerHTML=`<tr><th>Costo de mensajería</th>${SC.map(s=>`<th class="r">${s}</th>`).join("")}</tr>`+u.map(r=>`<tr><td>${r[0]}</td>${[0,1,2].map(s=>`<td class="r num">${r[1](s)}</td>`).join("")}</tr>`).join("");
 }
 function renderGroupSummary(){
-  const E=R[1],o=ops(E,1);
-  $("gs_canal").textContent=`${F(E.T.mkt+E.T.util)} plantillas`;
-  ["A","B","C"].forEach(c=>$("gs_"+c).textContent=`${F(E[c].billable)} cobrables · ${USD(E[c].usd)}`);
-  $("gs_conv").textContent=`${F(o.matr)} matrículas esperadas`;
+  const O=R.map((x,s)=>ops(x,s));
+  const put=(g,label,fn)=>{$("resl_"+g).textContent=label;[0,1,2].forEach(s=>{$(`res_${g}_${s}`).innerHTML=fn(s)})};
+  put("canal","plantillas enviadas · costo USD",s=>`${F(R[s].T.mkt+R[s].T.util)}<small>${USD(R[s].T.usd)}</small>`);
+  ["A","B","C"].forEach(c=>put(c,"cobrables · costo USD",s=>`${F(R[s][c].billable)}<small>${USD(R[s][c].usd)}</small>`));
+  put("conv","matrículas · leads calificados",s=>`${F(O[s].matr)}<small>${F(O[s].leads)} leads</small>`);
 }
 function renderViews(){
   seg("segDist",()=>selDist,i=>selDist=i);seg("segOp",()=>selOp,i=>selOp=i);seg("segCost",()=>selCost,i=>selCost=i);
