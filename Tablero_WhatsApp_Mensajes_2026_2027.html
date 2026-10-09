@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Tablero WhatsApp UAO</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -272,6 +272,35 @@ select:focus-visible,input[type=text]:focus-visible,textarea:focus-visible{outli
 .cbig small{color:var(--muted);font-size:13px}
 .kv{margin:0;display:flex;flex-direction:column}.kv div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}.kv div:last-child{border:0}.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:700}
 .fh{margin:6px 0 -4px;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--red-ink)}
+.annex-band{border-top:3px solid var(--red);padding-top:22px;display:flex;flex-direction:column;gap:8px}
+.eyebrow-a{align-self:flex-start;font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;background:var(--red);color:#fff;padding:4px 10px;border-radius:99px}
+.annex-title{font-size:clamp(24px,3.4vw,36px);font-weight:800;letter-spacing:-.02em;display:block}
+.annex-title::before{display:none}
+ul.pr{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+ul.pr li{margin:0;padding-left:16px;position:relative;font-size:14px;color:var(--ink)}
+ul.pr li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:2px;background:var(--red)}
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:30px 34px}
+.fs,.fo{border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:4px;background:var(--surface);position:relative;min-width:0}
+.fs b,.fo b{font-size:14px;color:var(--red-ink)}.fs span,.fo span{font-size:13px;color:var(--muted)}
+.fs.s2::before,.fs.s3::before,.fs.s4::before{content:"→";position:absolute;left:-26px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:18px}
+.fo::before{content:"↓";position:absolute;left:50%;top:-26px;transform:translateX(-50%);color:var(--muted);font-size:18px}
+.o2{grid-column:2;grid-row:2}.o3{grid-column:3;grid-row:2}.o4{grid-column:4;grid-row:2}
+.fo.bad{background:var(--red-soft);border-color:color-mix(in srgb,var(--red) 40%,var(--line))}
+.fo.ok{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 50%,var(--line))}.fo.ok b{color:var(--good)}
+@media(max-width:820px){.flow{grid-template-columns:1fr;gap:28px}.o2,.o3,.o4{grid-column:auto;grid-row:auto}
+ .fs.s2::before,.fs.s3::before,.fs.s4::before{content:"↓";left:50%;top:-24px;transform:translateX(-50%)}}
+.tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;counter-reset:t}
+.tl li{position:relative;padding:0 0 16px 34px;display:flex;flex-direction:column;gap:2px;counter-increment:t}
+.tl li::before{content:counter(t);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font:600 12px var(--mono)}
+.tl li::after{content:"";position:absolute;left:11px;top:26px;bottom:2px;width:2px;background:var(--line)}
+.tl li:last-child{padding-bottom:0}.tl li:last-child::after{display:none}
+.tl li b{font-size:14px}.tl li span{font-size:13px;color:var(--muted)}
+.tl li.ok::before{background:var(--good)}.tl li.bad::before{background:var(--ink)}
+.qv{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-radius:10px;padding:12px 14px;font-weight:600;font-size:14px}
+.qv.pass{background:var(--good-soft);color:var(--good)}.qv.fail{background:var(--red-soft);color:var(--red-ink)}
+.qv small{font-weight:400;color:var(--muted);font-size:13px}
+.chipb{font:600 12px var(--font);border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:6px 12px;cursor:pointer}
+.chipb:hover{border-color:var(--red);color:var(--red-ink)}
 </style>
 
 <header class="hero">
@@ -286,7 +315,7 @@ select:focus-visible,input[type=text]:focus-visible,textarea:focus-visible{outli
 </header>
 
 <nav class="nav" aria-label="Secciones"><div class="wrap">
-  <a href="#resumen">Resumen</a><a href="#volumenes">Volúmenes</a><a href="#componentes">Componentes</a><a href="#modelo">Modelo</a><a href="#calculadora">Calculadora</a><a href="#campana">Campaña</a><a href="#escenarios">Escenarios</a><a href="#distribucion">Líneas</a><a href="#operacion">Operación</a><a href="#costos">Costos USD</a><a href="#arquitectura">Arquitectura</a><a href="#journeys">Journeys</a>
+  <a href="#resumen">Resumen</a><a href="#volumenes">Volúmenes</a><a href="#componentes">Componentes</a><a href="#modelo">Modelo</a><a href="#calculadora">Calculadora</a><a href="#campana">Campaña</a><a href="#escenarios">Escenarios</a><a href="#distribucion">Líneas</a><a href="#operacion">Operación</a><a href="#costos">Costos USD</a><a href="#arquitectura">Arquitectura</a><a href="#journeys">Journeys</a><a href="#anexo">Anexo</a>
 </div></nav>
 
 <main class="wrap">
@@ -498,6 +527,123 @@ select:focus-visible,input[type=text]:focus-visible,textarea:focus-visible{outli
 <section id="journeys">
   <div class="sec-head"><h2>Inventario de journeys</h2><p class="sub">Cada journey tendrá evento de entrada, etapas, mensajes por fase, condiciones, esperas, criterio de salida, mensajes cobrables, créditos y costo. Por ahora quedan identificados y asignados a su componente.</p></div>
   <div class="jgrid" id="jlist"></div>
+</section>
+
+<section id="anexo">
+  <div class="annex-band"><span class="eyebrow-a">Anexo</span><h2 class="annex-title">Calidad de datos para Marketing Cloud y Salesforce</h2>
+    <p class="sub">Proyecto de limpieza y actualización de datos. Solo entra a Salesforce un contacto limpio, real y verificado. Es un complemento del proyecto de WhatsApp: un celular y un correo correctos son la base para que los mensajes lleguen.</p></div>
+
+  <div class="grid g4">
+    <div class="panel kpi"><span class="l">Reglas de calidad</span><span class="v">4</span><span class="n">Cédula, celular, correo y nombre</span></div>
+    <div class="panel kpi"><span class="l">Unidades de negocio</span><span class="v">3</span><span class="n">PRE, POS y EDU, cada una con su base</span></div>
+    <div class="panel kpi"><span class="l">Espera para confirmar</span><span class="v">3 días</span><span class="n">Luego se repite el proceso</span></div>
+    <div class="panel kpi main"><span class="l">Destino</span><span class="v">Salesforce</span><span class="n">Solo contactos verificados</span></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+      <h3>El problema</h3>
+      <ul class="plain pr">
+        <li><b>Cédulas falsas:</b> 0000000, 1111111, 12345678</li>
+        <li><b>Celulares</b> con +57, espacios o guiones</li>
+        <li><b>Correos</b> con errores o inexistentes</li>
+        <li><b>Base inflada</b> que cuesta licencia y daña las métricas</li>
+        <li><b>SQL por programa</b> para ajustar los datos de pauta, solo para arreglar el teléfono, lo que consume mucho tiempo de conexión</li>
+      </ul>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+      <h3>Resultado esperado</h3>
+      <ul class="plain pr">
+        <li>Menos retención de datos erróneos que llenan el límite de almacenamiento de la plataforma</li>
+        <li>Salesforce recibe solo datos verificados y calificados para seguimiento</li>
+        <li>Base liviana y sin basura acumulada</li>
+        <li>Mejor entregabilidad y métricas reales</li>
+        <li>Proceso automático con Automation Studio</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+    <h3>Esquema del flujo de datos</h3>
+    <div class="flow" role="group" aria-label="Flujo de datos">
+      <div class="fs s1"><b>1. Bases origen</b><span>Carpeta con todas las bases separadas por PRE, POS, EDU</span></div>
+      <div class="fs s2"><b>2. Script SSJS</b><span>Limpia, califica y unifica</span></div>
+      <div class="fs s3"><b>3. Base unificada</b><span>Estado Pendiente + token</span></div>
+      <div class="fs s4"><b>4. Journey</b><span>Correo de verificación</span></div>
+      <div class="fo bad o2"><b>Descartado</b><span>No cumple reglas: no entra</span></div>
+      <div class="fo bad o3"><b>Eliminado</b><span>Si no confirma en 3 días, repite el proceso y al final se elimina si no tuvo contacto</span></div>
+      <div class="fo ok o4"><b>Salesforce</b><span>Solo ingresan contactos verificados</span></div>
+    </div>
+    <p class="fn">Para que el flujo funcione, todas las bases deben tener los datos unificados según su unidad de negocio: Pregrado, Posgrado o Educación para la vida.</p>
+  </div>
+
+  <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+    <div class="bar-top"><h3>Reglas de calidad</h3><span class="tag red">Pruébalas abajo</span></div>
+    <div class="tw"><table>
+      <tr><th>Campo</th><th>Regla</th><th>Acción</th></tr>
+      <tr><td><b>Cédula</b></td><td>6 a 10 dígitos, sin repetidos ni secuencias</td><td><span class="tag red">Descartar</span></td></tr>
+      <tr><td><b>Celular</b></td><td>10 dígitos, inicia en 3; sin +57 ni espacios</td><td><span class="tag warn">Normalizar</span></td></tr>
+      <tr><td><b>Correo</b></td><td>Formato válido, dominio real, errores de escritura corregidos</td><td><span class="tag warn">Corregir</span> <span class="tag red">o descartar</span></td></tr>
+      <tr><td><b>Nombre</b></td><td>Sin números ni vacíos</td><td><span class="tag warn">Capitalizar</span></td></tr>
+    </table></div>
+  </div>
+
+  <div class="panel" style="display:flex;flex-direction:column;gap:16px">
+    <div class="bar-top"><h3>Probador de reglas</h3><span class="fn">Escribe un registro y mira qué haría el script</span></div>
+    <div class="fgrid">
+      <label class="fld"><span>Cédula</span><input id="q_ced" type="text" inputmode="numeric" value="12345678" autocomplete="off"></label>
+      <label class="fld"><span>Celular</span><input id="q_cel" type="text" inputmode="tel" value="+57 300 123 4567" autocomplete="off"></label>
+      <label class="fld"><span>Correo</span><input id="q_mail" type="text" inputmode="email" value="juan.perez@gmial.com" autocomplete="off"></label>
+      <label class="fld"><span>Nombre</span><input id="q_nom" type="text" value="juan perez" autocomplete="off"></label>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap" id="qEx"></div>
+    <div id="qOut"></div>
+    <p class="fn">El probador revisa formato, secuencias y errores de escritura comunes. La comprobación de que el dominio existe la hace el script en Marketing Cloud.</p>
+  </div>
+
+  <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+    <div class="bar-top"><h3>Lote de ejemplo</h3><span class="tag">Datos ilustrativos</span></div>
+    <div class="tw"><table id="qBatch"></table></div>
+    <div class="grid g4" id="qSum"></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <h3>Journey de verificación</h3>
+      <ol class="tl">
+        <li><b>Entrada</b><span>Base de datos unificada con Estado = Pendiente</span></li>
+        <li><b>Correo</b><span>«Confirma que tus datos son correctos», con token único</span></li>
+        <li><b>CloudPage de confirmación</b><span>Marca Estado = Verificado</span></li>
+        <li class="ok"><b>Verificado</b><span>Se envía a Salesforce como Lead o Contact</span></li>
+        <li class="bad"><b>Sin respuesta en 3 días</b><span>Se repite el proceso. Al final se elimina de la base porque no califica</span></li>
+        <li><b>Si reingresa</b><span>Si se inscribe de nuevo a otra actividad, repite todo el proceso</span></li>
+      </ol>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+        <h3>Cómo medir el resultado</h3>
+        <ul class="plain pr">
+          <li><b>Base liviana:</b> registros descartados y eliminados, y espacio de almacenamiento liberado</li>
+          <li><b>Calidad:</b> porcentaje de descartes por regla (cédula, celular, correo, nombre)</li>
+          <li><b>Verificación:</b> contactos verificados al primer correo y tras cada reintento</li>
+          <li><b>Entregabilidad:</b> rebotes de correo y plantillas de WhatsApp no entregadas</li>
+          <li><b>Ahorro de tiempo:</b> SQL por programa que dejan de ser necesarios</li>
+        </ul>
+        <p class="fn">Indicadores sugeridos a partir del resultado esperado. La presentación no trae metas numéricas.</p>
+      </div>
+      <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+        <h3>Por definir</h3>
+        <ul class="plain pr">
+          <li>Cuántas veces se repite el proceso antes de eliminar</li>
+          <li>Vigencia del token de verificación</li>
+          <li>Qué cuenta como «tuvo contacto» para no eliminar</li>
+          <li>Llave para unificar a la misma persona entre PRE, POS y EDU</li>
+          <li>El correo confirma los datos. El consentimiento para WhatsApp se captura por separado</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="fn">Fuente: presentación «Estrategia de calidad de datos para Marketing Cloud».</p>
 </section>
 </main>
 
@@ -935,6 +1081,66 @@ BASE=[0,1,2].map(s=>compute(DEFAULTS,s));
 buildInputs();initShare();
 ["c_name","c_n","c_cat","c_k","c_sc","c_resp","c_svc","c_budget"].forEach(id=>{$(id).oninput=renderCamp;$(id).onchange=renderCamp});
 run();
+
+/* ===== Anexo: calidad de datos ===== */
+(function(){
+  const q=id=>document.getElementById(id);
+  const TYPOS={"gmial.com":"gmail.com","gmai.com":"gmail.com","gamil.com":"gmail.com","gmail.con":"gmail.com","gmail.cm":"gmail.com","hotmial.com":"hotmail.com","hotmal.com":"hotmail.com","hotmail.con":"hotmail.com","outlok.com":"outlook.com","outlook.con":"outlook.com","yahoo.con":"yahoo.com","yaho.com":"yahoo.com","icloud.con":"icloud.com"};
+  function cedula(raw){
+    const d=String(raw).replace(/[\s.\-,]/g,"");
+    if(!/^\d+$/.test(d))return {ok:false,val:d,msg:"Tiene letras o símbolos",tag:"Descartar"};
+    if(d.length<6||d.length>10)return {ok:false,val:d,msg:`Tiene ${d.length} dígitos, debe tener de 6 a 10`,tag:"Descartar"};
+    if(/^(\d)\1+$/.test(d))return {ok:false,val:d,msg:"Todos los dígitos son iguales",tag:"Descartar"};
+    let up=true,dn=true;for(let i=1;i<d.length;i++){const a=+d[i-1],b=+d[i];if(b!==(a+1)%10)up=false;if(b!==(a+9)%10)dn=false}
+    if(up||dn)return {ok:false,val:d,msg:"Es una secuencia",tag:"Descartar"};
+    return {ok:true,val:d,msg:d!==String(raw).trim()?"Se quitaron separadores":"Cumple la regla",tag:d!==String(raw).trim()?"Normalizado":"Correcto"};
+  }
+  function celular(raw){
+    const o=String(raw).trim();let s=o.replace(/[\s\-().]/g,"");
+    if(s.startsWith("+57"))s=s.slice(3);else if(s.startsWith("0057"))s=s.slice(4);else if(s.startsWith("57")&&s.length===12)s=s.slice(2);
+    if(!/^3\d{9}$/.test(s))return {ok:false,val:s,msg:"Debe tener 10 dígitos e iniciar en 3",tag:"Descartar"};
+    return {ok:true,val:s,msg:s!==o?"Se quitó +57, espacios o guiones":"Cumple la regla",tag:s!==o?"Normalizado":"Correcto"};
+  }
+  function correo(raw){
+    const o=String(raw).trim();let s=o.toLowerCase();
+    if(!/^[a-z0-9._%+\-]+@[a-z0-9\-]+(\.[a-z0-9\-]+)+$/.test(s))return {ok:false,val:s,msg:"El formato no es válido",tag:"Descartar"};
+    const [u,dom]=s.split("@");let fixed=false;
+    if(TYPOS[dom]){s=u+"@"+TYPOS[dom];fixed=true}
+    return {ok:true,val:s,msg:fixed?`Error de escritura corregido (${dom})`:(s!==o?"Se pasó a minúsculas":"Formato válido"),tag:fixed?"Corregido":(s!==o?"Normalizado":"Correcto")};
+  }
+  function nombre(raw){
+    const s=String(raw).replace(/\s+/g," ").trim();
+    if(!s)return {ok:false,val:"",msg:"Está vacío",tag:"Descartar"};
+    if(/\d/.test(s))return {ok:false,val:s,msg:"Contiene números",tag:"Descartar"};
+    const P=["de","del","la","las","los","y","da"];
+    const v=s.toLocaleLowerCase("es").split(" ").map((w,i)=>i&&P.includes(w)?w:w.charAt(0).toLocaleUpperCase("es")+w.slice(1)).join(" ");
+    return {ok:true,val:v,msg:v!==String(raw).trim()?"Se capitalizó":"Cumple la regla",tag:v!==String(raw).trim()?"Capitalizado":"Correcto"};
+  }
+  function evalRec(r){
+    const f=[["Cédula",cedula(r.ced)],["Celular",celular(r.cel)],["Correo",correo(r.mail)],["Nombre",nombre(r.nom)]];
+    const bad=f.filter(x=>!x[1].ok), adj=f.filter(x=>x[1].ok&&x[1].tag!=="Correcto");
+    return {f,bad,adj,pass:!bad.length};
+  }
+  const cls=t=>t==="Correcto"?"good":t==="Descartar"?"red":"warn";
+  function render(){
+    const r=evalRec({ced:q("q_ced").value,cel:q("q_cel").value,mail:q("q_mail").value,nom:q("q_nom").value});
+    q("qOut").innerHTML=`<div class="tw"><table><tr><th>Campo</th><th>Resultado</th><th>Valor final</th><th>Detalle</th></tr>`+
+     r.f.map(([n,x])=>`<tr><td><b>${n}</b></td><td><span class="tag ${cls(x.tag)}">${x.tag}</span></td><td class="num">${x.ok?(x.val||"—"):"—"}</td><td class="fn">${x.msg}</td></tr>`).join("")+`</table></div>`+
+     `<div class="qv ${r.pass?"pass":"fail"}" style="margin-top:12px">${r.pass?"Pasa a verificación":"Descartado: no cumple reglas, no entra"}<small>${r.pass?"Estado = Pendiente y token único para el correo de verificación"+(r.adj.length?`. Con ${r.adj.length} ${r.adj.length>1?"ajustes":"ajuste"} automáticos`:""):r.bad.map(b=>b[0]).join(", ")+" no cumple"+(r.bad.length>1?"n":"")+" la regla"}</small></div>`;
+  }
+  const EX=[["Cédula falsa",["0000000","300 123 4567","ana@gmail.com","Ana Gómez"]],["Secuencia",["12345678","3105550199","luis@hotmail.com","Luis Pérez"]],["Celular con +57",["1113456789","+57 310-555-0199","maria@uao.edu.co","maría lópez"]],["Correo con error",["52345671","3205550101","pedro@hotmial.com","PEDRO RUIZ"]],["Registro válido",["1144567821","3205550101","carlos.ruiz@gmail.com","Carlos Ruiz"]]];
+  q("qEx").innerHTML=`<span class="fn" style="align-self:center">Ejemplos:</span>`+EX.map((e,i)=>`<button type="button" class="chipb" data-i="${i}">${e[0]}</button>`).join("");
+  q("qEx").querySelectorAll("button").forEach(b=>b.onclick=()=>{const v=EX[+b.dataset.i][1];["q_ced","q_cel","q_mail","q_nom"].forEach((id,k)=>q(id).value=v[k]);render()});
+  ["q_ced","q_cel","q_mail","q_nom"].forEach(id=>q(id).oninput=render);
+  render();
+  /* lote de ejemplo */
+  const B=[["0000000","+57 300 123 4567","ana@gmail.com","ana gomez"],["1113456789","310-555-0199","luis@hotmial.com","luis perez"],["12345678","3205550101","jose@gmail.com","José Mora"],
+    ["1144567821","3205550101","carlos@uao.edu.co","CARLOS RUIZ"],["987654321","3115550123","sofia@outlook.com","Sofía Díaz"],["52345671","12345","no-es-un-correo","J0sé"],["1098765431","+573155550100","laura@gmail.con","laura   restrepo"],["1067890123","3205550177","andres@yahoo.com","Andrés Gil"]];
+  const R=B.map(b=>evalRec({ced:b[0],cel:b[1],mail:b[2],nom:b[3]}));
+  q("qBatch").innerHTML=`<tr><th>Cédula</th><th>Celular</th><th>Correo</th><th>Nombre</th><th>Resultado</th></tr>`+B.map((b,i)=>`<tr><td class="num">${b[0]}</td><td class="num">${b[1]}</td><td>${b[2]}</td><td>${b[3]}</td><td>${R[i].pass?`<span class="tag ${R[i].adj.length?"warn":"good"}">${R[i].adj.length?"Pasa con ajustes":"Pasa"}</span>`:`<span class="tag red">Descartado</span>`}</td></tr>`).join("");
+  const n=R.length,dis=R.filter(r=>!r.pass).length,adj=R.filter(r=>r.pass&&r.adj.length).length,ok=n-dis-adj;
+  q("qSum").innerHTML=[["Registros del lote",n,"Ilustrativos"],["Pasan limpios",ok,`${Math.round(ok/n*100)} %`],["Pasan con ajustes",adj,`${Math.round(adj/n*100)} %`],["Descartados",dis,`${Math.round(dis/n*100)} %`]].map(a=>`<div class="kpi" style="background:var(--bg);border-radius:10px;padding:14px"><span class="l">${a[0]}</span><span class="v num" style="font-size:28px">${a[1]}</span><span class="n">${a[2]}</span></div>`).join("");
+})();
 </script>
 
 </body></html>
