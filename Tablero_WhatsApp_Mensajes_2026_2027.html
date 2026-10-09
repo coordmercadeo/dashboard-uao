@@ -301,6 +301,53 @@ ul.pr li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6
 .qv small{font-weight:400;color:var(--muted);font-size:13px}
 .chipb{font:600 12px var(--font);border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:6px 12px;cursor:pointer}
 .chipb:hover{border-color:var(--red);color:var(--red-ink)}
+/* ===== Perfilamiento ===== */
+.pf-track{height:26px;background:var(--idle-soft);border-radius:4px;display:flex;overflow:hidden}
+.pf-track i{display:block;height:100%;min-width:0;transition:width .45s ease}
+.pf-c1{background:var(--red)}.pf-c2{background:var(--ink)}.pf-c3{background:var(--warn)}.pf-c4{background:#8C8286}
+.legend i.pf-c1,.legend i.pf-c2,.legend i.pf-c3,.legend i.pf-c4{background:inherit}
+.legend i.pf-c1{background:var(--red)}.legend i.pf-c2{background:var(--ink)}.legend i.pf-c3{background:var(--warn)}.legend i.pf-c4{background:#8C8286}
+.pf-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
+.pf-steps li{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:start;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.pf-steps li:last-child{border-bottom:0}
+.pf-n{width:24px;height:24px;border-radius:50%;background:var(--idle-soft);color:var(--muted);font:600 12px var(--mono);display:flex;align-items:center;justify-content:center}
+.pf-steps li.t .pf-n{background:var(--red);color:#fff}
+.pf-steps b{font-weight:600}.pf-steps small{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.pf-k{font:600 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:var(--idle-soft);color:var(--muted);white-space:nowrap}
+.pf-steps li.t .pf-k{background:var(--red-soft);color:var(--red-ink)}
+.pf-out{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.pf-out h4{margin:0;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pf-o{display:grid;grid-template-columns:1fr auto;gap:10px;font-size:14px;align-items:start}
+.pf-o small{display:block;color:var(--muted);font-size:12px}
+.pf-o .v{font-family:var(--mono);font-weight:600;text-align:right;white-space:nowrap}
+#pfParams input.cin{width:78px}
+@media(max-width:560px){.pf-steps li{grid-template-columns:28px 1fr}.pf-steps li .pf-k{grid-column:2;justify-self:start}}
+/* ===== Mapa de flujo ===== */
+.fm-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px 34px;align-items:stretch}
+.fm-b{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--surface);display:flex;flex-direction:column;gap:3px;min-width:0;position:relative}
+.fm-b .k{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fm-b b{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.fm-b span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.fm-b.t{background:var(--red);border-color:var(--red);color:#fff}
+.fm-b.t .k,.fm-b.t span{color:#fff;opacity:.92}
+.fm-b.g{background:var(--good-soft);border-color:var(--good)}
+.fm-b.g b{color:var(--good)}
+.fm-b.n{background:var(--idle-soft)}
+.fm-b.wide{grid-column:1/-1}
+.fm-in{grid-column:1/-1}
+.fm-c2::before,.fm-c3::before,.fm-c4::before,.fm-c5::before,.fm-c6::before{content:"→";position:absolute;left:-26px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:20px}
+.fm-dn{display:flex;flex-direction:column;align-items:center;gap:0;color:var(--muted);font-size:12px;text-align:center;line-height:1.2}
+.fm-dn i{font-style:normal;font-size:20px;line-height:1}
+.fm-merge{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fm-lbl{grid-column:1/-1;font-size:12px;color:var(--muted);text-align:center}
+@media(max-width:900px){
+ .fm-grid{grid-template-columns:1fr;gap:10px}
+ .fm-c2::before,.fm-c3::before,.fm-c4::before,.fm-c5::before,.fm-c6::before{content:"↓";left:50%;top:-22px;transform:translateX(-50%)}
+ .fm-grid>*{grid-column:1 !important}
+ .fm-grid>div:empty{display:none}
+ .fm-merge{grid-template-columns:1fr}
+ .fm-dn{flex-direction:row;justify-content:center;gap:8px}
+}
 </style>
 
 <header class="hero">
@@ -315,7 +362,7 @@ ul.pr li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6
 </header>
 
 <nav class="nav" aria-label="Secciones"><div class="wrap">
-  <a href="#resumen">Resumen</a><a href="#volumenes">Volúmenes</a><a href="#componentes">Componentes</a><a href="#modelo">Modelo</a><a href="#calculadora">Calculadora</a><a href="#campana">Campaña</a><a href="#escenarios">Escenarios</a><a href="#distribucion">Líneas</a><a href="#operacion">Operación</a><a href="#costos">Costos USD</a><a href="#arquitectura">Arquitectura</a><a href="#journeys">Journeys</a><a href="#anexo">Anexo</a>
+  <a href="#resumen">Resumen</a><a href="#volumenes">Volúmenes</a><a href="#componentes">Componentes</a><a href="#modelo">Modelo</a><a href="#calculadora">Calculadora</a><a href="#campana">Campaña</a><a href="#escenarios">Escenarios</a><a href="#distribucion">Líneas</a><a href="#operacion">Operación</a><a href="#costos">Costos USD</a><a href="#arquitectura">Arquitectura</a><a href="#journeys">Journeys</a><a href="#perfilamiento">Perfilamiento</a><a href="#mapaflujo">Mapa de flujo</a><a href="#anexo">Anexo</a>
 </div></nav>
 
 <main class="wrap">
@@ -323,9 +370,9 @@ ul.pr li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6
 <section id="resumen">
   <div class="sec-head"><h2>Resumen</h2><p class="sub">Punto de partida del proyecto con los volúmenes iniciales del documento base. Son registros de captación e impactos, todavía no son mensajes.</p></div>
   <div class="grid g4">
-    <div class="panel kpi main"><span class="l">Registros iniciales / año</span><span class="v num" id="kpiTotal">191.000 – 266.000</span><span class="n">Mínimo – máximo, auditado</span></div>
+    <div class="panel kpi main"><span class="l">Registros iniciales / año</span><span class="v num" id="kpiTotal">201.000 – 280.000</span><span class="n">Mínimo – máximo, incluye base de gestores</span></div>
     <div class="panel kpi"><span class="l">Componentes</span><span class="v">3</span><span class="n">A automatización · B embudo · C eventos</span></div>
-    <div class="panel kpi"><span class="l">Journeys a diseñar</span><span class="v">8</span><span class="n">Captación, embudo y eventos</span></div>
+    <div class="panel kpi"><span class="l">Journeys a diseñar</span><span class="v">10</span><span class="n">Captación, embudo y eventos</span></div>
     <div class="panel kpi"><span class="l">Escenarios</span><span class="v">3</span><span class="n">Conservador · esperado · intensivo</span></div>
   </div>
   
@@ -351,15 +398,17 @@ ul.pr li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6
   <div class="sec-head"><h2>Componentes</h2><p class="sub">Detalle de las tres fuentes de volumen y el modelo que se aplicará a cada una.</p></div>
   <div class="grid g2">
     <div class="panel" style="display:flex;flex-direction:column;gap:12px">
-      <div class="bar-top"><h3>A · Orgánicos y pauta</h3><span class="tag red">51.000 – 68.000</span></div>
+      <div class="bar-top"><h3>A · Orgánicos y pauta</h3><span class="tag red">61.000 – 82.000</span></div>
       <div class="tw"><table>
         <tr><th>Línea</th><th>Por cohorte</th><th class="r">Mín. anual</th><th class="r">Máx. anual</th></tr>
         <tr><td>Orgánicos</td><td>Todo el año</td><td class="r num">2.000</td><td class="r num">2.000</td></tr>
         <tr><td>Posgrados</td><td class="num">8.000 – 10.000 × 2 cohortes</td><td class="r num">16.000</td><td class="r num">20.000</td></tr>
         <tr><td>Pregrados</td><td class="num">9.000 – 14.000 × 2 cohortes</td><td class="r num">18.000</td><td class="r num">28.000</td></tr>
+        <tr><td>Pregrado · Gestores</td><td class="num">10.000 – 14.000 al año (total de las 2 cohortes)</td><td class="r num">10.000</td><td class="r num">14.000</td></tr>
         <tr><td>Educación Continua</td><td class="num">15.000 – 18.000 al año</td><td class="r num">15.000</td><td class="r num">18.000</td></tr>
-        <tr class="total"><td>Total</td><td></td><td class="r num">51.000</td><td class="r num">68.000</td></tr>
+        <tr class="total"><td>Total</td><td></td><td class="r num">61.000</td><td class="r num">82.000</td></tr>
       </table></div>
+      <p class="fn"><b>Base de gestores.</b> Los gestores de pregrado captan entre 10.000 y 14.000 datos al año, que es el total de las 2 cohortes. Como el contacto no escribió primero, la UAO inicia la conversación con plantilla en el 100 % de estos datos. Esto no está en el documento base: se sumó al tablero por indicación del equipo.</p>
       <p class="fn"><b>Proyecto nuevo de automatización de WhatsApp.</b> Cada dato que llega por medios orgánicos o pauta dispara una conversación automática. Se proyecta bienvenida, menú, clasificación, información académica, seguimientos, transferencia a asesor y reactivación, sujeto a consentimiento.</p>
     </div>
     <div class="panel" style="display:flex;flex-direction:column;gap:12px">
@@ -529,6 +578,62 @@ ul.pr li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6
   <div class="jgrid" id="jlist"></div>
 </section>
 
+<section id="perfilamiento">
+  <div class="sec-head"><h2>Perfilamiento por WhatsApp: plantillas por flujo</h2><p class="sub">Cuántas plantillas salen por cada contacto en el flujo orgánico y en el de pauta, tomando como base el prototipo funcional. Los mensajes que responde el bot dentro de las 24 horas posteriores a un mensaje del usuario son de servicio y no cuentan como plantilla. Esta sección es un detalle del Componente A y no cambia los resultados del resto del tablero.</p></div>
+
+  <div class="grid g4" id="pfKpis"></div>
+
+  <div class="panel" style="display:flex;flex-direction:column;gap:16px">
+    <div class="bar-top"><div><h3>Plantillas por contacto</h3><span class="fn">Promedio por contacto que entra a cada flujo, según el momento en que salen</span></div><div class="seg" role="group" aria-label="Escenario" id="pfSeg"></div></div>
+    <div class="rows" id="pfChart"></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px" id="pfOrg"></div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px" id="pfPaid"></div>
+  </div>
+
+  <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+    <h3>Del contacto al total del año</h3>
+    <div class="tw"><table id="pfTable"></table></div>
+    <p class="fn" id="pfCmp"></p>
+  </div>
+
+  <details class="panel">
+    <summary><b>Supuestos del flujo</b> <span class="fn">(editables)</span></summary>
+    <div class="tw" style="margin-top:12px"><table id="pfParams"></table></div>
+    <p class="fn" style="margin-top:10px">Los tres primeros porcentajes describen cómo termina el contacto que ya tiene la ventana de 24 h abierta. El resto, hasta 100 %, pasa a un asesor y ahí se detienen las plantillas automáticas. La respuesta a la plantilla inicial de pauta viene de la fila «Respuesta a la plantilla inicial» de la calculadora.</p>
+    <div style="margin-top:10px"><button class="btn" id="pfReset" type="button">Restablecer valores iniciales</button></div>
+  </details>
+
+  <div class="panel" style="display:flex;flex-direction:column;gap:8px">
+    <h3>Cómo se contó</h3>
+    <ul class="plain">
+      <li>Los tiempos de los seguimientos salen del prototipo: sin respuesta 1 h, 24 h, 72 h y 7 días; pidió información 4 h, 48 h y 5 días; cita agendada 24 h antes, 30 min antes y 2 h después.</li>
+      <li>Un seguimiento enviado dentro de las 24 h posteriores al último mensaje del usuario es de servicio. Por eso el de 1 h (sin respuesta) y el de 4 h (pidió información) no cuentan como plantilla en el flujo orgánico.</li>
+      <li>En pauta el contacto aún no ha escrito, así que los cuatro seguimientos sin respuesta sí son plantillas, además de la inicial del Journey.</li>
+      <li>Los recordatorios de cita se cuentan como plantillas de utilidad y el seguimiento posterior como marketing. El recordatorio de 30 min podría salir gratis si la ventana sigue abierta; se cuenta igual para no quedarnos cortos.</li>
+      <li>Cuando la persona responde, se detiene la secuencia, como indica la regla de detención del prototipo. Esa probabilidad de respuesta por seguimiento es un supuesto editable.</li>
+      <li>Los porcentajes de cómo termina cada contacto no vienen del prototipo, que usa datos de ejemplo. Son hipótesis de trabajo para ajustar con datos reales.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="mapaflujo">
+  <div class="sec-head"><h2>Mapa de flujo: ejemplo de pauta de pregrado</h2><p class="sub">Un ejemplo para ver el recorrido completo. Entran datos de pauta de pregrado y a cada contacto que no responde se le envían hasta 5 mensajes de WhatsApp, todos contados como plantillas. Quien responde sale de la secuencia y pasa a la conversación con el bot.</p></div>
+  <div class="panel" style="display:flex;flex-direction:column;gap:18px">
+    <div class="bar-top">
+      <label class="fld" style="max-width:240px"><span>Datos de pauta de pregrado que entran</span><input id="fmN" type="number" inputmode="numeric" min="0" step="500" value="10000"></label>
+      <div class="seg" role="group" aria-label="Escenario" id="fmSeg"></div>
+    </div>
+    <div class="fm-grid" id="fmMap"></div>
+    <div class="legend"><span><i style="background:var(--red)"></i>Plantilla enviada</span><span><i style="background:var(--good)"></i>Responde y sale de la secuencia</span><span><i style="background:var(--idle-soft);border:1px solid var(--line)"></i>Sin respuesta o cierre</span></div>
+  </div>
+  <div class="grid g4" id="fmKpis"></div>
+  <div class="panel" style="display:flex;flex-direction:column;gap:8px"><h3>Cómo leerlo</h3>
+    <ul class="plain" id="fmNotes"></ul></div>
+</section>
+
 <section id="anexo">
   <div class="annex-band"><span class="eyebrow-a">Anexo</span><h2 class="annex-title">Calidad de datos para Marketing Cloud y Salesforce</h2>
     <p class="sub">Proyecto de limpieza y actualización de datos. Solo entra a Salesforce un contacto limpio, real y verificado. Es un complemento del proyecto de WhatsApp: un celular y un correo correctos son la base para que los mensajes lleguen.</p></div>
@@ -660,6 +765,7 @@ const DEFAULTS = {
     {id:"org", n:"Orgánicos",          min:2000,  max:2000,  months:[[0,1,2,3,4,5,6,7,8,9,10,11]]},
     {id:"pos", n:"Posgrados",          min:16000, max:20000, months:[[9,10,11,0],[3,4,5]]},
     {id:"pre", n:"Pregrados",          min:18000, max:28000, months:[[10,11,0,1],[3,4,5,6]]},
+    {id:"ges", n:"Pregrado · Gestores", min:10000, max:14000, out:1, months:[[10,11,0,1],[3,4,5,6]]},
     {id:"ec",  n:"Educación Continua", min:15000, max:18000, months:[[0,1,2,3,4,5,6,7,8,9,10,11]]}
   ],
   B: [
@@ -717,7 +823,7 @@ function compute(P, s){
   const lines=[];
   // ---- A
   P.A.forEach(l=>{
-    const N=pick(l), out=N*r("outShare"), resp=N*(1-r("outShare"))+out*r("respOut");
+    const N=pick(l), os_=(l.out!=null?l.out:r("outShare")), out=N*os_, resp=N*(1-os_)+out*r("respOut");
     const ini=out, fu=N*r("fuA"), re=N*r("reactA"), svc=resp*r("svcMsgsA");
     lines.push({c:"A",id:l.id,n:l.n,contacts:N,convs:resp,replies:out*r("respOut"),ini, seg:fu+re, evt:0, svc, mkt:ini+fu+re, util:0, w:cohortW(l.months)});
   });
@@ -762,6 +868,7 @@ const P=JSON.parse(JSON.stringify(DEFAULTS));
 const JOURNEYS=[
  ["Captación orgánicos","Orgánicos","A","Dato orgánico que llega"],
  ["Captación pregrados","Pregrados","A","Dato que llega por orgánico o pauta"],
+ ["Captación por gestores","Pregrados","A","Base captada por gestores, la UAO inicia con plantilla"],
  ["Captación posgrados","Posgrados","A","Dato que llega por orgánico o pauta"],
  ["Captación Educación Continua","Educación Continua","A","Dato que llega por orgánico o pauta"],
  ["Embudo de ventas","Todas las líneas","B","Estado del lead en CRM"],
@@ -786,8 +893,8 @@ const $=id=>document.getElementById(id);
 const SC=["Conservador","Esperado","Intensivo"];
 const DOC_C={ohpre:"20.000 – 28.000",ohpos:"80.000 – 120.000",fin:"20.000 – 30.000",otros:"5.000"};
 const DOC_C_TOT=[125000,183000];
-const ANAME={org:"Automatización: orgánicos",pos:"Automatización: posgrados",pre:"Automatización: pregrados",ec:"Automatización: Educ. Continua"};
-const ASUB={org:"Todo el año",pos:"8.000–10.000 por cohorte",pre:"9.000–14.000 por cohorte",ec:"15.000–18.000 al año"};
+const ANAME={org:"Automatización: orgánicos",pos:"Automatización: posgrados",pre:"Automatización: pregrados",ges:"Automatización: base de gestores (pregrado)",ec:"Automatización: Educ. Continua"};
+const ASUB={org:"Todo el año",pos:"8.000–10.000 por cohorte",pre:"9.000–14.000 por cohorte",ges:"10.000–14.000 al año (2 cohortes) · la UAO inicia todas con plantilla",ec:"15.000–18.000 al año"};
 const KEY="uao-wa-calculadora-v2";
 let R=[],BASE=[],mode="min",selDist=1,selOp=1,selCost=1,selSens="usd",selSensS=1;
 const clone=o=>JSON.parse(JSON.stringify(o));
@@ -1073,9 +1180,151 @@ function renderViews(){
   seg("segDist",()=>selDist,i=>selDist=i);seg("segOp",()=>selOp,i=>selOp=i);seg("segCost",()=>selCost,i=>selCost=i);
   renderDist();renderOps();renderCosts();
 }
+/* ===== Perfilamiento por WhatsApp ===== */
+const PF_D={rf:[0.15,0.10,0.05],stall:[0.45,0.40,0.35],info:[0.30,0.30,0.30],cita:[0.10,0.15,0.20]};
+let PF=JSON.parse(JSON.stringify(PF_D)),pfSel=1,pfBuilt=false;
+try{const j=JSON.parse(localStorage.getItem("uao_pf")||"null");if(j)Object.keys(PF_D).forEach(k=>{if(Array.isArray(j[k])&&j[k].length===3&&j[k].every(v=>isFinite(v)&&v>=0&&v<=1))PF[k]=j[k].map(Number)})}catch(e){}
+const PF_ROWS=[["rf","Responde a un seguimiento y se detiene la secuencia"],["stall","Termina sin responder, tras iniciar la conversación"],["info","Pide información y no avanza"],["cita","Agenda una cita"]];
+function pfCalc(s){
+  const rf=PF.rf[s],st=PF.stall[s],inf=PF.info[s],ci=PF.cita[s],adv=Math.max(0,1-st-inf-ci),q=1-rf;
+  const r0=P.r.respOut[s],d=P.r.deliver[s];
+  const seqS=1+q+q*q, seqI=1+q, seqN=1+q+q*q+q*q*q;
+  const w={nores:st*seqS,info:inf*seqI,cita:ci*3,util:ci*2,mkt:st*seqS+inf*seqI+ci};
+  const org={first:0,nores:w.nores,info:w.info,cita:w.cita,util:w.util,mkt:w.mkt};
+  const paid={first:1,nores:(1-r0)*seqN+r0*w.nores,info:r0*w.info,cita:r0*w.cita,util:r0*w.util,mkt:1+(1-r0)*seqN+r0*w.mkt};
+  [org,paid].forEach(f=>{f.total=f.first+f.nores+f.info+f.cita;f.usd=d*(f.mkt*P.fin.usdMkt+f.util*P.fin.usdUtil)});
+  const A=R[s].lines.filter(l=>l.c==="A");
+  const vo=A.reduce((a,l)=>a+l.contacts-l.ini,0), vp=A.reduce((a,l)=>a+l.ini,0);
+  return {rf,st,inf,ci,adv,r0,seqS,seqI,seqN,org,paid,vo,vp,tO:vo*org.total,tP:vp*paid.total,uO:vo*org.usd,uP:vp*paid.usd,model:R[s].A.mkt+R[s].A.util};
+}
+const f2=n=>n.toFixed(2).replace(".",",");
+const PF_SEG=[["first","Primer contacto (Journey)","pf-c1"],["nores","Seguimiento sin respuesta","pf-c2"],["info","Seguimiento tras pedir información","pf-c3"],["cita","Cita: recordatorios y seguimiento","pf-c4"]];
+function pfBuild(){
+  $("pfSeg").innerHTML=SC.map((n,i)=>`<button type="button" aria-pressed="${i===pfSel}" data-i="${i}">${n}</button>`).join("");
+  $("pfSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{pfSel=+b.dataset.i;renderPF()});
+  $("pfParams").innerHTML=`<tr><th>Parámetro</th>${SC.map(n=>`<th class="r">${n}</th>`).join("")}</tr>`+
+   PF_ROWS.map(r=>`<tr><td>${r[1]}</td>${[0,1,2].map(s=>`<td class="r"><input class="cin" type="number" inputmode="decimal" min="0" max="100" step="1" id="pf_${r[0]}_${s}" value="${+(PF[r[0]][s]*100).toFixed(2)}" aria-label="${r[1]}, ${SC[s]}"> %</td>`).join("")}</tr>`).join("")+
+   `<tr><td>Pasa a un asesor (resto)</td>${[0,1,2].map(s=>`<td class="r num" id="pf_adv_${s}"></td>`).join("")}</tr>`;
+  PF_ROWS.forEach(r=>[0,1,2].forEach(s=>$(`pf_${r[0]}_${s}`).oninput=e=>{const v=parseFloat(e.target.value);PF[r[0]][s]=isNaN(v)||v<0?0:Math.min(v,100)/100;pfSave();renderPF()}));
+  $("pfReset").onclick=()=>{PF=JSON.parse(JSON.stringify(PF_D));PF_ROWS.forEach(r=>[0,1,2].forEach(s=>$(`pf_${r[0]}_${s}`).value=+(PF[r[0]][s]*100).toFixed(2)));pfSave();renderPF()};
+  pfBuilt=true;
+}
+function pfSave(){try{localStorage.setItem("uao_pf",JSON.stringify(PF))}catch(e){}}
+const pfStep=(n,t,title,sub,k)=>`<li class="${t?"t":""}"><span class="pf-n">${n}</span><span><b>${title}</b>${sub?`<small>${sub}</small>`:""}</span><span class="pf-k">${k||(t?"Plantilla":"Servicio")}</span></li>`;
+function renderPF(){
+  if(!pfBuilt)pfBuild();
+  const X=[0,1,2].map(pfCalc), x=X[pfSel];
+  $("pfSeg").querySelectorAll("button").forEach((b,i)=>b.setAttribute("aria-pressed",i===pfSel));
+  [0,1,2].forEach(s=>{const v=X[s].adv;$("pf_adv_"+s).textContent=pct(v,0);$("pf_adv_"+s).style.color=(1-PF.stall[s]-PF.info[s]-PF.cita[s])<0?"var(--red-ink)":""});
+  $("pfKpis").innerHTML=
+   `<div class="panel kpi main"><span class="l">Plantillas por contacto orgánico</span><span class="v num">${f2(x.org.total)}</span><span class="n">Escenario ${SC[pfSel].toLowerCase()} · sin plantilla de inicio</span></div>`+
+   `<div class="panel kpi"><span class="l">Plantillas por contacto de pauta</span><span class="v num">${f2(x.paid.total)}</span><span class="n">Incluye la plantilla inicial del Journey</span></div>`+
+   `<div class="panel kpi"><span class="l">Plantillas del año por estos flujos</span><span class="v num">${F(x.tO+x.tP)}</span><span class="n">${F(x.tO)} orgánico · ${F(x.tP)} pauta y gestores</span></div>`+
+   `<div class="panel kpi"><span class="l">Mensajes de servicio, flujo completo</span><span class="v num">hasta 19</span><span class="n">Orgánico. En pauta, de 4 a 7</span></div>`;
+  const top=Math.max(x.org.total,x.paid.total,0.01)*1.05;
+  $("pfChart").innerHTML=[["Orgánico","Escribe primero",x.org,x.vo],["Pauta y gestores","La UAO inicia con plantilla",x.paid,x.vp]].map(r=>{const f=r[2];
+   return `<div class="row"><div class="name">${r[0]}<small>${r[1]}</small></div><div class="pf-track" role="img" aria-label="${r[0]}: ${f2(f.total)} plantillas por contacto">${PF_SEG.map(g=>`<i class="${g[2]}" style="width:${f[g[0]]/top*100}%" title="${g[1]}: ${f2(f[g[0]])}"></i>`).join("")}</div><div class="val num">${f2(f.total)}<span class="pc">por contacto</span></div></div>`}).join("")+
+   `<div class="fn" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px 18px;margin-top:4px">${PF_SEG.map(g=>`<span><i class="${g[2]}" style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px"></i>${g[1]}: <b class="num" style="color:var(--ink)">${f2(x.org[g[0]])}</b> orgánico · <b class="num" style="color:var(--ink)">${f2(x.paid[g[0]])}</b> pauta</span>`).join("")}</div>`;
+  const q=1-x.rf;
+  $("pfOrg").innerHTML=`<div class="bar-top"><h3>Flujo orgánico</h3><span class="tag red">Escribe primero</span></div>
+   <p class="fn">Instagram, Facebook, sitio web, notas web, medios aliados, QR o referidos. La persona abre la conversación, así que se abre la ventana de 24 h y todo el recorrido es de servicio.</p>
+   <ol class="pf-steps">
+   ${pfStep(1,0,"La persona escribe","Se abre la ventana de 24 h","Sin costo")}
+   ${pfStep(2,0,"Bienvenida y origen del WhatsApp","1 mensaje")}
+   ${pfStep(3,0,"Línea y tipo de formación","2 mensajes · el tipo aplica a posgrado y educación continua")}
+   ${pfStep(4,0,"Facultad y modalidad","2 mensajes")}
+   ${pfStep(5,0,"Observación de programa y menú de valor","2 mensajes")}
+   ${pfStep(6,0,"Información elegida y siguiente paso","2 mensajes")}
+   ${pfStep(7,0,"Captura de datos y consentimiento","8 mensajes · seis datos, consentimiento y confirmación")}
+   ${pfStep(8,0,"Agenda o asesor","2 mensajes · 4 franjas y una salida a asesor")}
+   </ol>
+   <div class="pf-out"><h4>Cómo termina y qué plantillas salen</h4>
+    <div class="pf-o"><span>Sin respuesta · ${pct(x.st,0)}<small>24 h, 72 h y 7 días, hasta que responda</small></span><span class="v">${f2(x.seqS)}</span></div>
+    <div class="pf-o"><span>Pidió información · ${pct(x.inf,0)}<small>48 h y 5 días, hasta que responda</small></span><span class="v">${f2(x.seqI)}</span></div>
+    <div class="pf-o"><span>Agendó cita · ${pct(x.ci,0)}<small>24 h antes, 30 min antes y 2 h después</small></span><span class="v">3,00</span></div>
+    <div class="pf-o"><span>Pasa a asesor · ${pct(x.adv,0)}<small>Se detienen las plantillas automáticas</small></span><span class="v">0,00</span></div></div>`;
+  $("pfPaid").innerHTML=`<div class="bar-top"><h3>Flujo de pauta</h3><span class="tag red">La UAO inicia</span></div>
+   <p class="fn">Formulario de Meta, Lead Capture, Data Extension, Journey Builder y campaña en Salesforce. Los gestores de pregrado siguen el mismo camino. Los datos ya vienen cargados, así que el bot no los vuelve a pedir.</p>
+   <ol class="pf-steps">
+   ${pfStep(1,0,"Formulario de Meta y Journey","Lead Capture, Data Extension y campaña en Salesforce","Sin mensaje")}
+   ${pfStep(2,1,"Plantilla inicial por WhatsApp","Saludo con el programa y menú de opciones · marketing")}
+   ${pfStep(3,0,"La persona responde","Se abre la ventana de 24 h · responde "+pct(x.r0,0)+" en este escenario","Sin costo")}
+   ${pfStep(4,0,"Información elegida y siguiente paso","2 mensajes")}
+   ${pfStep(5,0,"Datos que falten y consentimiento","0 a 3 mensajes")}
+   ${pfStep(6,0,"Agenda o asesor","2 mensajes")}
+   </ol>
+   <div class="pf-out"><h4>Cómo termina y qué plantillas salen</h4>
+    <div class="pf-o"><span>No responde a la inicial · ${pct(1-x.r0,0)}<small>Después de la inicial: 1 h, 24 h, 72 h y 7 días, hasta que responda</small></span><span class="v">${f2(x.seqN)}</span></div>
+    <div class="pf-o"><span>Responde y termina sin respuesta · ${pct(x.r0*x.st,0)}<small>Después de la inicial: 24 h, 72 h y 7 días</small></span><span class="v">${f2(x.seqS)}</span></div>
+    <div class="pf-o"><span>Responde y pide información · ${pct(x.r0*x.inf,0)}<small>Después de la inicial: 48 h y 5 días</small></span><span class="v">${f2(x.seqI)}</span></div>
+    <div class="pf-o"><span>Responde y agenda cita · ${pct(x.r0*x.ci,0)}<small>Después de la inicial: tres recordatorios</small></span><span class="v">3,00</span></div>
+    <div class="pf-o"><span>Responde y pasa a asesor · ${pct(x.r0*x.adv,0)}<small>Solo la plantilla inicial</small></span><span class="v">0,00</span></div></div>`;
+  $("pfTable").innerHTML=`<tr><th></th>${SC.map(n=>`<th class="r">${n}</th>`).join("")}</tr>`+[
+   ["Contactos orgánicos del año (escriben primero)",s=>F(X[s].vo)],
+   ["Contactos de pauta y gestores (la UAO inicia)",s=>F(X[s].vp)],
+   ["Plantillas por contacto orgánico",s=>f2(X[s].org.total)],
+   ["Plantillas por contacto de pauta",s=>f2(X[s].paid.total)],
+   ["Plantillas del año · orgánico",s=>F(X[s].tO)],
+   ["Plantillas del año · pauta y gestores",s=>F(X[s].tP)],
+   ["Total de plantillas por estos flujos",s=>`<b>${F(X[s].tO+X[s].tP)}</b>`],
+   ["Costo Meta estimado de estos flujos (USD)",s=>USD(X[s].uO+X[s].uP)],
+   ["Plantillas que supone hoy el Componente A",s=>F(X[s].model)],
+   ["Diferencia frente al Componente A",s=>{const d=X[s].tO+X[s].tP-X[s].model;return (d>0?"+":d<0?"−":"")+F(Math.abs(d))}]
+  ].map(r=>`<tr><td>${r[0]}</td>${[0,1,2].map(s=>`<td class="r num">${r[1](s)}</td>`).join("")}</tr>`).join("");
+  const dd=[0,1,2].map(s=>X[s].tO+X[s].tP-X[s].model);
+  $("pfCmp").innerHTML=`<b>Lectura.</b> El Componente A usa una regla más simple: un número de seguimientos y de reactivaciones por contacto, igual para orgánicos y pauta. Este detalle por flujo da ${dd.every(v=>v>0)?"más":dd.every(v=>v<0)?"menos":"más o menos"} plantillas que esa regla en ${dd.every(v=>v>0)?"los tres escenarios":dd.every(v=>v<0)?"los tres escenarios":"según el escenario"}. Si los supuestos de arriba se confirman, conviene calibrar la calculadora (seguimientos por contacto y reactivación) para que ambas vistas coincidan. Por ahora no se mezclaron, para no mover los totales ya aprobados.`;
+}
+/* ===== Mapa de flujo ===== */
+let fmSel=1,fmBuilt=false;
+function fmCalc(s,N){
+  const r0=P.r.respOut[s],rf=PF.rf[s],d=P.r.deliver[s];
+  const sent=[N],resp=[N*r0];
+  let rem=N*(1-r0);
+  for(let k=1;k<5;k++){sent.push(rem);resp.push(rem*rf);rem=rem*(1-rf)}
+  const total=sent.reduce((a,v)=>a+v,0), repl=resp.reduce((a,v)=>a+v,0);
+  return {r0,rf,d,sent,resp,rem,total,repl,usd:total*d*P.fin.usdMkt,
+    st:PF.stall[s],inf:PF.info[s],ci:PF.cita[s],adv:Math.max(0,1-PF.stall[s]-PF.info[s]-PF.cita[s])};
+}
+function renderFM(){
+  if(!fmBuilt){
+    $("fmSeg").innerHTML=SC.map((n,i)=>`<button type="button" aria-pressed="${i===fmSel}" data-i="${i}">${n}</button>`).join("");
+    $("fmSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{fmSel=+b.dataset.i;renderFM()});
+    $("fmN").oninput=renderFM;fmBuilt=true;
+  }
+  $("fmSeg").querySelectorAll("button").forEach((b,i)=>b.setAttribute("aria-pressed",i===fmSel));
+  const N=Math.max(0,parseFloat($("fmN").value)||0), x=fmCalc(fmSel,N);
+  const M=[["Plantilla 1 · inicial","Saludo con el programa y menú de opciones. La envía el Journey apenas entra el dato.","Al entrar"],
+   ["Plantilla 2","Recordatorio suave sobre el programa consultado.","1 hora después"],
+   ["Plantilla 3","Contenido de valor o respuesta a la duda principal.","24 horas después"],
+   ["Plantilla 4","Invitación a resolver dudas o agendar asesoría.","72 horas después"],
+   ["Plantilla 5","Cierre respetuoso y opción de recibir futuras novedades.","7 días después"]];
+  const rate=i=>i===0?x.r0:x.rf;
+  let h=`<div class="fm-b wide fm-in"><span class="k">Entrada</span><b class="num">${F(N)}</b><span>datos de pauta de pregrado captados por formulario de Meta · pasan por Lead Capture, Data Extension y Journey Builder y quedan asociados a su campaña en Salesforce</span></div>`;
+  h+=M.map((m,i)=>`<div class="fm-b t fm-c${i+1}"${i===0?' style="grid-column:1"':""}><span class="k">${m[2]}</span><b class="num">${F(x.sent[i])}</b><span><strong>${m[0]}</strong><br>${m[1]}</span></div>`).join("");
+  h+=`<div class="fm-b n fm-c6"><span class="k">Cierre del ciclo</span><b class="num">${F(x.rem)}</b><span>no respondieron a ninguno de los 5 mensajes. Salen de la secuencia y quedan en la base para futuras campañas</span></div>`;
+  h+=M.map((m,i)=>`<div class="fm-dn" style="grid-column:${i+1}"><span>responde ${pct(rate(i),0)}</span><i>↓</i></div>`).join("")+`<div></div>`;
+  h+=x.resp.map((v,i)=>`<div class="fm-b g" style="grid-column:${i+1}"><span class="k">Responden</span><b class="num">${F(v)}</b><span>${i===0?"a la plantilla inicial":"al mensaje "+(i+1)}</span></div>`).join("")+`<div></div>`;
+  h+=`<div class="fm-dn" style="grid-column:1/-1"><i>↓</i><span>se abre la ventana de 24 h</span></div>`;
+  h+=`<div class="fm-b g wide"><span class="k">Conversación con el bot</span><b class="num">${F(x.repl)}</b><span>personas conversan sin costo de plantilla: información, captura de datos que falten y agenda. Los mensajes del bot dentro de las 24 h son de servicio.</span></div>`;
+  h+=`<div class="fm-dn" style="grid-column:1/-1"><i>↓</i><span>cómo termina la conversación</span></div>`;
+  h+=`<div class="fm-merge">${[["Pasa a asesor",x.adv,"Se detienen las automatizaciones"],["Agenda una cita",x.ci,"3 recordatorios más, no incluidos en los 5"],["Pide información y no avanza",x.inf,"2 seguimientos más, no incluidos en los 5"],["Se queda sin responder",x.st,"3 seguimientos más, no incluidos en los 5"]].map(o=>`<div class="fm-b"><span class="k">${o[0]}</span><b class="num">${F(x.repl*o[1])}</b><span>${pct(o[1],0)} · ${o[2]}</span></div>`).join("")}</div>`;
+  $("fmMap").innerHTML=h;
+  $("fmKpis").innerHTML=
+   `<div class="panel kpi main"><span class="l">Plantillas enviadas</span><span class="v num">${F(x.total)}</span><span class="n">${f2(N?x.total/N:0)} por dato · ${SC[fmSel].toLowerCase()}</span></div>`+
+   `<div class="panel kpi"><span class="l">Plantillas entregadas</span><span class="v num">${F(x.total*x.d)}</span><span class="n">Se cobra lo entregado (${pct(x.d,0)})</span></div>`+
+   `<div class="panel kpi"><span class="l">Costo Meta estimado</span><span class="v num">${USD(x.usd)}</span><span class="n">Todas de marketing, ${USDu(P.fin.usdMkt)} cada una</span></div>`+
+   `<div class="panel kpi"><span class="l">Personas que conversan</span><span class="v num">${F(x.repl)}</span><span class="n">${pct(N?x.repl/N:0,0)} de los datos que entran</span></div>`;
+  $("fmNotes").innerHTML=[
+   `Cada recuadro rojo es una plantilla. La cifra es cuántas se envían: a la primera le llegan todos los datos y a las siguientes solo quienes aún no han respondido.`,
+   `Respuesta a la plantilla inicial: ${pct(x.r0,0)}. Respuesta a cada seguimiento: ${pct(x.rf,0)}. El primer dato sale de la fila «Respuesta a la plantilla inicial» de la calculadora y el segundo de los supuestos del flujo, así que si los cambias allá, este mapa se mueve.`,
+   `Para llegar a ${F(N)} de entrada y ${F(x.total)} plantillas, el promedio es de ${f2(N?x.total/N:0)} plantillas por dato. Es un ejemplo de una sola base, no suma al total del tablero.`,
+   `Quien responde sale de la secuencia, como indica la regla de detención del prototipo. Las plantillas de cita, información y sin respuesta posteriores no están en este ejemplo; se cuentan en la sección de perfilamiento.`
+  ].map(t=>`<li>${t}</li>`).join("");
+}
+
 function run(){
   R=[0,1,2].map(s=>compute(P,s));
-  drawVol();renderC();renderEvTotals();renderLive();renderTarifa();renderGroupSummary();renderReco();renderEsc();renderViews();renderSens();renderCamp();markChanged();save();
+  drawVol();renderC();renderEvTotals();renderLive();renderTarifa();renderGroupSummary();renderReco();renderEsc();renderViews();renderSens();renderCamp();markChanged();save();renderPF();renderFM();
 }
 BASE=[0,1,2].map(s=>compute(DEFAULTS,s));
 buildInputs();initShare();
