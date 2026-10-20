@@ -1,7 +1,8 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Open House Posgrados · Cierre del evento · 19 oct 2026</title>
 <style>
 :root{--panel:#fff;--ink:#101217;--muted:#68707c;--line:#e5e8ed;--red:#b11226;--red2:#e22142;--green:#13804a;--blue:#3157c8;--amber:#b56b00;--dark:#17191e;--soft:#f6f7f9}
@@ -18,863 +19,962 @@
 @media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.insight-grid{grid-template-columns:repeat(2,1fr)}.close-grid,.rank-grid,.two{grid-template-columns:1fr}}
 @media(max-width:700px){.shell{padding:13px}.hero{padding:25px 21px}.hero h1{font-size:29px}.kpis{grid-template-columns:repeat(2,1fr)}.insight-grid{grid-template-columns:1fr}.barrow{grid-template-columns:minmax(170px,1fr) .8fr 30px}.program-name{min-width:280px}}
 @media print{body{background:#fff}.section,.hero,.kpi{box-shadow:none}.toolbar{display:none}}
+
+
+.fb-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:14px}
+.funnel-grid{display:grid;grid-template-columns:1fr 28px 1fr 28px 1.2fr;gap:8px;align-items:stretch;margin-top:13px}
+.funnel-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fbfcfd}
+.funnel-card.emphasis{border-color:#bfe3cf;background:#f6fff9}
+.funnel-card span,.funnel-card small{display:block}.funnel-card span{font-size:9px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.05em}.funnel-card b{display:block;font-size:30px;margin:5px 0;letter-spacing:-.04em}.funnel-card small{font-size:9px;color:var(--muted);line-height:1.35}.funnel-arrow{display:flex;align-items:center;justify-content:center;font-size:22px;color:#9aa1aa;font-weight:900}
+.fb-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}.fb-metrics>div{background:#f7f8fa;border-radius:12px;padding:10px}.fb-metrics span,.fb-metrics small{display:block}.fb-metrics span{font-size:8px;color:var(--muted);font-weight:800}.fb-metrics b{display:block;font-size:19px;margin:4px 0}.fb-metrics small{font-size:8.5px;color:var(--muted);line-height:1.35}
+.origin-bars{margin-top:12px}.origin-row{display:grid;grid-template-columns:105px 1fr 30px 46px;gap:8px;align-items:center;margin:10px 0;font-size:10px}.origin-label{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.origin-track{height:10px;background:#edf0f3;border-radius:999px;overflow:hidden}.origin-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--red2));border-radius:999px}.origin-count{font-weight:900;text-align:right}.origin-share{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+@media(max-width:1100px){.fb-grid{grid-template-columns:1fr}.fb-metrics{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.funnel-grid{grid-template-columns:1fr}.funnel-arrow{transform:rotate(90deg);height:20px}.fb-metrics{grid-template-columns:1fr 1fr}.origin-row{grid-template-columns:88px 1fr 26px 40px}}
 </style>
 </head>
 <body><div class="shell">
-
 <header class="hero">
-  <div class="eyebrow">Universidad Autónoma de Occidente · Open House Posgrados</div>
-  <h1>Cierre del evento · Open House Posgrados 2027-1S</h1>
-  <p>Tablero de cierre construido exclusivamente con el archivo de Salesforce del 19 de octubre de 2026. El resultado de asistencia se toma directamente de <b>Estado del miembro</b>: “Asiste al Evento” se clasifica como asistente y “Enviado” como no asistente.</p>
-  <div class="hero-tags">
-    <span class="hero-tag">Corte: 19 oct 2026</span>
-    <span class="hero-tag">428 registros únicos</span>
-    <span class="hero-tag">82 asistentes reales</span>
-    <span class="hero-tag">19.2% tasa de asistencia</span>
-    <span class="hero-tag">QA: 53/53 controles OK</span>
-  </div>
+<div class="eyebrow">Universidad Autónoma de Occidente · Open House Posgrados</div>
+<h1>Cierre del evento · Open House Posgrados 2027-1S</h1>
+<p>Tablero de cierre construido exclusivamente con el archivo de Salesforce del 19 de octubre de 2026. El resultado de asistencia se toma directamente de <b>Estado del miembro</b>: “Asiste al Evento” se clasifica como asistente y “Enviado” como no asistente.</p>
+<div class="hero-tags">
+<span class="hero-tag">Corte: 19 oct 2026</span>
+<span class="hero-tag">428 registros únicos</span>
+<span class="hero-tag">82 asistentes reales</span>
+<span class="hero-tag">19.2% tasa de asistencia</span>
+<span class="hero-tag">QA: 53/53 controles OK</span>
+<span class="hero-tag">Facebook: 13 formularios de 27 asistentes</span></div>
 </header>
-
 <section class="kpis">
-  <div class="kpi"><b>428</b><span>Registrados</span><small>Base de cierre completa.</small></div>
-  <div class="kpi att"><b>82</b><span>Asistieron al evento</span><small>Estado = Asiste al Evento.</small></div>
-  <div class="kpi noatt"><b>346</b><span>No asistieron</span><small>Estado = Enviado.</small></div>
-  <div class="kpi att"><b>19.2%</b><span>Tasa de asistencia</span><small>82 asistentes / 428 registrados.</small></div>
-  <div class="kpi"><b>34</b><span>Programa/interés informado</span><small>34 valores no vacíos en el campo Programa de interés.</small></div>
-  <div class="kpi"><b>25</b><span>Con al menos 1 asistente</span><small>De 34 valores no vacíos de programa/interés.</small></div>
+<div class="kpi"><b>428</b><span>Registrados</span><small>Base de cierre completa.</small></div>
+<div class="kpi att"><b>82</b><span>Asistieron al evento</span><small>Estado = Asiste al Evento.</small></div>
+<div class="kpi noatt"><b>346</b><span>No asistieron</span><small>Estado = Enviado.</small></div>
+<div class="kpi att"><b>19.2%</b><span>Tasa de asistencia</span><small>82 asistentes / 428 registrados.</small></div>
+<div class="kpi"><b>34</b><span>Programa/interés informado</span><small>34 valores no vacíos en el campo Programa de interés.</small></div>
+<div class="kpi"><b>25</b><span>Con al menos 1 asistente</span><small>De 34 valores no vacíos de programa/interés.</small></div>
+</section>
+<section class="section">
+<div class="section-head"><div><h2>Resultado final del evento</h2><p>La asistencia ya no es una proyección: corresponde al estado final registrado en Salesforce dentro del archivo de cierre.</p></div></div>
+<div class="close-grid">
+<div class="status-card">
+<div class="status-title">Conversión registro → asistencia</div>
+<div class="status-big">19.2%</div>
+<div class="tiny">82 de 428 registrados asistieron al Open House.</div>
+<div class="statusbar"><div class="yes" style="width:19.1589%"></div><div class="no" style="width:80.8411%"></div></div>
+<div class="statuslegend">
+<span><i class="dot" style="background:var(--green)"></i><b>82</b> Asiste al Evento</span>
+<span><i class="dot" style="background:#d7dbe0"></i><b>346</b> Enviado / no asistió</span>
+</div>
+</div>
+<div class="insight-grid" style="grid-template-columns:1fr 1fr">
+<div class="insight"><span class="signal">Mayor volumen</span><b>16 asistentes</b><p>MAESTRÍA EN INTELIGENCIA ARTIFICIAL Y CIENCIA DE DATOS lidera la asistencia por cantidad.</p></div>
+<div class="insight"><span class="signal">Mejor tasa · base ≥5</span><b>57.1%</b><p>ESPECIALIZACIÓN EN LOGÍSTICA: 4 asistentes de 7 registros.</p></div>
+<div class="insight action"><span class="signal">Sin asistencia</span><b>9 valores</b><p>Tienen registros en la base, pero 0 personas con estado “Asiste al Evento”.</p></div>
+<div class="insight"><span class="signal">Cobertura</span><b>25/34</b><p>Valores con programa que lograron al menos un asistente.</p></div>
+</div>
+</div>
 </section>
 
-<section class="section">
-  <div class="section-head"><div><h2>Resultado final del evento</h2><p>La asistencia ya no es una proyección: corresponde al estado final registrado en Salesforce dentro del archivo de cierre.</p></div></div>
-  <div class="close-grid">
-    <div class="status-card">
-      <div class="status-title">Conversión registro → asistencia</div>
-      <div class="status-big">19.2%</div>
-      <div class="tiny">82 de 428 registrados asistieron al Open House.</div>
-      <div class="statusbar"><div class="yes" style="width:19.1589%"></div><div class="no" style="width:80.8411%"></div></div>
-      <div class="statuslegend">
-        <span><i class="dot" style="background:var(--green)"></i><b>82</b> Asiste al Evento</span>
-        <span><i class="dot" style="background:#d7dbe0"></i><b>346</b> Enviado / no asistió</span>
+<section class="section" id="efectividad-origen">
+<div class="section-head">
+<div>
+<h2>Efectividad del origen · Facebook pauta y distribución de asistentes</h2>
+<p>Lectura de cierre que combina la base de Salesforce con el dato postevento suministrado para Facebook pauta: de los 27 asistentes originados en Facebook, 13 diligenciaron formulario. Para los demás orígenes no se dispone todavía de un dato equivalente de formulario, por lo que no se interpreta el campo vacío como cero.</p>
+</div>
+<div class="tiny">Base total: 428 · Asistentes: 82</div>
+</div>
+<div class="fb-grid">
+<div class="status-card">
+<div class="status-title">Embudo Facebook pauta</div>
+<div class="funnel-grid">
+<div class="funnel-card">
+<span>Captados</span>
+<b>239</b>
+<small>55,8% de los 428 registros</small>
+</div>
+<div class="funnel-arrow">→</div>
+<div class="funnel-card">
+<span>Asistieron</span>
+<b>27</b>
+<small>11,3% de los captados por Facebook</small>
+</div>
+<div class="funnel-arrow">→</div>
+<div class="funnel-card emphasis">
+<span>Diligenciaron formulario</span>
+<b>13</b>
+<small>48,1% de los asistentes Facebook</small>
+</div>
+</div>
+<div class="fb-metrics">
+<div><span>Registro → asistencia</span><b>11,3%</b><small>vs. 19,2% general · -7,9 pp</small></div>
+<div><span>Asistencia → formulario</span><b>48,1%</b><small>13 de 27 asistentes</small></div>
+<div><span>Registro → formulario</span><b>5,4%</b><small>13 de 239 captados</small></div>
+<div><span>Peso entre asistentes</span><b>32,9%</b><small>vs. 55,8% en captación · -22,9 pp</small></div>
+</div>
+<div class="callout">
+<b>Lectura:</b> Facebook pauta fue el mayor generador de volumen, con 239 registros (55,8% de la base), pero su peso baja a 32,9% entre quienes asistieron. La oportunidad está en mejorar la conversión <b>registro → asistencia</b>. Entre quienes sí llegaron desde Facebook, 13 de 27 diligenciaron formulario (48,1%), señal útil para evaluar el comportamiento posterior a la asistencia.
       </div>
-    </div>
-    <div class="insight-grid" style="grid-template-columns:1fr 1fr">
-      <div class="insight"><span class="signal">Mayor volumen</span><b>16 asistentes</b><p>MAESTRÍA EN INTELIGENCIA ARTIFICIAL Y CIENCIA DE DATOS lidera la asistencia por cantidad.</p></div>
-      <div class="insight"><span class="signal">Mejor tasa · base ≥5</span><b>57.1%</b><p>ESPECIALIZACIÓN EN LOGÍSTICA: 4 asistentes de 7 registros.</p></div>
-      <div class="insight action"><span class="signal">Sin asistencia</span><b>9 valores</b><p>Tienen registros en la base, pero 0 personas con estado “Asiste al Evento”.</p></div>
-      <div class="insight"><span class="signal">Cobertura</span><b>25/34</b><p>Valores con programa que lograron al menos un asistente.</p></div>
-    </div>
-  </div>
+</div>
+<div class="status-card">
+<div class="status-title">Distribución de los 82 asistentes por origen</div>
+<div class="origin-bars">
+<div class="origin-row">
+<div class="origin-label">facebookpauta</div>
+<div class="origin-track"><div class="origin-fill" style="width:100.00%"></div></div>
+<div class="origin-count">27</div>
+<div class="origin-share">32,9%</div>
+</div>
+<div class="origin-row">
+<div class="origin-label">Sin origen</div>
+<div class="origin-track"><div class="origin-fill" style="width:70.37%"></div></div>
+<div class="origin-count">19</div>
+<div class="origin-share">23,2%</div>
+</div>
+<div class="origin-row">
+<div class="origin-label">(en blanco)</div>
+<div class="origin-track"><div class="origin-fill" style="width:62.96%"></div></div>
+<div class="origin-count">17</div>
+<div class="origin-share">20,7%</div>
+</div>
+<div class="origin-row">
+<div class="origin-label">whatsapp</div>
+<div class="origin-track"><div class="origin-fill" style="width:29.63%"></div></div>
+<div class="origin-count">8</div>
+<div class="origin-share">9,8%</div>
+</div>
+<div class="origin-row">
+<div class="origin-label">Comercial1</div>
+<div class="origin-track"><div class="origin-fill" style="width:22.22%"></div></div>
+<div class="origin-count">6</div>
+<div class="origin-share">7,3%</div>
+</div>
+<div class="origin-row">
+<div class="origin-label">organico</div>
+<div class="origin-track"><div class="origin-fill" style="width:14.81%"></div></div>
+<div class="origin-count">4</div>
+<div class="origin-share">4,9%</div>
+</div>
+<div class="origin-row">
+<div class="origin-label">Email</div>
+<div class="origin-track"><div class="origin-fill" style="width:3.70%"></div></div>
+<div class="origin-count">1</div>
+<div class="origin-share">1,2%</div>
+</div>
+</div>
+<div class="callout">
+<b>Atribución:</b> Facebook pauta es el origen individual con más asistentes (27; 32,9%). Sin embargo, <b>36 asistentes (43,9%)</b> están entre “Sin origen” y “(en blanco)”, por lo que una parte importante de la asistencia no puede atribuirse con precisión a un canal.
+      </div>
+</div>
+</div>
+<div class="insight-grid" style="margin-top:12px">
+<div class="insight"><span class="signal">Captación Facebook</span><b>239 registros</b><p>Representan 55,8% de toda la base del evento.</p></div>
+<div class="insight"><span class="signal">Asistencia Facebook</span><b>27 personas</b><p>Equivalen a 32,9% de los 82 asistentes y a una tasa de 11,3% sobre los registros Facebook.</p></div>
+<div class="insight action"><span class="signal">Brecha</span><b>-7,9 pp</b><p>La tasa de asistencia de Facebook (11,3%) está por debajo de la tasa general del evento (19,2%).</p></div>
+<div class="insight"><span class="signal">Formulario Facebook</span><b>13 personas</b><p>48,1% de quienes asistieron desde Facebook y 5,4% de toda la captación Facebook.</p></div>
+</div>
+<p class="tiny" style="margin-top:12px"><b>Fuente del dato de formulario:</b> información postevento suministrada manualmente. No se dispone aún de formularios discriminados para los demás orígenes; por ello no se calculan tasas comparables de formulario para Comercial1, Email, orgánico, WhatsApp, Sin origen o registros con origen vacío.</p>
 </section>
-
 <section class="section">
-  <div class="section-head"><div><h2>Asistentes por programa</h2><p>Ranking por número de personas con estado “Asiste al Evento”. Se muestran todos los valores con al menos un asistente, sin limitar a un Top 10.</p></div><div class="tiny">Suma: 82 asistentes</div></div>
-  <div class="rank-grid">
-    <div class="bars"><div class="barrow">
-      <div class="barlabel" title="MAESTRÍA EN INTELIGENCIA ARTIFICIAL Y CIENCIA DE DATOS">MAESTRÍA EN INTELIGENCIA ARTIFICIAL Y CIENCIA DE DATOS</div>
-      <div class="bartrack"><div class="barfill" style="width:100.00%"></div></div>
-      <div class="barvalue">16</div>
-    </div>
+<div class="section-head"><div><h2>Asistentes por programa</h2><p>Ranking por número de personas con estado “Asiste al Evento”. Se muestran todos los valores con al menos un asistente, sin limitar a un Top 10.</p></div><div class="tiny">Suma: 82 asistentes</div></div>
+<div class="rank-grid">
+<div class="bars"><div class="barrow">
+<div class="barlabel" title="MAESTRÍA EN INTELIGENCIA ARTIFICIAL Y CIENCIA DE DATOS">MAESTRÍA EN INTELIGENCIA ARTIFICIAL Y CIENCIA DE DATOS</div>
+<div class="bartrack"><div class="barfill" style="width:100.00%"></div></div>
+<div class="barvalue">16</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN FINANZAS">ESPECIALIZACIÓN EN FINANZAS</div>
-      <div class="bartrack"><div class="barfill" style="width:62.50%"></div></div>
-      <div class="barvalue">10</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN FINANZAS">ESPECIALIZACIÓN EN FINANZAS</div>
+<div class="bartrack"><div class="barfill" style="width:62.50%"></div></div>
+<div class="barvalue">10</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN INTELIGENCIA ARTIFICIAL">ESPECIALIZACIÓN EN INTELIGENCIA ARTIFICIAL</div>
-      <div class="bartrack"><div class="barfill" style="width:31.25%"></div></div>
-      <div class="barvalue">5</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN INTELIGENCIA ARTIFICIAL">ESPECIALIZACIÓN EN INTELIGENCIA ARTIFICIAL</div>
+<div class="bartrack"><div class="barfill" style="width:31.25%"></div></div>
+<div class="barvalue">5</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN GERENCIA DE PROYECTOS">ESPECIALIZACIÓN EN GERENCIA DE PROYECTOS</div>
-      <div class="bartrack"><div class="barfill" style="width:31.25%"></div></div>
-      <div class="barvalue">5</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN GERENCIA DE PROYECTOS">ESPECIALIZACIÓN EN GERENCIA DE PROYECTOS</div>
+<div class="bartrack"><div class="barfill" style="width:31.25%"></div></div>
+<div class="barvalue">5</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN GERENCIA DEL TALENTO HUMANO">ESPECIALIZACIÓN EN GERENCIA DEL TALENTO HUMANO</div>
-      <div class="bartrack"><div class="barfill" style="width:31.25%"></div></div>
-      <div class="barvalue">5</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN GERENCIA DEL TALENTO HUMANO">ESPECIALIZACIÓN EN GERENCIA DEL TALENTO HUMANO</div>
+<div class="bartrack"><div class="barfill" style="width:31.25%"></div></div>
+<div class="barvalue">5</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN COMERCIO EXTERIOR">ESPECIALIZACIÓN EN COMERCIO EXTERIOR</div>
-      <div class="bartrack"><div class="barfill" style="width:25.00%"></div></div>
-      <div class="barvalue">4</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN COMERCIO EXTERIOR">ESPECIALIZACIÓN EN COMERCIO EXTERIOR</div>
+<div class="bartrack"><div class="barfill" style="width:25.00%"></div></div>
+<div class="barvalue">4</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="MAESTRÍA EN GERENCIA DE INGENIERÍA">MAESTRÍA EN GERENCIA DE INGENIERÍA</div>
-      <div class="bartrack"><div class="barfill" style="width:25.00%"></div></div>
-      <div class="barvalue">4</div>
-    </div>
+<div class="barlabel" title="MAESTRÍA EN GERENCIA DE INGENIERÍA">MAESTRÍA EN GERENCIA DE INGENIERÍA</div>
+<div class="bartrack"><div class="barfill" style="width:25.00%"></div></div>
+<div class="barvalue">4</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN LOGÍSTICA">ESPECIALIZACIÓN EN LOGÍSTICA</div>
-      <div class="bartrack"><div class="barfill" style="width:25.00%"></div></div>
-      <div class="barvalue">4</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN LOGÍSTICA">ESPECIALIZACIÓN EN LOGÍSTICA</div>
+<div class="bartrack"><div class="barfill" style="width:25.00%"></div></div>
+<div class="barvalue">4</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN FINANZAS - VIRTUAL">ESPECIALIZACIÓN EN FINANZAS - VIRTUAL</div>
-      <div class="bartrack"><div class="barfill" style="width:18.75%"></div></div>
-      <div class="barvalue">3</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN FINANZAS - VIRTUAL">ESPECIALIZACIÓN EN FINANZAS - VIRTUAL</div>
+<div class="bartrack"><div class="barfill" style="width:18.75%"></div></div>
+<div class="barvalue">3</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN EFICIENCIA ENERGÉTICA">ESPECIALIZACIÓN EN EFICIENCIA ENERGÉTICA</div>
-      <div class="bartrack"><div class="barfill" style="width:18.75%"></div></div>
-      <div class="barvalue">3</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN EFICIENCIA ENERGÉTICA">ESPECIALIZACIÓN EN EFICIENCIA ENERGÉTICA</div>
+<div class="bartrack"><div class="barfill" style="width:18.75%"></div></div>
+<div class="barvalue">3</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO">ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO</div>
-      <div class="bartrack"><div class="barfill" style="width:18.75%"></div></div>
-      <div class="barvalue">3</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO">ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO</div>
+<div class="bartrack"><div class="barfill" style="width:18.75%"></div></div>
+<div class="barvalue">3</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN COMUNICACIÓN ESTRATÉGICA">ESPECIALIZACIÓN EN COMUNICACIÓN ESTRATÉGICA</div>
-      <div class="bartrack"><div class="barfill" style="width:12.50%"></div></div>
-      <div class="barvalue">2</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN COMUNICACIÓN ESTRATÉGICA">ESPECIALIZACIÓN EN COMUNICACIÓN ESTRATÉGICA</div>
+<div class="bartrack"><div class="barfill" style="width:12.50%"></div></div>
+<div class="barvalue">2</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="MAESTRÍA EN ADMINISTRACIÓN DE EMPRESAS">MAESTRÍA EN ADMINISTRACIÓN DE EMPRESAS</div>
-      <div class="bartrack"><div class="barfill" style="width:12.50%"></div></div>
-      <div class="barvalue">2</div>
-    </div>
+<div class="barlabel" title="MAESTRÍA EN ADMINISTRACIÓN DE EMPRESAS">MAESTRÍA EN ADMINISTRACIÓN DE EMPRESAS</div>
+<div class="bartrack"><div class="barfill" style="width:12.50%"></div></div>
+<div class="barvalue">2</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN CIBERSEGURIDAD">ESPECIALIZACIÓN EN CIBERSEGURIDAD</div>
-      <div class="bartrack"><div class="barfill" style="width:12.50%"></div></div>
-      <div class="barvalue">2</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN CIBERSEGURIDAD">ESPECIALIZACIÓN EN CIBERSEGURIDAD</div>
+<div class="bartrack"><div class="barfill" style="width:12.50%"></div></div>
+<div class="barvalue">2</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN MERCADEO">ESPECIALIZACIÓN EN MERCADEO</div>
-      <div class="bartrack"><div class="barfill" style="width:12.50%"></div></div>
-      <div class="barvalue">2</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN MERCADEO">ESPECIALIZACIÓN EN MERCADEO</div>
+<div class="bartrack"><div class="barfill" style="width:12.50%"></div></div>
+<div class="barvalue">2</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="MAESTRÍA EN COMUNICACIÓN DIGITAL">MAESTRÍA EN COMUNICACIÓN DIGITAL</div>
-      <div class="bartrack"><div class="barfill" style="width:12.50%"></div></div>
-      <div class="barvalue">2</div>
-    </div>
+<div class="barlabel" title="MAESTRÍA EN COMUNICACIÓN DIGITAL">MAESTRÍA EN COMUNICACIÓN DIGITAL</div>
+<div class="bartrack"><div class="barfill" style="width:12.50%"></div></div>
+<div class="barvalue">2</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN ESTRATEGIA PUBLICITARIA DE MARCA EN ENTORNOS DIGITALES">ESPECIALIZACIÓN EN ESTRATEGIA PUBLICITARIA DE MARCA EN ENTORNOS DIGITALES</div>
-      <div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
-      <div class="barvalue">1</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN ESTRATEGIA PUBLICITARIA DE MARCA EN ENTORNOS DIGITALES">ESPECIALIZACIÓN EN ESTRATEGIA PUBLICITARIA DE MARCA EN ENTORNOS DIGITALES</div>
+<div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
+<div class="barvalue">1</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN GERENCIA DE MANTENIMIENTO Y CONFIABILIDAD">ESPECIALIZACIÓN EN GERENCIA DE MANTENIMIENTO Y CONFIABILIDAD</div>
-      <div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
-      <div class="barvalue">1</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN GERENCIA DE MANTENIMIENTO Y CONFIABILIDAD">ESPECIALIZACIÓN EN GERENCIA DE MANTENIMIENTO Y CONFIABILIDAD</div>
+<div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
+<div class="barvalue">1</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO - VIRTUAL">ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO - VIRTUAL</div>
-      <div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
-      <div class="barvalue">1</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO - VIRTUAL">ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO - VIRTUAL</div>
+<div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
+<div class="barvalue">1</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN ENERGÍAS RENOVABLES">ESPECIALIZACIÓN EN ENERGÍAS RENOVABLES</div>
-      <div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
-      <div class="barvalue">1</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN ENERGÍAS RENOVABLES">ESPECIALIZACIÓN EN ENERGÍAS RENOVABLES</div>
+<div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
+<div class="barvalue">1</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN INGENIERÍA CLÍNICA">ESPECIALIZACIÓN EN INGENIERÍA CLÍNICA</div>
-      <div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
-      <div class="barvalue">1</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN INGENIERÍA CLÍNICA">ESPECIALIZACIÓN EN INGENIERÍA CLÍNICA</div>
+<div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
+<div class="barvalue">1</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN INTERCULTURALIDAD Y ESTUDIOS DE GÉNERO">ESPECIALIZACIÓN EN INTERCULTURALIDAD Y ESTUDIOS DE GÉNERO</div>
-      <div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
-      <div class="barvalue">1</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN INTERCULTURALIDAD Y ESTUDIOS DE GÉNERO">ESPECIALIZACIÓN EN INTERCULTURALIDAD Y ESTUDIOS DE GÉNERO</div>
+<div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
+<div class="barvalue">1</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="ESPECIALIZACIÓN EN COMUNICACIÓN Y PERIODISMO CON INTELIGENCIA ARTIFICIAL - VIRTUAL">ESPECIALIZACIÓN EN COMUNICACIÓN Y PERIODISMO CON INTELIGENCIA ARTIFICIAL - VIRTUAL</div>
-      <div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
-      <div class="barvalue">1</div>
-    </div>
+<div class="barlabel" title="ESPECIALIZACIÓN EN COMUNICACIÓN Y PERIODISMO CON INTELIGENCIA ARTIFICIAL - VIRTUAL">ESPECIALIZACIÓN EN COMUNICACIÓN Y PERIODISMO CON INTELIGENCIA ARTIFICIAL - VIRTUAL</div>
+<div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
+<div class="barvalue">1</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="MAESTRÍA EN INGENIERÍA DE DESARROLLO DE PRODUCTOS">MAESTRÍA EN INGENIERÍA DE DESARROLLO DE PRODUCTOS</div>
-      <div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
-      <div class="barvalue">1</div>
-    </div>
+<div class="barlabel" title="MAESTRÍA EN INGENIERÍA DE DESARROLLO DE PRODUCTOS">MAESTRÍA EN INGENIERÍA DE DESARROLLO DE PRODUCTOS</div>
+<div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
+<div class="barvalue">1</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="PROGRAMAS DE POSGRADO">PROGRAMAS DE POSGRADO</div>
-      <div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
-      <div class="barvalue">1</div>
-    </div>
+<div class="barlabel" title="PROGRAMAS DE POSGRADO">PROGRAMAS DE POSGRADO</div>
+<div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
+<div class="barvalue">1</div>
+</div>
 <div class="barrow">
-      <div class="barlabel" title="SIN PROGRAMA REGISTRADO">SIN PROGRAMA REGISTRADO</div>
-      <div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
-      <div class="barvalue">1</div>
-    </div></div>
-    <div>
-      <div class="insight"><span class="signal">#1 asistencia</span><b>MAESTRÍA EN INTELIGENCIA ARTIFICIAL Y CIENCIA DE DATOS</b><p>16 asistentes de 49 registros · tasa 32.7% · representa 19.5% de los asistentes del evento.</p></div>
-      <div class="callout"><b>Lectura:</b> el volumen de asistentes y la tasa de asistencia deben leerse juntos. Un programa puede llevar más personas por tener mayor base registrada, mientras otro puede mostrar una tasa superior con una base mucho menor.</div>
-      <div class="insight action" style="margin-top:12px"><span class="signal">Programas / intereses con 0 asistencia</span><b>9</b><p>ESPECIALIZACIÓN EN ANALÍTICA DE BIG DATA, DOCTORADO EN INGENIERÍA, ESPECIALIZACION EN DERECHOS HUMANOS Y TERRITORIOS, ESPECIALIZACIÓN EN DISEÑO PUBLICITARIO EN CONTENIDOS DIGITALES, MAESTRÍA EN SISTEMAS ENERGÉTICOS, MAESTRÍA EN SEGURIDAD Y SALUD EN EL TRABAJO, DOCTORADO EN BIOINGENIERÍA, DOCTORADO EN SOSTENIBLIDAD, ESPECIALIZACIÓN EN LOGÍSTICA - VIRTUAL.</p></div>
-    </div>
-  </div>
+<div class="barlabel" title="SIN PROGRAMA REGISTRADO">SIN PROGRAMA REGISTRADO</div>
+<div class="bartrack"><div class="barfill" style="width:6.25%"></div></div>
+<div class="barvalue">1</div>
+</div></div>
+<div>
+<div class="insight"><span class="signal">#1 asistencia</span><b>MAESTRÍA EN INTELIGENCIA ARTIFICIAL Y CIENCIA DE DATOS</b><p>16 asistentes de 49 registros · tasa 32.7% · representa 19.5% de los asistentes del evento.</p></div>
+<div class="callout"><b>Lectura:</b> el volumen de asistentes y la tasa de asistencia deben leerse juntos. Un programa puede llevar más personas por tener mayor base registrada, mientras otro puede mostrar una tasa superior con una base mucho menor.</div>
+<div class="insight action" style="margin-top:12px"><span class="signal">Programas / intereses con 0 asistencia</span><b>9</b><p>ESPECIALIZACIÓN EN ANALÍTICA DE BIG DATA, DOCTORADO EN INGENIERÍA, ESPECIALIZACION EN DERECHOS HUMANOS Y TERRITORIOS, ESPECIALIZACIÓN EN DISEÑO PUBLICITARIO EN CONTENIDOS DIGITALES, MAESTRÍA EN SISTEMAS ENERGÉTICOS, MAESTRÍA EN SEGURIDAD Y SALUD EN EL TRABAJO, DOCTORADO EN BIOINGENIERÍA, DOCTORADO EN SOSTENIBLIDAD, ESPECIALIZACIÓN EN LOGÍSTICA - VIRTUAL.</p></div>
+</div>
+</div>
 </section>
-
 <section class="section">
-  <div class="section-head"><div><h2>Detalle completo por programa de interés</h2><p>Incluye todos los valores presentes en el campo “Programa de interés” del CSV. No se agregan programas de otros cortes. El registro sin programa se conserva como “SIN PROGRAMA REGISTRADO”.</p></div><div id="programCount" class="tiny">35 filas visibles</div></div>
-  <div class="toolbar">
-    <input id="programSearch" type="search" placeholder="Buscar programa…">
-    <select id="attendanceFilter">
-      <option value="">Todos</option>
-      <option value="with">Con asistentes</option>
-      <option value="without">Sin asistentes</option>
-    </select>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Programa de interés</th><th>Registrados</th><th>Asistentes</th><th>No asistieron</th><th>Tasa asistencia</th><th>% de los 82 asistentes</th></tr></thead>
-      <tbody id="programBody"><tr class="program-row" data-att="16" data-name="maestría en inteligencia artificial y ciencia de datos">
-      <td class="program-name">MAESTRÍA EN INTELIGENCIA ARTIFICIAL Y CIENCIA DE DATOS</td>
-      <td class="num strong">49</td>
-      <td class="num positive">16</td>
-      <td class="num">33</td>
-      <td class="num">32.7%</td>
-      <td class="num">19.5%</td>
-    </tr>
+<div class="section-head"><div><h2>Detalle completo por programa de interés</h2><p>Incluye todos los valores presentes en el campo “Programa de interés” del CSV. No se agregan programas de otros cortes. El registro sin programa se conserva como “SIN PROGRAMA REGISTRADO”.</p></div><div class="tiny" id="programCount">35 filas visibles</div></div>
+<div class="toolbar">
+<input id="programSearch" placeholder="Buscar programa…" type="search"/>
+<select id="attendanceFilter">
+<option value="">Todos</option>
+<option value="with">Con asistentes</option>
+<option value="without">Sin asistentes</option>
+</select>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Programa de interés</th><th>Registrados</th><th>Asistentes</th><th>No asistieron</th><th>Tasa asistencia</th><th>% de los 82 asistentes</th></tr></thead>
+<tbody id="programBody"><tr class="program-row" data-att="16" data-name="maestría en inteligencia artificial y ciencia de datos">
+<td class="program-name">MAESTRÍA EN INTELIGENCIA ARTIFICIAL Y CIENCIA DE DATOS</td>
+<td class="num strong">49</td>
+<td class="num positive">16</td>
+<td class="num">33</td>
+<td class="num">32.7%</td>
+<td class="num">19.5%</td>
+</tr>
 <tr class="program-row" data-att="10" data-name="especialización en finanzas">
-      <td class="program-name">ESPECIALIZACIÓN EN FINANZAS</td>
-      <td class="num strong">20</td>
-      <td class="num positive">10</td>
-      <td class="num">10</td>
-      <td class="num">50.0%</td>
-      <td class="num">12.2%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN FINANZAS</td>
+<td class="num strong">20</td>
+<td class="num positive">10</td>
+<td class="num">10</td>
+<td class="num">50.0%</td>
+<td class="num">12.2%</td>
+</tr>
 <tr class="program-row" data-att="5" data-name="especialización en inteligencia artificial">
-      <td class="program-name">ESPECIALIZACIÓN EN INTELIGENCIA ARTIFICIAL</td>
-      <td class="num strong">37</td>
-      <td class="num positive">5</td>
-      <td class="num">32</td>
-      <td class="num">13.5%</td>
-      <td class="num">6.1%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN INTELIGENCIA ARTIFICIAL</td>
+<td class="num strong">37</td>
+<td class="num positive">5</td>
+<td class="num">32</td>
+<td class="num">13.5%</td>
+<td class="num">6.1%</td>
+</tr>
 <tr class="program-row" data-att="5" data-name="especialización en gerencia de proyectos">
-      <td class="program-name">ESPECIALIZACIÓN EN GERENCIA DE PROYECTOS</td>
-      <td class="num strong">33</td>
-      <td class="num positive">5</td>
-      <td class="num">28</td>
-      <td class="num">15.2%</td>
-      <td class="num">6.1%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN GERENCIA DE PROYECTOS</td>
+<td class="num strong">33</td>
+<td class="num positive">5</td>
+<td class="num">28</td>
+<td class="num">15.2%</td>
+<td class="num">6.1%</td>
+</tr>
 <tr class="program-row" data-att="5" data-name="especialización en gerencia del talento humano">
-      <td class="program-name">ESPECIALIZACIÓN EN GERENCIA DEL TALENTO HUMANO</td>
-      <td class="num strong">19</td>
-      <td class="num positive">5</td>
-      <td class="num">14</td>
-      <td class="num">26.3%</td>
-      <td class="num">6.1%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN GERENCIA DEL TALENTO HUMANO</td>
+<td class="num strong">19</td>
+<td class="num positive">5</td>
+<td class="num">14</td>
+<td class="num">26.3%</td>
+<td class="num">6.1%</td>
+</tr>
 <tr class="program-row" data-att="4" data-name="especialización en comercio exterior">
-      <td class="program-name">ESPECIALIZACIÓN EN COMERCIO EXTERIOR</td>
-      <td class="num strong">20</td>
-      <td class="num positive">4</td>
-      <td class="num">16</td>
-      <td class="num">20.0%</td>
-      <td class="num">4.9%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN COMERCIO EXTERIOR</td>
+<td class="num strong">20</td>
+<td class="num positive">4</td>
+<td class="num">16</td>
+<td class="num">20.0%</td>
+<td class="num">4.9%</td>
+</tr>
 <tr class="program-row" data-att="4" data-name="maestría en gerencia de ingeniería">
-      <td class="program-name">MAESTRÍA EN GERENCIA DE INGENIERÍA</td>
-      <td class="num strong">19</td>
-      <td class="num positive">4</td>
-      <td class="num">15</td>
-      <td class="num">21.1%</td>
-      <td class="num">4.9%</td>
-    </tr>
+<td class="program-name">MAESTRÍA EN GERENCIA DE INGENIERÍA</td>
+<td class="num strong">19</td>
+<td class="num positive">4</td>
+<td class="num">15</td>
+<td class="num">21.1%</td>
+<td class="num">4.9%</td>
+</tr>
 <tr class="program-row" data-att="4" data-name="especialización en logística">
-      <td class="program-name">ESPECIALIZACIÓN EN LOGÍSTICA</td>
-      <td class="num strong">7</td>
-      <td class="num positive">4</td>
-      <td class="num">3</td>
-      <td class="num">57.1%</td>
-      <td class="num">4.9%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN LOGÍSTICA</td>
+<td class="num strong">7</td>
+<td class="num positive">4</td>
+<td class="num">3</td>
+<td class="num">57.1%</td>
+<td class="num">4.9%</td>
+</tr>
 <tr class="program-row" data-att="3" data-name="especialización en finanzas - virtual">
-      <td class="program-name">ESPECIALIZACIÓN EN FINANZAS - VIRTUAL</td>
-      <td class="num strong">15</td>
-      <td class="num positive">3</td>
-      <td class="num">12</td>
-      <td class="num">20.0%</td>
-      <td class="num">3.7%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN FINANZAS - VIRTUAL</td>
+<td class="num strong">15</td>
+<td class="num positive">3</td>
+<td class="num">12</td>
+<td class="num">20.0%</td>
+<td class="num">3.7%</td>
+</tr>
 <tr class="program-row" data-att="3" data-name="especialización en eficiencia energética">
-      <td class="program-name">ESPECIALIZACIÓN EN EFICIENCIA ENERGÉTICA</td>
-      <td class="num strong">11</td>
-      <td class="num positive">3</td>
-      <td class="num">8</td>
-      <td class="num">27.3%</td>
-      <td class="num">3.7%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN EFICIENCIA ENERGÉTICA</td>
+<td class="num strong">11</td>
+<td class="num positive">3</td>
+<td class="num">8</td>
+<td class="num">27.3%</td>
+<td class="num">3.7%</td>
+</tr>
 <tr class="program-row" data-att="3" data-name="especialización en seguridad y salud en el trabajo">
-      <td class="program-name">ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO</td>
-      <td class="num strong">11</td>
-      <td class="num positive">3</td>
-      <td class="num">8</td>
-      <td class="num">27.3%</td>
-      <td class="num">3.7%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO</td>
+<td class="num strong">11</td>
+<td class="num positive">3</td>
+<td class="num">8</td>
+<td class="num">27.3%</td>
+<td class="num">3.7%</td>
+</tr>
 <tr class="program-row" data-att="2" data-name="especialización en comunicación estratégica">
-      <td class="program-name">ESPECIALIZACIÓN EN COMUNICACIÓN ESTRATÉGICA</td>
-      <td class="num strong">17</td>
-      <td class="num positive">2</td>
-      <td class="num">15</td>
-      <td class="num">11.8%</td>
-      <td class="num">2.4%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN COMUNICACIÓN ESTRATÉGICA</td>
+<td class="num strong">17</td>
+<td class="num positive">2</td>
+<td class="num">15</td>
+<td class="num">11.8%</td>
+<td class="num">2.4%</td>
+</tr>
 <tr class="program-row" data-att="2" data-name="maestría en administración de empresas">
-      <td class="program-name">MAESTRÍA EN ADMINISTRACIÓN DE EMPRESAS</td>
-      <td class="num strong">16</td>
-      <td class="num positive">2</td>
-      <td class="num">14</td>
-      <td class="num">12.5%</td>
-      <td class="num">2.4%</td>
-    </tr>
+<td class="program-name">MAESTRÍA EN ADMINISTRACIÓN DE EMPRESAS</td>
+<td class="num strong">16</td>
+<td class="num positive">2</td>
+<td class="num">14</td>
+<td class="num">12.5%</td>
+<td class="num">2.4%</td>
+</tr>
 <tr class="program-row" data-att="2" data-name="especialización en ciberseguridad">
-      <td class="program-name">ESPECIALIZACIÓN EN CIBERSEGURIDAD</td>
-      <td class="num strong">15</td>
-      <td class="num positive">2</td>
-      <td class="num">13</td>
-      <td class="num">13.3%</td>
-      <td class="num">2.4%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN CIBERSEGURIDAD</td>
+<td class="num strong">15</td>
+<td class="num positive">2</td>
+<td class="num">13</td>
+<td class="num">13.3%</td>
+<td class="num">2.4%</td>
+</tr>
 <tr class="program-row" data-att="2" data-name="especialización en mercadeo">
-      <td class="program-name">ESPECIALIZACIÓN EN MERCADEO</td>
-      <td class="num strong">13</td>
-      <td class="num positive">2</td>
-      <td class="num">11</td>
-      <td class="num">15.4%</td>
-      <td class="num">2.4%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN MERCADEO</td>
+<td class="num strong">13</td>
+<td class="num positive">2</td>
+<td class="num">11</td>
+<td class="num">15.4%</td>
+<td class="num">2.4%</td>
+</tr>
 <tr class="program-row" data-att="2" data-name="maestría en comunicación digital">
-      <td class="program-name">MAESTRÍA EN COMUNICACIÓN DIGITAL</td>
-      <td class="num strong">10</td>
-      <td class="num positive">2</td>
-      <td class="num">8</td>
-      <td class="num">20.0%</td>
-      <td class="num">2.4%</td>
-    </tr>
+<td class="program-name">MAESTRÍA EN COMUNICACIÓN DIGITAL</td>
+<td class="num strong">10</td>
+<td class="num positive">2</td>
+<td class="num">8</td>
+<td class="num">20.0%</td>
+<td class="num">2.4%</td>
+</tr>
 <tr class="program-row" data-att="1" data-name="especialización en estrategia publicitaria de marca en entornos digitales">
-      <td class="program-name">ESPECIALIZACIÓN EN ESTRATEGIA PUBLICITARIA DE MARCA EN ENTORNOS DIGITALES</td>
-      <td class="num strong">11</td>
-      <td class="num positive">1</td>
-      <td class="num">10</td>
-      <td class="num">9.1%</td>
-      <td class="num">1.2%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN ESTRATEGIA PUBLICITARIA DE MARCA EN ENTORNOS DIGITALES</td>
+<td class="num strong">11</td>
+<td class="num positive">1</td>
+<td class="num">10</td>
+<td class="num">9.1%</td>
+<td class="num">1.2%</td>
+</tr>
 <tr class="program-row" data-att="1" data-name="especialización en gerencia de mantenimiento y confiabilidad">
-      <td class="program-name">ESPECIALIZACIÓN EN GERENCIA DE MANTENIMIENTO Y CONFIABILIDAD</td>
-      <td class="num strong">9</td>
-      <td class="num positive">1</td>
-      <td class="num">8</td>
-      <td class="num">11.1%</td>
-      <td class="num">1.2%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN GERENCIA DE MANTENIMIENTO Y CONFIABILIDAD</td>
+<td class="num strong">9</td>
+<td class="num positive">1</td>
+<td class="num">8</td>
+<td class="num">11.1%</td>
+<td class="num">1.2%</td>
+</tr>
 <tr class="program-row" data-att="1" data-name="especialización en seguridad y salud en el trabajo - virtual">
-      <td class="program-name">ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO - VIRTUAL</td>
-      <td class="num strong">8</td>
-      <td class="num positive">1</td>
-      <td class="num">7</td>
-      <td class="num">12.5%</td>
-      <td class="num">1.2%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN SEGURIDAD Y SALUD EN EL TRABAJO - VIRTUAL</td>
+<td class="num strong">8</td>
+<td class="num positive">1</td>
+<td class="num">7</td>
+<td class="num">12.5%</td>
+<td class="num">1.2%</td>
+</tr>
 <tr class="program-row" data-att="1" data-name="especialización en energías renovables">
-      <td class="program-name">ESPECIALIZACIÓN EN ENERGÍAS RENOVABLES</td>
-      <td class="num strong">5</td>
-      <td class="num positive">1</td>
-      <td class="num">4</td>
-      <td class="num">20.0%</td>
-      <td class="num">1.2%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN ENERGÍAS RENOVABLES</td>
+<td class="num strong">5</td>
+<td class="num positive">1</td>
+<td class="num">4</td>
+<td class="num">20.0%</td>
+<td class="num">1.2%</td>
+</tr>
 <tr class="program-row" data-att="1" data-name="especialización en ingeniería clínica">
-      <td class="program-name">ESPECIALIZACIÓN EN INGENIERÍA CLÍNICA</td>
-      <td class="num strong">4</td>
-      <td class="num positive">1</td>
-      <td class="num">3</td>
-      <td class="num">25.0%</td>
-      <td class="num">1.2%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN INGENIERÍA CLÍNICA</td>
+<td class="num strong">4</td>
+<td class="num positive">1</td>
+<td class="num">3</td>
+<td class="num">25.0%</td>
+<td class="num">1.2%</td>
+</tr>
 <tr class="program-row" data-att="1" data-name="especialización en interculturalidad y estudios de género">
-      <td class="program-name">ESPECIALIZACIÓN EN INTERCULTURALIDAD Y ESTUDIOS DE GÉNERO</td>
-      <td class="num strong">2</td>
-      <td class="num positive">1</td>
-      <td class="num">1</td>
-      <td class="num">50.0%</td>
-      <td class="num">1.2%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN INTERCULTURALIDAD Y ESTUDIOS DE GÉNERO</td>
+<td class="num strong">2</td>
+<td class="num positive">1</td>
+<td class="num">1</td>
+<td class="num">50.0%</td>
+<td class="num">1.2%</td>
+</tr>
 <tr class="program-row" data-att="1" data-name="especialización en comunicación y periodismo con inteligencia artificial - virtual">
-      <td class="program-name">ESPECIALIZACIÓN EN COMUNICACIÓN Y PERIODISMO CON INTELIGENCIA ARTIFICIAL - VIRTUAL</td>
-      <td class="num strong">1</td>
-      <td class="num positive">1</td>
-      <td class="num">0</td>
-      <td class="num">100.0%</td>
-      <td class="num">1.2%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN COMUNICACIÓN Y PERIODISMO CON INTELIGENCIA ARTIFICIAL - VIRTUAL</td>
+<td class="num strong">1</td>
+<td class="num positive">1</td>
+<td class="num">0</td>
+<td class="num">100.0%</td>
+<td class="num">1.2%</td>
+</tr>
 <tr class="program-row" data-att="1" data-name="maestría en ingeniería de desarrollo de productos">
-      <td class="program-name">MAESTRÍA EN INGENIERÍA DE DESARROLLO DE PRODUCTOS</td>
-      <td class="num strong">1</td>
-      <td class="num positive">1</td>
-      <td class="num">0</td>
-      <td class="num">100.0%</td>
-      <td class="num">1.2%</td>
-    </tr>
+<td class="program-name">MAESTRÍA EN INGENIERÍA DE DESARROLLO DE PRODUCTOS</td>
+<td class="num strong">1</td>
+<td class="num positive">1</td>
+<td class="num">0</td>
+<td class="num">100.0%</td>
+<td class="num">1.2%</td>
+</tr>
 <tr class="program-row" data-att="1" data-name="programas de posgrado">
-      <td class="program-name">PROGRAMAS DE POSGRADO</td>
-      <td class="num strong">1</td>
-      <td class="num positive">1</td>
-      <td class="num">0</td>
-      <td class="num">100.0%</td>
-      <td class="num">1.2%</td>
-    </tr>
+<td class="program-name">PROGRAMAS DE POSGRADO</td>
+<td class="num strong">1</td>
+<td class="num positive">1</td>
+<td class="num">0</td>
+<td class="num">100.0%</td>
+<td class="num">1.2%</td>
+</tr>
 <tr class="program-row" data-att="1" data-name="sin programa registrado">
-      <td class="program-name">SIN PROGRAMA REGISTRADO</td>
-      <td class="num strong">1</td>
-      <td class="num positive">1</td>
-      <td class="num">0</td>
-      <td class="num">100.0%</td>
-      <td class="num">1.2%</td>
-    </tr>
+<td class="program-name">SIN PROGRAMA REGISTRADO</td>
+<td class="num strong">1</td>
+<td class="num positive">1</td>
+<td class="num">0</td>
+<td class="num">100.0%</td>
+<td class="num">1.2%</td>
+</tr>
 <tr class="program-row" data-att="0" data-name="especialización en analítica de big data">
-      <td class="program-name">ESPECIALIZACIÓN EN ANALÍTICA DE BIG DATA</td>
-      <td class="num strong">30</td>
-      <td class="num positive">0</td>
-      <td class="num">30</td>
-      <td class="num">0.0%</td>
-      <td class="num">0.0%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN ANALÍTICA DE BIG DATA</td>
+<td class="num strong">30</td>
+<td class="num positive">0</td>
+<td class="num">30</td>
+<td class="num">0.0%</td>
+<td class="num">0.0%</td>
+</tr>
 <tr class="program-row" data-att="0" data-name="doctorado en ingeniería">
-      <td class="program-name">DOCTORADO EN INGENIERÍA</td>
-      <td class="num strong">11</td>
-      <td class="num positive">0</td>
-      <td class="num">11</td>
-      <td class="num">0.0%</td>
-      <td class="num">0.0%</td>
-    </tr>
+<td class="program-name">DOCTORADO EN INGENIERÍA</td>
+<td class="num strong">11</td>
+<td class="num positive">0</td>
+<td class="num">11</td>
+<td class="num">0.0%</td>
+<td class="num">0.0%</td>
+</tr>
 <tr class="program-row" data-att="0" data-name="especializacion en derechos humanos y territorios">
-      <td class="program-name">ESPECIALIZACION EN DERECHOS HUMANOS Y TERRITORIOS</td>
-      <td class="num strong">8</td>
-      <td class="num positive">0</td>
-      <td class="num">8</td>
-      <td class="num">0.0%</td>
-      <td class="num">0.0%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACION EN DERECHOS HUMANOS Y TERRITORIOS</td>
+<td class="num strong">8</td>
+<td class="num positive">0</td>
+<td class="num">8</td>
+<td class="num">0.0%</td>
+<td class="num">0.0%</td>
+</tr>
 <tr class="program-row" data-att="0" data-name="especialización en diseño publicitario en contenidos digitales">
-      <td class="program-name">ESPECIALIZACIÓN EN DISEÑO PUBLICITARIO EN CONTENIDOS DIGITALES</td>
-      <td class="num strong">8</td>
-      <td class="num positive">0</td>
-      <td class="num">8</td>
-      <td class="num">0.0%</td>
-      <td class="num">0.0%</td>
-    </tr>
+<td class="program-name">ESPECIALIZACIÓN EN DISEÑO PUBLICITARIO EN CONTENIDOS DIGITALES</td>
+<td class="num strong">8</td>
+<td class="num positive">0</td>
+<td class="num">8</td>
+<td class="num">0.0%</td>
+<td class="num">0.0%</td>
+</tr>
 <tr class="program-row" data-att="0" data-name="maestría en sistemas energéticos">
-      <td class="program-name">MAESTRÍA EN SISTEMAS ENERGÉTICOS</td>
-      <td class="num strong">8</td>
-      <td class="num positive">0</td>
-      <td class="num">8</td>
-      <td class="num">0.0%</td>
-      <td class="num">0.0%</td>
-    </tr>
+<td class="program-name">MAESTRÍA EN SISTEMAS ENERGÉTICOS</td>
+<td class="num strong">8</td>
+<td class="num positive">0</td>
+<td class="num">8</td>
+<td class="num">0.0%</td>
+<td class="num">0.0%</td>
+</tr>
 <tr class="program-row" data-att="0" data-name="maestría en seguridad y salud en el trabajo">
-      <td class="program-name">MAESTRÍA EN SEGURIDAD Y SALUD EN EL TRABAJO</td>
-      <td class="num strong">5</td>
-      <td class="num positive">0</td>
-      <td class="num">5</td>
-      <td class="num">0.0%</td>
-      <td class="num">0.0%</td>
-    </tr>
+<td class="program-name">MAESTRÍA EN SEGURIDAD Y SALUD EN EL TRABAJO</td>
+<td class="num strong">5</td>
+<td class="num positive">0</td>
+<td class="num">5</td>
+<td class="num">0.0%</td>
+<td class="num">0.0%</td>
+</tr>
 <tr class="program-row" data-att="0" data-name="doctorado en bioingeniería">
-      <td class="program-name">DOCTORADO EN BIOINGENIERÍA</td>
-      <td class="num strong">1</td>
-      <td class="num positive">0</td>
-      <td class="num">1</td>
-      <td class="num">0.0%</td>
-      <td class="num">0.0%</td>
-    </tr>
+<td class="program-name">DOCTORADO EN BIOINGENIERÍA</td>
+<td class="num strong">1</td>
+<td class="num positive">0</td>
+<td class="num">1</td>
+<td class="num">0.0%</td>
+<td class="num">0.0%</td>
+</tr>
 <tr class="program-row" data-att="0" data-name="doctorado en sosteniblidad">
-      <td class="program-name">DOCTORADO EN SOSTENIBLIDAD</td>
-      <td class="num strong">1</td>
-      <td class="num positive">0</td>
-      <td class="num">1</td>
-      <td class="num">0.0%</td>
-      <td class="num">0.0%</td>
-    </tr>
+<td class="program-name">DOCTORADO EN SOSTENIBLIDAD</td>
+<td class="num strong">1</td>
+<td class="num positive">0</td>
+<td class="num">1</td>
+<td class="num">0.0%</td>
+<td class="num">0.0%</td>
+</tr>
 <tr class="program-row" data-att="0" data-name="especialización en logística - virtual">
-      <td class="program-name">ESPECIALIZACIÓN EN LOGÍSTICA - VIRTUAL</td>
-      <td class="num strong">1</td>
-      <td class="num positive">0</td>
-      <td class="num">1</td>
-      <td class="num">0.0%</td>
-      <td class="num">0.0%</td>
-    </tr></tbody>
-    </table>
-  </div>
+<td class="program-name">ESPECIALIZACIÓN EN LOGÍSTICA - VIRTUAL</td>
+<td class="num strong">1</td>
+<td class="num positive">0</td>
+<td class="num">1</td>
+<td class="num">0.0%</td>
+<td class="num">0.0%</td>
+</tr></tbody>
+</table>
+</div>
 </section>
-
 <section class="section">
-  <div class="section-head"><div><h2>Asistencia por nivel académico</h2><p>Clasificación derivada únicamente del prefijo del valor de Programa de interés. “Otro” y “Sin programa” se mantienen separados.</p></div></div>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Nivel</th><th>Registrados</th><th>Asistentes</th><th>No asistieron</th><th>Tasa asistencia</th></tr></thead>
-    <tbody><tr><td>Especialización</td><td class="num strong">305</td>
-    <td class="num positive">55</td><td class="num">250</td>
-    <td class="num">18.0%</td></tr>
+<div class="section-head"><div><h2>Asistencia por nivel académico</h2><p>Clasificación derivada únicamente del prefijo del valor de Programa de interés. “Otro” y “Sin programa” se mantienen separados.</p></div></div>
+<div class="table-wrap"><table>
+<thead><tr><th>Nivel</th><th>Registrados</th><th>Asistentes</th><th>No asistieron</th><th>Tasa asistencia</th></tr></thead>
+<tbody><tr><td>Especialización</td><td class="num strong">305</td>
+<td class="num positive">55</td><td class="num">250</td>
+<td class="num">18.0%</td></tr>
 <tr><td>Maestría</td><td class="num strong">108</td>
-    <td class="num positive">25</td><td class="num">83</td>
-    <td class="num">23.1%</td></tr>
+<td class="num positive">25</td><td class="num">83</td>
+<td class="num">23.1%</td></tr>
 <tr><td>Doctorado</td><td class="num strong">13</td>
-    <td class="num positive">0</td><td class="num">13</td>
-    <td class="num">0.0%</td></tr>
+<td class="num positive">0</td><td class="num">13</td>
+<td class="num">0.0%</td></tr>
 <tr><td>Otro</td><td class="num strong">1</td>
-    <td class="num positive">1</td><td class="num">0</td>
-    <td class="num">100.0%</td></tr>
+<td class="num positive">1</td><td class="num">0</td>
+<td class="num">100.0%</td></tr>
 <tr><td>Sin programa</td><td class="num strong">1</td>
-    <td class="num positive">1</td><td class="num">0</td>
-    <td class="num">100.0%</td></tr></tbody>
-  </table></div>
+<td class="num positive">1</td><td class="num">0</td>
+<td class="num">100.0%</td></tr></tbody>
+</table></div>
 </section>
-
 <section class="section">
-  <div class="section-head"><div><h2>Comportamiento por origen exacto</h2><p>Se conserva el valor exacto del campo Origen; no se mezclan ni homologan fuentes para este cálculo de cierre.</p></div></div>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Origen exacto</th><th>Registrados</th><th>Asistentes</th><th>No asistieron</th><th>Tasa asistencia</th><th>% de la base</th></tr></thead>
-    <tbody><tr><td>facebookpauta</td><td class="num strong">239</td>
-    <td class="num positive">27</td><td class="num">212</td>
-    <td class="num">11.3%</td><td class="num">55.8%</td></tr>
+<div class="section-head"><div><h2>Comportamiento por origen exacto</h2><p>Se conserva el valor exacto del campo Origen; no se mezclan ni homologan fuentes para este cálculo de cierre.</p></div></div>
+<div class="table-wrap"><table>
+<thead><tr><th>Origen exacto</th><th>Registrados</th><th>Asistentes</th><th>No asistieron</th><th>Tasa asistencia</th><th>% de la base</th></tr></thead>
+<tbody><tr><td>facebookpauta</td><td class="num strong">239</td>
+<td class="num positive">27</td><td class="num">212</td>
+<td class="num">11.3%</td><td class="num">55.8%</td></tr>
 <tr><td>Sin origen</td><td class="num strong">89</td>
-    <td class="num positive">19</td><td class="num">70</td>
-    <td class="num">21.3%</td><td class="num">20.8%</td></tr>
+<td class="num positive">19</td><td class="num">70</td>
+<td class="num">21.3%</td><td class="num">20.8%</td></tr>
 <tr><td>Vacío / sin valor</td><td class="num strong">19</td>
-    <td class="num positive">17</td><td class="num">2</td>
-    <td class="num">89.5%</td><td class="num">4.4%</td></tr>
+<td class="num positive">17</td><td class="num">2</td>
+<td class="num">89.5%</td><td class="num">4.4%</td></tr>
 <tr><td>whatsapp</td><td class="num strong">41</td>
-    <td class="num positive">8</td><td class="num">33</td>
-    <td class="num">19.5%</td><td class="num">9.6%</td></tr>
+<td class="num positive">8</td><td class="num">33</td>
+<td class="num">19.5%</td><td class="num">9.6%</td></tr>
 <tr><td>Comercial1</td><td class="num strong">20</td>
-    <td class="num positive">6</td><td class="num">14</td>
-    <td class="num">30.0%</td><td class="num">4.7%</td></tr>
+<td class="num positive">6</td><td class="num">14</td>
+<td class="num">30.0%</td><td class="num">4.7%</td></tr>
 <tr><td>organico</td><td class="num strong">13</td>
-    <td class="num positive">4</td><td class="num">9</td>
-    <td class="num">30.8%</td><td class="num">3.0%</td></tr>
+<td class="num positive">4</td><td class="num">9</td>
+<td class="num">30.8%</td><td class="num">3.0%</td></tr>
 <tr><td>Email</td><td class="num strong">2</td>
-    <td class="num positive">1</td><td class="num">1</td>
-    <td class="num">50.0%</td><td class="num">0.5%</td></tr>
+<td class="num positive">1</td><td class="num">1</td>
+<td class="num">50.0%</td><td class="num">0.5%</td></tr>
 <tr><td>Linkedin_CPC</td><td class="num strong">2</td>
-    <td class="num positive">0</td><td class="num">2</td>
-    <td class="num">0.0%</td><td class="num">0.5%</td></tr>
+<td class="num positive">0</td><td class="num">2</td>
+<td class="num">0.0%</td><td class="num">0.5%</td></tr>
 <tr><td>Orgánico</td><td class="num strong">1</td>
-    <td class="num positive">0</td><td class="num">1</td>
-    <td class="num">0.0%</td><td class="num">0.2%</td></tr>
+<td class="num positive">0</td><td class="num">1</td>
+<td class="num">0.0%</td><td class="num">0.2%</td></tr>
 <tr><td>QR_pantallas</td><td class="num strong">1</td>
-    <td class="num positive">0</td><td class="num">1</td>
-    <td class="num">0.0%</td><td class="num">0.2%</td></tr>
+<td class="num positive">0</td><td class="num">1</td>
+<td class="num">0.0%</td><td class="num">0.2%</td></tr>
 <tr><td>smsdiex</td><td class="num strong">1</td>
-    <td class="num positive">0</td><td class="num">1</td>
-    <td class="num">0.0%</td><td class="num">0.2%</td></tr></tbody>
-  </table></div>
+<td class="num positive">0</td><td class="num">1</td>
+<td class="num">0.0%</td><td class="num">0.2%</td></tr></tbody>
+</table></div>
 </section>
-
 <section class="section">
-  <div class="section-head"><div><h2>Asistencia por ciudad registrada</h2><p>Vista exacta del campo Ciudad. No se homologan Cali/cali/Santiago de Cali en esta tabla para preservar la trazabilidad del archivo.</p></div></div>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Ciudad exacta</th><th>Registrados</th><th>Asistentes</th><th>No asistieron</th><th>Tasa asistencia</th></tr></thead>
-    <tbody><tr><td>Cali</td><td class="num strong">246</td>
-    <td class="num positive">42</td><td class="num">204</td>
-    <td class="num">17.1%</td></tr>
+<div class="section-head"><div><h2>Asistencia por ciudad registrada</h2><p>Vista exacta del campo Ciudad. No se homologan Cali/cali/Santiago de Cali en esta tabla para preservar la trazabilidad del archivo.</p></div></div>
+<div class="table-wrap"><table>
+<thead><tr><th>Ciudad exacta</th><th>Registrados</th><th>Asistentes</th><th>No asistieron</th><th>Tasa asistencia</th></tr></thead>
+<tbody><tr><td>Cali</td><td class="num strong">246</td>
+<td class="num positive">42</td><td class="num">204</td>
+<td class="num">17.1%</td></tr>
 <tr><td>Vacío / sin valor</td><td class="num strong">39</td>
-    <td class="num positive">25</td><td class="num">14</td>
-    <td class="num">64.1%</td></tr>
+<td class="num positive">25</td><td class="num">14</td>
+<td class="num">64.1%</td></tr>
 <tr><td>Otra</td><td class="num strong">63</td>
-    <td class="num positive">6</td><td class="num">57</td>
-    <td class="num">9.5%</td></tr>
+<td class="num positive">6</td><td class="num">57</td>
+<td class="num">9.5%</td></tr>
 <tr><td>Jamundí</td><td class="num strong">13</td>
-    <td class="num positive">3</td><td class="num">10</td>
-    <td class="num">23.1%</td></tr>
+<td class="num positive">3</td><td class="num">10</td>
+<td class="num">23.1%</td></tr>
 <tr><td>Santiago de Cali</td><td class="num strong">4</td>
-    <td class="num positive">2</td><td class="num">2</td>
-    <td class="num">50.0%</td></tr>
+<td class="num positive">2</td><td class="num">2</td>
+<td class="num">50.0%</td></tr>
 <tr><td>Yumbo</td><td class="num strong">3</td>
-    <td class="num positive">1</td><td class="num">2</td>
-    <td class="num">33.3%</td></tr>
+<td class="num positive">1</td><td class="num">2</td>
+<td class="num">33.3%</td></tr>
 <tr><td>BUENAVENTURA</td><td class="num strong">1</td>
-    <td class="num positive">1</td><td class="num">0</td>
-    <td class="num">100.0%</td></tr>
+<td class="num positive">1</td><td class="num">0</td>
+<td class="num">100.0%</td></tr>
 <tr><td>Miranda</td><td class="num strong">1</td>
-    <td class="num positive">1</td><td class="num">0</td>
-    <td class="num">100.0%</td></tr>
+<td class="num positive">1</td><td class="num">0</td>
+<td class="num">100.0%</td></tr>
 <tr><td>Popayán Cauca</td><td class="num strong">1</td>
-    <td class="num positive">1</td><td class="num">0</td>
-    <td class="num">100.0%</td></tr>
+<td class="num positive">1</td><td class="num">0</td>
+<td class="num">100.0%</td></tr>
 <tr><td>Bogotá</td><td class="num strong">25</td>
-    <td class="num positive">0</td><td class="num">25</td>
-    <td class="num">0.0%</td></tr>
+<td class="num positive">0</td><td class="num">25</td>
+<td class="num">0.0%</td></tr>
 <tr><td>Medellín</td><td class="num strong">13</td>
-    <td class="num positive">0</td><td class="num">13</td>
-    <td class="num">0.0%</td></tr>
+<td class="num positive">0</td><td class="num">13</td>
+<td class="num">0.0%</td></tr>
 <tr><td>Palmira</td><td class="num strong">13</td>
-    <td class="num positive">0</td><td class="num">13</td>
-    <td class="num">0.0%</td></tr>
+<td class="num positive">0</td><td class="num">13</td>
+<td class="num">0.0%</td></tr>
 <tr><td>cali</td><td class="num strong">2</td>
-    <td class="num positive">0</td><td class="num">2</td>
-    <td class="num">0.0%</td></tr>
+<td class="num positive">0</td><td class="num">2</td>
+<td class="num">0.0%</td></tr>
 <tr><td>Barranquilla</td><td class="num strong">1</td>
-    <td class="num positive">0</td><td class="num">1</td>
-    <td class="num">0.0%</td></tr>
+<td class="num positive">0</td><td class="num">1</td>
+<td class="num">0.0%</td></tr>
 <tr><td>Guacari</td><td class="num strong">1</td>
-    <td class="num positive">0</td><td class="num">1</td>
-    <td class="num">0.0%</td></tr>
+<td class="num positive">0</td><td class="num">1</td>
+<td class="num">0.0%</td></tr>
 <tr><td>JAMUNDÍ</td><td class="num strong">1</td>
-    <td class="num positive">0</td><td class="num">1</td>
-    <td class="num">0.0%</td></tr>
+<td class="num positive">0</td><td class="num">1</td>
+<td class="num">0.0%</td></tr>
 <tr><td>Neiva</td><td class="num strong">1</td>
-    <td class="num positive">0</td><td class="num">1</td>
-    <td class="num">0.0%</td></tr></tbody>
-  </table></div>
+<td class="num positive">0</td><td class="num">1</td>
+<td class="num">0.0%</td></tr></tbody>
+</table></div>
 </section>
-
 <section class="section">
-  <div class="section-head"><div><h2>Evolución de la captación</h2><p>Fecha de creación de los 428 registros. La base contiene registros entre 28/08/2026 y 18/10/2026.</p></div></div>
-  <div class="daily"><div class="dailycol" title="28 Aug · 2 registros">
-      <div class="dailyval">2</div>
-      <div class="dailybar" style="height:4.7px"></div>
-      <div class="dailylabel">28 Aug</div>
-    </div>
+<div class="section-head"><div><h2>Evolución de la captación</h2><p>Fecha de creación de los 428 registros. La base contiene registros entre 28/08/2026 y 18/10/2026.</p></div></div>
+<div class="daily"><div class="dailycol" title="28 Aug · 2 registros">
+<div class="dailyval">2</div>
+<div class="dailybar" style="height:4.7px"></div>
+<div class="dailylabel">28 Aug</div>
+</div>
 <div class="dailycol" title="03 Sep · 1 registros">
-      <div class="dailyval">1</div>
-      <div class="dailybar" style="height:2.4px"></div>
-      <div class="dailylabel">03 Sep</div>
-    </div>
+<div class="dailyval">1</div>
+<div class="dailybar" style="height:2.4px"></div>
+<div class="dailylabel">03 Sep</div>
+</div>
 <div class="dailycol" title="04 Sep · 2 registros">
-      <div class="dailyval">2</div>
-      <div class="dailybar" style="height:4.7px"></div>
-      <div class="dailylabel">04 Sep</div>
-    </div>
+<div class="dailyval">2</div>
+<div class="dailybar" style="height:4.7px"></div>
+<div class="dailylabel">04 Sep</div>
+</div>
 <div class="dailycol" title="05 Sep · 5 registros">
-      <div class="dailyval">5</div>
-      <div class="dailybar" style="height:11.8px"></div>
-      <div class="dailylabel">05 Sep</div>
-    </div>
+<div class="dailyval">5</div>
+<div class="dailybar" style="height:11.8px"></div>
+<div class="dailylabel">05 Sep</div>
+</div>
 <div class="dailycol" title="06 Sep · 2 registros">
-      <div class="dailyval">2</div>
-      <div class="dailybar" style="height:4.7px"></div>
-      <div class="dailylabel">06 Sep</div>
-    </div>
+<div class="dailyval">2</div>
+<div class="dailybar" style="height:4.7px"></div>
+<div class="dailylabel">06 Sep</div>
+</div>
 <div class="dailycol" title="07 Sep · 5 registros">
-      <div class="dailyval">5</div>
-      <div class="dailybar" style="height:11.8px"></div>
-      <div class="dailylabel">07 Sep</div>
-    </div>
+<div class="dailyval">5</div>
+<div class="dailybar" style="height:11.8px"></div>
+<div class="dailylabel">07 Sep</div>
+</div>
 <div class="dailycol" title="08 Sep · 4 registros">
-      <div class="dailyval">4</div>
-      <div class="dailybar" style="height:9.5px"></div>
-      <div class="dailylabel">08 Sep</div>
-    </div>
+<div class="dailyval">4</div>
+<div class="dailybar" style="height:9.5px"></div>
+<div class="dailylabel">08 Sep</div>
+</div>
 <div class="dailycol" title="09 Sep · 3 registros">
-      <div class="dailyval">3</div>
-      <div class="dailybar" style="height:7.1px"></div>
-      <div class="dailylabel">09 Sep</div>
-    </div>
+<div class="dailyval">3</div>
+<div class="dailybar" style="height:7.1px"></div>
+<div class="dailylabel">09 Sep</div>
+</div>
 <div class="dailycol" title="10 Sep · 2 registros">
-      <div class="dailyval">2</div>
-      <div class="dailybar" style="height:4.7px"></div>
-      <div class="dailylabel">10 Sep</div>
-    </div>
+<div class="dailyval">2</div>
+<div class="dailybar" style="height:4.7px"></div>
+<div class="dailylabel">10 Sep</div>
+</div>
 <div class="dailycol" title="11 Sep · 4 registros">
-      <div class="dailyval">4</div>
-      <div class="dailybar" style="height:9.5px"></div>
-      <div class="dailylabel">11 Sep</div>
-    </div>
+<div class="dailyval">4</div>
+<div class="dailybar" style="height:9.5px"></div>
+<div class="dailylabel">11 Sep</div>
+</div>
 <div class="dailycol" title="12 Sep · 2 registros">
-      <div class="dailyval">2</div>
-      <div class="dailybar" style="height:4.7px"></div>
-      <div class="dailylabel">12 Sep</div>
-    </div>
+<div class="dailyval">2</div>
+<div class="dailybar" style="height:4.7px"></div>
+<div class="dailylabel">12 Sep</div>
+</div>
 <div class="dailycol" title="13 Sep · 1 registros">
-      <div class="dailyval">1</div>
-      <div class="dailybar" style="height:2.4px"></div>
-      <div class="dailylabel">13 Sep</div>
-    </div>
+<div class="dailyval">1</div>
+<div class="dailybar" style="height:2.4px"></div>
+<div class="dailylabel">13 Sep</div>
+</div>
 <div class="dailycol" title="14 Sep · 4 registros">
-      <div class="dailyval">4</div>
-      <div class="dailybar" style="height:9.5px"></div>
-      <div class="dailylabel">14 Sep</div>
-    </div>
+<div class="dailyval">4</div>
+<div class="dailybar" style="height:9.5px"></div>
+<div class="dailylabel">14 Sep</div>
+</div>
 <div class="dailycol" title="15 Sep · 7 registros">
-      <div class="dailyval">7</div>
-      <div class="dailybar" style="height:16.5px"></div>
-      <div class="dailylabel">15 Sep</div>
-    </div>
+<div class="dailyval">7</div>
+<div class="dailybar" style="height:16.5px"></div>
+<div class="dailylabel">15 Sep</div>
+</div>
 <div class="dailycol" title="16 Sep · 2 registros">
-      <div class="dailyval">2</div>
-      <div class="dailybar" style="height:4.7px"></div>
-      <div class="dailylabel">16 Sep</div>
-    </div>
+<div class="dailyval">2</div>
+<div class="dailybar" style="height:4.7px"></div>
+<div class="dailylabel">16 Sep</div>
+</div>
 <div class="dailycol" title="17 Sep · 4 registros">
-      <div class="dailyval">4</div>
-      <div class="dailybar" style="height:9.5px"></div>
-      <div class="dailylabel">17 Sep</div>
-    </div>
+<div class="dailyval">4</div>
+<div class="dailybar" style="height:9.5px"></div>
+<div class="dailylabel">17 Sep</div>
+</div>
 <div class="dailycol" title="18 Sep · 1 registros">
-      <div class="dailyval">1</div>
-      <div class="dailybar" style="height:2.4px"></div>
-      <div class="dailylabel">18 Sep</div>
-    </div>
+<div class="dailyval">1</div>
+<div class="dailybar" style="height:2.4px"></div>
+<div class="dailylabel">18 Sep</div>
+</div>
 <div class="dailycol" title="19 Sep · 2 registros">
-      <div class="dailyval">2</div>
-      <div class="dailybar" style="height:4.7px"></div>
-      <div class="dailylabel">19 Sep</div>
-    </div>
+<div class="dailyval">2</div>
+<div class="dailybar" style="height:4.7px"></div>
+<div class="dailylabel">19 Sep</div>
+</div>
 <div class="dailycol" title="20 Sep · 4 registros">
-      <div class="dailyval">4</div>
-      <div class="dailybar" style="height:9.5px"></div>
-      <div class="dailylabel">20 Sep</div>
-    </div>
+<div class="dailyval">4</div>
+<div class="dailybar" style="height:9.5px"></div>
+<div class="dailylabel">20 Sep</div>
+</div>
 <div class="dailycol" title="21 Sep · 5 registros">
-      <div class="dailyval">5</div>
-      <div class="dailybar" style="height:11.8px"></div>
-      <div class="dailylabel">21 Sep</div>
-    </div>
+<div class="dailyval">5</div>
+<div class="dailybar" style="height:11.8px"></div>
+<div class="dailylabel">21 Sep</div>
+</div>
 <div class="dailycol" title="22 Sep · 1 registros">
-      <div class="dailyval">1</div>
-      <div class="dailybar" style="height:2.4px"></div>
-      <div class="dailylabel">22 Sep</div>
-    </div>
+<div class="dailyval">1</div>
+<div class="dailybar" style="height:2.4px"></div>
+<div class="dailylabel">22 Sep</div>
+</div>
 <div class="dailycol" title="23 Sep · 11 registros">
-      <div class="dailyval">11</div>
-      <div class="dailybar" style="height:26.0px"></div>
-      <div class="dailylabel">23 Sep</div>
-    </div>
+<div class="dailyval">11</div>
+<div class="dailybar" style="height:26.0px"></div>
+<div class="dailylabel">23 Sep</div>
+</div>
 <div class="dailycol" title="24 Sep · 5 registros">
-      <div class="dailyval">5</div>
-      <div class="dailybar" style="height:11.8px"></div>
-      <div class="dailylabel">24 Sep</div>
-    </div>
+<div class="dailyval">5</div>
+<div class="dailybar" style="height:11.8px"></div>
+<div class="dailylabel">24 Sep</div>
+</div>
 <div class="dailycol" title="25 Sep · 3 registros">
-      <div class="dailyval">3</div>
-      <div class="dailybar" style="height:7.1px"></div>
-      <div class="dailylabel">25 Sep</div>
-    </div>
+<div class="dailyval">3</div>
+<div class="dailybar" style="height:7.1px"></div>
+<div class="dailylabel">25 Sep</div>
+</div>
 <div class="dailycol" title="27 Sep · 12 registros">
-      <div class="dailyval">12</div>
-      <div class="dailybar" style="height:28.4px"></div>
-      <div class="dailylabel">27 Sep</div>
-    </div>
+<div class="dailyval">12</div>
+<div class="dailybar" style="height:28.4px"></div>
+<div class="dailylabel">27 Sep</div>
+</div>
 <div class="dailycol" title="28 Sep · 7 registros">
-      <div class="dailyval">7</div>
-      <div class="dailybar" style="height:16.5px"></div>
-      <div class="dailylabel">28 Sep</div>
-    </div>
+<div class="dailyval">7</div>
+<div class="dailybar" style="height:16.5px"></div>
+<div class="dailylabel">28 Sep</div>
+</div>
 <div class="dailycol" title="29 Sep · 9 registros">
-      <div class="dailyval">9</div>
-      <div class="dailybar" style="height:21.3px"></div>
-      <div class="dailylabel">29 Sep</div>
-    </div>
+<div class="dailyval">9</div>
+<div class="dailybar" style="height:21.3px"></div>
+<div class="dailylabel">29 Sep</div>
+</div>
 <div class="dailycol" title="30 Sep · 8 registros">
-      <div class="dailyval">8</div>
-      <div class="dailybar" style="height:18.9px"></div>
-      <div class="dailylabel">30 Sep</div>
-    </div>
+<div class="dailyval">8</div>
+<div class="dailybar" style="height:18.9px"></div>
+<div class="dailylabel">30 Sep</div>
+</div>
 <div class="dailycol" title="01 Oct · 2 registros">
-      <div class="dailyval">2</div>
-      <div class="dailybar" style="height:4.7px"></div>
-      <div class="dailylabel">01 Oct</div>
-    </div>
+<div class="dailyval">2</div>
+<div class="dailybar" style="height:4.7px"></div>
+<div class="dailylabel">01 Oct</div>
+</div>
 <div class="dailycol" title="02 Oct · 22 registros">
-      <div class="dailyval">22</div>
-      <div class="dailybar" style="height:52.0px"></div>
-      <div class="dailylabel">02 Oct</div>
-    </div>
+<div class="dailyval">22</div>
+<div class="dailybar" style="height:52.0px"></div>
+<div class="dailylabel">02 Oct</div>
+</div>
 <div class="dailycol" title="03 Oct · 8 registros">
-      <div class="dailyval">8</div>
-      <div class="dailybar" style="height:18.9px"></div>
-      <div class="dailylabel">03 Oct</div>
-    </div>
+<div class="dailyval">8</div>
+<div class="dailybar" style="height:18.9px"></div>
+<div class="dailylabel">03 Oct</div>
+</div>
 <div class="dailycol" title="04 Oct · 4 registros">
-      <div class="dailyval">4</div>
-      <div class="dailybar" style="height:9.5px"></div>
-      <div class="dailylabel">04 Oct</div>
-    </div>
+<div class="dailyval">4</div>
+<div class="dailybar" style="height:9.5px"></div>
+<div class="dailylabel">04 Oct</div>
+</div>
 <div class="dailycol" title="05 Oct · 7 registros">
-      <div class="dailyval">7</div>
-      <div class="dailybar" style="height:16.5px"></div>
-      <div class="dailylabel">05 Oct</div>
-    </div>
+<div class="dailyval">7</div>
+<div class="dailybar" style="height:16.5px"></div>
+<div class="dailylabel">05 Oct</div>
+</div>
 <div class="dailycol" title="06 Oct · 55 registros">
-      <div class="dailyval">55</div>
-      <div class="dailybar" style="height:130.0px"></div>
-      <div class="dailylabel">06 Oct</div>
-    </div>
+<div class="dailyval">55</div>
+<div class="dailybar" style="height:130.0px"></div>
+<div class="dailylabel">06 Oct</div>
+</div>
 <div class="dailycol" title="07 Oct · 29 registros">
-      <div class="dailyval">29</div>
-      <div class="dailybar" style="height:68.5px"></div>
-      <div class="dailylabel">07 Oct</div>
-    </div>
+<div class="dailyval">29</div>
+<div class="dailybar" style="height:68.5px"></div>
+<div class="dailylabel">07 Oct</div>
+</div>
 <div class="dailycol" title="08 Oct · 20 registros">
-      <div class="dailyval">20</div>
-      <div class="dailybar" style="height:47.3px"></div>
-      <div class="dailylabel">08 Oct</div>
-    </div>
+<div class="dailyval">20</div>
+<div class="dailybar" style="height:47.3px"></div>
+<div class="dailylabel">08 Oct</div>
+</div>
 <div class="dailycol" title="09 Oct · 7 registros">
-      <div class="dailyval">7</div>
-      <div class="dailybar" style="height:16.5px"></div>
-      <div class="dailylabel">09 Oct</div>
-    </div>
+<div class="dailyval">7</div>
+<div class="dailybar" style="height:16.5px"></div>
+<div class="dailylabel">09 Oct</div>
+</div>
 <div class="dailycol" title="10 Oct · 9 registros">
-      <div class="dailyval">9</div>
-      <div class="dailybar" style="height:21.3px"></div>
-      <div class="dailylabel">10 Oct</div>
-    </div>
+<div class="dailyval">9</div>
+<div class="dailybar" style="height:21.3px"></div>
+<div class="dailylabel">10 Oct</div>
+</div>
 <div class="dailycol" title="11 Oct · 10 registros">
-      <div class="dailyval">10</div>
-      <div class="dailybar" style="height:23.6px"></div>
-      <div class="dailylabel">11 Oct</div>
-    </div>
+<div class="dailyval">10</div>
+<div class="dailybar" style="height:23.6px"></div>
+<div class="dailylabel">11 Oct</div>
+</div>
 <div class="dailycol" title="12 Oct · 11 registros">
-      <div class="dailyval">11</div>
-      <div class="dailybar" style="height:26.0px"></div>
-      <div class="dailylabel">12 Oct</div>
-    </div>
+<div class="dailyval">11</div>
+<div class="dailybar" style="height:26.0px"></div>
+<div class="dailylabel">12 Oct</div>
+</div>
 <div class="dailycol" title="13 Oct · 13 registros">
-      <div class="dailyval">13</div>
-      <div class="dailybar" style="height:30.7px"></div>
-      <div class="dailylabel">13 Oct</div>
-    </div>
+<div class="dailyval">13</div>
+<div class="dailybar" style="height:30.7px"></div>
+<div class="dailylabel">13 Oct</div>
+</div>
 <div class="dailycol" title="14 Oct · 12 registros">
-      <div class="dailyval">12</div>
-      <div class="dailybar" style="height:28.4px"></div>
-      <div class="dailylabel">14 Oct</div>
-    </div>
+<div class="dailyval">12</div>
+<div class="dailybar" style="height:28.4px"></div>
+<div class="dailylabel">14 Oct</div>
+</div>
 <div class="dailycol" title="15 Oct · 50 registros">
-      <div class="dailyval">50</div>
-      <div class="dailybar" style="height:118.2px"></div>
-      <div class="dailylabel">15 Oct</div>
-    </div>
+<div class="dailyval">50</div>
+<div class="dailybar" style="height:118.2px"></div>
+<div class="dailylabel">15 Oct</div>
+</div>
 <div class="dailycol" title="16 Oct · 26 registros">
-      <div class="dailyval">26</div>
-      <div class="dailybar" style="height:61.5px"></div>
-      <div class="dailylabel">16 Oct</div>
-    </div>
+<div class="dailyval">26</div>
+<div class="dailybar" style="height:61.5px"></div>
+<div class="dailylabel">16 Oct</div>
+</div>
 <div class="dailycol" title="17 Oct · 24 registros">
-      <div class="dailyval">24</div>
-      <div class="dailybar" style="height:56.7px"></div>
-      <div class="dailylabel">17 Oct</div>
-    </div>
+<div class="dailyval">24</div>
+<div class="dailybar" style="height:56.7px"></div>
+<div class="dailylabel">17 Oct</div>
+</div>
 <div class="dailycol" title="18 Oct · 1 registros">
-      <div class="dailyval">1</div>
-      <div class="dailybar" style="height:2.4px"></div>
-      <div class="dailylabel">18 Oct</div>
-    </div></div>
+<div class="dailyval">1</div>
+<div class="dailybar" style="height:2.4px"></div>
+<div class="dailylabel">18 Oct</div>
+</div></div>
 </section>
-
-
 <section class="section">
-  <div class="section-head"><div><h2>Calidad del dato de cierre</h2><p>Estos puntos no son errores de cálculo del tablero; son condiciones presentes en el archivo fuente y deben considerarse al interpretar atribución, ciudad y programa.</p></div></div>
-  <div class="insight-grid">
-    <div class="insight action"><span class="signal">Programa</span><b>1 asistente sin programa</b><p>Hay 1 registro con Programa de interés vacío y corresponde a una persona que asistió.</p></div>
-    <div class="insight action"><span class="signal">Origen</span><b>17 asistentes sin origen</b><p>El archivo contiene 19 registros con Origen vacío; 17 de ellos asistieron. Esto limita la atribución por canal.</p></div>
-    <div class="insight action"><span class="signal">Ciudad</span><b>25 asistentes sin ciudad</b><p>Hay 39 registros con Ciudad vacía; 25 corresponden a asistentes.</p></div>
-    <div class="insight"><span class="signal">Programa genérico</span><b>PROGRAMAS DE POSGRADO</b><p>Es un valor real del campo Programa de interés con 1 registro y 1 asistente, pero no representa un programa académico específico.</p></div>
-  </div>
-  <div class="callout"><b>Otros controles de calidad:</b> 6 registros no tienen número celular; ninguno de ellos pertenece a los 82 asistentes. Correo electrónico y número de documento están completos en los 428 registros. También se preservan exactamente variantes de ciudad como “Cali”, “cali” y “Santiago de Cali” para no alterar el archivo fuente.</div>
+<div class="section-head"><div><h2>Calidad del dato de cierre</h2><p>Estos puntos no son errores de cálculo del tablero; son condiciones presentes en el archivo fuente y deben considerarse al interpretar atribución, ciudad y programa.</p></div></div>
+<div class="insight-grid">
+<div class="insight action"><span class="signal">Programa</span><b>1 asistente sin programa</b><p>Hay 1 registro con Programa de interés vacío y corresponde a una persona que asistió.</p></div>
+<div class="insight action"><span class="signal">Origen</span><b>17 asistentes sin origen</b><p>El archivo contiene 19 registros con Origen vacío; 17 de ellos asistieron. Esto limita la atribución por canal.</p></div>
+<div class="insight action"><span class="signal">Ciudad</span><b>25 asistentes sin ciudad</b><p>Hay 39 registros con Ciudad vacía; 25 corresponden a asistentes.</p></div>
+<div class="insight"><span class="signal">Programa genérico</span><b>PROGRAMAS DE POSGRADO</b><p>Es un valor real del campo Programa de interés con 1 registro y 1 asistente, pero no representa un programa académico específico.</p></div>
+</div>
+<div class="callout"><b>Otros controles de calidad:</b> 6 registros no tienen número celular; ninguno de ellos pertenece a los 82 asistentes. Correo electrónico y número de documento están completos en los 428 registros. También se preservan exactamente variantes de ciudad como “Cali”, “cali” y “Santiago de Cali” para no alterar el archivo fuente.</div>
 </section>
-
 <section class="section">
-  <div class="section-head"><div><h2>Auditoría final de cierre</h2><p>Controles recalculados directamente desde el CSV del 19 de octubre. Cada valor de Programa de interés se valida individualmente contra el archivo.</p></div><div class="tiny">Resultado: 53/53 controles OK</div></div>
-  <div class="table-wrap qa-table"><table>
-    <thead><tr><th>Control</th><th>Resultado</th><th>Detalle</th></tr></thead>
-    <tbody><tr><td>Filas = IDs únicos</td><td class="ok">OK</td><td>428 filas / 428 IDs únicos</td></tr>
+<div class="section-head"><div><h2>Auditoría final de cierre</h2><p>Controles recalculados directamente desde el CSV del 19 de octubre. Cada valor de Programa de interés se valida individualmente contra el archivo.</p></div><div class="tiny">Resultado: 53/53 controles OK</div></div>
+<div class="table-wrap qa-table"><table>
+<thead><tr><th>Control</th><th>Resultado</th><th>Detalle</th></tr></thead>
+<tbody><tr><td>Filas = IDs únicos</td><td class="ok">OK</td><td>428 filas / 428 IDs únicos</td></tr>
 <tr><td>Sin duplicados por ID</td><td class="ok">OK</td><td>0 duplicados</td></tr>
 <tr><td>Estados suman total</td><td class="ok">OK</td><td>82+346=428</td></tr>
 <tr><td>Asistentes según Estado del miembro</td><td class="ok">OK</td><td>82 asistentes</td></tr>
@@ -927,13 +1027,12 @@
 <tr><td>Programa: DOCTORADO EN BIOINGENIERÍA</td><td class="ok">OK</td><td>1 registros · 0 asistentes</td></tr>
 <tr><td>Programa: DOCTORADO EN SOSTENIBLIDAD</td><td class="ok">OK</td><td>1 registros · 0 asistentes</td></tr>
 <tr><td>Programa: ESPECIALIZACIÓN EN LOGÍSTICA - VIRTUAL</td><td class="ok">OK</td><td>1 registros · 0 asistentes</td></tr></tbody>
-  </table></div>
+</table></div>
 </section>
-
 <section class="section">
-  <div class="section-head"><div><h2>Metodología y alcance</h2></div></div>
-  <p class="method">
-    <b>Fuente única:</b> Open House Posgrado 2027-01S Informe-2026-10-19-19-36-34.csv.
+<div class="section-head"><div><h2>Metodología y alcance</h2></div></div>
+<p class="method">
+<b>Fuente única:</b> Open House Posgrado 2027-01S Informe-2026-10-19-19-36-34.csv.
     <b>Unidad:</b> Id. de contacto; 428 filas y 428 IDs únicos.
     <b>Asistencia:</b> “Asiste al Evento” = asistió; “Enviado” = no asistió. El archivo contiene únicamente esos dos estados.
     <b>Programas:</b> se usan exclusivamente los valores presentes en “Programa de interés”; hay 34 valores con nombre y 1 registro sin programa informado.
@@ -943,7 +1042,6 @@
     <b>No se utilizaron:</b> programas, cifras de asistencia, cohortes ni métricas provenientes de tableros o cortes anteriores.
   </p>
 </section>
-
 </div>
 <script>
 (function(){
